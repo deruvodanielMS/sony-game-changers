@@ -14,7 +14,7 @@ app/
 │  ├─ layout.tsx
 │  ├─ page.tsx
 │  ├─ about/page.tsx
-│  └─api/                # Server actions and backend 
+│  └─api/                # Server actions and backend
 components/              # Reusable components
 messages/                # Translation JSON files
 common/                  # Shared constants, routes ...

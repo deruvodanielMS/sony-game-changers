@@ -14,8 +14,8 @@ src/components/ui/[ComponentName]/
 [component].css
 [Component].test.tsx
 ```
----
 
+---
 
 **Conventions:**
 
@@ -38,8 +38,12 @@ src/components/ui/[ComponentName]/
   @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors;
   @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
 }
-.btn-default { @apply bg-primary text-primary-foreground hover:bg-primary/90; }
-.btn-outline { @apply border border-input hover:bg-accent hover:text-accent-foreground; }
+.btn-default {
+  @apply bg-primary text-primary-foreground hover:bg-primary/90;
+}
+.btn-outline {
+  @apply border border-input hover:bg-accent hover:text-accent-foreground;
+}
 ```
 
 ### Radix Primitives:
@@ -113,7 +117,7 @@ test('increments counter', () => {
 
 ### Location:
 
-Tests next to the component or hook (*.spec.tsx or *.spec.ts).
+Tests next to the component or hook (_.spec.tsx or _.spec.ts).
 
 ### UI Components:
 
@@ -130,7 +134,6 @@ it('renders Button with text', () => {
 const { result } = renderHook(() => useCounter())
 act(() => result.current.increment())
 expect(result.current.count).toBe(1)
-
 ```
 
 ### Rules:
@@ -178,17 +181,18 @@ Consistent naming is key for readability, maintainability, and a clean import ex
 
 ### 📁 File & Folder Naming
 
-| Type | Convention | Example | Notes |
-|------|-------------|----------|--------|
-| Components | **PascalCase** | `Button.tsx`, `UserCard.tsx` | Each component in its own folder |
-| Hooks | **camelCase** | `useFetch.ts`, `useScrollLock.ts` | Must start with `use` |
-| Stylesheets | **kebab-case** | `button.css`, `details-card.css` | Matches component name |
-| Tests | Match source + `.test.ts(x)` | `Button.test.tsx`, `useFetch.test.ts` | Placed next to the file tested |
-| Utility files | **camelCase** | `formatCurrency.ts`, `getErrorMessage.ts` | No default exports |
-| Layouts / Pages | **PascalCase folders** | `Dashboard/`, `Settings/` | Next.js App Router convention |
-| Constants / Config | **UPPER_SNAKE_CASE file name** | `API_ROUTES.ts`, `ENV_CONFIG.ts` | Exports constants only |
+| Type               | Convention                     | Example                                   | Notes                            |
+| ------------------ | ------------------------------ | ----------------------------------------- | -------------------------------- |
+| Components         | **PascalCase**                 | `Button.tsx`, `UserCard.tsx`              | Each component in its own folder |
+| Hooks              | **camelCase**                  | `useFetch.ts`, `useScrollLock.ts`         | Must start with `use`            |
+| Stylesheets        | **kebab-case**                 | `button.css`, `details-card.css`          | Matches component name           |
+| Tests              | Match source + `.test.ts(x)`   | `Button.test.tsx`, `useFetch.test.ts`     | Placed next to the file tested   |
+| Utility files      | **camelCase**                  | `formatCurrency.ts`, `getErrorMessage.ts` | No default exports               |
+| Layouts / Pages    | **PascalCase folders**         | `Dashboard/`, `Settings/`                 | Next.js App Router convention    |
+| Constants / Config | **UPPER_SNAKE_CASE file name** | `API_ROUTES.ts`, `ENV_CONFIG.ts`          | Exports constants only           |
 
 **General Rules:**
+
 - Avoid abbreviations (prefer `useScrollLock` over `useScrLk`).
 - Folder names match the main exported symbol (`/Button/Button.tsx` exports `Button`).
 - Keep index files minimal (`index.ts` only for re-exports).
@@ -199,13 +203,15 @@ Consistent naming is key for readability, maintainability, and a clean import ex
 ### 🧠 Code Naming Rules
 
 **Components:**
+
 - **PascalCase** for React components: `Button`, `UserProfileCard`.
 - Exported symbol matches the file name exactly.
 - One top-level component per file.
-- Props interfaces start with the component name:  
+- Props interfaces start with the component name:
   ```ts
   interface ButtonProps { ... }
   export function Button({ variant }: ButtonProps) { ... }
+  ```
 
 **Functions & Variables:**
 
@@ -229,7 +235,7 @@ const apiUrl = getBaseUrl()
 ```ts
 enum Status {
   ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE'
+  INACTIVE = 'INACTIVE',
 }
 ```
 
