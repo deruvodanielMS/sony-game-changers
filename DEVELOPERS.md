@@ -13,10 +13,13 @@ app/
 ├─ [locale]/             # Dynamic locale folder
 │  ├─ layout.tsx
 │  ├─ page.tsx
-│  └─ about/page.tsx
+│  ├─ about/page.tsx
+│  └─api/                # Server actions and backend
 components/              # Reusable components
 messages/                # Translation JSON files
-api/                     # Server actions and backend endpoints
+common/                  # Shared constants, routes ...
+utils/                   # Helpers
+hooks/                   # Custom hooks
 
 ## 2️⃣ i18n & Navigation
 
