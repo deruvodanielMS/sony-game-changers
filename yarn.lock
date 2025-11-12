@@ -202,6 +202,25 @@
     "@babel/helper-string-parser" "^7.27.1"
     "@babel/helper-validator-identifier" "^7.27.1"
 
+"@conform-to/dom@1.13.3":
+  version "1.13.3"
+  resolved "https://registry.yarnpkg.com/@conform-to/dom/-/dom-1.13.3.tgz#ed83c53e558ba3124f860201663b9ffd44a6c201"
+  integrity sha512-V4uNfUcx0cfuwnL/yNtjRvWxzwyNWhayBJXhRDBxEtiqBJiSEge6qeMN0xSUDbZezj5uAl13rzVQyf6FZXoOZQ==
+
+"@conform-to/react@^1.13.2":
+  version "1.13.3"
+  resolved "https://registry.yarnpkg.com/@conform-to/react/-/react-1.13.3.tgz#d1b5a4d3c4d9352d328050206d30ec1cf3c5448f"
+  integrity sha512-3qLE52gLUKX9UBadto06mluqU+LS+S/oo/KXfCWJYhW2WxtZg87mG0c1kstPVBOOkocPzCCHN6Hjo4vwrGgiPg==
+  dependencies:
+    "@conform-to/dom" "1.13.3"
+
+"@conform-to/zod@^1.13.2":
+  version "1.13.3"
+  resolved "https://registry.yarnpkg.com/@conform-to/zod/-/zod-1.13.3.tgz#dc713d8ff29ce375c71487a0266423d05f24cd10"
+  integrity sha512-HimtfcJPgjlhmMRWUvvyFvgdPgAmG/54qY/Bp1Wtoi+mRQ4ffBuBy+0L8mlc1USeI1X2YEZDfMurOlTf92xQwA==
+  dependencies:
+    "@conform-to/dom" "1.13.3"
+
 "@csstools/color-helpers@^5.1.0":
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/@csstools/color-helpers/-/color-helpers-5.1.0.tgz#106c54c808cabfd1ab4c602d8505ee584c2996ef"
@@ -3784,6 +3803,11 @@ lru-cache@^5.1.1:
   dependencies:
     yallist "^3.0.2"
 
+lucide-react@^0.552.0:
+  version "0.552.0"
+  resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.552.0.tgz#037767b51513fe6db71818f1198fcd7df4a08bde"
+  integrity sha512-g9WCjmfwqbexSnZE+2cl21PCfXOcqnGeWeMTNAOGEfpPbm/ZF4YIq77Z8qWrxbu660EKuLB4nSLggoKnCb+isw==
+
 magic-string@^0.30.19:
   version "0.30.19"
   resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.19.tgz#cebe9f104e565602e5d2098c5f2e79a77cc86da9"
@@ -5069,3 +5093,8 @@ yocto-queue@^0.1.0:
   version "4.1.12"
   resolved "https://registry.yarnpkg.com/zod/-/zod-4.1.12.tgz#64f1ea53d00eab91853195653b5af9eee68970f0"
   integrity sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==
+
+zod@^3.24.2:
+  version "3.25.76"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.76.tgz#26841c3f6fd22a6a2760e7ccb719179768471e34"
+  integrity sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==
