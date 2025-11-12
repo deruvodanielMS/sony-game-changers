@@ -30,7 +30,7 @@ export default async function LangLayout({
   const { locale } = await params
 
   return (
-    <html lang={locale || DEFAULT_LANGUAGE}>
+    <html lang={locale || DEFAULT_LANGUAGE} data-theme="dark">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
