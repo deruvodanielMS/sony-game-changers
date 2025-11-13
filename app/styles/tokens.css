@@ -132,6 +132,34 @@
   --feedback-danger-800: #fd9ba7;
   --feedback-danger-950: #ffe4e6;
 
+  /* 🌿 Extra palettes */
+  --extra-red-100: #fd659d;
+  --extra-red-200: #fd659d;
+  --extra-red-300: #fd659d;
+  --extra-red-600: #fd659d;
+  --extra-red-800: #fd659d;
+  --extra-red-950: #fd659d;
+
+  --extra-green-100: #d9f6f4;
+  --extra-green-200: #afe7e3;
+  --extra-green-300: #52d8cd;
+  --extra-green-600: #01a79a;
+  --extra-green-800: #01655d;
+  --extra-green-950: #01433d;
+
+  --extra-pink-100: #f9e9ff;
+  --extra-pink-200: #edc2ff;
+  --extra-pink-300: #dc8aff;
+  --extra-pink-600: #d061ff;
+  --extra-pink-800: #b914ff;
+  --extra-pink-950: #8f10c6;
+
+  --extra-blue-100: #dbe2ff;
+  --extra-blue-200: #b8c6f9;
+  --extra-blue-300: #7694ff;
+  --extra-blue-600: #5577f4;
+  --extra-blue-800: #0c32bb;
+  --extra-blue-950: #0d2c9c;
 }
 
 :root {

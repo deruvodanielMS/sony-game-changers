@@ -5,9 +5,7 @@ export default function HomePage() {
   return (
     <>
       <section>
-        <h1 className="text-h1 leading-h1 font-bold text-accent-primary mb-4">
-          {t('title')}
-        </h1>
+        <h1 className="text-h1 leading-h1 font-bold text-accent-primary mb-4">{t('title')}</h1>
         <p className="text-body leading-body text-neutral-600">
           Visual overview of colors, typography, and spacing defined in the theme.
         </p>

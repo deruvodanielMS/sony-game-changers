@@ -9,10 +9,10 @@
 **Location:**
 
 ```text
-src/components/ui/[ComponentName]/
+components/ui/[ComponentName]/
 [Component].tsx
-[component].css
 [Component].test.tsx
+[Component].stories.tsx
 ```
 
 ---
@@ -24,26 +24,28 @@ src/components/ui/[ComponentName]/
 - Props types defined before the component.
 - Named export (`export function Button`).
 - `className` always last prop in JSX root.
-- Use `cn()` or `clsx` to compose Tailwind classes.
+- Use `cn()` utility to compose Tailwind classes.
 - Avoid inline callbacks in render.
 
-**Tailwind + @apply:**
+**Tailwind Inline (No CSS Files):**
 
-- Each component has its own CSS with semantic classes.
-- Avoid repeating inline utilities if already defined.
-- Example `button.css`:
+- Use inline Tailwind utilities directly (more performant, better tree-shaking).
+- Use CVA (class-variance-authority) for component variants.
+- Leverage design tokens from theme.css (CSS variables).
+- Example:
 
-```css
-.btn {
-  @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors;
-  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
-}
-.btn-default {
-  @apply bg-primary text-primary-foreground hover:bg-primary/90;
-}
-.btn-outline {
-  @apply border border-input hover:bg-accent hover:text-accent-foreground;
-}
+```tsx
+import { cva } from 'class-variance-authority'
+import { cn } from '@/utils/cn'
+
+const buttonVariants = cva('inline-flex items-center justify-center rounded-md font-medium', {
+  variants: {
+    variant: {
+      default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+      outline: 'border border-input hover:bg-accent',
+    },
+  },
+})
 ```
 
 ### Radix Primitives:
@@ -98,10 +100,10 @@ test('increments counter', () => {
 
 ## 3. Server vs Client Components Guidelines
 
-| Type | Use                                   | Hooks | Location                              |
-| ---- | ------------------------------------- | ----- | ------------------------------------- |
-| SC   | Layouts, data fetching                | None  | `src/components/layout/` or `app/...` |
-| CC   | Visual UI components (Radix/Tailwind) | All   | `src/components/ui/...`               |
+| Type | Use                                   | Hooks | Location                       |
+| ---- | ------------------------------------- | ----- | ------------------------------ |
+| SC   | Layouts, data fetching                | None  | `components/layout/` or `app/` |
+| CC   | Visual UI components (Radix/Tailwind) | All   | `components/ui/...`            |
 
 ### Rules:
 
