@@ -20,7 +20,7 @@ const ThemeDecorator = ({
 }) => {
   // Apply data-theme to document root for Storybook
   React.useEffect(() => {
-    const theme = context?.globals?.theme || 'dark'
+    const theme = context?.globals?.theme || 'light'
     document.documentElement.setAttribute('data-theme', theme)
   }, [context?.globals?.theme])
 
@@ -39,7 +39,7 @@ const preview: Preview = {
   globalTypes: {
     theme: {
       description: 'Global theme for components',
-      defaultValue: 'dark',
+      defaultValue: 'light',
       toolbar: {
         title: 'Theme',
         icon: 'circlehollow',

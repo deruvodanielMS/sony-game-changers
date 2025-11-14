@@ -25,7 +25,7 @@ export default async function LangLayout({
   const { locale } = await params
 
   return (
-    <html lang={locale || DEFAULT_LANGUAGE} data-theme="dark">
+    <html lang={locale || DEFAULT_LANGUAGE} data-theme="light">
       <body className={`${inter.variable} font-sans antialiased`}>
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>

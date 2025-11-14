@@ -54,21 +54,33 @@
   --color-feedback-danger-600: var(--feedback-danger-600);
   --color-feedback-danger-800: var(--feedback-danger-800);
   --color-feedback-danger-950: var(--feedback-danger-950);
+  --color-feedback-danger-10: var(--feedback-danger-10);
+  --color-feedback-danger-10: var(--feedback-danger-20);
+  --color-feedback-warning-10: var(--feedback-warning-10);
+  --color-feedback-warning-20: var(--feedback-warning-20);
+  --color-feedback-info-10: var(--feedback-info-10);
+  --color-feedback-info-20: var(--feedback-info-20);
+  --color-feedback-success-10: var(--feedback-success-10);
+  --color-feedback-success-20: var(--feedback-success-20);
 }
 
 @theme inline {
   /* Spacing scale */
-  --spacing-0_125: var(--spacing-0_125);
-  --spacing-0_25: var(--spacing-0_25);
-  --spacing-0_5: var(--spacing-0_5);
-  --spacing-0_75: var(--spacing-0_75);
-  --spacing-1: var(--spacing-1);
-  --spacing-1_5: var(--spacing-1_5);
-  --spacing-2: var(--spacing-2);
-  --spacing-3: var(--spacing-3);
-  --spacing-4: var(--spacing-4);
-  --spacing-6: var(--spacing-6);
-  --spacing-8: var(--spacing-8);
+  --spacing-0_125: var(--space-0_125);
+  --spacing-0_25: var(--space-0_25);
+  --spacing-0_5: var(--space-0_5);
+  --spacing-0_75: var(--space-0_75);
+  --spacing-1: var(--space-1);
+  --spacing-1_5: var(--space-1_5);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-6: var(--space-6);
+  --spacing-8: var(--space-8);
+
+  --spacing-form-control-width: var(--form-control-width);
+  --container-form-control-width: var(--form-control-width);
+  --spacing-icon-rounded-diameter: var(--icon-rounded-diameter);
 
   /* Typography – Font Sizes */
   --text-h1: var(--font-size-h1);
@@ -91,4 +103,9 @@
   --leading-body: var(--line-height-body);
   --leading-body-small: var(--line-height-body-small);
   --leading-body-tiny: var(--line-height-body-tiny);
+
+  --radius-tiny: var(--rounded-tiny);
+  --radius-small: var(--rounded-small);
+  --radius-default: var(--rounded-default);
+  --radius-x-large: var(--rounded-x-large);
 }

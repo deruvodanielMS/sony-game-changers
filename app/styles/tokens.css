@@ -81,6 +81,7 @@
 }
 
 /* ---------- DARK THEME ---------- */
+
 :root[data-theme='dark'] {
   /* 🌈 Accent */
   --accent-primary: #0c54b2;
@@ -131,7 +132,9 @@
   --feedback-danger-600: #fb7185;
   --feedback-danger-800: #fd9ba7;
   --feedback-danger-950: #ffe4e6;
+}
 
+:root {
   /* 🌿 Extra palettes */
   --extra-red-100: #fd659d;
   --extra-red-200: #fd659d;
@@ -160,21 +163,32 @@
   --extra-blue-600: #5577f4;
   --extra-blue-800: #0c32bb;
   --extra-blue-950: #0d2c9c;
+  --feedback-danger-10: rgba(233, 26, 71, 0.1);
+  --feedback-danger-20: rgba(233, 26, 71, 0.2);
+
+  --feedback-info-10: rgba(2, 132, 199, 0.1);
+  --feedback-info-20: rgba(2, 132, 199, 0.2);
+
+  --feedback-success-10: rgba(94, 150, 5, 0.1);
+  --feedback-success-20: rgba(94, 150, 5, 0.2);
+
+  --feedback-warning-10: rgba(234, 88, 12, 0.1);
+  --feedback-warning-20: rgba(234, 88, 12, 0.2);
 }
 
 :root {
   /* 📏 Spacing */
-  --spacing-0_125: 2px;
-  --spacing-0_25: 4px;
-  --spacing-0_5: 8px;
-  --spacing-0_75: 12px;
-  --spacing-1: 16px;
-  --spacing-1_5: 24px;
-  --spacing-2: 32px;
-  --spacing-3: 48px;
-  --spacing-4: 64px;
-  --spacing-6: 96px;
-  --spacing-8: 128px;
+  --space-0_125: 2px;
+  --space-0_25: 4px;
+  --space-0_5: 8px;
+  --space-0_75: 12px;
+  --space-1: 16px;
+  --space-1_5: 24px;
+  --space-2: 32px;
+  --space-3: 48px;
+  --space-4: 64px;
+  --space-6: 96px;
+  --space-8: 128px;
 
   /* 🔠 Typography – Size */
   --font-size-h1: 64px;
@@ -202,17 +216,17 @@
 @media (max-width: 768px) {
   :root {
     /* Spacing */
-    --spacing-0_125: 2px;
-    --spacing-0_25: 4px;
-    --spacing-0_5: 6px;
-    --spacing-0_75: 8px;
-    --spacing-1: 12px;
-    --spacing-1_5: 16px;
-    --spacing-2: 24px;
-    --spacing-3: 40px;
-    --spacing-4: 48px;
-    --spacing-6: 80px;
-    --spacing-8: 96px;
+    --space-0_125: 2px;
+    --space-0_25: 4px;
+    --space-0_5: 6px;
+    --space-0_75: 8px;
+    --space-1: 12px;
+    --space-1_5: 16px;
+    --space-2: 24px;
+    --space-3: 40px;
+    --space-4: 48px;
+    --space-6: 80px;
+    --space-8: 96px;
 
     /* Typography – Size */
     --font-size-h1: 40px;
@@ -236,4 +250,25 @@
     --line-height-body-small: 16px;
     --line-height-body-tiny: 12px;
   }
+}
+
+:root {
+  --rounded-tiny: 4px;
+  --rounded-small: 8px;
+  --rounded-default: 16px;
+  --rounded-x-large: 48px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --rounded-tiny: 2px;
+    --rounded-small: 6px;
+    --rounded-default: 12px;
+    --rounded-x-large: 24px;
+  }
+}
+
+:root {
+  --form-control-width: 280px;
+  --icon-rounded-diameter: 20px;
 }
