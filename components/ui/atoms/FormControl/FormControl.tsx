@@ -1,4 +1,4 @@
-'use-client'
+'use client'
 
 import { Label } from 'radix-ui'
 import { Info, X, Check, AlertCircle } from 'lucide-react'

@@ -108,4 +108,14 @@
   --radius-small: var(--rounded-small);
   --radius-default: var(--rounded-default);
   --radius-x-large: var(--rounded-x-large);
+
+  /* Modal */
+
+  --container-modal-sm: var(--modal-width-sm);
+  --container-modal-md: var(--modal-width-md);
+  --container-modal-lg: var(--modal-width-lg);
+
+  --spacing-modal-sm: var(--modal-width-sm);
+  --spacing-modal-md: var(--modal-width-md);
+  --spacing-modal-lg: var(--modal-width-lg);
 }

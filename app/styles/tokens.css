@@ -272,3 +272,19 @@
   --form-control-width: 280px;
   --icon-rounded-diameter: 20px;
 }
+
+/* Modal */
+
+:root {
+  --modal-width-sm: 420px;
+  --modal-width-md: 547px;
+  --modal-width-lg: 720px;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --modal-width-sm: 288px;
+    --modal-width-md: 288px;
+    --modal-width-lg: 288px;
+  }
+}
