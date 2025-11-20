@@ -15,7 +15,7 @@ import {
  * @param variant - The variant name (h1-h6, body, body-small, body-tiny)
  */
 const createTypographyVariant = (variant: string) =>
-  `text-[length:var(--font-size-${variant})] leading-[var(--line-height-${variant})]`
+  `text-${variant} leading-${variant}`
 
 const typographyVariants = cva('', {
   variants: {
