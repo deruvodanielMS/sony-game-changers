@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Typography } from './typography'
+import { Typography } from './Typography'
 
 /**
  * Reusable wrapper component for story layouts
@@ -9,7 +9,7 @@ const TypographyShowcase = ({ children }: { children: React.ReactNode }) => (
 )
 
 const meta: Meta<typeof Typography> = {
-  title: 'UI/Typography',
+  title: 'Foundations/Typography',
   component: Typography,
   parameters: {
     layout: 'padded',

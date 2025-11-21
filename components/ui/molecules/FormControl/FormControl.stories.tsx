@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs'
-import { FormControl } from '@/components/ui/atoms/FormControl'
+import { FormControl } from './FormControl'
 
 const inputClases =
   'w-full rounded-tiny border border-gray-300 bg-white p-0_25 text-sm text-gray-900 placeholder:text-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-500'
 
 const meta = {
-  title: 'UI/FormControl',
+  title: 'Molecules/FormControl',
   component: FormControl,
   parameters: {
     layout: 'centered',

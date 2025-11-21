@@ -2,7 +2,7 @@ import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 
 const meta = {
-  title: 'UI/Color Tokens',
+  title: 'Foundations/ColorTokens',
   parameters: {
     layout: 'fullscreen',
   },
@@ -185,10 +185,10 @@ export const AllColorTokens: Story = {
     return (
       <div className="p-10">
         <div className="mb-12">
-          <h1 className="mb-4 text-[length:var(--font-size-h3)] font-semibold leading-[var(--line-height-h3)] text-[var(--neutral-1000)]">
+          <h1 className="mb-4 text-h3 font-semibold leading-h3 text-color-neutral-1000">
             Color Tokens
           </h1>
-          <p className="text-[length:var(--font-size-body)] text-[var(--neutral-600)]">
+          <p className="text-body text-color-neutral-600">
             Complete color palette configured in the design system. Colors adapt automatically based
             on the theme (light/dark).
           </p>

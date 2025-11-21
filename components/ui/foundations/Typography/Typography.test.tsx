@@ -1,8 +1,8 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import { Typography } from './typography'
-import { TYPOGRAPHY_COLORS } from './typography.constants'
+import { Typography } from './Typography'
+import { TYPOGRAPHY_COLORS } from './Typography.constants'
 
 describe('Typography', () => {
   it('renders with default variant', () => {

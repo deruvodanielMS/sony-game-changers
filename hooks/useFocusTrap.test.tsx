@@ -1,7 +1,6 @@
 import React, { useRef } from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 
 import { useFocusTrap } from './useFocusTrap'
 
@@ -56,7 +55,12 @@ describe('useFocusTrap', () => {
     btn1.focus()
     expect(document.activeElement).toBe(btn1)
 
-    const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true, shiftKey: true })
+    const ev = new KeyboardEvent('keydown', {
+      key: 'Tab',
+      bubbles: true,
+      cancelable: true,
+      shiftKey: true,
+    })
     const spy = vi.spyOn(ev, 'preventDefault')
     document.dispatchEvent(ev)
 
@@ -72,7 +76,7 @@ describe('useFocusTrap', () => {
       </TestHarness>,
     )
 
-    const [btn1, btn2] = screen.getAllByRole('button')
+    const [, btn2] = screen.getAllByRole('button')
     btn2.focus()
     expect(document.activeElement).toBe(btn2)
 

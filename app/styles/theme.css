@@ -118,4 +118,24 @@
   --spacing-modal-sm: var(--modal-width-sm);
   --spacing-modal-md: var(--modal-width-md);
   --spacing-modal-lg: var(--modal-width-lg);
+
+  /* Buttons */
+
+  --spacing-button-height: var(--button-height-default);
+  --spacing-button-height-small: var(--button-height-small);
+
+  --color-button-primary-from: var(--primary-from);
+  --color-button-primary-to: var(--primary-to);
+
+  --shadow-button-primary: var(--primary-hover-shadow);
+  --shadow-button-primary-compound: var(--primary-compound-hover-shadow);
+
+  --shadow-button-secondary: var(--secondary-shadow);
+  --shadow-button-secondary-hover: var(--secondary-hover-shadow);
+
+  --shadow-button-tertiary-hover: var(--tertiary-hover-shadow);
+  --shadow-button-tertiary-danger-compound-hover: var(--tertiary-danger-compound-hover-shadow);
+
+  --shadow-button-plain-hover: var(--plain-hover-shadow);
+  --shadow-button-plain-danger-compound-hover: var(--plain-danger-compound-hover-shadow);
 }

@@ -4,7 +4,7 @@
 
 Purpose: give an AI coding agent the minimal, concrete knowledge to be productive in this Next.js + TypeScript repo.
 
-- Project type: Next.js (App Router) + TypeScript + Tailwind CSS. UI components are in `components/ui/` and follow a per-component folder convention.
+- Project type: Next.js (App Router) + TypeScript + Tailwind CSS. UI components are in `components/ui/` and follow Atomic Design methodology.
 - Important scripts (run from repository root):
   - Start dev server: `yarn dev` (uses `next dev`)
   - Install: `yarn install --frozen-lockfile`
@@ -13,14 +13,32 @@ Purpose: give an AI coding agent the minimal, concrete knowledge to be productiv
   - Tests: `yarn test` (vitest), watch with `yarn test:watch`, coverage `yarn test:coverage`
   - Lint/format: `yarn lint`, `yarn lint:fix`, `yarn format`
 
+Atomic Design structure (strictly enforced)
+
+- Component organization follows Atomic Design:
+  - `components/ui/foundations/[Component]/` - Design system fundamentals (Typography, ColorTokens)
+  - `components/ui/atoms/[Component]/` - Basic building blocks (Button, Input, Modal)
+  - `components/ui/molecules/[Component]/` - Simple component groups (FormControl, SearchBar)
+  - `components/ui/organisms/[Component]/` - Complex UI sections (Header, Footer)
+- Each component folder contains:
+  - `[Component].tsx` - Main component (PascalCase)
+  - `[Component].test.tsx` - Unit tests
+  - `[Component].stories.tsx` - Storybook stories
+  - `[Component].types.ts` - Type definitions (optional)
+  - `index.tsx` - Barrel export
+- Naming: All files and folders use PascalCase matching component name
+
 Quick architecture notes you must follow
 
 - App Router + server/client split: server components (SC) are used for layouts and data fetching; client components (CC) are used for visual UI and live interactions. See `docs/CODE_GUIDELINES.md` for exact rules.
 - Rule: CC may import SC; SC must never import CC. CCs should include the client directive at the top (project convention: `use client`).
 - Location patterns:
   - Pages & layouts: `app/` (Next App Router)
-  - Visual components: `components/ui/[ComponentName]/[Component].tsx`
-  - Stories: `components/ui/.../*.stories.tsx`
+  - Foundations: `components/ui/foundations/[Component]/[Component].tsx`
+  - Atoms: `components/ui/atoms/[Component]/[Component].tsx`
+  - Molecules: `components/ui/molecules/[Component]/[Component].tsx`
+  - Organisms: `components/ui/organisms/[Component]/[Component].tsx`
+  - Stories: `components/ui/**/*.stories.tsx`
   - Tests: `*.test.tsx` or `*.test.ts` colocated with source files
 
 Component & styling conventions (concrete)
@@ -53,10 +71,14 @@ Repository conventions and commit/PR format
 
 Concrete file references to consult when you need examples
 
-- Component example: `components/ui/atoms/FormControl/FormControl.tsx` — shows `cn()` usage, helper subcomponents, and in-place Tailwind utilities.
-- App root layout: `app/layout.tsx` — minimal server layout placeholder.
-- Global guidelines and naming conventions: `docs/CODE_GUIDELINES.md`.
-- Scripts & dependencies: `package.json` (Next 16, React 19, TypeScript 5, Vitest).
+- Atomic Design structure: See `docs/CODE_GUIDELINES.md` for complete folder organization
+- Foundations example: `components/ui/foundations/Typography/Typography.tsx` — design system fundamentals
+- Atoms example: `components/ui/atoms/Button/Button.tsx` — shows CVA variants, `cn()` usage, and comprehensive testing (31 tests, 13 stories)
+- Molecules example: `components/ui/molecules/FormControl/FormControl.tsx` — shows `cn()` usage, helper subcomponents, and composition patterns
+- App root layout: `app/layout.tsx` — minimal server layout placeholder
+- Global guidelines and naming conventions: `docs/CODE_GUIDELINES.md`
+- Storybook organization: `.storybook/STORY_GUIDELINES.md`
+- Scripts & dependencies: `package.json` (Next 16, React 19, TypeScript 5, Vitest)
 
 When editing code, prefer small, focused changes
 

@@ -8,14 +8,13 @@ import {
   TYPOGRAPHY_COLORS,
   type TypographyColor,
   type TypographyElement,
-} from './typography.constants'
+} from './Typography.constants'
 
 /**
  * Helper function to create typography variant classes following DRY principles
  * @param variant - The variant name (h1-h6, body, body-small, body-tiny)
  */
-const createTypographyVariant = (variant: string) =>
-  `text-${variant} leading-${variant}`
+const createTypographyVariant = (variant: string) => `text-${variant} leading-${variant}`
 
 const typographyVariants = cva('', {
   variants: {

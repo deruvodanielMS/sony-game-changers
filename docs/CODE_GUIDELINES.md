@@ -6,13 +6,27 @@
 
 ## 1. UI Components Base Guidelines
 
-**Location:**
+**Location (Atomic Design):**
 
 ```text
-components/ui/[ComponentName]/
-[Component].tsx
-[Component].test.tsx
-[Component].stories.tsx
+**Location (Atomic Design):**
+
+```
+
+components/ui/foundations/[ComponentName]/ # Typography, ColorTokens, etc.
+components/ui/atoms/[ComponentName]/ # Button, Input, etc.
+components/ui/molecules/[ComponentName]/ # FormControl, SearchBar, etc.
+components/ui/organisms/[ComponentName]/ # Header, Footer, etc.
+
+```
+
+Each component folder contains:
+[Component].tsx                            # Main component file
+[Component].test.tsx                       # Unit tests
+[Component].stories.tsx                    # Storybook stories
+index.tsx                                  # Barrel export
+
+Naming convention: All files use PascalCase matching the component name.
 ```
 
 ---
@@ -20,6 +34,8 @@ components/ui/[ComponentName]/
 **Conventions:**
 
 - `use client` always at the top of visual components.
+- **File naming:** PascalCase for all component files (Button.tsx, not button.tsx).
+- **Folder naming:** PascalCase matching component name (Button/, not button/).
 - Import order: React → 3rd-party → internal.
 - Props types defined before the component.
 - Named export (`export function Button`).
