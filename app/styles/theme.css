@@ -62,6 +62,9 @@
   --color-feedback-info-20: var(--feedback-info-20);
   --color-feedback-success-10: var(--feedback-success-10);
   --color-feedback-success-20: var(--feedback-success-20);
+
+  --color-black-10: var(--black-10);
+  --color-black-20: var(--black-20);
 }
 
 @theme inline {

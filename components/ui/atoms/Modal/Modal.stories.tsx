@@ -6,7 +6,7 @@ import { ModalBody } from './ModalBody'
 import { ModalFooter } from './ModalFooter'
 
 const meta: Meta<typeof Modal> = {
-  title: 'UI/Modal',
+  title: 'Atoms/Modal',
   component: Modal,
 }
 export default meta
