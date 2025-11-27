@@ -141,4 +141,9 @@
 
   --shadow-button-plain-hover: var(--plain-hover-shadow);
   --shadow-button-plain-danger-compound-hover: var(--plain-danger-compound-hover-shadow);
+
+  /* Layout */
+
+  --height-header: var(--header-height);
+  --width-sidebar: var(--sidebar-width);
 }

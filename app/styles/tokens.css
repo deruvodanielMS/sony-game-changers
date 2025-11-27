@@ -292,6 +292,13 @@
   }
 }
 
+/* Layout */
+
+:root {
+  --header-height: 64px;
+  --sidebar-width: 280px;
+}
+
 /* Buttons */
 
 :root {

@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl'
 
 import '../globals.css'
 import { DEFAULT_LANGUAGE } from '@/common/constants'
+import { AppLayout } from '@/components/ui/organisms/AppLayout'
 
 const inter = Inter({
   variable: '--font-inter',
@@ -27,7 +28,9 @@ export default async function LangLayout({
   return (
     <html lang={locale || DEFAULT_LANGUAGE} data-theme="light">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <AppLayout>{children}</AppLayout>
+        </NextIntlClientProvider>
       </body>
     </html>
   )
