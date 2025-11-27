@@ -1,0 +1,183 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Drawer Snapshots > matches snapshot - bottom position mobile sheet 1`] = `
+<div
+  aria-label="Bottom Sheet"
+  aria-modal="true"
+  class="fixed bg-neutral-0 box-border overflow-hidden flex flex-col shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)] transition-all duration-slow ease-spring bottom-0 left-0 right-0 w-full h-drawer-height-md md:h-drawer-height-lg translate-y-0 md:rounded-t-default rounded-t-large"
+  data-testid="drawer-container"
+  role="dialog"
+  tabindex="-1"
+>
+  <div
+    class="md:hidden flex justify-center py-0.5"
+  >
+    <div
+      class="w-4 h-0.25 bg-neutral-300 rounded-default"
+    />
+  </div>
+  <header
+    class="flex items-center gap-0.75 px-1.5 py-1 border-b border-neutral-200"
+  >
+    <div
+      class="flex-1 text-title-medium font-semibold text-neutral-1000"
+    >
+      Bottom Sheet
+    </div>
+    <button
+      aria-label="Close drawer"
+      class="shrink-0 w-6 h-6 items-center justify-center rounded-small hover:bg-neutral-100 transition-colors duration-base md:flex hidden"
+      data-testid="drawer-close-button"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="20"
+        viewBox="0 0 20 20"
+        width="20"
+      >
+        <path
+          d="M15 5L5 15M5 5L15 15"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-width="2"
+        />
+      </svg>
+    </button>
+  </header>
+  <div
+    class="flex-1 overflow-y-auto px-1.5 py-1"
+    data-testid="drawer-body"
+  >
+    <p>
+      Mobile content
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Drawer Snapshots > matches snapshot - default right position 1`] = `
+<div
+  aria-label="Snapshot Test"
+  aria-modal="true"
+  class="fixed bg-neutral-0 box-border overflow-hidden flex flex-col shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)] transition-all duration-slow ease-spring right-0 top-0 bottom-0 h-full w-drawer-width-md translate-x-0"
+  data-testid="drawer-container"
+  role="dialog"
+  tabindex="-1"
+>
+  <header
+    class="flex items-center gap-0.75 px-1.5 py-1 border-b border-neutral-200"
+  >
+    <div
+      class="flex-1 text-title-medium font-semibold text-neutral-1000"
+    >
+      Snapshot Test
+    </div>
+    <button
+      aria-label="Close drawer"
+      class="shrink-0 w-6 h-6 flex items-center justify-center rounded-small hover:bg-neutral-100 transition-colors duration-base"
+      data-testid="drawer-close-button"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="20"
+        viewBox="0 0 20 20"
+        width="20"
+      >
+        <path
+          d="M15 5L5 15M5 5L15 15"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-width="2"
+        />
+      </svg>
+    </button>
+  </header>
+  <div
+    class="flex-1 overflow-y-auto px-1.5 py-1"
+    data-testid="drawer-body"
+  >
+    <p>
+      Test content
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Drawer Snapshots > matches snapshot - large size without title 1`] = `
+<div
+  aria-label="Drawer dialog"
+  aria-modal="true"
+  class="fixed bg-neutral-0 box-border overflow-hidden flex flex-col shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)] transition-all duration-slow ease-spring right-0 top-0 bottom-0 h-full w-drawer-width-lg translate-x-0"
+  data-testid="drawer-container"
+  role="dialog"
+  tabindex="-1"
+>
+  <div
+    class="flex-1 overflow-y-auto px-1.5 py-1"
+    data-testid="drawer-body"
+  >
+    <p>
+      No title drawer
+    </p>
+  </div>
+</div>
+`;
+
+exports[`Drawer Snapshots > matches snapshot - left position with actions 1`] = `
+<div
+  aria-label="Left Drawer"
+  aria-modal="true"
+  class="fixed bg-neutral-0 box-border overflow-hidden flex flex-col shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)] transition-all duration-slow ease-spring left-0 top-0 bottom-0 h-full w-drawer-width-md translate-x-0"
+  data-testid="drawer-container"
+  role="dialog"
+  tabindex="-1"
+>
+  <header
+    class="flex items-center gap-0.75 px-1.5 py-1 border-b border-neutral-200"
+  >
+    <div
+      class="flex-1 text-title-medium font-semibold text-neutral-1000"
+    >
+      Left Drawer
+    </div>
+    <button
+      aria-label="Close drawer"
+      class="shrink-0 w-6 h-6 flex items-center justify-center rounded-small hover:bg-neutral-100 transition-colors duration-base"
+      data-testid="drawer-close-button"
+    >
+      <svg
+        aria-hidden="true"
+        fill="none"
+        height="20"
+        viewBox="0 0 20 20"
+        width="20"
+      >
+        <path
+          d="M15 5L5 15M5 5L15 15"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-width="2"
+        />
+      </svg>
+    </button>
+  </header>
+  <div
+    class="flex-1 overflow-y-auto px-1.5 py-1"
+    data-testid="drawer-body"
+  >
+    <p>
+      Content
+    </p>
+  </div>
+  <footer
+    class="flex items-center justify-end gap-0.75 px-1.5 py-1 border-t border-neutral-200 bg-neutral-50"
+    data-testid="drawer-footer"
+  >
+    <button>
+      Action
+    </button>
+  </footer>
+</div>
+`;

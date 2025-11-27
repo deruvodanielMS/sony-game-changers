@@ -32,7 +32,7 @@ export function AppLayout({ children, header, sidebar, footer, className }: AppL
         sidebar
           ? [
               // Desktop with sidebar: sidebar + main content
-              'lg:grid-cols-[var(--sidebar-width)_1fr]',
+              'lg:grid-cols-[var(--width-sidebar)_1fr]',
               'lg:grid-rows-[auto_1fr_auto]',
               'lg:[grid-template-areas:"header_header""sidebar_main""sidebar_footer"]',
               // Mobile with sidebar: stack vertically
@@ -67,8 +67,8 @@ export function AppLayout({ children, header, sidebar, footer, className }: AppL
             'bg-neutral-0',
             'border-r border-neutral-200',
             // Mobile: no fixed position
-            'lg:sticky lg:top-(--header-height)',
-            'lg:h-[calc(100vh-var(--header-height))]',
+            'lg:sticky lg:top-(--height-header)',
+            'lg:h-[calc(100vh-var(--height-header))]',
             'lg:overflow-y-auto',
           )}
         >
@@ -81,7 +81,7 @@ export function AppLayout({ children, header, sidebar, footer, className }: AppL
           '[grid-area:main]',
           'z-0',
           'bg-neutral-0',
-          'min-h-[calc(100vh-var(--header-height))]',
+          'min-h-[calc(100vh-var(--height-header))]',
           'w-full',
         )}
       >

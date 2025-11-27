@@ -146,4 +146,27 @@
 
   --height-header: var(--header-height);
   --width-sidebar: var(--sidebar-width);
+
+  /* Drawer */
+  --width-drawer-width-sm: var(--drawer-width-sm);
+  --width-drawer-width-md: var(--drawer-width-md);
+  --width-drawer-width-lg: var(--drawer-width-lg);
+  --height-drawer-height-sm: var(--drawer-height-sm);
+  --height-drawer-height-md: var(--drawer-height-md);
+  --height-drawer-height-lg: var(--drawer-height-lg);
+
+  /* Z-index */
+  --z-900: 900;
+
+  /* Transitions & Animations */
+  --duration-fast: var(--transition-duration-fast);
+  --duration-base: var(--transition-duration-base);
+  --duration-slow: var(--transition-duration-slow);
+  --duration-slower: var(--transition-duration-slower);
+
+  --ease-default: var(--transition-ease-default);
+  --ease-in: var(--transition-ease-in);
+  --ease-out: var(--transition-ease-out);
+  --ease-in-out: var(--transition-ease-in-out);
+  --ease-spring: var(--transition-ease-spring);
 }
