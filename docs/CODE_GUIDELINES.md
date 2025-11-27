@@ -64,6 +64,33 @@ const buttonVariants = cva('inline-flex items-center justify-center rounded-md f
 })
 ```
 
+### Internationalization (i18n):
+
+**Critical:** All user-facing strings MUST be internationalized using next-intl.
+
+```tsx
+import { useTranslations } from 'next-intl'
+
+export function MyComponent() {
+  const t = useTranslations('ComponentName')
+
+  return <h1>{t('title')}</h1>
+}
+```
+
+**Rules:**
+
+- ❌ Never hardcode strings: `label="Home"`
+- ✅ Always use translations: `label={t('home')}`
+- Translation keys in `messages/en.json` and `messages/fr.json`
+- Use descriptive namespaces: `Sidebar.*`, `MobileHeader.*`, etc.
+- For navigation, use `Link` from `@/i18n/navigation` (NOT `next/link`)
+
+```tsx
+import { Link } from '@/i18n/navigation' // ✅ Correct
+import Link from 'next/link' // ❌ Wrong - doesn't handle locale
+```
+
 ### Radix Primitives:
 
 - Never use primitives directly in pages; always wrap them.

@@ -1,4 +1,4 @@
-export interface AppLayoutProps {
+export interface AppLayoutBaseProps {
   /**
    * Main content area (pages)
    */
@@ -19,4 +19,8 @@ export interface AppLayoutProps {
    * Additional CSS classes
    */
   className?: string
+  /**
+   * Whether sidebar is collapsed (for dynamic grid)
+   */
+  sidebarCollapsed?: boolean
 }

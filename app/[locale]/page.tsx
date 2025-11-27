@@ -3,9 +3,11 @@ import { useTranslations } from 'next-intl'
 export default function HomePage() {
   const t = useTranslations('HomePage')
   return (
-    <>
+    <div className="p-4 md:p-6">
+      <h1 className="text-h3 leading-h3 font-bold text-neutral-1000 mb-4 md:mb-6">Home</h1>
+
       <section>
-        <h1 className="text-h1 leading-h1 font-bold text-accent-primary mb-4">{t('title')}</h1>
+        <h2 className="text-h4 leading-h4 font-bold text-accent-primary mb-4">{t('title')}</h2>
         <p className="text-body leading-body text-neutral-600">
           Visual overview of colors, typography, and spacing defined in the theme.
         </p>
@@ -126,6 +128,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-    </>
+    </div>
   )
 }

@@ -48,6 +48,31 @@ Component & styling conventions (concrete)
 - Always export named components (e.g. `export function Button(...)`) and match filename with exported symbol.
 - `className` should be last prop in JSX root.
 
+Internationalization (i18n) - CRITICAL
+
+**All user-facing strings MUST be internationalized using next-intl.**
+
+- ❌ Never hardcode strings: `label="Home"`, `<button>Click me</button>`
+- ✅ Always use translations: `label={t('home')}`, `<button>{t('clickMe')}</button>`
+
+```tsx
+import { useTranslations } from 'next-intl'
+
+export function MyComponent() {
+  const t = useTranslations('ComponentName')
+  return <h1>{t('title')}</h1>
+}
+```
+
+- Translation keys in `messages/en.json` and `messages/fr.json`
+- Use descriptive namespaces: `Sidebar.*`, `MobileHeader.*`, etc.
+- For navigation, use `Link` from `@/i18n/navigation` (NOT `next/link`)
+
+```tsx
+import { Link } from '@/i18n/navigation' // ✅ Correct
+import Link from 'next/link' // ❌ Wrong - doesn't handle locale
+```
+
 Radix & accessibility patterns
 
 - Radix primitives should be wrapped in project components (do not leak primitives directly into pages). Use `asChild` when appropriate.

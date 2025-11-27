@@ -63,14 +63,14 @@ describe('TextArea', () => {
     it('renders default size', () => {
       const { container } = render(<TextArea size="default" />)
       const textarea = container.querySelector('textarea')
-      expect(textarea?.className).toContain('min-h-[96px]')
+      expect(textarea?.className).toContain('min-h-space-6')
       expect(textarea?.className).toContain('text-body')
     })
 
     it('renders small size', () => {
       const { container } = render(<TextArea size="small" />)
       const textarea = container.querySelector('textarea')
-      expect(textarea?.className).toContain('min-h-[64px]')
+      expect(textarea?.className).toContain('min-h-space-4')
       expect(textarea?.className).toContain('text-body-small')
     })
   })
@@ -205,7 +205,7 @@ describe('TextArea', () => {
       const { container } = render(<TextArea variant="error" size="small" resize="none" />)
       const textarea = container.querySelector('textarea')
       expect(textarea?.className).toContain('border-feedback-danger-600')
-      expect(textarea?.className).toContain('min-h-[64px]')
+      expect(textarea?.className).toContain('min-h-space-4')
       expect(textarea?.className).toContain('resize-none')
     })
 

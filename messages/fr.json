@@ -1,5 +1,28 @@
 {
   "HomePage": {
     "title": "Bonjour le monde!"
+  },
+  "Sidebar": {
+    "mainNavigation": "Navigation principale",
+    "home": "Accueil",
+    "gameChangers": "Game Changers",
+    "myTeam": "Mon équipe",
+    "notifications": "Notifications",
+    "profile": "Profil",
+    "expandSidebar": "Développer la barre latérale",
+    "collapseSidebar": "Réduire la barre latérale",
+    "closeMenu": "Fermer le menu"
+  },
+  "MobileHeader": {
+    "playStationHome": "PlayStation - Accueil",
+    "openNavigationMenu": "Ouvrir le menu de navigation",
+    "closeNavigationMenu": "Fermer le menu de navigation"
+  },
+  "Pages": {
+    "home": "Accueil",
+    "gameChangers": "Game Changers",
+    "myTeam": "Mon équipe",
+    "notifications": "Notifications",
+    "profile": "Profil"
   }
 }

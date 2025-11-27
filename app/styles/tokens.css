@@ -297,6 +297,7 @@
 :root {
   --header-height: 64px;
   --sidebar-width: 280px;
+  --sidebar-collapsed-width: 64px;
 }
 
 /* Drawer */

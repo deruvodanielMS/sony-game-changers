@@ -146,6 +146,11 @@
 
   --height-header: var(--header-height);
   --width-sidebar: var(--sidebar-width);
+  --width-sidebar-collapsed: var(--sidebar-collapsed-width);
+
+  /* Sidebar width utilities */
+  --size-w-sidebar: var(--sidebar-width);
+  --size-w-sidebar-collapsed: var(--sidebar-collapsed-width);
 
   /* Drawer */
   --width-drawer-width-sm: var(--drawer-width-sm);

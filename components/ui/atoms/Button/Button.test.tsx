@@ -33,15 +33,15 @@ describe('Button', () => {
     it('renders primary variant', () => {
       const { container } = render(<Button variant="primary">Primary</Button>)
       const button = container.querySelector('button')
-      expect(button?.className).toContain('from-indigo-500')
-      expect(button?.className).toContain('to-fuchsia-500')
+      expect(button?.className).toContain('from-button-primary-from')
+      expect(button?.className).toContain('to-button-primary-to')
     })
 
     it('renders secondary variant', () => {
       const { container } = render(<Button variant="secondary">Secondary</Button>)
       const button = container.querySelector('button')
       expect(button?.className).toContain('bg-neutral-0')
-      expect(button?.className).toContain('shadow-[inset_0_0_0_1px_var(--neutral-1000)]')
+      expect(button?.className).toContain('shadow-button-secondary')
     })
 
     it('renders tertiary variant', () => {
@@ -61,13 +61,13 @@ describe('Button', () => {
     it('renders default size', () => {
       const { container } = render(<Button size="default">Default</Button>)
       const button = container.querySelector('button')
-      expect(button?.className).toContain('h-[44px]')
+      expect(button?.className).toContain('h-button-height')
     })
 
     it('renders small size', () => {
       const { container } = render(<Button size="small">Small</Button>)
       const button = container.querySelector('button')
-      expect(button?.className).toContain('h-[32px]')
+      expect(button?.className).toContain('h-button-height-small')
     })
   })
 

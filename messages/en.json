@@ -1,5 +1,28 @@
 {
   "HomePage": {
     "title": "Hello world!"
+  },
+  "Sidebar": {
+    "mainNavigation": "Main navigation",
+    "home": "Home",
+    "gameChangers": "Game Changers",
+    "myTeam": "My Team",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar",
+    "closeMenu": "Close Menu"
+  },
+  "MobileHeader": {
+    "playStationHome": "PlayStation - Home",
+    "openNavigationMenu": "Open navigation menu",
+    "closeNavigationMenu": "Close navigation menu"
+  },
+  "Pages": {
+    "home": "Home",
+    "gameChangers": "Game Changers",
+    "myTeam": "My Team",
+    "notifications": "Notifications",
+    "profile": "Profile"
   }
 }
