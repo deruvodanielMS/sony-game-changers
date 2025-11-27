@@ -43,7 +43,7 @@ describe('TextField', () => {
         placeholder="with icons"
         leftIcon={<svg data-testid="left" />}
         rightIcon={<svg data-testid="right" />}
-      />
+      />,
     )
     expect(screen.getByTestId('left')).toBeInTheDocument()
     expect(screen.getByTestId('right')).toBeInTheDocument()

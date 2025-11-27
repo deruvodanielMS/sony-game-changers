@@ -1,7 +1,6 @@
 import React from 'react'
 
-export interface TextFieldProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+export interface TextFieldProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   /** Any valid HTML input type */
   type?: React.HTMLInputTypeAttribute
 

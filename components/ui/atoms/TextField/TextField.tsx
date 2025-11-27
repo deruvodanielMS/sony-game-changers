@@ -27,10 +27,11 @@ const rootStyles = cva(
       hasError: false,
       fullWidth: true,
     },
-  }
+  },
 )
 
-const inputStyles = 'flex-1 bg-transparent outline-none placeholder:text-neutral-600 text-neutral-1000 py-0_75 px-1';
+const inputStyles =
+  'flex-1 bg-transparent outline-none placeholder:text-neutral-600 text-neutral-1000 py-0_75 px-1'
 
 function TextFieldImpl(props: TextFieldProps, ref: React.ForwardedRef<HTMLInputElement>) {
   const {
@@ -42,10 +43,10 @@ function TextFieldImpl(props: TextFieldProps, ref: React.ForwardedRef<HTMLInputE
     readOnly,
     placeholder,
     fullWidth = true,
+    ['aria-invalid']: ariaInvalid,
     ...rest
   } = props
 
-  const ariaInvalid = (rest as any)['aria-invalid']
   const hasError = ariaInvalid === true || ariaInvalid === 'true'
 
   return (
@@ -53,12 +54,15 @@ function TextFieldImpl(props: TextFieldProps, ref: React.ForwardedRef<HTMLInputE
       className={cn(
         rootStyles({ disabled: !!disabled || !!readOnly, hasError, fullWidth }),
         'focus-within:ring-1 focus-within:ring-neutral-1000',
-        className
+        className,
       )}
       aria-hidden={false}
     >
       {leftIcon ? (
-        <span className="w-3 h-3 flex items-center justify-center text-neutral-400 mr-0_25 select-none" aria-hidden>
+        <span
+          className="w-3 h-3 flex items-center justify-center text-neutral-400 mr-0_25 select-none"
+          aria-hidden
+        >
           {leftIcon}
         </span>
       ) : null}
@@ -66,11 +70,7 @@ function TextFieldImpl(props: TextFieldProps, ref: React.ForwardedRef<HTMLInputE
       <input
         ref={ref}
         type={type}
-        className={cn(
-          inputStyles,
-          leftIcon ? 'pl-0' : '',
-          rightIcon ? 'pr-0' : '',
-        )}
+        className={cn(inputStyles, leftIcon ? 'pl-0' : '', rightIcon ? 'pr-0' : '')}
         placeholder={placeholder}
         disabled={disabled}
         readOnly={readOnly}
@@ -78,7 +78,10 @@ function TextFieldImpl(props: TextFieldProps, ref: React.ForwardedRef<HTMLInputE
       />
 
       {rightIcon ? (
-        <span className="w-3 h-3 flex items-center justify-center text-neutral-400 ml-0_25 select-none" aria-hidden>
+        <span
+          className="w-3 h-3 flex items-center justify-center text-neutral-400 ml-0_25 select-none"
+          aria-hidden
+        >
           {rightIcon}
         </span>
       ) : null}

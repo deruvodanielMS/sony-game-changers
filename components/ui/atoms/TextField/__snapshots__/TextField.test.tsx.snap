@@ -1,0 +1,16 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TextField > matches snapshot 1`] = `
+<DocumentFragment>
+  <div
+    aria-hidden="false"
+    class="inline-flex items-center bg-transparent rounded-small transition-colors border rounded-small h-3 w-full focus-within:ring-1 focus-within:ring-neutral-1000"
+  >
+    <input
+      class="flex-1 bg-transparent outline-none placeholder:text-neutral-600 text-neutral-1000 py-0_75 px-1"
+      placeholder="snap"
+      type="text"
+    />
+  </div>
+</DocumentFragment>
+`;

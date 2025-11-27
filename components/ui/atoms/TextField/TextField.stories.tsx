@@ -57,7 +57,6 @@ export const WithBothIcons: Story = {
   },
 }
 
-
 export const States: Story = {
   render: (args: TextFieldProps) => (
     <div className="space-y-2 w-80">
@@ -77,8 +76,7 @@ export const CustomWidth: Story = {
       <TextField {...args} placeholder="Fixed width" fullWidth={false} className="w-96" />
     </div>
   ),
-  args: {
-  },
+  args: {},
 }
 
 export const Playground: Story = {
