@@ -8,6 +8,7 @@ import { SidebarNav } from '@/components/ui/molecules/SidebarNav'
 import { SidebarNavItem } from '@/components/ui/molecules/SidebarNavItem'
 import { LanguageSwitcher } from '@/components/ui/molecules/LanguageSwitcher'
 import type { SidebarProps } from './Sidebar.types'
+import { ROUTES } from '@/common/routes'
 
 /**
  * Sidebar - Application sidebar with navigation items
@@ -70,19 +71,19 @@ export function Sidebar({
             label={t('home')}
             isActive
             isCollapsed={isCollapsed}
-            href="/"
+            href={ROUTES.ROOT}
           />
           <SidebarNavItem
             icon={<UserCheck size={20} />}
             label={t('gameChangers')}
             isCollapsed={isCollapsed}
-            href="/game-changers"
+            href={ROUTES.GAME_CHANGERS}
           />
           <SidebarNavItem
             icon={<Users size={20} />}
             label={t('myTeam')}
             isCollapsed={isCollapsed}
-            href="/team"
+            href={ROUTES.TEAM}
           />
         </SidebarNav>
       </div>
@@ -127,7 +128,7 @@ export function Sidebar({
               icon={<Bell size={20} />}
               label={t('notifications')}
               isCollapsed={isCollapsed}
-              href="/notifications"
+              href={ROUTES.NOTIFICATIONS}
             />
             <SidebarNavItem
               icon={
@@ -139,7 +140,7 @@ export function Sidebar({
               }
               label={t('profile')}
               isCollapsed={isCollapsed}
-              href="/profile"
+              href={ROUTES.PROFILE}
             />
           </SidebarNav>
         </div>
