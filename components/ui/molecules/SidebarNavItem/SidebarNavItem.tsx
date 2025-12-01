@@ -3,7 +3,7 @@
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/utils/cn'
 import type { SidebarNavItemProps } from './SidebarNavItem.types'
-import { routes } from '@/common/routes'
+import { ROUTES } from '@/common/routes'
 
 /**
  * SidebarNavItem component
@@ -29,7 +29,7 @@ export function SidebarNavItem({
   return (
     <div className="relative group">
       <Comp
-        href={href || routes.ROOT}
+        href={href || ROUTES.ROOT}
         onClick={onClick}
         role={isButton ? 'button' : undefined}
         aria-current={isActive ? 'page' : undefined}

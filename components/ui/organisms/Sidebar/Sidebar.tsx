@@ -131,7 +131,7 @@ export function Sidebar({
             />
             <SidebarNavItem
               icon={
-                <Image
+                <img
                   src="https://i.pravatar.cc/40?img=12"
                   alt={t('profile')}
                   className="w-5 h-5 rounded-full object-cover"

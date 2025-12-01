@@ -1,0 +1,50 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LayoutTabSection > renders correctly (snapshot) 1`] = `
+<DocumentFragment>
+  <div
+    class="block px-3"
+  >
+    <div
+      data-testid="tabs-root"
+      data-value="account"
+    >
+      <div
+        data-testid="tabs-list"
+      >
+        <button
+          class="min-w-[200px] p-0_75 gap-0_5 text-body leading-body flex items--center bg-neutral-100 hover:bg-neutral-200 data-[state=active]:bg-neutral-800 data-[state=active]:text-neutral-0 rounded-default"
+          data-testid="tab-account"
+        >
+          <a
+            href="/settings/account"
+          >
+            A
+            <span>
+              Account
+            </span>
+          </a>
+        </button>
+        <button
+          class="min-w-[200px] p-0_75 gap-0_5 text-body leading-body flex items--center bg-neutral-100 hover:bg-neutral-200 data-[state=active]:bg-neutral-800 data-[state=active]:text-neutral-0 rounded-default"
+          data-testid="tab-password"
+        >
+          <a
+            href="/settings/password"
+          >
+            P
+            <span>
+              Password
+            </span>
+          </a>
+        </button>
+      </div>
+      <div>
+        <div>
+          Child content
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;

@@ -21,7 +21,11 @@
   "Pages": {
     "home": "Accueil",
     "gameChangers": "Game Changers",
-    "gameChangersGoals": "Goals",
+    "gameChangersGoals": "Objectifs",
+    "gameChangersCheckIns": "Points de contrôle",
+    "gameChangersFeedback": "Retour d'information",
+    "gameChangersPerformanceReviews": "Évaluations de performance",
+    "gameChangersTalentPlanning": "Planification des talents",
     "myTeam": "Mon équipe",
     "notifications": "Notifications",
     "profile": "Profil"
