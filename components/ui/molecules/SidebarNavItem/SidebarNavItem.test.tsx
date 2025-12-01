@@ -4,6 +4,14 @@ import userEvent from '@testing-library/user-event'
 import { Home } from 'lucide-react'
 import { SidebarNavItem } from './SidebarNavItem'
 
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ children, href, ...props }: { children: React.ReactNode; href: string }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
+}))
+
 describe('SidebarNavItem', () => {
   const defaultProps = {
     label: 'Home',

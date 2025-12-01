@@ -2,6 +2,13 @@ import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MobileHeader } from './MobileHeader'
+import translations from '@/messages/en.json'
+
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    return (translations.MobileHeader as Record<string, string>)[key] || key
+  },
+}))
 
 describe('MobileHeader', () => {
   describe('Rendering', () => {

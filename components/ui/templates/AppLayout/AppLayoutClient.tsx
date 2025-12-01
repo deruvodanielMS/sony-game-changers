@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, startTransition } from 'react'
 import { AppLayoutBase } from './AppLayout'
 import { Drawer } from '@/components/ui/atoms/Drawer'
 import { MobileHeader } from '@/components/ui/organisms/MobileHeader'
@@ -20,11 +20,15 @@ export function AppLayout({ children, ...props }: AppLayoutProps) {
   // Detect mobile viewport after mount to prevent hydration mismatch
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
+      startTransition(() => {
+        setIsMobile(window.innerWidth < 768)
+      })
     }
 
     checkMobile()
-    setMounted(true)
+    startTransition(() => {
+      setMounted(true)
+    })
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])

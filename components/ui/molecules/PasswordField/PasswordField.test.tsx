@@ -1,5 +1,6 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, it, expect } from 'vitest'
 import { PasswordField } from './PasswordField'
 
@@ -25,18 +26,19 @@ describe('PasswordField', () => {
     expect(container).toMatchSnapshot()
   })
 
-  it('toggles via keyboard (Enter and Space)', () => {
+  it('toggles via keyboard (Enter and Space)', async () => {
+    const user = userEvent.setup()
     render(<PasswordField placeholder="Password" />)
-    const input = screen.getByRole('textbox') as HTMLInputElement
+    const input = screen.getByPlaceholderText('Password') as HTMLInputElement
     const button = screen.getByRole('button', { name: /show password/i })
 
     // Enter
     button.focus()
-    fireEvent.keyDown(button, { key: 'Enter', code: 'Enter' })
+    await user.keyboard('{Enter}')
     expect(input.type).toBe('text')
 
     // Space toggles back
-    fireEvent.keyDown(button, { key: ' ', code: 'Space' })
+    await user.keyboard(' ')
     expect(input.type).toBe('password')
   })
 

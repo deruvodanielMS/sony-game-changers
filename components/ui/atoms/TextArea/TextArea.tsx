@@ -46,8 +46,7 @@ const textareaVariants = cva(
 )
 
 export interface TextAreaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-    VariantProps<typeof textareaVariants> {
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement>, VariantProps<typeof textareaVariants> {
   /**
    * Visual style variant
    * @default 'default'

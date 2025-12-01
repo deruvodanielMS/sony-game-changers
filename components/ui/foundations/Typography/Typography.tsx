@@ -53,7 +53,8 @@ const typographyVariants = cva('', {
  * ```
  */
 export interface TypographyProps
-  extends Omit<React.HTMLAttributes<HTMLElement>, 'color'>,
+  extends
+    Omit<React.HTMLAttributes<HTMLElement>, 'color'>,
     VariantProps<typeof typographyVariants> {
   /** The HTML element to render. Defaults to semantic element based on variant (h1-h6 for headings, p for body) */
   as?: TypographyElement
