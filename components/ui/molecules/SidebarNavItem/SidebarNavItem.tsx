@@ -27,7 +27,7 @@ export function SidebarNavItem({
   const isButton = !href
 
   return (
-    <div className="relative group">
+    <div className="relative group before:hidden after:hidden">
       <Comp
         href={href || ROUTES.ROOT}
         onClick={onClick}
@@ -36,14 +36,16 @@ export function SidebarNavItem({
         aria-label={isCollapsed ? label : undefined}
         data-test-id={dataTestId}
         className={cn(
-          'flex items-center w-full',
+          'flex items-center w-full h-3',
           'transition-all duration-fast',
           'rounded-default',
-          'text-body-small leading-body-small font-bold',
-          'focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-accent-primary/20',
-          isCollapsed ? 'justify-center p-0_5 gap-0' : 'px-1 py-0_75 gap-0_5',
+          'text-body-small leading-body-small font-semibold',
+          'focus-visible:outline-none',
+          'before:hidden after:hidden',
+          'border-0 outline-none ring-0',
+          isCollapsed ? 'justify-center p-0_75 overflow-hidden' : 'px-1 py-0_75 gap-0_5',
           isActive
-            ? ['bg-neutral-800', 'text-neutral-0', 'font-bold']
+            ? ['bg-neutral-800', 'text-neutral-0']
             : [
                 'text-neutral-1000',
                 'hover:bg-neutral-200',
@@ -82,32 +84,6 @@ export function SidebarNavItem({
           </span>
         )}
       </Comp>
-
-      {/* Tooltip for collapsed state */}
-      {isCollapsed && (
-        <div
-          role="tooltip"
-          className={cn(
-            'absolute left-full ml-0_5 top-1/2 -translate-y-1/2',
-            'px-0_75 py-0_5',
-            'bg-neutral-1000 text-neutral-0',
-            'text-body-tiny leading-body-tiny font-medium',
-            'rounded-tiny',
-            'whitespace-nowrap',
-            'pointer-events-none',
-            'opacity-0 group-hover:opacity-100',
-            'transition-opacity duration-fast',
-            'z-50',
-          )}
-        >
-          {label}
-          {badge && (
-            <span className="ml-0_5 px-0_25 py-0_125 bg-neutral-0/20 rounded-tiny text-body-tiny">
-              {badge}
-            </span>
-          )}
-        </div>
-      )}
     </div>
   )
 }

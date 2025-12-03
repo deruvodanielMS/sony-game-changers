@@ -299,7 +299,8 @@
 :root {
   --header-height: 64px;
   --sidebar-width: 280px;
-  --sidebar-collapsed-width: 64px;
+  --sidebar-collapsed-width: 96px;
+  --mobile-drawer-offset: 50px;
 }
 
 /* Drawer */

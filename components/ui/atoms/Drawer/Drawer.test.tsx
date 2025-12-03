@@ -1,23 +1,30 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Drawer } from './Drawer'
 
 describe('Drawer', () => {
-  it('renders when open=true and not when open=false', () => {
+  it('renders when open=true and not when open=false', async () => {
     const { rerender } = render(
-      <Drawer open={true} onClose={() => {}} title="Test Drawer">
+      <Drawer open onClose={() => {}} title="Test Drawer">
         Body content
       </Drawer>,
     )
-    expect(screen.queryByRole('dialog')).toBeInTheDocument()
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
 
     rerender(
       <Drawer open={false} onClose={() => {}} title="Test Drawer">
         Body content
       </Drawer>,
     )
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+
+    // Wait for unmount animation (500ms) to complete
+    await waitFor(
+      () => {
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+      },
+      { timeout: 600 },
+    )
   })
 
   it('calls onClose on overlay click when overlayClose=true', async () => {

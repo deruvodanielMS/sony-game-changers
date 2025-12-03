@@ -13,7 +13,7 @@ export function SidebarNav({ children, isCollapsed = false, className }: Sidebar
     <nav
       role="navigation"
       aria-label="Main navigation"
-      className={cn('flex flex-col gap-0_25', className)}
+      className={cn('flex flex-col gap-1', className)}
     >
       {children}
     </nav>
