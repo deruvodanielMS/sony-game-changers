@@ -1,0 +1,201 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ProgressRing > snapshots > matches snapshot at 0% progress 1`] = `
+<div>
+  <svg
+    class="rotate-[-90deg]"
+    height="48"
+    viewBox="0 0 48 48"
+    width="48"
+  >
+    <defs>
+      <lineargradient
+        id="progress-gradient-w4rgmdega"
+        x1="0%"
+        x2="100%"
+        y1="0%"
+        y2="100%"
+      >
+        <stop
+          offset="0%"
+          style="stop-color: var(--color-extra-blue-600);"
+        />
+        <stop
+          offset="100%"
+          style="stop-color: var(--color-extra-pink-600);"
+        />
+      </lineargradient>
+    </defs>
+    <circle
+      cx="24"
+      cy="24"
+      fill="none"
+      r="21"
+      stroke="#E8E4FF"
+      stroke-width="6"
+    />
+    <circle
+      cx="24"
+      cy="24"
+      fill="none"
+      r="21"
+      stroke="url(#progress-gradient-w4rgmdega)"
+      stroke-dasharray="131.94689145077132"
+      stroke-dashoffset="131.94689145077132"
+      stroke-linecap="round"
+      stroke-width="6"
+      style="transition: stroke-dashoffset 0.3s ease;"
+    />
+  </svg>
+</div>
+`;
+
+exports[`ProgressRing > snapshots > matches snapshot at 50% progress 1`] = `
+<div>
+  <svg
+    class="rotate-[-90deg]"
+    height="48"
+    viewBox="0 0 48 48"
+    width="48"
+  >
+    <defs>
+      <lineargradient
+        id="progress-gradient-6mphmx71g"
+        x1="0%"
+        x2="100%"
+        y1="0%"
+        y2="100%"
+      >
+        <stop
+          offset="0%"
+          style="stop-color: var(--color-extra-blue-600);"
+        />
+        <stop
+          offset="100%"
+          style="stop-color: var(--color-extra-pink-600);"
+        />
+      </lineargradient>
+    </defs>
+    <circle
+      cx="24"
+      cy="24"
+      fill="none"
+      r="21"
+      stroke="#E8E4FF"
+      stroke-width="6"
+    />
+    <circle
+      cx="24"
+      cy="24"
+      fill="none"
+      r="21"
+      stroke="url(#progress-gradient-6mphmx71g)"
+      stroke-dasharray="131.94689145077132"
+      stroke-dashoffset="65.97344572538566"
+      stroke-linecap="round"
+      stroke-width="6"
+      style="transition: stroke-dashoffset 0.3s ease;"
+    />
+  </svg>
+</div>
+`;
+
+exports[`ProgressRing > snapshots > matches snapshot at 100% progress 1`] = `
+<div>
+  <svg
+    class="rotate-[-90deg]"
+    height="48"
+    viewBox="0 0 48 48"
+    width="48"
+  >
+    <defs>
+      <lineargradient
+        id="progress-gradient-8adp51is0"
+        x1="0%"
+        x2="100%"
+        y1="0%"
+        y2="100%"
+      >
+        <stop
+          offset="0%"
+          style="stop-color: var(--color-extra-blue-600);"
+        />
+        <stop
+          offset="100%"
+          style="stop-color: var(--color-extra-pink-600);"
+        />
+      </lineargradient>
+    </defs>
+    <circle
+      cx="24"
+      cy="24"
+      fill="none"
+      r="21"
+      stroke="#E8E4FF"
+      stroke-width="6"
+    />
+    <circle
+      cx="24"
+      cy="24"
+      fill="none"
+      r="21"
+      stroke="url(#progress-gradient-8adp51is0)"
+      stroke-dasharray="131.94689145077132"
+      stroke-dashoffset="0"
+      stroke-linecap="round"
+      stroke-width="6"
+      style="transition: stroke-dashoffset 0.3s ease;"
+    />
+  </svg>
+</div>
+`;
+
+exports[`ProgressRing > snapshots > matches snapshot with custom size and strokeWidth 1`] = `
+<div>
+  <svg
+    class="rotate-[-90deg]"
+    height="64"
+    viewBox="0 0 64 64"
+    width="64"
+  >
+    <defs>
+      <lineargradient
+        id="progress-gradient-9coj06civ"
+        x1="0%"
+        x2="100%"
+        y1="0%"
+        y2="100%"
+      >
+        <stop
+          offset="0%"
+          style="stop-color: var(--color-extra-blue-600);"
+        />
+        <stop
+          offset="100%"
+          style="stop-color: var(--color-extra-pink-600);"
+        />
+      </lineargradient>
+    </defs>
+    <circle
+      cx="32"
+      cy="32"
+      fill="none"
+      r="28"
+      stroke="#E8E4FF"
+      stroke-width="8"
+    />
+    <circle
+      cx="32"
+      cy="32"
+      fill="none"
+      r="28"
+      stroke="url(#progress-gradient-9coj06civ)"
+      stroke-dasharray="175.92918860102841"
+      stroke-dashoffset="43.9822971502571"
+      stroke-linecap="round"
+      stroke-width="8"
+      style="transition: stroke-dashoffset 0.3s ease;"
+    />
+  </svg>
+</div>
+`;

@@ -65,6 +65,22 @@
 
   --color-black-10: var(--black-10);
   --color-black-20: var(--black-20);
+
+  /* Extra - Blue */
+  --color-extra-blue-100: var(--extra-blue-100);
+  --color-extra-blue-200: var(--extra-blue-200);
+  --color-extra-blue-300: var(--extra-blue-300);
+  --color-extra-blue-600: var(--extra-blue-600);
+  --color-extra-blue-800: var(--extra-blue-800);
+  --color-extra-blue-950: var(--extra-blue-950);
+
+  /* Extra - Pink */
+  --color-extra-pink-100: var(--extra-pink-100);
+  --color-extra-pink-200: var(--extra-pink-200);
+  --color-extra-pink-300: var(--extra-pink-300);
+  --color-extra-pink-600: var(--extra-pink-600);
+  --color-extra-pink-800: var(--extra-pink-800);
+  --color-extra-pink-950: var(--extra-pink-950);
 }
 
 @theme inline {
@@ -78,6 +94,7 @@
   --spacing-2: var(--space-2);
   --spacing-3: var(--space-3);
   --spacing-4: var(--space-4);
+  --spacing-4_5: var(--space-4_5);
   --spacing-6: var(--space-6);
   --spacing-8: var(--space-8);
 

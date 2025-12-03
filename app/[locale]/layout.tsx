@@ -27,7 +27,7 @@ export default async function LangLayout({
 
   return (
     <html lang={locale || DEFAULT_LANGUAGE} data-theme="light">
-      <body className={inter.variable} suppressHydrationWarning>
+      <body className={inter.className} suppressHydrationWarning>
         <NextIntlClientProvider>
           <AppLayout>{children}</AppLayout>
         </NextIntlClientProvider>

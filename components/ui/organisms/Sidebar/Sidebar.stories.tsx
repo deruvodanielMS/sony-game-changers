@@ -7,6 +7,13 @@ const meta = {
   component: Sidebar,
   parameters: {
     layout: 'padded',
+    nextjs: {
+      appDirectory: true,
+      navigation: {
+        pathname: '/en',
+        query: {},
+      },
+    },
   },
   tags: ['autodocs'],
 } satisfies Meta<typeof Sidebar>

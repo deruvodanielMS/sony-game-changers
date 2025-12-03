@@ -1,0 +1,67 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SectionHeader > snapshots > matches snapshot with actions 1`] = `
+<div>
+  <header
+    class="flex items-center gap-1_5 bg-neutral-0 w-full"
+  >
+    <div
+      class="flex flex-col gap-0_25 grow min-w-0"
+    >
+      <h1
+        class="text-h4 font-semibold text-neutral-1000 leading-h4"
+      >
+        Test Title
+      </h1>
+    </div>
+    <div
+      class="flex gap-0_75 shrink-0"
+    >
+      <button>
+        Action
+      </button>
+    </div>
+  </header>
+</div>
+`;
+
+exports[`SectionHeader > snapshots > matches snapshot with title and description 1`] = `
+<div>
+  <header
+    class="flex items-center gap-1_5 bg-neutral-0 w-full"
+  >
+    <div
+      class="flex flex-col gap-0_25 grow min-w-0"
+    >
+      <h1
+        class="text-h4 font-semibold text-neutral-1000 leading-h4"
+      >
+        Test Title
+      </h1>
+      <p
+        class="text-body text-neutral-800 leading-body"
+      >
+        Test description
+      </p>
+    </div>
+  </header>
+</div>
+`;
+
+exports[`SectionHeader > snapshots > matches snapshot with title only 1`] = `
+<div>
+  <header
+    class="flex items-center gap-1_5 bg-neutral-0 w-full"
+  >
+    <div
+      class="flex flex-col gap-0_25 grow min-w-0"
+    >
+      <h1
+        class="text-h4 font-semibold text-neutral-1000 leading-h4"
+      >
+        Test Title
+      </h1>
+    </div>
+  </header>
+</div>
+`;

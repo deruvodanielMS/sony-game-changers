@@ -190,6 +190,7 @@
   --space-2: 32px;
   --space-3: 48px;
   --space-4: 64px;
+  --space-4_5: 72px;
   --space-6: 96px;
   --space-8: 128px;
 
@@ -228,6 +229,7 @@
     --space-2: 24px;
     --space-3: 40px;
     --space-4: 48px;
+    --space-4_5: 56px;
     --space-6: 80px;
     --space-8: 96px;
 

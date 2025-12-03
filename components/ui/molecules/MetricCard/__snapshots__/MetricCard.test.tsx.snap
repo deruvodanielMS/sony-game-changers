@@ -1,0 +1,106 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MetricCard > snapshots > matches snapshot with icon 1`] = `
+<div>
+  <div
+    class="flex items-center gap-0_75 bg-neutral-100 rounded-default px-0_75 py-0_75 h-4_5"
+  >
+    <div
+      aria-hidden="true"
+      class="w-3 h-3 shrink-0"
+    >
+      <svg
+        data-testid="mock-icon"
+        height="48"
+        viewBox="0 0 48 48"
+        width="48"
+      >
+        <circle
+          cx="24"
+          cy="24"
+          fill="currentColor"
+          r="20"
+        />
+      </svg>
+    </div>
+    <div
+      class="flex flex-col justify-between min-w-10"
+    >
+      <span
+        class="text-body-small text-neutral-500 leading-body-small"
+      >
+        Completed
+      </span>
+      <span
+        class="text-h5 font-semibold text-neutral-1000 leading-h5"
+      >
+        18
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MetricCard > snapshots > matches snapshot with string value 1`] = `
+<div>
+  <div
+    class="flex items-center gap-0_75 bg-neutral-100 rounded-default px-0_75 py-0_75 h-4_5"
+  >
+    <div
+      aria-hidden="true"
+      class="w-3 h-3 shrink-0"
+    >
+      <svg
+        data-testid="mock-icon"
+        height="48"
+        viewBox="0 0 48 48"
+        width="48"
+      >
+        <circle
+          cx="24"
+          cy="24"
+          fill="currentColor"
+          r="20"
+        />
+      </svg>
+    </div>
+    <div
+      class="flex flex-col justify-between min-w-10"
+    >
+      <span
+        class="text-body-small text-neutral-500 leading-body-small"
+      >
+        Status
+      </span>
+      <span
+        class="text-h5 font-semibold text-neutral-1000 leading-h5"
+      >
+        Active
+      </span>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`MetricCard > snapshots > matches snapshot without icon 1`] = `
+<div>
+  <div
+    class="flex items-center gap-0_75 bg-neutral-100 rounded-default px-0_75 py-0_75 h-4_5"
+  >
+    <div
+      class="flex flex-col justify-between min-w-10"
+    >
+      <span
+        class="text-body-small text-neutral-500 leading-body-small"
+      >
+        Completed
+      </span>
+      <span
+        class="text-h5 font-semibold text-neutral-1000 leading-h5"
+      >
+        18
+      </span>
+    </div>
+  </div>
+</div>
+`;

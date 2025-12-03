@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { PasswordField } from './PasswordField'
 
 const meta: Meta<typeof PasswordField> = {
-  title: 'UI/Molecules/PasswordField',
+  title: 'Molecules/PasswordField',
   component: PasswordField,
   tags: ['autodocs'],
 }

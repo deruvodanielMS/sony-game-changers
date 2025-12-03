@@ -1,13 +1,16 @@
 import { useTranslations } from 'next-intl'
+import { SectionHeader } from '@/components/ui/organisms/SectionHeader'
 
 export default function GameChangersPerformanceReviewPage() {
   const t = useTranslations('Pages')
 
   return (
-    <div>
-      <h1 className="text-h3 leading-h3 font-bold text-neutral-1000">
-        {t('gameChangersPerformanceReviews')}
-      </h1>
+    <div className="flex flex-col gap-3">
+      <SectionHeader
+        title={t('gameChangersPerformanceReviews')}
+        description={t('gameChangersPerformanceReviewsDescription')}
+      />
+      {/* Performance reviews content will be implemented later */}
     </div>
   )
 }

@@ -23,11 +23,21 @@
     "gameChangers": "Game Changers",
     "gameChangersGoals": "Goals",
     "gameChangersCheckIns": "Check-ins",
+    "gameChangersCheckInsDescription": "Track your regular check-ins and progress updates.",
     "gameChangersFeedback": "Feedback",
+    "gameChangersFeedbackDescription": "Give and receive feedback to support continuous improvement.",
     "gameChangersPerformanceReviews": "Performance Reviews",
+    "gameChangersPerformanceReviewsDescription": "Manage and review performance evaluations and career development.",
     "gameChangersTalentPlanning": "Talent Planning",
+    "gameChangersTalentPlanningDescription": "Plan and develop talent strategies for team growth and succession.",
     "myTeam": "My Team",
     "notifications": "Notifications",
     "profile": "Profile"
+  },
+  "Goals": {
+    "title": "Your Team Goals",
+    "description": "This is the place for an amazing section description.",
+    "completed": "Completed",
+    "nonStarted": "Non Started"
   }
 }

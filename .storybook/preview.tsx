@@ -1,7 +1,9 @@
 import type { Preview } from '@storybook/nextjs'
 import { Inter } from 'next/font/google'
 import React from 'react'
+import { NextIntlClientProvider } from 'next-intl'
 import '../app/globals.css'
+import messages from '../messages/en.json'
 
 const inter = Inter({
   variable: '--font-inter',
@@ -9,7 +11,7 @@ const inter = Inter({
 })
 
 /**
- * Decorator component that applies theme and font configuration to Storybook stories
+ * Decorator component that applies theme, font, and i18n configuration to Storybook stories
  */
 const ThemeDecorator = ({
   children,
@@ -24,7 +26,11 @@ const ThemeDecorator = ({
     document.documentElement.setAttribute('data-theme', theme)
   }, [context?.globals?.theme])
 
-  return <div className={`${inter.variable} font-sans`}>{children}</div>
+  return (
+    <NextIntlClientProvider locale="en" messages={messages} timeZone="UTC">
+      <div className={`${inter.variable} font-sans`}>{children}</div>
+    </NextIntlClientProvider>
+  )
 }
 
 const preview: Preview = {

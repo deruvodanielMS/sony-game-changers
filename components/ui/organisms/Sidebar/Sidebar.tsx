@@ -134,6 +134,8 @@ export function Sidebar({
                 <img
                   src="https://i.pravatar.cc/40?img=12"
                   alt={t('profile')}
+                  width={20}
+                  height={20}
                   className="w-5 h-5 rounded-full object-cover"
                 />
               }
