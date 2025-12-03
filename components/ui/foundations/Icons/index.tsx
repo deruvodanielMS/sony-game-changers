@@ -1,0 +1,8 @@
+export { DashboardIcon } from './DashboardIcon'
+export { GameChangersIcon } from './GameChangersIcon'
+export { TeamIcon } from './TeamIcon'
+export { RadarIcon } from './RadarIcon'
+export { CalendarIcon } from './CalendarIcon'
+export { ChatIcon } from './ChatIcon'
+export { UserCertificationIcon } from './UserCertificationIcon'
+export { UserActivityIcon } from './UserActivityIcon'

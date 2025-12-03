@@ -13,7 +13,7 @@ export default function ProfilePage() {
       {/* Language Settings Section */}
       <section className="mb-8">
         <h2 className="text-h5 leading-h5 font-semibold text-neutral-1000 mb-4">
-          Language Settings
+          {t('languageSettings')}
         </h2>
         <div className="max-w-xs">
           <LanguageSwitcher isCollapsed={false} />

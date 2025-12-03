@@ -11,7 +11,6 @@ export interface DrawerProps {
   focusTrap?: boolean
   showClose?: boolean
   hideCloseOnMobile?: boolean
-  noPadding?: boolean
   children?: React.ReactNode
   actions?: React.ReactNode
   className?: string

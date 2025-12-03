@@ -1,12 +1,12 @@
 'use client'
 
-import { LayoutGrid, UserCheck, Users, Bell, ArrowLeft, ArrowRight } from 'lucide-react'
+import { Bell, ArrowLeft, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
-import { usePathname } from 'next/navigation'
 import { cn } from '@/utils/cn'
 import { SidebarNav } from '@/components/ui/molecules/SidebarNav'
 import { SidebarNavItem } from '@/components/ui/molecules/SidebarNavItem'
+import { DashboardIcon, GameChangersIcon, TeamIcon } from '@/components/ui/foundations/Icons'
 import type { SidebarProps } from './Sidebar.types'
 import { ROUTES } from '@/common/routes'
 
@@ -25,7 +25,6 @@ export function Sidebar({
   'data-test-id': dataTestId,
 }: SidebarProps) {
   const t = useTranslations('Sidebar')
-  const pathname = usePathname()
 
   return (
     <aside
@@ -96,25 +95,22 @@ export function Sidebar({
       >
         <SidebarNav isCollapsed={isCollapsed}>
           <SidebarNavItem
-            icon={<LayoutGrid size={20} />}
+            icon={<DashboardIcon className="w-5 h-5" />}
             label={t('home')}
-            isActive={pathname === ROUTES.ROOT || pathname === '/en' || pathname === '/fr'}
             isCollapsed={isCollapsed}
             href={ROUTES.ROOT}
             onClick={onNavigate}
           />
           <SidebarNavItem
-            icon={<UserCheck size={20} />}
+            icon={<GameChangersIcon className="w-5 h-5" />}
             label={t('gameChangers')}
-            isActive={pathname?.includes(ROUTES.GAME_CHANGERS)}
             isCollapsed={isCollapsed}
             href={ROUTES.GAME_CHANGERS}
             onClick={onNavigate}
           />
           <SidebarNavItem
-            icon={<Users size={20} />}
+            icon={<TeamIcon className="w-5 h-5" />}
             label={t('myTeam')}
-            isActive={pathname?.includes(ROUTES.TEAM)}
             isCollapsed={isCollapsed}
             href={ROUTES.TEAM}
             onClick={onNavigate}
@@ -129,7 +125,6 @@ export function Sidebar({
           <SidebarNavItem
             icon={<Bell size={20} />}
             label={t('notifications')}
-            isActive={pathname?.includes(ROUTES.NOTIFICATIONS)}
             isCollapsed={isCollapsed}
             href={ROUTES.NOTIFICATIONS}
             onClick={onNavigate}
@@ -143,7 +138,6 @@ export function Sidebar({
               />
             }
             label={t('profile')}
-            isActive={pathname?.includes(ROUTES.PROFILE)}
             isCollapsed={isCollapsed}
             href={ROUTES.PROFILE}
             onClick={onNavigate}

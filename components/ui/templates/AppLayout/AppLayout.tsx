@@ -86,14 +86,12 @@ export function AppLayout({ children, className }: AppLayoutProps) {
           overlayClose
           focusTrap
           showClose={false}
-          noPadding
+          className="[&>div[data-testid='drawer-body']]:p-0"
           aria-label="Mobile navigation drawer"
           data-test-id="app-mobile-drawer"
         >
           <div className="pt-[var(--padding-mobile-drawer-offset)] h-full">
             <Sidebar
-              isCollapsed={false}
-              onToggle={handleToggle}
               onNavigate={handleDrawerClose}
               hideToggle
               hideLogo
@@ -120,14 +118,11 @@ export function AppLayout({ children, className }: AppLayoutProps) {
         'h-screen overflow-hidden',
         'grid grid-rows-[1fr]',
         '[grid-template-areas:"sidebar_main"]',
+        'transition-[grid-template-columns] duration-slow ease-out',
         !sidebarCollapsed && 'grid-cols-[var(--width-sidebar)_1fr]',
         sidebarCollapsed && 'grid-cols-[var(--width-sidebar-collapsed)_1fr]',
         className,
       )}
-      style={{
-        transition:
-          'grid-template-columns var(--transition-duration-slow) var(--transition-ease-out)',
-      }}
     >
       <aside
         className={cn('[grid-area:sidebar]', 'z-40', 'sticky top-0', 'h-screen', 'overflow-hidden')}

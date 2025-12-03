@@ -62,7 +62,6 @@ export function Drawer({
   focusTrap = false,
   showClose = true,
   hideCloseOnMobile = false,
-  noPadding = false,
   children,
   actions,
   className,
@@ -240,7 +239,7 @@ export function Drawer({
         )}
 
         {/* Body */}
-        <div className={cn('flex-1 overflow-y-auto', !noPadding && 'px-1.5 py-1')} data-testid="drawer-body">
+        <div className="flex-1 overflow-y-auto px-1.5 py-1" data-testid="drawer-body">
           {children}
         </div>
 

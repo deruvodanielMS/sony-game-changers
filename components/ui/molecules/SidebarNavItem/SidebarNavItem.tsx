@@ -1,6 +1,6 @@
 'use client'
 
-import { Link } from '@/i18n/navigation'
+import { Link, usePathname } from '@/i18n/navigation'
 import { cn } from '@/utils/cn'
 import type { SidebarNavItemProps } from './SidebarNavItem.types'
 import { ROUTES } from '@/common/routes'
@@ -11,11 +11,12 @@ import { ROUTES } from '@/common/routes'
  * Individual navigation item with icon, label, and optional badge.
  * Adapts to collapsed state by showing only icon with tooltip.
  * Uses next-intl Link for internationalized routing.
+ * Automatically calculates active state based on current pathname.
  */
 export function SidebarNavItem({
   label,
   icon,
-  isActive = false,
+  isActive: isActiveProp,
   isCollapsed = false,
   onClick,
   href,
@@ -23,11 +24,22 @@ export function SidebarNavItem({
   badge,
   'data-test-id': dataTestId,
 }: SidebarNavItemProps) {
+  const pathname = usePathname()
   const Comp = href ? Link : 'button'
   const isButton = !href
 
+  // Auto-calculate isActive if not explicitly provided
+  const isActive =
+    isActiveProp !== undefined
+      ? isActiveProp
+      : href
+        ? href === ROUTES.ROOT
+          ? pathname === ROUTES.ROOT
+          : pathname?.startsWith(href)
+        : false
+
   return (
-    <div className="relative group before:hidden after:hidden">
+    <div className="relative group">
       <Comp
         href={href || ROUTES.ROOT}
         onClick={onClick}
@@ -41,7 +53,6 @@ export function SidebarNavItem({
           'rounded-default',
           'text-body-small leading-body-small font-semibold',
           'focus-visible:outline-none',
-          'before:hidden after:hidden',
           'border-0 outline-none ring-0',
           isCollapsed ? 'justify-center p-0_75 overflow-hidden' : 'px-1 py-0_75 gap-0_5',
           isActive
