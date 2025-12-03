@@ -31,7 +31,7 @@ export function MetricCard({
       )}
 
       {/* Data */}
-      <div className="flex flex-col justify-between min-w-10">
+      <div className="flex flex-col justify-between min-w-8">
         <Typography variant="bodySmall" as="span" color="neutral500">
           {label}
         </Typography>
