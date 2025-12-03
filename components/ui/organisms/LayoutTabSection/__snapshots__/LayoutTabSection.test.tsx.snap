@@ -3,7 +3,7 @@
 exports[`LayoutTabSection > renders correctly (snapshot) 1`] = `
 <DocumentFragment>
   <div
-    class="block px-3"
+    class="block px-3 mt-3 md:mt-0"
   >
     <div
       data-testid="tabs-root"

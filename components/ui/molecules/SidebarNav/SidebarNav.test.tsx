@@ -40,6 +40,7 @@ describe('SidebarNav', () => {
   it('has gap between items', () => {
     render(<SidebarNav>Content</SidebarNav>)
     const nav = screen.getByRole('navigation')
-    expect(nav).toHaveClass('gap-0_25')
+    // Gap updated to 16px (gap-1) per Figma design specs
+    expect(nav).toHaveClass('gap-1')
   })
 })

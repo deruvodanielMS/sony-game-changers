@@ -4,7 +4,7 @@ exports[`Drawer Snapshots > matches snapshot - bottom position mobile sheet 1`] 
 <div
   aria-label="Bottom Sheet"
   aria-modal="true"
-  class="fixed bg-neutral-0 box-border overflow-hidden flex flex-col shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)] transition-all duration-slow ease-spring bottom-0 left-0 right-0 w-full h-drawer-height-md md:h-drawer-height-lg translate-y-0 md:rounded-t-default rounded-t-large"
+  class="fixed bg-neutral-0 box-border overflow-hidden flex flex-col shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)] transition-transform duration-slower ease-in-out bottom-0 left-0 right-0 w-full h-drawer-height-md md:h-drawer-height-lg translate-y-0 md:rounded-t-default rounded-t-large"
   data-testid="drawer-container"
   role="dialog"
   tabindex="-1"
@@ -60,7 +60,7 @@ exports[`Drawer Snapshots > matches snapshot - default right position 1`] = `
 <div
   aria-label="Snapshot Test"
   aria-modal="true"
-  class="fixed bg-neutral-0 box-border overflow-hidden flex flex-col shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)] transition-all duration-slow ease-spring right-0 top-0 bottom-0 h-full w-drawer-width-md translate-x-0"
+  class="fixed bg-neutral-0 box-border overflow-hidden flex flex-col shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)] transition-transform duration-slower ease-in-out right-0 top-0 bottom-0 h-full w-drawer-width-md translate-x-0"
   data-testid="drawer-container"
   role="dialog"
   tabindex="-1"
@@ -109,7 +109,7 @@ exports[`Drawer Snapshots > matches snapshot - large size without title 1`] = `
 <div
   aria-label="Drawer dialog"
   aria-modal="true"
-  class="fixed bg-neutral-0 box-border overflow-hidden flex flex-col shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)] transition-all duration-slow ease-spring right-0 top-0 bottom-0 h-full w-drawer-width-lg translate-x-0"
+  class="fixed bg-neutral-0 box-border overflow-hidden flex flex-col shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)] transition-transform duration-slower ease-in-out right-0 top-0 bottom-0 h-full w-drawer-width-lg translate-x-0"
   data-testid="drawer-container"
   role="dialog"
   tabindex="-1"
@@ -129,7 +129,7 @@ exports[`Drawer Snapshots > matches snapshot - left position with actions 1`] = 
 <div
   aria-label="Left Drawer"
   aria-modal="true"
-  class="fixed bg-neutral-0 box-border overflow-hidden flex flex-col shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)] transition-all duration-slow ease-spring left-0 top-0 bottom-0 h-full w-drawer-width-md translate-x-0"
+  class="fixed bg-neutral-0 box-border overflow-hidden flex flex-col shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)] transition-transform duration-slower ease-in-out left-0 top-0 bottom-0 h-full w-drawer-width-md translate-x-0"
   data-testid="drawer-container"
   role="dialog"
   tabindex="-1"

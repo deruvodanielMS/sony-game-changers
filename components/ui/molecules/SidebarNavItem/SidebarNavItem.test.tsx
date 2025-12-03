@@ -90,8 +90,8 @@ describe('SidebarNavItem', () => {
 
     it('shows tooltip when collapsed', () => {
       render(<SidebarNavItem {...defaultProps} isCollapsed />)
-      expect(screen.getByRole('tooltip')).toBeInTheDocument()
-      expect(screen.getByRole('tooltip')).toHaveTextContent('Home')
+      // Tooltip was removed from the component - no longer displayed
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
     })
 
     it('sets aria-label when collapsed', () => {
@@ -124,9 +124,9 @@ describe('SidebarNavItem', () => {
 
     it('shows badge in tooltip when collapsed', () => {
       render(<SidebarNavItem {...defaultProps} badge="5" isCollapsed />)
-      const tooltip = screen.getByRole('tooltip')
-      expect(tooltip).toHaveTextContent('Home')
-      expect(tooltip).toHaveTextContent('5')
+      // Tooltip was removed - badge is hidden when collapsed
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+      expect(screen.queryByText('5')).not.toBeInTheDocument()
     })
 
     it('applies active badge styles when item is active', () => {
@@ -179,7 +179,8 @@ describe('SidebarNavItem', () => {
       render(<SidebarNavItem {...defaultProps} />)
       const button = screen.getByRole('button')
       expect(button).toHaveClass('focus-visible:outline-none')
-      expect(button).toHaveClass('focus-visible:ring-4')
+      // Ring was removed - now uses outline-none consistently
+      expect(button).toHaveClass('outline-none')
     })
   })
 
@@ -193,7 +194,8 @@ describe('SidebarNavItem', () => {
 
     it('tooltip has correct role', () => {
       render(<SidebarNavItem {...defaultProps} isCollapsed />)
-      expect(screen.getByRole('tooltip')).toBeInTheDocument()
+      // Tooltip was removed from component
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
     })
 
     it('button has role="button" when not a link', () => {
@@ -212,9 +214,8 @@ describe('SidebarNavItem', () => {
 
     it('tooltip has transition classes', () => {
       render(<SidebarNavItem {...defaultProps} isCollapsed />)
-      const tooltip = screen.getByRole('tooltip')
-      expect(tooltip).toHaveClass('transition-opacity')
-      expect(tooltip).toHaveClass('duration-fast')
+      // Tooltip was removed - no transition classes to verify
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
     })
   })
 })

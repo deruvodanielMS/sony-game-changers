@@ -164,6 +164,7 @@
   --height-header: var(--header-height);
   --width-sidebar: var(--sidebar-width);
   --width-sidebar-collapsed: var(--sidebar-collapsed-width);
+  --padding-mobile-drawer-offset: var(--mobile-drawer-offset);
 
   /* Sidebar width utilities */
   --size-w-sidebar: var(--sidebar-width);
@@ -178,6 +179,8 @@
   --height-drawer-height-lg: var(--drawer-height-lg);
 
   /* Z-index */
+  --z-drawer-overlay: 750;
+  --z-mobile-header: 800;
   --z-900: 900;
 
   /* Transitions & Animations */

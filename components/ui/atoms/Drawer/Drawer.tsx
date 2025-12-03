@@ -7,7 +7,7 @@ import { useFocusTrap } from '@/hooks/useFocusTrap'
 import type { DrawerProps, DrawerPosition, DrawerSize } from './Drawer.types'
 
 // Constants
-const ANIMATION_DURATION = 300
+const ANIMATION_DURATION = 500
 const SWIPE_THRESHOLD = 100
 const MOBILE_BREAKPOINT = 768
 
@@ -80,11 +80,11 @@ export function Drawer({
   // Handle animation timing
   useEffect(() => {
     if (open) {
-      const timer = setTimeout(() => setMounted(true), 10)
+      setMounted(true)
+    } else {
+      const timer = setTimeout(() => setMounted(false), ANIMATION_DURATION)
       return () => clearTimeout(timer)
     }
-    const timer = setTimeout(() => setMounted(false), ANIMATION_DURATION)
-    return () => clearTimeout(timer)
   }, [open])
 
   // Handle body scroll lock and focus management
@@ -153,25 +153,25 @@ export function Drawer({
   const containerClasses = cn(
     'fixed bg-neutral-0 box-border overflow-hidden flex flex-col',
     'shadow-[0px_25px_66px_-20px_rgba(0,16,53,0.24)] shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)]',
-    'transition-all duration-slow ease-spring',
+    'transition-transform duration-slower ease-in-out',
     POSITION_CLASS_MAP[position],
     SIZE_CLASS_MAP[position][size],
     // Slide animation based on position
-    open ? SLIDE_TRANSFORM_MAP[position].open : SLIDE_TRANSFORM_MAP[position].closed,
+    mounted && open ? SLIDE_TRANSFORM_MAP[position].open : SLIDE_TRANSFORM_MAP[position].closed,
     // Mobile sheet styling for bottom drawer
     position === 'bottom' && 'md:rounded-t-default rounded-t-large',
     className,
   )
 
   const overlayClasses = cn(
-    'fixed inset-0 z-900',
-    'transition-opacity duration-slow ease-default',
-    open ? 'opacity-100' : 'opacity-0',
+    'fixed inset-0 z-[var(--z-drawer-overlay)]',
+    'transition-opacity duration-slower ease-in-out',
+    mounted && open ? 'opacity-100' : 'opacity-0',
   )
 
   const backdropClasses = cn(
-    'absolute inset-0 bg-neutral-1000/50 backdrop-blur-sm transition-opacity duration-slow ease-default',
-    open ? 'opacity-100' : 'opacity-0',
+    'absolute inset-0 bg-neutral-1000/50 backdrop-blur-sm transition-opacity duration-slower ease-in-out',
+    mounted && open ? 'opacity-100' : 'opacity-0',
   )
 
   const overlay = (

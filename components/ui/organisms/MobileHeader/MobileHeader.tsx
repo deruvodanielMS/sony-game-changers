@@ -20,7 +20,7 @@ export function MobileHeader({
   return (
     <header
       role="banner"
-      className="relative z-[800] h-header bg-neutral-0 border-b border-neutral-300 px-1 flex items-center justify-between"
+      className="fixed top-0 left-0 right-0 z-[var(--z-mobile-header)] h-header bg-neutral-0 border-b border-neutral-300 px-1 flex items-center justify-between"
       data-test-id={dataTestId}
     >
       {/* Logo */}

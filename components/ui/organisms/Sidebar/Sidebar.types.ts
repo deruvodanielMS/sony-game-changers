@@ -3,6 +3,8 @@ export interface SidebarProps {
   isCollapsed?: boolean
   /** Callback function when toggle button is clicked */
   onToggle?: () => void
+  /** Callback function when a navigation item is clicked */
+  onNavigate?: () => void
   /** Custom logo element to display instead of default PlayStation logo */
   logo?: React.ReactNode
   /** Hide the logo section completely */

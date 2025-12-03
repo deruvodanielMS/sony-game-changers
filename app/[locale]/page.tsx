@@ -3,7 +3,7 @@ import { useTranslations } from 'next-intl'
 export default function HomePage() {
   const t = useTranslations('HomePage')
   return (
-    <div className="p-4 md:p-6">
+    <div className="p-1 md:pt-1_5 md:px-3 md:pb-3 mt-4_5 md:mt-0">
       <h1 className="text-h3 leading-h3 font-bold text-neutral-1000 mb-4 md:mb-6">Home</h1>
 
       <section>

@@ -18,7 +18,10 @@ export function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <header
-      className={cn('flex items-center gap-1_5 bg-neutral-0 w-full', className)}
+      className={cn(
+        'flex flex-col md:flex-row md:items-center gap-1_5 bg-neutral-0 w-full',
+        className,
+      )}
       data-test-id={dataTestId}
     >
       {/* Title Section */}
@@ -34,7 +37,9 @@ export function SectionHeader({
       </div>
 
       {/* Actions/Metrics Section */}
-      {actions && <div className="flex gap-0_75 shrink-0">{actions}</div>}
+      {actions && (
+        <div className="flex gap-0_75 shrink-0 self-start md:self-auto">{actions}</div>
+      )}
     </header>
   )
 }
