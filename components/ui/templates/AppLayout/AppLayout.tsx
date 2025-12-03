@@ -85,15 +85,12 @@ export function AppLayout({ children, className }: AppLayoutProps) {
           size="sm"
           overlayClose
           focusTrap
-          showClose={true}
+          showClose={false}
+          noPadding
           aria-label="Mobile navigation drawer"
           data-test-id="app-mobile-drawer"
         >
-          <div
-            className="flex flex-col h-full pt-[var(--padding-mobile-drawer-offset)]"
-            role="navigation"
-            aria-label="Main navigation"
-          >
+          <div className="pt-[var(--padding-mobile-drawer-offset)] h-full">
             <Sidebar
               isCollapsed={false}
               onToggle={handleToggle}
@@ -101,7 +98,6 @@ export function AppLayout({ children, className }: AppLayoutProps) {
               hideToggle
               hideLogo
               hideBorder
-              noPadding
               data-test-id="app-sidebar-mobile"
             />
           </div>

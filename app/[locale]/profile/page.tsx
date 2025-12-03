@@ -7,7 +7,7 @@ export default function ProfilePage() {
   const t = useTranslations('Pages')
 
   return (
-    <div className="p-4 md:p-6 mt-3 md:mt-0">
+    <div className="p-1 md:pt-1_5 md:px-3 md:pb-3 mt-4_5 md:mt-0">
       <h1 className="text-h3 leading-h3 font-bold text-neutral-1000 mb-6">{t('profile')}</h1>
 
       {/* Language Settings Section */}
