@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/utils/cn'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
@@ -74,15 +74,18 @@ export function Drawer({
   const startY = useRef<number>(0)
   const currentY = useRef<number>(0)
   const [mounted, setMounted] = useState(false)
+  const onOpenChange = useEffectEvent((value: boolean) => {
+    setMounted(value)
+  })
 
   useFocusTrap(containerRef, focusTrap)
 
   // Handle animation timing
   useEffect(() => {
     if (open) {
-      setMounted(true)
+      onOpenChange(true)
     } else {
-      const timer = setTimeout(() => setMounted(false), ANIMATION_DURATION)
+      const timer = setTimeout(() => onOpenChange(false), ANIMATION_DURATION)
       return () => clearTimeout(timer)
     }
   }, [open])

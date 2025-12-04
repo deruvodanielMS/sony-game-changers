@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`<Card /> > match snapshot 1`] = `
+<div
+  class="bg-neutral-0 rounded-default border border-neutral-300 p-1_5 test-class"
+>
+  Snapshot
+</div>
+`;

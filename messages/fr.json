@@ -39,6 +39,15 @@
     "title": "Objectifs de votre équipe",
     "description": "C'est l'endroit idéal pour une description de section étonnante.",
     "completed": "Complété",
-    "nonStarted": "Non commencé"
+    "nonStarted": "Non commencé",
+    "status": {
+      "completed": "Terminé",
+      "draft": "Brouillon",
+      "awaiting_approval": "En attente d’approbation"
+    }
+  },
+  "GoalCard": {
+    "childrenGoalsLabel": "{goals} objectifs hiérarchisés au total",
+    "addLadderedGoalLabel": "Ajouter un objectif hiérarchisé"
   }
 }

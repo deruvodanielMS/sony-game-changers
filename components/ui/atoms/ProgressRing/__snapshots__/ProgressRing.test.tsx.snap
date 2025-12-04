@@ -10,7 +10,7 @@ exports[`ProgressRing > snapshots > matches snapshot at 0% progress 1`] = `
   >
     <defs>
       <lineargradient
-        id="progress-gradient-w4rgmdega"
+        id="progress-gradient-_r_a_"
         x1="0%"
         x2="100%"
         y1="0%"
@@ -39,7 +39,7 @@ exports[`ProgressRing > snapshots > matches snapshot at 0% progress 1`] = `
       cy="24"
       fill="none"
       r="21"
-      stroke="url(#progress-gradient-w4rgmdega)"
+      stroke="url(#progress-gradient-_r_a_)"
       stroke-dasharray="131.94689145077132"
       stroke-dashoffset="131.94689145077132"
       stroke-linecap="round"
@@ -60,7 +60,7 @@ exports[`ProgressRing > snapshots > matches snapshot at 50% progress 1`] = `
   >
     <defs>
       <lineargradient
-        id="progress-gradient-6mphmx71g"
+        id="progress-gradient-_r_b_"
         x1="0%"
         x2="100%"
         y1="0%"
@@ -89,7 +89,7 @@ exports[`ProgressRing > snapshots > matches snapshot at 50% progress 1`] = `
       cy="24"
       fill="none"
       r="21"
-      stroke="url(#progress-gradient-6mphmx71g)"
+      stroke="url(#progress-gradient-_r_b_)"
       stroke-dasharray="131.94689145077132"
       stroke-dashoffset="65.97344572538566"
       stroke-linecap="round"
@@ -110,7 +110,7 @@ exports[`ProgressRing > snapshots > matches snapshot at 100% progress 1`] = `
   >
     <defs>
       <lineargradient
-        id="progress-gradient-8adp51is0"
+        id="progress-gradient-_r_c_"
         x1="0%"
         x2="100%"
         y1="0%"
@@ -139,7 +139,7 @@ exports[`ProgressRing > snapshots > matches snapshot at 100% progress 1`] = `
       cy="24"
       fill="none"
       r="21"
-      stroke="url(#progress-gradient-8adp51is0)"
+      stroke="url(#progress-gradient-_r_c_)"
       stroke-dasharray="131.94689145077132"
       stroke-dashoffset="0"
       stroke-linecap="round"
@@ -160,7 +160,7 @@ exports[`ProgressRing > snapshots > matches snapshot with custom size and stroke
   >
     <defs>
       <lineargradient
-        id="progress-gradient-9coj06civ"
+        id="progress-gradient-_r_d_"
         x1="0%"
         x2="100%"
         y1="0%"
@@ -189,7 +189,7 @@ exports[`ProgressRing > snapshots > matches snapshot with custom size and stroke
       cy="32"
       fill="none"
       r="28"
-      stroke="url(#progress-gradient-9coj06civ)"
+      stroke="url(#progress-gradient-_r_d_)"
       stroke-dasharray="175.92918860102841"
       stroke-dashoffset="43.9822971502571"
       stroke-linecap="round"

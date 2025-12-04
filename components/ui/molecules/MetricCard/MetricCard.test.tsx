@@ -54,13 +54,13 @@ describe('MetricCard', () => {
   it('applies correct typography classes to label', () => {
     render(<MetricCard label="Completed" value={18} />)
     const label = screen.getByText('Completed')
-    expect(label).toHaveClass('text-body-small', 'text-neutral-500', 'leading-body-small')
+    expect(label).toHaveClass('text-body-small', 'leading-body-small', 'font-normal')
   })
 
   it('applies correct typography classes to value', () => {
     render(<MetricCard label="Completed" value={18} />)
     const value = screen.getByText('18')
-    expect(value).toHaveClass('text-h5', 'font-semibold', 'text-neutral-1000', 'leading-h5')
+    expect(value).toHaveClass('text-h5', 'leading-h5', 'font-semibold')
   })
 
   it('applies correct layout classes', () => {

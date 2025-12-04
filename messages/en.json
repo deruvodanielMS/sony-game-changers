@@ -39,6 +39,15 @@
     "title": "Your Team Goals",
     "description": "This is the place for an amazing section description.",
     "completed": "Completed",
-    "nonStarted": "Non Started"
+    "nonStarted": "Non Started",
+    "status": {
+      "completed": "Completed",
+      "draft": "Draft",
+      "awaiting_approval": "Awaiting Approval"
+    }
+  },
+  "GoalCard": {
+    "childrenGoalsLabel": "{goals} Laddered Goals total",
+    "addLadderedGoalLabel": "Add laddered Goal"
   }
 }

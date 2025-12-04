@@ -4,6 +4,7 @@
 export const TYPOGRAPHY_COLORS = {
   default: 'var(--color-neutral-1000)',
   muted: 'var(--color-neutral-400)',
+  neutral600: 'var(--color-neutral-600)',
   neutral500: 'var(--color-neutral-500)',
   neutral800: 'var(--color-neutral-800)',
   primary: 'var(--color-accent-primary)',

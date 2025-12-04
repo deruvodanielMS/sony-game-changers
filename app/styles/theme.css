@@ -81,6 +81,12 @@
   --color-extra-pink-600: var(--extra-pink-600);
   --color-extra-pink-800: var(--extra-pink-800);
   --color-extra-pink-950: var(--extra-pink-950);
+
+  /* EXTRA - Goals */
+
+  --color-goal-completed: var(--goal-completed);
+  --color-goal-draft: var(--goal-draft);
+  --color-goal-awaiting-approval: var(--goal-awaiting-approval);
 }
 
 @theme inline {
