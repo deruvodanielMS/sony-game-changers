@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { cn } from '@/utils/cn'
 import type { ModalProps, ModalSize } from './Modal.types'
@@ -27,13 +27,40 @@ export function Modal({
   const containerRef = useRef<HTMLDivElement | null>(null)
   const lastActiveRef = useRef<HTMLElement | null>(null)
 
+  const [isVisible, setIsVisible] = useState(open)
+  const [animateIn, setAnimateIn] = useState(false)
+
+  const updateIsVisible = useEffectEvent((value: boolean) => {
+    setIsVisible(value)
+  })
+
+  const updateAnimateIn = useEffectEvent((value: boolean) => {
+    setAnimateIn(value)
+  })
+
   useFocusTrap(containerRef, focusTrap)
+
+  useEffect(() => {
+    if (open) {
+      updateIsVisible(true)
+
+      requestAnimationFrame(() => {
+        updateAnimateIn(true)
+      })
+    } else {
+      updateAnimateIn(false)
+
+      const t = setTimeout(() => {
+        updateIsVisible(false)
+      }, 150)
+      return () => clearTimeout(t)
+    }
+  }, [open])
 
   useEffect(() => {
     if (open) {
       lastActiveRef.current = document.activeElement as HTMLElement | null
       document.body.style.overflow = 'hidden'
-      // focus container
       setTimeout(() => containerRef.current?.focus(), 0)
     } else {
       document.body.style.overflow = ''
@@ -56,7 +83,7 @@ export function Modal({
     return () => document.removeEventListener('keydown', onKey)
   }, [open, onClose])
 
-  if (!open) return null
+  if (!isVisible) return null
 
   const containerClasses = cn(
     'w-full bg-neutral-0 rounded-default relative box-border',
@@ -70,15 +97,17 @@ export function Modal({
     <div
       data-testid="modal-overlay"
       ref={overlayRef}
-      className="fixed inset-0 z-[900] flex items-center justify-center"
+      className={cn(
+        'fixed inset-0 z-[900] flex items-center justify-center transition-opacity duration-150',
+        animateIn ? 'opacity-100' : 'opacity-0',
+      )}
       onMouseDown={(e) => {
         if (!overlayClose) return
-        if (e.target === overlayRef.current) {
-          onClose()
-        }
+        if (e.target === overlayRef.current) onClose()
       }}
     >
       <div className="absolute inset-0 bg-neutral-1000/50 backdrop-blur-sm" aria-hidden />
+
       <div
         role="dialog"
         aria-modal="true"
@@ -86,7 +115,12 @@ export function Modal({
         data-testid="modal-container"
         ref={containerRef}
         tabIndex={-1}
-        className={cn('relative z-10 overflow-hidden flex flex-col p-1 gap-1', containerClasses)}
+        className={cn(
+          'relative z-10 overflow-hidden flex flex-col p-1 gap-1',
+          'transition-all duration-150 transform',
+          animateIn ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
+          containerClasses,
+        )}
         onMouseDown={(e) => e.stopPropagation()}
       >
         {children}

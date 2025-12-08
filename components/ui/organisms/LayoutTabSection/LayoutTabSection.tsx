@@ -11,7 +11,7 @@ export function LayoutTabSection({ children, sections = [] }: LayoutTabSectionPr
   const current = pathname.split('/').pop() || ''
 
   const tabItemClasses =
-    'min-w-[200px] p-0_75 gap-0_5 text-body leading-body flex items-center bg-neutral-100 hover:bg-neutral-200 data-[state=active]:bg-neutral-800 data-[state=active]:text-neutral-0 rounded-default'
+    'min-w-[200px] p-0_75 gap-0_5 text-body leading-body flex items-center bg-neutral-100 transition-hover hover:bg-neutral-200 data-[state=active]:bg-neutral-800 data-[state=active]:text-neutral-0 rounded-default font-bold'
 
   return (
     <div className="px-1 md:px-3 mt-4_5 md:mt-0">

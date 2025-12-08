@@ -8,7 +8,7 @@
     "gameChangers": "Game Changers",
     "myTeam": "Mon équipe",
     "notifications": "Notifications",
-    "profile": "Profil",
+    "profile": "James Miller",
     "expandSidebar": "Développer la barre latérale",
     "collapseSidebar": "Réduire la barre latérale",
     "closeMenu": "Fermer le menu"
@@ -49,5 +49,9 @@
   "GoalCard": {
     "childrenGoalsLabel": "{goals} objectifs hiérarchisés au total",
     "addLadderedGoalLabel": "Ajouter un objectif hiérarchisé"
+  },
+  "Common": {
+    "confirm": "Confirmer",
+    "cancel": "Annuler"
   }
 }

@@ -12,7 +12,7 @@ const goalTeamMock = {
     goalType: GOAL_TYPES.TEAM,
     description:
       'Deliver a truly compelling, next-generation, immersive gaming experience immersive gaming experience that secures leading industry recognition and high player satisfaction.',
-    avatarUrl: 'https://i.pravatar.cc/40?img=12',
+    avatarUrl: '/profile-img/profile.png',
   },
   ladderGoals: [
     {
@@ -31,10 +31,10 @@ const goalTeamMock = {
         'Integrate all mandatory feedback from playtests into level design by the end of each sprint.',
       status: GOAL_STATUSES.COMPLETED,
       goalType: GOAL_TYPES.PERSONAL,
-      avatarUrl: 'https://i.pravatar.cc/40?img=12',
+      avatarUrl: '/profile-img/profile.png',
     },
   ],
-  'data-test-id': 'goal-team-mock',
+  'data-testid': 'goal-team-mock',
   allowAddChildrenGoals: true,
 }
 
@@ -46,10 +46,10 @@ const goalPersonalMock = {
       "Strategically increase The Team's technical expertise by implementing targeted upskilling initiatives in critical architectural domains (e.g., CI/CD).",
     status: GOAL_STATUSES.COMPLETED,
     goalType: GOAL_TYPES.PERSONAL,
-    avatarUrl: 'https://i.pravatar.cc/40?img=12',
+    avatarUrl: '/profile-img/profile.png',
   },
   ladderGoals: [],
-  'data-test-id': 'goal-personal-mock',
+  'data-testid': 'goal-personal-mock',
   allowAddChildrenGoals: false,
 }
 

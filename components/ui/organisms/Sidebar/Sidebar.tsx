@@ -69,6 +69,7 @@ export function Sidebar({
                 'transition-colors duration-fast',
                 'rounded-default',
                 'text-neutral-1000',
+                'transition-hover',
                 'hover:bg-neutral-200',
                 'cursor-pointer',
                 isCollapsed ? 'justify-center' : 'justify-start px-1 gap-0_5',
@@ -105,7 +106,7 @@ export function Sidebar({
             icon={<GameChangersIcon className="w-5 h-5" />}
             label={t('gameChangers')}
             isCollapsed={isCollapsed}
-            href={ROUTES.GAME_CHANGERS}
+            href={ROUTES.GAME_CHANGERS_GOALS}
             onClick={onNavigate}
           />
           <SidebarNavItem
@@ -132,7 +133,7 @@ export function Sidebar({
           <SidebarNavItem
             icon={
               <Image
-                src="https://i.pravatar.cc/40?img=12"
+                src="/profile-img/profile.png"
                 alt={t('profile')}
                 className="w-5 h-5 rounded-full object-cover"
                 width={24}

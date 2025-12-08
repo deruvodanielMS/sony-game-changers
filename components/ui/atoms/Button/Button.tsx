@@ -8,6 +8,7 @@ import { cn } from '@/utils/cn'
 
 const buttonVariants = cva(
   [
+    'transition-hover',
     'inline-flex items-center justify-center',
     'font-semibold transition-all duration-200 outline-none cursor-pointer',
     'disabled:opacity-50 disabled:cursor-not-allowed',

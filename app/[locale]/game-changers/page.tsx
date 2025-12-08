@@ -1,11 +1,14 @@
-import { useTranslations } from 'next-intl'
+'use client'
+
+import { useEffect } from 'react'
+import { ROUTES } from '@/common/routes'
+import { useRouter } from '@/i18n/navigation'
 
 export default function GameChangersPage() {
-  const t = useTranslations('Pages')
+  const router = useRouter()
+  useEffect(() => {
+    router.replace(ROUTES.GAME_CHANGERS_GOALS)
+  }, [router])
 
-  return (
-    <div>
-      <h1 className="text-h3 leading-h3 font-bold text-neutral-1000">{t('gameChangers')}</h1>
-    </div>
-  )
+  return null
 }

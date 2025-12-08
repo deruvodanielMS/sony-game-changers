@@ -70,7 +70,7 @@ export function GoalCard({
               className="rounded-full shrink-0 grow-0"
             />
             {goalType && (
-              <div className="w-3 h-3 absolute top-0 left-[32px] bg-neutral-100 rounded-full text-neutral-1000 flex items-center justify-center">
+              <div className="w-3 h-3 absolute top-[50%] left-[32px] -mt-1_5 bg-neutral-100 rounded-full text-neutral-1000 flex items-center justify-center">
                 {GoalTypeIcons[goalType]}
               </div>
             )}

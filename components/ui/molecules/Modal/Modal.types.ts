@@ -25,6 +25,7 @@ export interface ModalBodyProps {
 }
 
 export interface ModalFooterProps {
-  children?: React.ReactNode
+  onConfirm?: (e: React.MouseEvent<HTMLButtonElement>) => void
+  onCancel?: (e: React.MouseEvent<HTMLButtonElement>) => void
   className?: string
 }
