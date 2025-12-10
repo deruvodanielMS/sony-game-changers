@@ -177,6 +177,10 @@
 
   --black-10: rgba(22, 22, 155, 0.06);
   --black-20: rgba(22, 13, 130, 0.12);
+
+  --goal-completed: #21b22f;
+  --goal-draft: #3b70ea;
+  --goal-awaiting-approval: #d14fdd;
 }
 
 :root {

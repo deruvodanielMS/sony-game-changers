@@ -37,9 +37,7 @@ export function SectionHeader({
       </div>
 
       {/* Actions/Metrics Section */}
-      {actions && (
-        <div className="flex gap-0_75 shrink-0 self-start md:self-auto">{actions}</div>
-      )}
+      {actions && <div className="flex gap-0_75 shrink-0 self-start md:self-auto">{actions}</div>}
     </header>
   )
 }

@@ -8,7 +8,7 @@ import type { SidebarNavProps } from './SidebarNav.types'
  *
  * Navigation list container for sidebar items
  */
-export function SidebarNav({ children, isCollapsed = false, className }: SidebarNavProps) {
+export function SidebarNav({ children, className }: SidebarNavProps) {
   return (
     <nav
       role="navigation"

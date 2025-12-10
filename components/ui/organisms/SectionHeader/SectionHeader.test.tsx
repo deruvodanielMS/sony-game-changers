@@ -43,19 +43,27 @@ describe('SectionHeader', () => {
   it('applies correct layout classes', () => {
     const { container } = render(<SectionHeader title="Test Title" />)
     const header = container.querySelector('header')
-    expect(header).toHaveClass('flex', 'items-center', 'gap-1_5', 'bg-neutral-0', 'w-full')
+    expect(header).toHaveClass(
+      'flex',
+      'flex-col',
+      'md:flex-row',
+      'md:items-center',
+      'gap-1_5',
+      'bg-neutral-0',
+      'w-full',
+    )
   })
 
   it('title has correct typography classes', () => {
     render(<SectionHeader title="Test Title" />)
     const title = screen.getByRole('heading', { level: 1 })
-    expect(title).toHaveClass('text-h4', 'font-semibold', 'text-neutral-1000', 'leading-h4')
+    expect(title).toHaveClass('text-h4', 'font-bold', 'leading-h4')
   })
 
   it('description has correct typography classes', () => {
     render(<SectionHeader title="Test Title" description="Test description" />)
     const description = screen.getByText('Test description')
-    expect(description).toHaveClass('text-body', 'text-neutral-800', 'leading-body')
+    expect(description).toHaveClass('text-body', 'leading-body', 'font-normal')
   })
 
   it('renders multiple actions', () => {

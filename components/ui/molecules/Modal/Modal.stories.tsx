@@ -6,7 +6,7 @@ import { ModalBody } from './ModalBody'
 import { ModalFooter } from './ModalFooter'
 
 const meta: Meta<typeof Modal> = {
-  title: 'Atoms/Modal',
+  title: 'Molecules/Modal',
   component: Modal,
 }
 export default meta
@@ -26,14 +26,10 @@ export const Default: Story = {
             erat porttitor ligula, eget lacinia odio sem nec elit.
           </p>
         </ModalBody>
-        <ModalFooter>
-          <button className="p-[12px_16px] text-neutral-0 font-bold bg-gradient-to-l from-indigo-500 to-fuchsia-500 rounded-x-large inline-flex justify-center items-center">
-            Confirm
-          </button>
-          <button className="p-[12px_16px] text-neutral-1000 border border-neutral-1000 font-bold bg-neutral-0 rounded-x-large inline-flex justify-center items-center">
-            Cancel
-          </button>
-        </ModalFooter>
+        <ModalFooter
+          onConfirm={() => alert('You have confirmed this modal')}
+          onCancel={() => alert('You have cancelled this modal')}
+        />
       </>
     ),
   },
@@ -53,14 +49,10 @@ export const FocusTrap: Story = {
             erat porttitor ligula, eget lacinia odio sem nec elit.
           </p>
         </ModalBody>
-        <ModalFooter>
-          <button className="p-[12px_16px] text-neutral-0 font-bold bg-gradient-to-l from-indigo-500 to-fuchsia-500 rounded-x-large inline-flex justify-center items-center">
-            Confirm
-          </button>
-          <button className="p-[12px_16px] text-neutral-1000 border border-neutral-1000 font-bold bg-neutral-0 rounded-x-large inline-flex justify-center items-center">
-            Cancel
-          </button>
-        </ModalFooter>
+        <ModalFooter
+          onConfirm={() => alert('You have confirmed this modal')}
+          onCancel={() => alert('You have cancelled this modal')}
+        />
       </>
     ),
   },

@@ -5,4 +5,4 @@ export interface GoalsHeaderProps {
   'data-test-id'?: string
 }
 
-export interface GoalsMetric extends Omit<MetricCardProps, 'data-test-id'> {}
+export type GoalsMetric = Omit<MetricCardProps, 'data-test-id'>

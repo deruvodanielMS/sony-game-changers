@@ -1,50 +1,76 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`LayoutTabSection > renders correctly (snapshot) 1`] = `
-<DocumentFragment>
+exports[`LayoutTabSection > matches snapshot 1`] = `
+<div>
   <div
-    class="block px-3 mt-3 md:mt-0"
+    class="px-1 md:px-3 mt-4_5 md:mt-0"
   >
     <div
       data-testid="tabs-root"
-      data-value="account"
+      data-value="profile"
     >
       <div
+        class="hidden md:flex gap-1 py-1_5"
         data-testid="tabs-list"
       >
-        <button
-          class="min-w-[200px] p-0_75 gap-0_5 text-body leading-body flex items--center bg-neutral-100 hover:bg-neutral-200 data-[state=active]:bg-neutral-800 data-[state=active]:text-neutral-0 rounded-default"
-          data-testid="tab-account"
+        <a
+          href="/settings/profile"
         >
-          <a
-            href="/settings/account"
-          >
-            A
-            <span>
-              Account
-            </span>
-          </a>
-        </button>
-        <button
-          class="min-w-[200px] p-0_75 gap-0_5 text-body leading-body flex items--center bg-neutral-100 hover:bg-neutral-200 data-[state=active]:bg-neutral-800 data-[state=active]:text-neutral-0 rounded-default"
-          data-testid="tab-password"
+          <svg
+            data-testid="mock-icon"
+          />
+          <span>
+            Profile
+          </span>
+        </a>
+        <a
+          href="/settings/billing"
         >
-          <a
-            href="/settings/password"
-          >
-            P
-            <span>
-              Password
-            </span>
-          </a>
-        </button>
+          <svg
+            data-testid="mock-icon"
+          />
+          <span>
+            Billing
+          </span>
+        </a>
       </div>
-      <div>
+      <div
+        class="md:hidden w-full overflow-x-auto overflow-y-hidden py-1_5 scrollbar-hide"
+      >
+        <div
+          class="flex gap-1"
+          data-testid="tabs-list"
+        >
+          <a
+            href="/settings/profile"
+          >
+            <svg
+              data-testid="mock-icon"
+            />
+            <span>
+              Profile
+            </span>
+          </a>
+          <a
+            href="/settings/billing"
+          >
+            <svg
+              data-testid="mock-icon"
+            />
+            <span>
+              Billing
+            </span>
+          </a>
+        </div>
+      </div>
+      <div
+        class="pt-1_5 pb-1 md:pb-3"
+      >
         <div>
-          Child content
+          Snapshot child
         </div>
       </div>
     </div>
   </div>
-</DocumentFragment>
+</div>
 `;

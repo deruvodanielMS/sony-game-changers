@@ -1,100 +1,161 @@
-import { describe, it, vi, expect, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+
+vi.mock('next/navigation', () => {
+  return {
+    usePathname: vi.fn(),
+  }
+})
+
+vi.mock('@/i18n/navigation', () => {
+  return {
+    Link: ({ href, children }: any) => <a href={href}>{children}</a>,
+  }
+})
+
+vi.mock('@radix-ui/react-tabs', async () => {
+  const React = await import('react')
+  return {
+    Root: ({ value, children, ...rest }: any) => (
+      <div data-testid="tabs-root" data-value={value} {...rest}>
+        {children}
+      </div>
+    ),
+
+    List: ({ children, ...rest }: any) => (
+      <div data-testid="tabs-list" {...rest}>
+        {children}
+      </div>
+    ),
+
+    Trigger: ({ value, children, asChild, ...rest }: any) => {
+      if (asChild && React.isValidElement(children)) {
+        return React.cloneElement(children, {
+          'data-testid': `tab-trigger-${value}`,
+          ...rest,
+        })
+      }
+
+      return (
+        <button data-testid={`tab-trigger-${value}`} {...rest}>
+          {children}
+        </button>
+      )
+    },
+  }
+})
+
 import { LayoutTabSection } from './LayoutTabSection'
-
-import type { Mock } from 'vitest'
-
-// --- 🔧 Mocks ---
-vi.mock('next/navigation', () => ({
-  usePathname: vi.fn(),
-}))
-
-vi.mock('next-intl', () => ({
-  useTranslations: vi.fn().mockReturnValue((key: string) => key),
-}))
-
-vi.mock('@/i18n/navigation', () => ({
-  Link: ({ href, children }: any) => <a href={href}>{children}</a>,
-}))
-
-vi.mock('@radix-ui/react-tabs', () => ({
-  Root: ({ children, value }: any) => (
-    <div data-testid="tabs-root" data-value={value}>
-      {children}
-    </div>
-  ),
-  List: ({ children }: any) => <div data-testid="tabs-list">{children}</div>,
-  Trigger: ({ children, value, className }: any) => (
-    <button data-testid={`tab-${value}`} className={className}>
-      {children}
-    </button>
-  ),
-}))
-
-// --- Get actual mocked function ---
 import { usePathname } from 'next/navigation'
 
-const sections = [
-  { value: 'account', label: 'Account', href: '/settings/account', icon: 'A' },
-  { value: 'password', label: 'Password', href: '/settings/password', icon: 'P' },
+const mockUsePathname = usePathname as unknown as ReturnType<typeof vi.fn>
+const MockIcon = () => <svg data-testid="mock-icon" />
+
+const sectionsMock = [
+  {
+    value: 'profile',
+    label: 'Profile',
+    href: '/settings/profile',
+    icon: <MockIcon />,
+  },
+  {
+    value: 'billing',
+    label: 'Billing',
+    href: '/settings/billing',
+    icon: <MockIcon />,
+  },
 ]
 
 describe('LayoutTabSection', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mockUsePathname.mockReturnValue('/settings/profile')
   })
 
-  it('renders correctly (snapshot)', () => {
-    ;(usePathname as Mock).mockReturnValue('/settings/account')
-
-    const { asFragment } = render(
-      <LayoutTabSection sections={sections}>
+  it('renders both desktop and mobile tab lists', () => {
+    render(
+      <LayoutTabSection sections={sectionsMock}>
         <div>Child content</div>
       </LayoutTabSection>,
     )
 
-    expect(asFragment()).toMatchSnapshot()
+    const lists = screen.getAllByTestId('tabs-list')
+    expect(lists.length).toBe(2)
   })
 
-  it('sets the correct tab based on pathname', () => {
-    ;(usePathname as Mock).mockReturnValue('/settings/password')
-
+  it('renders all section labels and icons', () => {
     render(
-      <LayoutTabSection sections={sections}>
-        <div>Content</div>
+      <LayoutTabSection sections={sectionsMock}>
+        <div>Children</div>
+      </LayoutTabSection>,
+    )
+
+    expect(screen.getAllByText('Profile')[0]).toBeInTheDocument()
+    expect(screen.getAllByText('Billing')[0]).toBeInTheDocument()
+
+    const icons = screen.getAllByTestId('mock-icon')
+    expect(icons.length).toBe(4)
+  })
+
+  it('preserves <a> as the interactive element so we can verify hrefs', () => {
+    render(
+      <LayoutTabSection sections={sectionsMock}>
+        <div>Children</div>
+      </LayoutTabSection>,
+    )
+
+    const profileLinks = screen.getAllByText('Profile')
+    const profileLink = profileLinks[0].closest('a')
+    expect(profileLink).toBeTruthy()
+    expect(profileLink).toHaveAttribute('href', '/settings/profile')
+
+    const billingLinks = screen.getAllByText('Billing')
+    const billingLink = billingLinks[0].closest('a')
+    expect(billingLink).toBeTruthy()
+    expect(billingLink).toHaveAttribute('href', '/settings/billing')
+  })
+
+  it('marks the current tab value based on the pathname (last segment)', () => {
+    render(
+      <LayoutTabSection sections={sectionsMock}>
+        <div>Children</div>
       </LayoutTabSection>,
     )
 
     const root = screen.getByTestId('tabs-root')
-
-    expect(root.getAttribute('data-value')).toBe('password')
+    expect(root.getAttribute('data-value')).toBe('profile')
   })
 
-  it('renders each section as a tab', () => {
-    ;(usePathname as Mock).mockReturnValue('/settings/account')
-
+  it('renders the children section', () => {
     render(
-      <LayoutTabSection sections={sections}>
-        <div>Content</div>
+      <LayoutTabSection sections={sectionsMock}>
+        <div data-testid="child-slot">Hello children</div>
       </LayoutTabSection>,
     )
 
-    expect(screen.getByTestId('tab-account')).toBeInTheDocument()
-    expect(screen.getByTestId('tab-password')).toBeInTheDocument()
-
-    expect(screen.getByText('Account')).toBeInTheDocument()
-    expect(screen.getByText('Password')).toBeInTheDocument()
+    expect(screen.getByTestId('child-slot')).toBeInTheDocument()
   })
 
-  it('renders children', () => {
-    ;(usePathname as Mock).mockReturnValue('/settings/account')
+  it('works with a different pathname (billing active)', () => {
+    mockUsePathname.mockReturnValue('/settings/billing')
 
     render(
-      <LayoutTabSection sections={sections}>
-        <div data-testid="child">Child content</div>
+      <LayoutTabSection sections={sectionsMock}>
+        <div>Children</div>
       </LayoutTabSection>,
     )
 
-    expect(screen.getByTestId('child')).toBeInTheDocument()
+    const root = screen.getByTestId('tabs-root')
+    expect(root.getAttribute('data-value')).toBe('billing')
+  })
+
+  it('matches snapshot', () => {
+    const { container } = render(
+      <LayoutTabSection sections={sectionsMock}>
+        <div>Snapshot child</div>
+      </LayoutTabSection>,
+    )
+
+    expect(container).toMatchSnapshot()
   })
 })

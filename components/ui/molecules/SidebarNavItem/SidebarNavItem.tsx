@@ -58,6 +58,7 @@ export function SidebarNavItem({
           isActive
             ? ['bg-neutral-800', 'text-neutral-0']
             : [
+                'transition-hover',
                 'text-neutral-1000',
                 'hover:bg-neutral-200',
                 'hover:text-neutral-600',

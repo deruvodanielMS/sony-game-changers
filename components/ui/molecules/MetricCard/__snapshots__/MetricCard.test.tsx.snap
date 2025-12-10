@@ -24,15 +24,17 @@ exports[`MetricCard > snapshots > matches snapshot with icon 1`] = `
       </svg>
     </div>
     <div
-      class="flex flex-col justify-between min-w-10"
+      class="flex flex-col justify-between min-w-8"
     >
       <span
-        class="text-body-small text-neutral-500 leading-body-small"
+        class="text-body-small leading-body-small font-normal"
+        style="color: var(--color-neutral-500);"
       >
         Completed
       </span>
       <span
-        class="text-h5 font-semibold text-neutral-1000 leading-h5"
+        class="text-h5 leading-h5 font-semibold"
+        style="color: var(--color-neutral-800);"
       >
         18
       </span>
@@ -65,15 +67,17 @@ exports[`MetricCard > snapshots > matches snapshot with string value 1`] = `
       </svg>
     </div>
     <div
-      class="flex flex-col justify-between min-w-10"
+      class="flex flex-col justify-between min-w-8"
     >
       <span
-        class="text-body-small text-neutral-500 leading-body-small"
+        class="text-body-small leading-body-small font-normal"
+        style="color: var(--color-neutral-500);"
       >
         Status
       </span>
       <span
-        class="text-h5 font-semibold text-neutral-1000 leading-h5"
+        class="text-h5 leading-h5 font-semibold"
+        style="color: var(--color-neutral-800);"
       >
         Active
       </span>
@@ -88,15 +92,17 @@ exports[`MetricCard > snapshots > matches snapshot without icon 1`] = `
     class="flex items-center gap-0_75 bg-neutral-100 rounded-default px-0_75 py-0_75 h-4_5"
   >
     <div
-      class="flex flex-col justify-between min-w-10"
+      class="flex flex-col justify-between min-w-8"
     >
       <span
-        class="text-body-small text-neutral-500 leading-body-small"
+        class="text-body-small leading-body-small font-normal"
+        style="color: var(--color-neutral-500);"
       >
         Completed
       </span>
       <span
-        class="text-h5 font-semibold text-neutral-1000 leading-h5"
+        class="text-h5 leading-h5 font-semibold"
+        style="color: var(--color-neutral-800);"
       >
         18
       </span>

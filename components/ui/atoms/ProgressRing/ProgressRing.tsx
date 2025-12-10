@@ -1,5 +1,6 @@
 'use client'
 
+import { useId } from 'react'
 import { cn } from '@/utils/cn'
 import type { ProgressRingProps } from './ProgressRing.types'
 
@@ -12,7 +13,6 @@ export function ProgressRing({
   progress = 0,
   size = 48,
   strokeWidth = 6,
-  color = '#9D7FFF',
   backgroundColor = '#E8E4FF',
   className,
   'data-test-id': dataTestId,
@@ -21,7 +21,7 @@ export function ProgressRing({
   const radius = (size - strokeWidth) / 2
   const circumference = radius * 2 * Math.PI
   const strokeDashoffset = circumference - (normalizedProgress / 100) * circumference
-  const gradientId = `progress-gradient-${Math.random().toString(36).substr(2, 9)}`
+  const gradientId = `progress-gradient-${useId()}`
 
   return (
     <svg
