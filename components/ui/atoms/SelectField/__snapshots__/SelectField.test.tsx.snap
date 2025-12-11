@@ -1,0 +1,91 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SelectField > matches snapshot for closed state 1`] = `
+<DocumentFragment>
+  <button
+    aria-autocomplete="none"
+    aria-controls="radix-_r_17_"
+    aria-expanded="false"
+    class="inline-flex w-full items-center justify-between h-3 border-box px-1 py-0_75 rounded-small border border-neutral-1000 bg-neutral-0 text-neutral-1000 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:border-blue-500 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 transition-colors group"
+    data-placeholder=""
+    data-state="closed"
+    data-testid="select-field"
+    dir="ltr"
+    role="combobox"
+    type="button"
+  >
+    <span
+      style="pointer-events: none;"
+    >
+      Snapshot
+    </span>
+    <span
+      aria-hidden="true"
+      class="transition-transform group-data-[state=open]:rotate-180"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-chevron-down"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m6 9 6 6 6-6"
+        />
+      </svg>
+    </span>
+  </button>
+</DocumentFragment>
+`;
+
+exports[`SelectField > matches snapshot for open content 1`] = `
+<DocumentFragment>
+  <button
+    aria-autocomplete="none"
+    aria-controls="radix-_r_1b_"
+    aria-expanded="true"
+    class="inline-flex w-full items-center justify-between h-3 border-box px-1 py-0_75 rounded-small border border-neutral-1000 bg-neutral-0 text-neutral-1000 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:border-blue-500 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 transition-colors group"
+    data-placeholder=""
+    data-state="open"
+    data-testid="select-field"
+    dir="ltr"
+    role="combobox"
+    type="button"
+  >
+    <span
+      style="pointer-events: none;"
+    >
+      Snapshot content
+    </span>
+    <span
+      aria-hidden="true"
+      class="transition-transform group-data-[state=open]:rotate-180"
+    >
+      <svg
+        aria-hidden="true"
+        class="lucide lucide-chevron-down"
+        fill="none"
+        height="24"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+        width="24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="m6 9 6 6 6-6"
+        />
+      </svg>
+    </span>
+  </button>
+</DocumentFragment>
+`;
