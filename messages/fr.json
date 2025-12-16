@@ -44,6 +44,9 @@
       "completed": "Terminé",
       "draft": "Brouillon",
       "awaiting_approval": "En attente d’approbation"
+    },
+    "filters": {
+      "clearFieldsButton": "Effacer les champs"
     }
   },
   "GoalCard": {
