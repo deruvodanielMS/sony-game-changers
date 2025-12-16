@@ -48,7 +48,15 @@
   },
   "GoalCard": {
     "childrenGoalsLabel": "{goals} Laddered Goals total",
-    "addLadderedGoalLabel": "Add laddered Goal"
+    "addLadderedGoalLabel": "Add laddered Goal",
+    "openLadderingModalLabel": "Open laddering modal"
+  },
+  "LadderingModal": {
+    "title": "Ambition laddering",
+    "divisionAmbitionLabel": "AAA Division Ambition",
+    "teamAmbitionLabel": "AAA Team Ambition",
+    "linkButtonAriaLabel": "Link ambition",
+    "selectedGoalLabel": "Selected Goal"
   },
   "Common": {
     "confirm": "Confirm",

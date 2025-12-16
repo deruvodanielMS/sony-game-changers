@@ -48,7 +48,15 @@
   },
   "GoalCard": {
     "childrenGoalsLabel": "{goals} objectifs hiérarchisés au total",
-    "addLadderedGoalLabel": "Ajouter un objectif hiérarchisé"
+    "addLadderedGoalLabel": "Ajouter un objectif hiérarchisé",
+    "openLadderingModalLabel": "Ouvrir le modal de hiérarchisation"
+  },
+  "LadderingModal": {
+    "title": "Hiérarchisation des ambitions",
+    "divisionAmbitionLabel": "Ambition de la division AAA",
+    "teamAmbitionLabel": "Ambition de l'équipe AAA",
+    "linkButtonAriaLabel": "Lier l'ambition",
+    "selectedGoalLabel": "Objectif sélectionné"
   },
   "Common": {
     "confirm": "Confirmer",

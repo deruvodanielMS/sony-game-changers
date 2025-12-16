@@ -14,6 +14,7 @@ import { cn } from '@/utils/cn'
 import { Button } from '../../atoms/Button'
 import { useTranslations } from 'next-intl'
 import { GOAL_TYPES } from '@/types/goals'
+import { LadderingModal } from '@/components/ui/organisms/LadderingModal'
 
 const GoalTypeIcons = {
   [GOAL_TYPES.PERSONAL]: <Sprout width={20} />,
@@ -27,20 +28,37 @@ export function GoalCard({
   'data-testid': dataTestId,
 }: GoalCardProps) {
   const [open, setOpen] = useState(false)
+  const [isLadderingModalOpen, setIsLadderingModalOpen] = useState(false)
   const t = useTranslations('GoalCard')
 
   const { description, title, avatarUrl, goalType, status, userName } = goal
   const hasChildrenGoals = ladderGoals.length
 
+  const handleOpenLadderingModal = () => {
+    setIsLadderingModalOpen(true)
+  }
+
+  const handleCloseLadderingModal = () => {
+    setIsLadderingModalOpen(false)
+  }
+
   return (
     <Card data-testid={dataTestId} className="flex flex-col gap-1_5 items-stretch">
       {description && (
-        <div className="h-2 flex items-center gap-0_5">
-          <CornerDownRight width={20} />
-          <Typography color="neutral600" className="truncate">
+        <button
+          onClick={handleOpenLadderingModal}
+          className={cn(
+            'h-2 flex items-center gap-0_5 w-full text-left',
+            'hover:text-neutral-800 transition-colors',
+            'cursor-pointer group',
+          )}
+          aria-label={t('openLadderingModalLabel')}
+        >
+          <CornerDownRight width={20} className="shrink-0" />
+          <Typography color="neutral600" className="truncate group-hover:text-neutral-800">
             {description}
           </Typography>
-        </div>
+        </button>
       )}
       <Collapsible.Root open={open} onOpenChange={setOpen}>
         <div className="flex items-center gap-0_5">
@@ -130,6 +148,12 @@ export function GoalCard({
           )}
         </div>
       )}
+
+      <LadderingModal
+        open={isLadderingModalOpen}
+        onClose={handleCloseLadderingModal}
+        selectedGoal={goal}
+      />
     </Card>
   )
 }
