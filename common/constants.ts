@@ -8,3 +8,5 @@ export const SUPPORTED_LANGUAGES: Array<string> = Object.entries(LANGUAGES).map(
 )
 
 export const DEFAULT_LANGUAGE = LANGUAGES.EN
+
+export const DEBOUNCE_DELAY = 300
