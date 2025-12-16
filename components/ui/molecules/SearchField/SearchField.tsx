@@ -15,7 +15,7 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
   const [searchValue, setSearchValue] = useState(defaultValue || '')
   const _searchValue = useDebounce(searchValue, debounce)
   const handleChangeEvent = useEffectEvent((value: string) => {
-    onChange?.(value)
+    onChange(value)
   })
   useEffect(() => {
     if (_searchValue != null && !buttonSearch) {
@@ -24,7 +24,7 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
   }, [_searchValue, buttonSearch])
 
   const handleOnSearchClick = () => {
-    onChange?.(searchValue)
+    onChange(searchValue)
   }
 
   return (

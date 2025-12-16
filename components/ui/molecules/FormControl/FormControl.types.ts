@@ -20,4 +20,6 @@ export type FormControlProps = {
   afterLabel?: React.ReactNode
   beforeLabel?: React.ReactNode
   children?: React.ReactNode
+  className?: string
+  'data-testid'?: string
 }
