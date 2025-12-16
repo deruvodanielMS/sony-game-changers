@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LadderingModal > Snapshots > matches snapshot when closed 1`] = `<div />`;
+
+exports[`LadderingModal > Snapshots > matches snapshot when open 1`] = `<div />`;
+
+exports[`LadderingModal > Snapshots > matches snapshot with completed goal 1`] = `<div />`;

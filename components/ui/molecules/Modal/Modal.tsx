@@ -106,7 +106,10 @@ export function Modal({
         if (e.target === overlayRef.current) onClose()
       }}
     >
-      <div className="absolute inset-0 bg-neutral-1000/50 backdrop-blur-sm" aria-hidden />
+      <div
+        className="absolute inset-0 bg-neutral-1000/50 backdrop-blur-sm pointer-events-none"
+        aria-hidden
+      />
 
       <div
         role="dialog"
@@ -116,7 +119,7 @@ export function Modal({
         ref={containerRef}
         tabIndex={-1}
         className={cn(
-          'relative z-10 overflow-hidden flex flex-col p-1 gap-1',
+          'relative z-10 overflow-hidden flex flex-col p-1 gap-1 pointer-events-auto',
           'transition-all duration-150 transform',
           animateIn ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
           containerClasses,

@@ -66,8 +66,9 @@ describe('GoalCard', () => {
   it('renders ladder goals and allows collapsing content', () => {
     render(<GoalCard goal={baseGoal} ladderGoals={ladderGoals} allowAddChildrenGoals={false} />)
 
-    // Collapsible trigger (ChevronDown)
-    const toggleBtn = screen.getByRole('button')
+    // Collapsible trigger (ChevronDown) - get all buttons and find the collapse one
+    const buttons = screen.getAllByRole('button')
+    const toggleBtn = buttons.find((btn) => btn.getAttribute('aria-expanded') !== null)
     expect(toggleBtn).toBeInTheDocument()
 
     // Start closed: ladder goal not visible
