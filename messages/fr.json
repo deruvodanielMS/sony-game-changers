@@ -21,7 +21,7 @@
   "Pages": {
     "home": "Accueil",
     "gameChangers": "Game Changers",
-    "gameChangersGoals": "Objectifs",
+    "gameChangersGoals": "Ambitions",
     "gameChangersCheckIns": "Points de contrôle",
     "gameChangersCheckInsDescription": "Suivez vos points de contrôle réguliers et vos mises à jour de progrès.",
     "gameChangersFeedback": "Retour d'information",
@@ -36,7 +36,7 @@
     "languageSettings": "Paramètres de langue"
   },
   "Goals": {
-    "title": "Objectifs de votre équipe",
+    "title": "Ambitions de votre équipe",
     "description": "C'est l'endroit idéal pour une description de section étonnante.",
     "completed": "Complété",
     "nonStarted": "Non commencé",
@@ -50,8 +50,8 @@
     }
   },
   "GoalCard": {
-    "childrenGoalsLabel": "{goals} objectifs hiérarchisés au total",
-    "addLadderedGoalLabel": "Ajouter un objectif hiérarchisé",
+    "childrenGoalsLabel": "{goals} ambitions hiérarchisées au total",
+    "addLadderedGoalLabel": "Ajouter une ambition hiérarchisée",
     "openLadderingModalLabel": "Ouvrir le modal de hiérarchisation"
   },
   "LadderingModal": {
@@ -59,7 +59,7 @@
     "divisionAmbitionLabel": "Ambition de la division AAA",
     "teamAmbitionLabel": "Ambition de l'équipe AAA",
     "linkButtonAriaLabel": "Lier l'ambition",
-    "selectedGoalLabel": "Objectif sélectionné"
+    "selectedGoalLabel": "Ambition sélectionnée"
   },
   "Common": {
     "confirm": "Confirmer",

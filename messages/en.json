@@ -21,7 +21,7 @@
   "Pages": {
     "home": "Home",
     "gameChangers": "Game Changers",
-    "gameChangersGoals": "Goals",
+    "gameChangersGoals": "Ambitions",
     "gameChangersCheckIns": "Check-ins",
     "gameChangersCheckInsDescription": "Track your regular check-ins and progress updates.",
     "gameChangersFeedback": "Feedback",
@@ -36,7 +36,7 @@
     "languageSettings": "Language Settings"
   },
   "Goals": {
-    "title": "Your Team Goals",
+    "title": "Your Team Ambitions",
     "description": "This is the place for an amazing section description.",
     "completed": "Completed",
     "nonStarted": "Non Started",
@@ -50,8 +50,8 @@
     }
   },
   "GoalCard": {
-    "childrenGoalsLabel": "{goals} Laddered Goals total",
-    "addLadderedGoalLabel": "Add laddered Goal",
+    "childrenGoalsLabel": "{goals} Laddered Ambitions total",
+    "addLadderedGoalLabel": "Add laddered Ambition",
     "openLadderingModalLabel": "Open laddering modal"
   },
   "LadderingModal": {
@@ -59,7 +59,7 @@
     "divisionAmbitionLabel": "AAA Division Ambition",
     "teamAmbitionLabel": "AAA Team Ambition",
     "linkButtonAriaLabel": "Link ambition",
-    "selectedGoalLabel": "Selected Goal"
+    "selectedGoalLabel": "Selected Ambition"
   },
   "Common": {
     "confirm": "Confirm",
