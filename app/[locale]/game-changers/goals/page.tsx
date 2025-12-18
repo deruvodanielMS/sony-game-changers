@@ -7,8 +7,16 @@ import { FilterMultiSelectProps } from '@/components/ui/molecules/FilterMultiSel
 import { GoalCard } from '@/components/ui/organisms/GoalCard'
 import { FilterBar } from '@/components/ui/organisms/GoalFilters/FilterBar'
 import { GOAL_STATUSES, GOAL_TYPES } from '@/types/goals'
-import { CirclePlus } from 'lucide-react'
+import { CirclePlus, SlidersHorizontal } from 'lucide-react'
 import { useState } from 'react'
+import { useScrollDirection } from '@/hooks/useScrollDirection'
+import { Drawer } from '@/components/ui/atoms/Drawer'
+import { useTranslations } from 'next-intl'
+import { cn } from '@/utils/cn'
+import { FilterMultiSelect } from '@/components/ui/molecules/FilterMultiSelect/FilterMultiSelect'
+import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
+import { SearchField } from '@/components/ui/molecules/SearchField'
+import { Typography } from '@/components/ui/foundations/Typography'
 
 /**
  * Mocks
@@ -64,6 +72,48 @@ const goalPersonalMock = {
   allowAddChildrenGoals: false,
 }
 
+const goalMock3 = {
+  goal: {
+    id: 'goal-5',
+    userName: 'Emma Wilson',
+    title: 'Develop comprehensive onboarding program for new team members',
+    status: GOAL_STATUSES.DRAFT,
+    goalType: GOAL_TYPES.TEAM,
+    avatarUrl: '/profile-img/profile.png',
+  },
+  ladderGoals: [],
+  'data-testid': 'goal-mock-3',
+  allowAddChildrenGoals: true,
+}
+
+const goalMock4 = {
+  goal: {
+    id: 'goal-6',
+    userName: 'James Miller',
+    title: 'Improve code review process and documentation standards',
+    status: GOAL_STATUSES.AWAITING_APPROVAL,
+    goalType: GOAL_TYPES.PERSONAL,
+    avatarUrl: '/profile-img/profile.png',
+  },
+  ladderGoals: [],
+  'data-testid': 'goal-mock-4',
+  allowAddChildrenGoals: false,
+}
+
+const goalMock5 = {
+  goal: {
+    id: 'goal-7',
+    userName: 'Sofia Rodriguez',
+    title: 'Establish quarterly team retrospectives and continuous improvement initiatives',
+    status: GOAL_STATUSES.COMPLETED,
+    goalType: GOAL_TYPES.TEAM,
+    avatarUrl: '/profile-img/profile.png',
+  },
+  ladderGoals: [],
+  'data-testid': 'goal-mock-5',
+  allowAddChildrenGoals: true,
+}
+
 /**
  * Filter Bar mocks
  */
@@ -106,6 +156,9 @@ export default function GameChangersGoalsPage() {
   const [selectedFilterType, setSelectedFilterType] = useState<Array<string>>([])
   const [selectedFilterStatus, setSelectedFilterStatus] = useState<Array<string>>([])
   const [selectedSearchValue, setSelectedSearchValue] = useState('')
+  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false)
+  const { scrollDirection, scrollY } = useScrollDirection()
+  const t = useTranslations('Goals')
 
   const { filters, avatarSelector } = filterBarMocks
 
@@ -120,22 +173,175 @@ export default function GameChangersGoalsPage() {
     ...avatarSelector,
   }
 
+  const handleClearFields = () => {
+    setSelectedSearchValue('')
+    setSelectedFilterStatus([])
+    setSelectedFilterType([])
+    setSelectedAvatars([])
+  }
+
+  // Count active filters for badge
+  const activeFiltersCount =
+    selectedFilterStatus.length +
+    selectedFilterType.length +
+    selectedAvatars.length +
+    (selectedSearchValue ? 1 : 0)
+
+  // Hide header when scrolling down past 100px, show when scrolling up (only on desktop)
+  // In mobile (width < 768px) we want to keep header visible
+  const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768
+  const shouldHideHeader = isDesktop && scrollDirection === 'down' && scrollY > 100
+
   return (
-    <div className="flex flex-col gap-3">
-      <GoalsHeader />
-      <FilterBar
-        clearFields
-        filters={_filters as FilterMultiSelectProps[]}
-        avatarSelector={_avatarSelector as AvatarSelectProps}
-        searchField={{
-          onChange: setSelectedSearchValue,
-          defaultValue: selectedSearchValue,
+    <div className="flex flex-col gap-0 md:gap-3">
+      {/* Header - hide on scroll only on desktop, always visible on mobile */}
+      <div
+        className="md:transition-[transform,opacity] md:duration-base md:ease-out mb-0"
+        style={{
+          transform: shouldHideHeader ? 'translateY(-100%)' : 'translateY(0)',
+          opacity: shouldHideHeader ? 0 : 1,
         }}
       >
-        <Button variant="primary" className="text-neutral-0" leftIcon={<CirclePlus width={24} />}>
-          New Goal
-        </Button>
-      </FilterBar>
+        <GoalsHeader />
+      </div>
+
+      {/* Desktop: Sticky FilterBar */}
+      <div className="hidden md:block sticky top-24 z-[800] bg-neutral-0 transition-all duration-base">
+        <FilterBar
+          clearFields
+          filters={_filters as FilterMultiSelectProps[]}
+          avatarSelector={_avatarSelector as AvatarSelectProps}
+          searchField={{
+            onChange: setSelectedSearchValue,
+            defaultValue: selectedSearchValue,
+          }}
+        >
+          <Button variant="primary" className="text-neutral-0" leftIcon={<CirclePlus width={24} />}>
+            New Goal
+          </Button>
+        </FilterBar>
+      </div>
+
+      {/* Mobile: Filter Button that opens drawer */}
+      <div
+        className={cn(
+          'md:hidden sticky top-[112px] z-[800] bg-neutral-0 py-1 px-1 transition-opacity duration-base',
+          isFilterDrawerOpen && 'opacity-0 pointer-events-none',
+        )}
+      >
+        <div className="flex gap-1 justify-between">
+          <Button
+            variant="secondary"
+            className="flex-1 relative"
+            leftIcon={<SlidersHorizontal width={20} />}
+            onClick={() => setIsFilterDrawerOpen(true)}
+          >
+            Filters
+            {activeFiltersCount > 0 && (
+              <span className="absolute -top-0_25 -right-0_25 inline-flex items-center justify-center w-5 h-5 text-body-tiny bg-accent-primary text-neutral-0 rounded-full font-bold">
+                {activeFiltersCount}
+              </span>
+            )}
+          </Button>
+          <Button variant="primary" className="text-neutral-0" iconOnly>
+            <CirclePlus width={24} />
+          </Button>
+        </div>
+      </div>
+
+      {/* Mobile Filter Drawer */}
+      <Drawer
+        open={isFilterDrawerOpen}
+        onClose={() => setIsFilterDrawerOpen(false)}
+        title="Filter & Sort"
+        position="bottom"
+        size="full"
+        className="!h-[85vh] md:!h-[80vh]"
+      >
+        <div className="flex flex-col h-full">
+          {/* Scrollable content */}
+          <div className="flex-1 overflow-y-auto px-1_5 pb-1_5">
+            {/* Search First - Most used action */}
+            <div className="mb-1_5">
+              <Typography
+                variant="bodySmall"
+                fontWeight="semibold"
+                className="mb-0_5"
+                color="neutral800"
+              >
+                Search
+              </Typography>
+              <SearchField
+                onChange={setSelectedSearchValue}
+                defaultValue={selectedSearchValue}
+                placeholder="Search ambitions..."
+              />
+            </div>
+
+            {/* Filters Section */}
+            <div className="mb-1_5">
+              <Typography
+                variant="bodySmall"
+                fontWeight="semibold"
+                className="mb-0_75"
+                color="neutral800"
+              >
+                Filter By
+              </Typography>
+              <div className="flex flex-col gap-0_75">
+                {_filters.map((filter) => (
+                  <FilterMultiSelect key={filter.label} {...filter} />
+                ))}
+              </div>
+            </div>
+
+            {/* Avatar Selector */}
+            {_avatarSelector && (
+              <div className="mb-1_5">
+                <Typography
+                  variant="bodySmall"
+                  fontWeight="semibold"
+                  className="mb-0_75"
+                  color="neutral800"
+                >
+                  Team Members
+                </Typography>
+                <AvatarSelect {..._avatarSelector} />
+              </div>
+            )}
+          </div>
+
+          {/* Sticky Footer with actions */}
+          <div className="sticky bottom-0 bg-neutral-0 border-t border-neutral-300 px-1_5 py-1 flex gap-0_75">
+            <Button
+              variant="secondary"
+              onClick={handleClearFields}
+              className="flex-1"
+              disabled={activeFiltersCount === 0}
+            >
+              Clear All
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => setIsFilterDrawerOpen(false)}
+              className="flex-1 text-neutral-0 relative"
+            >
+              Show Results
+              {activeFiltersCount > 0 && (
+                <span className="ml-0_5 inline-flex items-center justify-center w-5 h-5 text-body-tiny bg-neutral-0 text-accent-primary rounded-full font-bold">
+                  {activeFiltersCount}
+                </span>
+              )}
+            </Button>
+          </div>
+        </div>
+      </Drawer>
+
+      <GoalCard {...goalTeamMock} />
+      <GoalCard {...goalPersonalMock} />
+      <GoalCard {...goalMock3} />
+      <GoalCard {...goalMock4} />
+      <GoalCard {...goalMock5} />
       <GoalCard {...goalTeamMock} />
       <GoalCard {...goalPersonalMock} />
     </div>
