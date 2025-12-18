@@ -1,3 +1,5 @@
+'use client'
+
 import { GoalsHeader } from '@/components/game-changers/goals/GoalsHeader'
 import { Button } from '@/components/ui/atoms/Button'
 import { AvatarSelectProps } from '@/components/ui/molecules/AvatarSelect/AvatarSelect.types'
@@ -7,6 +9,7 @@ import { FilterBar } from '@/components/ui/organisms/GoalFilters/FilterBar'
 import { GOAL_STATUSES, GOAL_TYPES } from '@/types/goals'
 import { CirclePlus, SlidersHorizontal } from 'lucide-react'
 import { useState, useEffect, useTransition } from 'react'
+import { useTranslations } from 'next-intl'
 import { useScrollDirection } from '@/hooks/useScrollDirection'
 import { Drawer } from '@/components/ui/atoms/Drawer'
 import { cn } from '@/utils/cn'
@@ -149,6 +152,7 @@ const filterBarMocks = {
 }
 
 export default function GameChangersGoalsPage() {
+  const t = useTranslations('Goals')
   const [selectedAvatars, setSelectedAvatars] = useState<Array<string>>([])
   const [selectedFilterType, setSelectedFilterType] = useState<Array<string>>([])
   const [selectedFilterStatus, setSelectedFilterStatus] = useState<Array<string>>([])
@@ -216,7 +220,7 @@ export default function GameChangersGoalsPage() {
     <div className="flex flex-col gap-0 md:gap-3">
       {/* Header - hide on scroll only on desktop, always visible on mobile */}
       <div
-        className="md:transition-[transform,opacity] md:duration-base md:ease-out mb-0 pt-28 md:pt-0"
+        className="md:transition-[transform,opacity] md:duration-base md:ease-out mb-0 pt-20 md:pt-0"
         style={{
           transform: shouldHideHeader ? 'translateY(-100%)' : 'translateY(0)',
           opacity: shouldHideHeader ? 0 : 1,
@@ -237,7 +241,7 @@ export default function GameChangersGoalsPage() {
           }}
         >
           <Button variant="primary" className="text-neutral-0" leftIcon={<CirclePlus width={24} />}>
-            New Goal
+            {t('newGoal')}
           </Button>
         </FilterBar>
       </div>
@@ -256,7 +260,7 @@ export default function GameChangersGoalsPage() {
             leftIcon={<SlidersHorizontal width={20} />}
             onClick={() => setIsFilterDrawerOpen(true)}
           >
-            Filters
+            {t('filtersButton')}
             {activeFiltersCount > 0 && (
               <span className="absolute -top-0.25 -right-0.25 inline-flex items-center justify-center w-5 h-5 text-body-tiny bg-accent-primary text-neutral-0 rounded-full font-bold">
                 {activeFiltersCount}
@@ -273,7 +277,7 @@ export default function GameChangersGoalsPage() {
       <Drawer
         open={isFilterDrawerOpen}
         onClose={() => setIsFilterDrawerOpen(false)}
-        title="Filter & Sort"
+        title={t('filterDrawer.title')}
         position="bottom"
         size="full"
         className="h-[85vh]! md:h-[80vh]!"
@@ -289,12 +293,12 @@ export default function GameChangersGoalsPage() {
                 className="mb-0.5"
                 color="neutral800"
               >
-                Search
+                {t('filterDrawer.searchLabel')}
               </Typography>
               <SearchField
                 onChange={setSelectedSearchValue}
                 defaultValue={selectedSearchValue}
-                placeholder="Search ambitions..."
+                placeholder={t('filterDrawer.searchPlaceholder')}
               />
             </div>
 
@@ -306,7 +310,7 @@ export default function GameChangersGoalsPage() {
                 className="mb-0.75"
                 color="neutral800"
               >
-                Filter By
+                {t('filterDrawer.filterByLabel')}
               </Typography>
               <div className="flex flex-col gap-0.75">
                 {_filters.map((filter) => (
@@ -324,7 +328,7 @@ export default function GameChangersGoalsPage() {
                   className="mb-0.75"
                   color="neutral800"
                 >
-                  Team Members
+                  {t('filterDrawer.teamMembersLabel')}
                 </Typography>
                 <AvatarSelect {..._avatarSelector} />
               </div>
@@ -339,14 +343,14 @@ export default function GameChangersGoalsPage() {
               className="flex-1"
               disabled={activeFiltersCount === 0}
             >
-              Clear All
+              {t('filterDrawer.clearAll')}
             </Button>
             <Button
               variant="primary"
               onClick={() => setIsFilterDrawerOpen(false)}
               className="flex-1 text-neutral-0 relative"
             >
-              Show Results
+              {t('filterDrawer.showResults')}
               {activeFiltersCount > 0 && (
                 <span className="ml-0.5 inline-flex items-center justify-center w-5 h-5 text-body-tiny bg-neutral-0 text-accent-primary rounded-full font-bold">
                   {activeFiltersCount}

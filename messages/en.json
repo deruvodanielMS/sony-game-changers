@@ -40,6 +40,8 @@
     "description": "This is the place for an amazing section description.",
     "completed": "Completed",
     "nonStarted": "Non Started",
+    "newGoal": "New Goal",
+    "filtersButton": "Filters",
     "status": {
       "completed": "Completed",
       "draft": "Draft",
@@ -47,6 +49,15 @@
     },
     "filters": {
       "clearFieldsButton": "Clear Fields"
+    },
+    "filterDrawer": {
+      "title": "Filter & Sort",
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search ambitions...",
+      "filterByLabel": "Filter By",
+      "teamMembersLabel": "Team Members",
+      "clearAll": "Clear All",
+      "showResults": "Show Results"
     }
   },
   "GoalCard": {
