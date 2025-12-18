@@ -1,5 +1,3 @@
-'use client'
-
 import { GoalsHeader } from '@/components/game-changers/goals/GoalsHeader'
 import { Button } from '@/components/ui/atoms/Button'
 import { AvatarSelectProps } from '@/components/ui/molecules/AvatarSelect/AvatarSelect.types'
@@ -8,10 +6,9 @@ import { GoalCard } from '@/components/ui/organisms/GoalCard'
 import { FilterBar } from '@/components/ui/organisms/GoalFilters/FilterBar'
 import { GOAL_STATUSES, GOAL_TYPES } from '@/types/goals'
 import { CirclePlus, SlidersHorizontal } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect, useTransition } from 'react'
 import { useScrollDirection } from '@/hooks/useScrollDirection'
 import { Drawer } from '@/components/ui/atoms/Drawer'
-import { useTranslations } from 'next-intl'
 import { cn } from '@/utils/cn'
 import { FilterMultiSelect } from '@/components/ui/molecules/FilterMultiSelect/FilterMultiSelect'
 import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
@@ -158,7 +155,7 @@ export default function GameChangersGoalsPage() {
   const [selectedSearchValue, setSelectedSearchValue] = useState('')
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false)
   const { scrollDirection, scrollY } = useScrollDirection()
-  const t = useTranslations('Goals')
+  const [, startTransition] = useTransition()
 
   const { filters, avatarSelector } = filterBarMocks
 
@@ -192,11 +189,34 @@ export default function GameChangersGoalsPage() {
   const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768
   const shouldHideHeader = isDesktop && scrollDirection === 'down' && scrollY > 100
 
+  // Detect if navigation drawer is open (mobile only)
+  const [isNavDrawerOpen, setIsNavDrawerOpen] = useState(false)
+
+  useEffect(() => {
+    const mainContent = document.querySelector('main[data-test-id="app-main-content-mobile"]')
+    if (!mainContent) return
+
+    const updateDrawerState = () => {
+      const drawerOpen = mainContent.getAttribute('data-drawer-open') === 'true'
+      startTransition(() => {
+        setIsNavDrawerOpen(drawerOpen)
+      })
+    }
+
+    // Initial check
+    updateDrawerState()
+
+    const observer = new MutationObserver(updateDrawerState)
+    observer.observe(mainContent, { attributes: true, attributeFilter: ['data-drawer-open'] })
+
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <div className="flex flex-col gap-0 md:gap-3">
       {/* Header - hide on scroll only on desktop, always visible on mobile */}
       <div
-        className="md:transition-[transform,opacity] md:duration-base md:ease-out mb-0"
+        className="md:transition-[transform,opacity] md:duration-base md:ease-out mb-0 pt-28 md:pt-0"
         style={{
           transform: shouldHideHeader ? 'translateY(-100%)' : 'translateY(0)',
           opacity: shouldHideHeader ? 0 : 1,
@@ -206,7 +226,7 @@ export default function GameChangersGoalsPage() {
       </div>
 
       {/* Desktop: Sticky FilterBar */}
-      <div className="hidden md:block sticky top-24 z-[800] bg-neutral-0 transition-all duration-base">
+      <div className="hidden md:block sticky top-24 z-800 bg-neutral-0 transition-all duration-base">
         <FilterBar
           clearFields
           filters={_filters as FilterMultiSelectProps[]}
@@ -225,8 +245,8 @@ export default function GameChangersGoalsPage() {
       {/* Mobile: Filter Button that opens drawer */}
       <div
         className={cn(
-          'md:hidden sticky top-[112px] z-[800] bg-neutral-0 py-1 px-1 transition-opacity duration-base',
-          isFilterDrawerOpen && 'opacity-0 pointer-events-none',
+          'md:hidden sticky top-28 z-800 bg-neutral-0 py-1 px-1 transition-opacity duration-base',
+          (isFilterDrawerOpen || isNavDrawerOpen) && 'opacity-0 pointer-events-none',
         )}
       >
         <div className="flex gap-1 justify-between">
@@ -238,7 +258,7 @@ export default function GameChangersGoalsPage() {
           >
             Filters
             {activeFiltersCount > 0 && (
-              <span className="absolute -top-0_25 -right-0_25 inline-flex items-center justify-center w-5 h-5 text-body-tiny bg-accent-primary text-neutral-0 rounded-full font-bold">
+              <span className="absolute -top-0.25 -right-0.25 inline-flex items-center justify-center w-5 h-5 text-body-tiny bg-accent-primary text-neutral-0 rounded-full font-bold">
                 {activeFiltersCount}
               </span>
             )}
@@ -256,17 +276,17 @@ export default function GameChangersGoalsPage() {
         title="Filter & Sort"
         position="bottom"
         size="full"
-        className="!h-[85vh] md:!h-[80vh]"
+        className="h-[85vh]! md:h-[80vh]!"
       >
         <div className="flex flex-col h-full">
           {/* Scrollable content */}
-          <div className="flex-1 overflow-y-auto px-1_5 pb-1_5">
+          <div className="flex-1 overflow-y-auto px-1.5 pb-1.5">
             {/* Search First - Most used action */}
-            <div className="mb-1_5">
+            <div className="mb-1.5">
               <Typography
                 variant="bodySmall"
                 fontWeight="semibold"
-                className="mb-0_5"
+                className="mb-0.5"
                 color="neutral800"
               >
                 Search
@@ -279,16 +299,16 @@ export default function GameChangersGoalsPage() {
             </div>
 
             {/* Filters Section */}
-            <div className="mb-1_5">
+            <div className="mb-1.5">
               <Typography
                 variant="bodySmall"
                 fontWeight="semibold"
-                className="mb-0_75"
+                className="mb-0.75"
                 color="neutral800"
               >
                 Filter By
               </Typography>
-              <div className="flex flex-col gap-0_75">
+              <div className="flex flex-col gap-0.75">
                 {_filters.map((filter) => (
                   <FilterMultiSelect key={filter.label} {...filter} />
                 ))}
@@ -297,11 +317,11 @@ export default function GameChangersGoalsPage() {
 
             {/* Avatar Selector */}
             {_avatarSelector && (
-              <div className="mb-1_5">
+              <div className="mb-1.5">
                 <Typography
                   variant="bodySmall"
                   fontWeight="semibold"
-                  className="mb-0_75"
+                  className="mb-0.75"
                   color="neutral800"
                 >
                   Team Members
@@ -312,7 +332,7 @@ export default function GameChangersGoalsPage() {
           </div>
 
           {/* Sticky Footer with actions */}
-          <div className="sticky bottom-0 bg-neutral-0 border-t border-neutral-300 px-1_5 py-1 flex gap-0_75">
+          <div className="sticky bottom-0 bg-neutral-0 border-t border-neutral-300 px-1.5 py-1 flex gap-0.75">
             <Button
               variant="secondary"
               onClick={handleClearFields}
@@ -328,7 +348,7 @@ export default function GameChangersGoalsPage() {
             >
               Show Results
               {activeFiltersCount > 0 && (
-                <span className="ml-0_5 inline-flex items-center justify-center w-5 h-5 text-body-tiny bg-neutral-0 text-accent-primary rounded-full font-bold">
+                <span className="ml-0.5 inline-flex items-center justify-center w-5 h-5 text-body-tiny bg-neutral-0 text-accent-primary rounded-full font-bold">
                   {activeFiltersCount}
                 </span>
               )}
@@ -337,13 +357,16 @@ export default function GameChangersGoalsPage() {
         </div>
       </Drawer>
 
-      <GoalCard {...goalTeamMock} />
-      <GoalCard {...goalPersonalMock} />
-      <GoalCard {...goalMock3} />
-      <GoalCard {...goalMock4} />
-      <GoalCard {...goalMock5} />
-      <GoalCard {...goalTeamMock} />
-      <GoalCard {...goalPersonalMock} />
+      {/* Goal Cards with gap */}
+      <div className="flex flex-col gap-1 md:gap-1.5">
+        <GoalCard {...goalTeamMock} />
+        <GoalCard {...goalPersonalMock} />
+        <GoalCard {...goalMock3} />
+        <GoalCard {...goalMock4} />
+        <GoalCard {...goalMock5} />
+        <GoalCard {...goalTeamMock} />
+        <GoalCard {...goalPersonalMock} />
+      </div>
     </div>
   )
 }
