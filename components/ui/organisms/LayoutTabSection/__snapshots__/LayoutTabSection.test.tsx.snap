@@ -2,43 +2,16 @@
 
 exports[`LayoutTabSection > matches snapshot 1`] = `
 <div>
-  <div
-    class="px-1 md:px-3 mt-4_5 md:mt-0"
-  >
+  <div>
     <div
       data-testid="tabs-root"
       data-value="profile"
     >
       <div
-        class="hidden md:flex gap-1 py-1_5"
-        data-testid="tabs-list"
-      >
-        <a
-          href="/settings/profile"
-        >
-          <svg
-            data-testid="mock-icon"
-          />
-          <span>
-            Profile
-          </span>
-        </a>
-        <a
-          href="/settings/billing"
-        >
-          <svg
-            data-testid="mock-icon"
-          />
-          <span>
-            Billing
-          </span>
-        </a>
-      </div>
-      <div
-        class="md:hidden w-full overflow-x-auto overflow-y-hidden py-1_5 scrollbar-hide"
+        class="sticky top-16 md:top-0 z-[900] bg-neutral-0 px-1 md:px-3 transition-opacity duration-base"
       >
         <div
-          class="flex gap-1"
+          class="hidden md:flex gap-1 py-1_5"
           data-testid="tabs-list"
         >
           <a
@@ -47,7 +20,9 @@ exports[`LayoutTabSection > matches snapshot 1`] = `
             <svg
               data-testid="mock-icon"
             />
-            <span>
+            <span
+              class="line-clamp-1"
+            >
               Profile
             </span>
           </a>
@@ -57,14 +32,49 @@ exports[`LayoutTabSection > matches snapshot 1`] = `
             <svg
               data-testid="mock-icon"
             />
-            <span>
+            <span
+              class="line-clamp-1"
+            >
               Billing
             </span>
           </a>
         </div>
+        <div
+          class="md:hidden w-full overflow-x-auto overflow-y-hidden py-1 scrollbar-hide"
+        >
+          <div
+            class="flex gap-1"
+            data-testid="tabs-list"
+          >
+            <a
+              href="/settings/profile"
+            >
+              <svg
+                data-testid="mock-icon"
+              />
+              <span
+                class="line-clamp-1"
+              >
+                Profile
+              </span>
+            </a>
+            <a
+              href="/settings/billing"
+            >
+              <svg
+                data-testid="mock-icon"
+              />
+              <span
+                class="line-clamp-1"
+              >
+                Billing
+              </span>
+            </a>
+          </div>
+        </div>
       </div>
       <div
-        class="pt-1_5 pb-1 md:pb-3"
+        class="px-1 md:px-3 pt-0 md:pt-1_5 pb-1 md:pb-3"
       >
         <div>
           Snapshot child

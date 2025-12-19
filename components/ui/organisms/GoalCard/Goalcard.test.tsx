@@ -75,6 +75,7 @@ describe('GoalCard', () => {
     expect(screen.queryByText('Sub Goal A')).toBeNull
 
     // Expand
+    if (!toggleBtn) throw new Error('Toggle button not found')
     fireEvent.click(toggleBtn)
 
     expect(screen.getByText('Sub Goal A')).toBeVisible()

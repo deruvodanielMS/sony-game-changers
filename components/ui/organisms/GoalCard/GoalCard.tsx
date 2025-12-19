@@ -75,27 +75,28 @@ export function GoalCard({
           </Collapsible.Trigger>
           <div
             className={cn(
-              'w-full flex gap-3 items-center relative max-sm:flex-wrap',
-              goalType ? 'gap-3' : 'gap-1',
+              'w-full flex gap-1 items-center max-sm:flex-wrap',
               !hasChildrenGoals ? 'ml-3' : '',
             )}
           >
-            <Image
-              src={avatarUrl || generateInitialsAvatarSrc(userName, { size: 48 })}
-              alt={userName}
-              width={48}
-              height={48}
-              className="rounded-full shrink-0 grow-0"
-            />
-            {goalType && (
-              <div className="w-3 h-3 absolute top-[50%] left-[32px] -mt-1_5 bg-neutral-100 rounded-full text-neutral-1000 flex items-center justify-center">
-                {GoalTypeIcons[goalType]}
-              </div>
-            )}
-            <Typography className="grow-1 basis-1 max-sm:order-last max-sm:basis-full" variant="h6">
+            <div className="relative shrink-0" style={{ width: goalType ? '72px' : '48px' }}>
+              <Image
+                src={avatarUrl || generateInitialsAvatarSrc(userName, { size: 48 })}
+                alt={userName}
+                width={48}
+                height={48}
+                className="rounded-full"
+              />
+              {goalType && (
+                <div className="absolute top-0 -right-0_25 w-12 h-12 bg-neutral-100 rounded-full text-neutral-1000 flex items-center justify-center">
+                  {GoalTypeIcons[goalType]}
+                </div>
+              )}
+            </div>
+            <Typography className="flex-1 max-sm:order-last max-sm:basis-full" variant="h6">
               {title}
             </Typography>
-            <GoalStatus status={status} className="grow-0 font-bold" />
+            <GoalStatus status={status} className="shrink-0 font-bold" />
           </div>
         </div>
 

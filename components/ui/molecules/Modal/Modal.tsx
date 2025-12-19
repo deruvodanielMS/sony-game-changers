@@ -106,10 +106,7 @@ export function Modal({
         if (e.target === overlayRef.current) onClose()
       }}
     >
-      <div
-        className="absolute inset-0 bg-neutral-1000/50 backdrop-blur-sm pointer-events-none"
-        aria-hidden
-      />
+      <div className="absolute inset-0 bg-neutral-1000/50 pointer-events-none" aria-hidden />
 
       <div
         role="dialog"

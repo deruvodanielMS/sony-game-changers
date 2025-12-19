@@ -1,107 +1,16 @@
 'use client'
 
+import { useState } from 'react'
+import { useTranslations } from 'next-intl'
+import { CirclePlus } from 'lucide-react'
 import { GoalsHeader } from '@/components/game-changers/goals/GoalsHeader'
 import { Button } from '@/components/ui/atoms/Button'
-import { AvatarSelectProps } from '@/components/ui/molecules/AvatarSelect/AvatarSelect.types'
-import { FilterMultiSelectProps } from '@/components/ui/molecules/FilterMultiSelect/FilterMultiSelect.types'
 import { GoalCard } from '@/components/ui/organisms/GoalCard'
-import { FilterBar } from '@/components/ui/organisms/GoalFilters/FilterBar'
-import { GOAL_STATUSES, GOAL_TYPES } from '@/types/goals'
-import { CirclePlus } from 'lucide-react'
-import { useState } from 'react'
-
-/**
- * Mocks
- */
-const goalTeamMock = {
-  goal: {
-    id: 'goal-1',
-    userName: 'Alice Williams',
-    title:
-      'Ensure core title features meet established quality bars to achieve a strong critical reception score and boost future sales.',
-    status: GOAL_STATUSES.AWAITING_APPROVAL,
-    goalType: GOAL_TYPES.TEAM,
-    description:
-      'Deliver a truly compelling, next-generation, immersive gaming experience immersive gaming experience that secures leading industry recognition and high player satisfaction.',
-    avatarUrl: '/profile-img/profile.png',
-  },
-  ladderGoals: [
-    {
-      id: 'goal-2',
-      userName: 'Bob Smith',
-      title:
-        'Verify the successful operation of all major systems and complete 100% of test cases before Alpha.',
-      status: GOAL_STATUSES.DRAFT,
-      goalType: GOAL_TYPES.TEAM,
-      description: 'Increase conversion from 10% to 15%',
-    },
-    {
-      id: 'goal-3',
-      userName: 'Charlie Johnson',
-      title:
-        'Integrate all mandatory feedback from playtests into level design by the end of each sprint.',
-      status: GOAL_STATUSES.COMPLETED,
-      goalType: GOAL_TYPES.PERSONAL,
-      avatarUrl: '/profile-img/profile.png',
-    },
-  ],
-  'data-testid': 'goal-team-mock',
-  allowAddChildrenGoals: true,
-}
-
-const goalPersonalMock = {
-  goal: {
-    id: 'goal-4',
-    userName: 'David Brown',
-    title:
-      "Strategically increase The Team's technical expertise by implementing targeted upskilling initiatives in critical architectural domains (e.g., CI/CD).",
-    status: GOAL_STATUSES.COMPLETED,
-    goalType: GOAL_TYPES.PERSONAL,
-    avatarUrl: '/profile-img/profile.png',
-  },
-  ladderGoals: [],
-  'data-testid': 'goal-personal-mock',
-  allowAddChildrenGoals: false,
-}
-
-/**
- * Filter Bar mocks
- */
-
-const filterBarMocks = {
-  avatarSelector: {
-    options: [
-      { uid: 'nn0098', name: 'Nia Washington', url: '/profile-img/nia-washington.png' },
-      { uid: 'nn0099', name: 'Sarah Miller', url: '/profile-img/sarah-miller.png' },
-      { uid: 'nn0100', name: 'Kylie Davies', url: '/profile-img/kylie-davies.png' },
-      { uid: 'nn0101', name: 'Lars van der Zee', url: '/profile-img/lars-van-der-zee.png' },
-      { uid: 'nn01201', name: 'Other Lars', url: '/profile-img/lars-van-der-zee.png' },
-      { uid: 'nn0102', name: 'Miguel Santos', url: '/profile-img/profile.png' },
-    ],
-    showItems: 4,
-  },
-  filters: [
-    {
-      label: 'Status',
-      'data-testid': 'filter-status',
-      options: [
-        { label: 'Awaiting Approval', value: GOAL_STATUSES.AWAITING_APPROVAL },
-        { label: 'Completed', value: GOAL_STATUSES.COMPLETED },
-        { label: 'Draft', value: GOAL_STATUSES.DRAFT },
-      ],
-    },
-    {
-      label: 'Type',
-      'data-testid': 'filter-category',
-      options: [
-        { label: 'Team', value: GOAL_TYPES.TEAM },
-        { label: 'personal', value: GOAL_TYPES.PERSONAL },
-      ],
-    },
-  ],
-}
+import { FilterableContentLayout } from '@/components/ui/templates/FilterableContentLayout'
+import { goalMocks, filterBarMocks } from './mocks'
 
 export default function GameChangersGoalsPage() {
+  const t = useTranslations('Goals')
   const [selectedAvatars, setSelectedAvatars] = useState<Array<string>>([])
   const [selectedFilterType, setSelectedFilterType] = useState<Array<string>>([])
   const [selectedFilterStatus, setSelectedFilterStatus] = useState<Array<string>>([])
@@ -120,24 +29,51 @@ export default function GameChangersGoalsPage() {
     ...avatarSelector,
   }
 
+  const handleClearFilters = () => {
+    setSelectedSearchValue('')
+    setSelectedFilterStatus([])
+    setSelectedFilterType([])
+    setSelectedAvatars([])
+  }
+
+  // Count active filters for badge
+  const activeFiltersCount =
+    selectedFilterStatus.length +
+    selectedFilterType.length +
+    selectedAvatars.length +
+    (selectedSearchValue ? 1 : 0)
+
   return (
-    <div className="flex flex-col gap-3">
-      <GoalsHeader />
-      <FilterBar
-        clearFields
-        filters={_filters as FilterMultiSelectProps[]}
-        avatarSelector={_avatarSelector as AvatarSelectProps}
-        searchField={{
-          onChange: setSelectedSearchValue,
-          defaultValue: selectedSearchValue,
-        }}
-      >
+    <FilterableContentLayout
+      header={<GoalsHeader />}
+      filters={_filters}
+      avatarSelector={_avatarSelector}
+      searchField={{
+        value: selectedSearchValue,
+        onChange: setSelectedSearchValue,
+        placeholder: t('filterDrawer.searchPlaceholder'),
+        label: t('filterDrawer.searchLabel'),
+      }}
+      onClearFilters={handleClearFilters}
+      drawerTitle={t('filterDrawer.title')}
+      translations={{
+        filtersButton: t('filtersButton'),
+        searchLabel: t('filterDrawer.searchLabel'),
+        filterByLabel: t('filterDrawer.filterByLabel'),
+        teamMembersLabel: t('filterDrawer.teamMembersLabel'),
+        clearAll: t('filterDrawer.clearAll'),
+        showResults: t('filterDrawer.showResults'),
+      }}
+      activeFiltersCount={activeFiltersCount}
+      primaryAction={
         <Button variant="primary" className="text-neutral-0" leftIcon={<CirclePlus width={24} />}>
-          New Goal
+          {t('newGoal')}
         </Button>
-      </FilterBar>
-      <GoalCard {...goalTeamMock} />
-      <GoalCard {...goalPersonalMock} />
-    </div>
+      }
+    >
+      {goalMocks.map((goalData) => (
+        <GoalCard key={goalData.goal.id} {...goalData} />
+      ))}
+    </FilterableContentLayout>
   )
 }

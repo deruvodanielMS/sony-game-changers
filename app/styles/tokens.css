@@ -302,8 +302,9 @@
 
 :root {
   --header-height: 64px;
-  --sidebar-width: 280px;
+  --sidebar-width: 240px;
   --sidebar-collapsed-width: 96px;
+  --sidebar-nav-item-max-width: 192px;
   --mobile-drawer-offset: 50px;
 }
 

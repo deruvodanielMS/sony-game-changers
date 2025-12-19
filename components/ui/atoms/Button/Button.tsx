@@ -46,7 +46,7 @@ const buttonVariants = cva(
       size: {
         default: [
           'h-button-height',
-          'px-1_5 py-1',
+          'px-1 py-1',
           'gap-0_75',
           'rounded-x-large',
           'text-body-small leading-body-small',

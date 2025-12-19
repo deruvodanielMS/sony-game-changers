@@ -7,7 +7,7 @@ exports[`MetricCard > snapshots > matches snapshot with icon 1`] = `
   >
     <div
       aria-hidden="true"
-      class="w-3 h-3 shrink-0"
+      class="hidden md:block w-3 h-3 shrink-0"
     >
       <svg
         data-testid="mock-icon"
@@ -50,7 +50,7 @@ exports[`MetricCard > snapshots > matches snapshot with string value 1`] = `
   >
     <div
       aria-hidden="true"
-      class="w-3 h-3 shrink-0"
+      class="hidden md:block w-3 h-3 shrink-0"
     >
       <svg
         data-testid="mock-icon"

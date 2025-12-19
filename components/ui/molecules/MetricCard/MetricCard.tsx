@@ -25,7 +25,7 @@ export function MetricCard({
     >
       {/* Icon (optional) */}
       {icon && (
-        <div className="w-3 h-3 shrink-0" aria-hidden="true">
+        <div className="hidden md:block w-3 h-3 shrink-0" aria-hidden="true">
           {icon}
         </div>
       )}

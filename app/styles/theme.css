@@ -145,6 +145,9 @@
   --spacing-modal-md: var(--modal-width-md);
   --spacing-modal-lg: var(--modal-width-lg);
 
+  /* Navigation */
+  --nav-item-max-width: var(--sidebar-nav-item-max-width);
+
   /* Buttons */
 
   --spacing-button-height: var(--button-height-default);

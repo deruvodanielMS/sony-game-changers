@@ -281,7 +281,7 @@ describe('Drawer', () => {
       </Drawer>,
     )
     const container = screen.getByTestId('drawer-container')
-    const handle = container.querySelector('.w-4.h-0\\.25')
+    const handle = container.querySelector('.w-2.h-0_25')
     expect(handle).toBeInTheDocument()
   })
 

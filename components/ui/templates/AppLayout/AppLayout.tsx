@@ -104,6 +104,7 @@ export function AppLayout({ children, className }: AppLayoutProps) {
         <main
           className="flex-1 overflow-y-auto overflow-x-hidden bg-neutral-0"
           data-test-id="app-main-content-mobile"
+          data-drawer-open={drawerOpen}
         >
           {children}
         </main>

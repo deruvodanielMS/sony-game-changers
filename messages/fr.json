@@ -40,13 +40,24 @@
     "description": "C'est l'endroit idéal pour une description de section étonnante.",
     "completed": "Complété",
     "nonStarted": "Non commencé",
+    "newGoal": "Nouvel objectif",
+    "filtersButton": "Filtres",
     "status": {
       "completed": "Terminé",
       "draft": "Brouillon",
-      "awaiting_approval": "En attente d’approbation"
+      "awaiting_approval": "En attente d'approbation"
     },
     "filters": {
       "clearFieldsButton": "Effacer les champs"
+    },
+    "filterDrawer": {
+      "title": "Filtrer et trier",
+      "searchLabel": "Rechercher",
+      "searchPlaceholder": "Rechercher des ambitions...",
+      "filterByLabel": "Filtrer par",
+      "teamMembersLabel": "Membres de l'équipe",
+      "clearAll": "Tout effacer",
+      "showResults": "Afficher les résultats"
     }
   },
   "GoalCard": {

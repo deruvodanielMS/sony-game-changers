@@ -10,14 +10,14 @@ exports[`Drawer Snapshots > matches snapshot - bottom position mobile sheet 1`] 
   tabindex="-1"
 >
   <div
-    class="md:hidden flex justify-center py-0.5"
+    class="md:hidden flex justify-center py-0_5"
   >
     <div
-      class="w-4 h-0.25 bg-neutral-300 rounded-default"
+      class="w-2 h-0_25 bg-neutral-300 rounded-default"
     />
   </div>
   <header
-    class="flex items-center gap-0.75 px-1.5 py-1 border-b border-neutral-200"
+    class="flex items-center gap-0_75 px-1_5 py-1 border-b border-neutral-200"
   >
     <div
       class="flex-1 text-title-medium font-semibold text-neutral-1000"
@@ -26,7 +26,7 @@ exports[`Drawer Snapshots > matches snapshot - bottom position mobile sheet 1`] 
     </div>
     <button
       aria-label="Close drawer"
-      class="shrink-0 w-6 h-6 items-center justify-center rounded-small hover:bg-neutral-100 transition-colors duration-base md:flex hidden"
+      class="shrink-0 w-icon-sm h-icon-sm items-center justify-center rounded-small hover:bg-neutral-100 transition-colors duration-base md:flex hidden"
       data-testid="drawer-close-button"
     >
       <svg
@@ -46,7 +46,7 @@ exports[`Drawer Snapshots > matches snapshot - bottom position mobile sheet 1`] 
     </button>
   </header>
   <div
-    class="flex-1 overflow-y-auto px-1.5 py-1"
+    class="flex-1 overflow-y-auto px-1_5 py-1"
     data-testid="drawer-body"
   >
     <p>
@@ -66,7 +66,7 @@ exports[`Drawer Snapshots > matches snapshot - default right position 1`] = `
   tabindex="-1"
 >
   <header
-    class="flex items-center gap-0.75 px-1.5 py-1 border-b border-neutral-200"
+    class="flex items-center gap-0_75 px-1_5 py-1 border-b border-neutral-200"
   >
     <div
       class="flex-1 text-title-medium font-semibold text-neutral-1000"
@@ -75,7 +75,7 @@ exports[`Drawer Snapshots > matches snapshot - default right position 1`] = `
     </div>
     <button
       aria-label="Close drawer"
-      class="shrink-0 w-6 h-6 flex items-center justify-center rounded-small hover:bg-neutral-100 transition-colors duration-base"
+      class="shrink-0 w-icon-sm h-icon-sm flex items-center justify-center rounded-small hover:bg-neutral-100 transition-colors duration-base"
       data-testid="drawer-close-button"
     >
       <svg
@@ -95,7 +95,7 @@ exports[`Drawer Snapshots > matches snapshot - default right position 1`] = `
     </button>
   </header>
   <div
-    class="flex-1 overflow-y-auto px-1.5 py-1"
+    class="flex-1 overflow-y-auto px-1_5 py-1"
     data-testid="drawer-body"
   >
     <p>
@@ -115,7 +115,7 @@ exports[`Drawer Snapshots > matches snapshot - large size without title 1`] = `
   tabindex="-1"
 >
   <div
-    class="flex-1 overflow-y-auto px-1.5 py-1"
+    class="flex-1 overflow-y-auto px-1_5 py-1"
     data-testid="drawer-body"
   >
     <p>
@@ -135,7 +135,7 @@ exports[`Drawer Snapshots > matches snapshot - left position with actions 1`] = 
   tabindex="-1"
 >
   <header
-    class="flex items-center gap-0.75 px-1.5 py-1 border-b border-neutral-200"
+    class="flex items-center gap-0_75 px-1_5 py-1 border-b border-neutral-200"
   >
     <div
       class="flex-1 text-title-medium font-semibold text-neutral-1000"
@@ -144,7 +144,7 @@ exports[`Drawer Snapshots > matches snapshot - left position with actions 1`] = 
     </div>
     <button
       aria-label="Close drawer"
-      class="shrink-0 w-6 h-6 flex items-center justify-center rounded-small hover:bg-neutral-100 transition-colors duration-base"
+      class="shrink-0 w-icon-sm h-icon-sm flex items-center justify-center rounded-small hover:bg-neutral-100 transition-colors duration-base"
       data-testid="drawer-close-button"
     >
       <svg
@@ -164,7 +164,7 @@ exports[`Drawer Snapshots > matches snapshot - left position with actions 1`] = 
     </button>
   </header>
   <div
-    class="flex-1 overflow-y-auto px-1.5 py-1"
+    class="flex-1 overflow-y-auto px-1_5 py-1"
     data-testid="drawer-body"
   >
     <p>
@@ -172,7 +172,7 @@ exports[`Drawer Snapshots > matches snapshot - left position with actions 1`] = 
     </p>
   </div>
   <footer
-    class="flex items-center justify-end gap-0.75 px-1.5 py-1 border-t border-neutral-200 bg-neutral-50"
+    class="flex items-center justify-end gap-0_75 px-1_5 py-1 border-t border-neutral-200 bg-neutral-50"
     data-testid="drawer-footer"
   >
     <button>

@@ -52,12 +52,12 @@ const ColorSwatch = ({ name, variable, hexValue, showA11y = true }: ColorSwatchP
     <div className="flex min-w-[110px] flex-col overflow-hidden rounded-lg border border-neutral-300 shadow-sm">
       <div className="relative h-24 w-full" style={{ backgroundColor: `var(${variable})` }}>
         {showA11y && a11yRating && (
-          <div className="absolute right-2 top-2 rounded bg-black px-1.5 py-0.5">
+          <div className="absolute right-2 top-2 rounded bg-black px-1_5 py-0_5">
             <span className="text-[10px] font-bold text-white">{a11yRating}</span>
           </div>
         )}
       </div>
-      <div className="bg-white px-3 py-2.5">
+      <div className="bg-white px-3 py-2_5">
         <div className="mb-1 text-sm font-bold text-black">
           {computedHex ? computedHex.toUpperCase() : '#000000'}
         </div>

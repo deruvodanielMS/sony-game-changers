@@ -65,14 +65,16 @@ export function Sidebar({
               aria-label={isCollapsed ? t('expandSidebar') : t('collapseSidebar')}
               className={cn(
                 'flex items-center',
-                'w-full h-3',
+                'h-3',
                 'transition-colors duration-fast',
                 'rounded-default',
                 'text-neutral-1000',
                 'transition-hover',
                 'hover:bg-neutral-200',
                 'cursor-pointer',
-                isCollapsed ? 'justify-center' : 'justify-start px-1 gap-0_5',
+                isCollapsed
+                  ? 'justify-center w-full'
+                  : 'justify-start px-1 gap-0_5 w-full max-w-[var(--nav-item-max-width)]',
               )}
             >
               {isCollapsed ? (
@@ -106,7 +108,7 @@ export function Sidebar({
             icon={<GameChangersIcon className="w-5 h-5" />}
             label={t('gameChangers')}
             isCollapsed={isCollapsed}
-            href={ROUTES.GAME_CHANGERS_GOALS}
+            href={ROUTES.GAME_CHANGERS}
             onClick={onNavigate}
           />
           <SidebarNavItem

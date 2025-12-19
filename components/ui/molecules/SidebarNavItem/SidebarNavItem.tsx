@@ -39,7 +39,7 @@ export function SidebarNavItem({
         : false
 
   return (
-    <div className="relative group">
+    <div className="relative group w-full">
       <Comp
         href={href || ROUTES.ROOT}
         onClick={onClick}
@@ -48,13 +48,15 @@ export function SidebarNavItem({
         aria-label={isCollapsed ? label : undefined}
         data-test-id={dataTestId}
         className={cn(
-          'flex items-center w-full h-3',
+          'flex items-center h-3',
           'transition-all duration-fast',
           'rounded-default',
           'text-body-small leading-body-small font-semibold',
           'focus-visible:outline-none',
           'border-0 outline-none ring-0',
-          isCollapsed ? 'justify-center p-0_75 overflow-hidden' : 'px-1 py-0_75 gap-0_5',
+          isCollapsed
+            ? 'justify-center p-0_75 overflow-hidden w-full'
+            : 'px-1 py-0_75 gap-0_5 w-full max-w-[var(--nav-item-max-width)]',
           isActive
             ? ['bg-neutral-800', 'text-neutral-0']
             : [

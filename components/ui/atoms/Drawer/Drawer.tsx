@@ -173,7 +173,7 @@ export function Drawer({
   )
 
   const backdropClasses = cn(
-    'absolute inset-0 bg-neutral-1000/50 backdrop-blur-sm transition-opacity duration-slower ease-in-out',
+    'absolute inset-0 bg-neutral-1000/50 transition-opacity duration-slower ease-in-out',
     mounted && open ? 'opacity-100' : 'opacity-0',
   )
 
@@ -209,20 +209,20 @@ export function Drawer({
       >
         {/* Mobile handle for bottom drawer */}
         {position === 'bottom' && (
-          <div className="md:hidden flex justify-center py-0.5">
-            <div className="w-4 h-0.25 bg-neutral-300 rounded-default" />
+          <div className="md:hidden flex justify-center py-0_5">
+            <div className="w-2 h-0_25 bg-neutral-300 rounded-default" />
           </div>
         )}
 
         {/* Header */}
         {title && (
-          <header className="flex items-center gap-0.75 px-1.5 py-1 border-b border-neutral-200">
+          <header className="flex items-center gap-0_75 px-1_5 py-1 border-b border-neutral-200">
             <div className="flex-1 text-title-medium font-semibold text-neutral-1000">{title}</div>
             {showClose && (
               <button
                 onClick={onClose}
                 className={cn(
-                  'shrink-0 w-6 h-6 flex items-center justify-center rounded-small hover:bg-neutral-100 transition-colors duration-base',
+                  'shrink-0 w-icon-sm h-icon-sm flex items-center justify-center rounded-small hover:bg-neutral-100 transition-colors duration-base',
                   hideCloseOnMobile && 'md:flex hidden',
                 )}
                 aria-label="Close drawer"
@@ -242,14 +242,14 @@ export function Drawer({
         )}
 
         {/* Body */}
-        <div className="flex-1 overflow-y-auto px-1.5 py-1" data-testid="drawer-body">
+        <div className="flex-1 overflow-y-auto px-1_5 py-1" data-testid="drawer-body">
           {children}
         </div>
 
         {/* Footer with actions */}
         {actions && (
           <footer
-            className="flex items-center justify-end gap-0.75 px-1.5 py-1 border-t border-neutral-200 bg-neutral-50"
+            className="flex items-center justify-end gap-0_75 px-1_5 py-1 border-t border-neutral-200 bg-neutral-50"
             data-testid="drawer-footer"
           >
             {actions}
