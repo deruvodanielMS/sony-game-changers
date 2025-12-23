@@ -1,0 +1,177 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model organization {
+  id        Int            @id @default(autoincrement())
+  code      String
+  parentId  Int?
+  path      String?
+  jobs      jobs[]
+  people    people[]
+  parent    organization?  @relation("organizationToparentId", fields: [parentId], references: [id])
+  relations organization[] @relation("organizationToparentId")
+}
+
+model jobs {
+  id           Int          @id @default(autoincrement())
+  name         String
+  code         String
+  level        Int
+  orgId        Int
+  organization organization @relation(fields: [orgId], references: [id])
+  people       people[]
+}
+
+model people {
+  id                            Int                     @id @default(autoincrement())
+  email                         String                  @unique
+  name                          String
+  lastname                      String
+  employeeId                    String?
+  workdayId                     String?
+  status                        String?
+  orgId                         Int
+  jobId                         Int
+  organization                  organization            @relation(fields: [orgId], references: [id])
+  jobs                          jobs                    @relation(fields: [jobId], references: [id])
+  goals_assignedTo              goals[]                 @relation("peopleTogoals_assignedTo")
+  goals_createdBy               goals[]                 @relation("peopleTogoals_createdBy")
+  checkins_peopleId             checkins[]              @relation("peopleTocheckins_peopleId")
+  checkins_createdBy            checkins[]              @relation("peopleTocheckins_createdBy")
+  feedback_peopleId             feedback[]              @relation("peopleTofeedback_peopleId")
+  feedback_createdBy            feedback[]              @relation("peopleTofeedback_createdBy")
+  performance_reviews_peopleId  performance_reviews[]   @relation("peopleToperformance_reviews_peopleId")
+  performance_reviews_createdBy performance_reviews[]   @relation("peopleToperformance_reviews_createdBy")
+  performance_breakdown         performance_breakdown[]
+}
+
+model goals {
+  id                  Int                 @id @default(autoincrement())
+  title               String
+  body                String
+  type                String
+  status              String
+  parentId            Int?
+  path                String?
+  assignedTo          Int
+  createdBy           Int
+  periodId            Int
+  parent              goals?              @relation("goalsToparentId", fields: [parentId], references: [id])
+  relations           goals[]             @relation("goalsToparentId")
+  people_assignedTo   people              @relation("peopleTogoals_assignedTo", fields: [assignedTo], references: [id])
+  people_createdBy    people              @relation("peopleTogoals_createdBy", fields: [createdBy], references: [id])
+  performance_periods performance_periods @relation(fields: [periodId], references: [id])
+  goal_ambitions      goal_ambitions[]
+  goal_actions        goal_actions[]
+  goal_achievements   goal_achievements[]
+}
+
+model goal_ambitions {
+  id     Int    @id @default(autoincrement())
+  title  String
+  body   String
+  status String
+  goalId Int
+  goals  goals  @relation(fields: [goalId], references: [id])
+}
+
+model goal_actions {
+  id     Int    @id @default(autoincrement())
+  title  String
+  body   String
+  status String
+  goalId Int
+  goals  goals  @relation(fields: [goalId], references: [id])
+}
+
+model goal_achievements {
+  id     Int    @id @default(autoincrement())
+  title  String
+  body   String
+  status String
+  goalId Int
+  goals  goals  @relation(fields: [goalId], references: [id])
+}
+
+model checkins {
+  id                  Int                 @id @default(autoincrement())
+  peopleId            Int
+  text                String
+  createdBy           Int
+  periodId            Int
+  people_peopleId     people              @relation("peopleTocheckins_peopleId", fields: [peopleId], references: [id])
+  people_createdBy    people              @relation("peopleTocheckins_createdBy", fields: [createdBy], references: [id])
+  performance_periods performance_periods @relation(fields: [periodId], references: [id])
+}
+
+model feedback {
+  id                  Int                 @id @default(autoincrement())
+  peopleId            Int
+  text                String
+  category            String
+  createdBy           Int
+  periodId            Int
+  people_peopleId     people              @relation("peopleTofeedback_peopleId", fields: [peopleId], references: [id])
+  people_createdBy    people              @relation("peopleTofeedback_createdBy", fields: [createdBy], references: [id])
+  performance_periods performance_periods @relation(fields: [periodId], references: [id])
+}
+
+model performance_reviews {
+  id                    Int                     @id @default(autoincrement())
+  peopleId              Int
+  summary               String
+  ambitions_text        String
+  achievements_text     String
+  strengths_text        String
+  growth_text           String
+  score                 Float
+  final_score           Float
+  potential_score       Float
+  createdBy             Int
+  periodId              Int
+  people_peopleId       people                  @relation("peopleToperformance_reviews_peopleId", fields: [peopleId], references: [id])
+  people_createdBy      people                  @relation("peopleToperformance_reviews_createdBy", fields: [createdBy], references: [id])
+  performance_periods   performance_periods     @relation(fields: [periodId], references: [id])
+  performance_breakdown performance_breakdown[]
+}
+
+model performance_breakdown {
+  id                   Int                    @id @default(autoincrement())
+  performanceReviewId  Int
+  peopleId             Int
+  category             String
+  score                Float
+  periodId             Int
+  performance_reviews  performance_reviews    @relation(fields: [performanceReviewId], references: [id])
+  people               people                 @relation(fields: [peopleId], references: [id])
+  performance_periods  performance_periods    @relation(fields: [periodId], references: [id])
+  performance_examples performance_examples[]
+}
+
+model performance_examples {
+  id                    Int                   @id @default(autoincrement())
+  breakdownId           Int
+  type                  String
+  text                  String
+  performance_breakdown performance_breakdown @relation(fields: [breakdownId], references: [id])
+}
+
+model performance_periods {
+  id                    Int                     @id @default(autoincrement())
+  name                  String
+  fiscalYear            Int
+  start                 DateTime
+  end                   DateTime
+  active                Boolean
+  goals                 goals[]
+  checkins              checkins[]
+  feedback              feedback[]
+  performance_reviews   performance_reviews[]
+  performance_breakdown performance_breakdown[]
+}

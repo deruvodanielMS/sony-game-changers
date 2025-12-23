@@ -15,11 +15,14 @@
     "test:coverage": "vitest run --coverage",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "dev:setup": "yarn install --frozen-lockfile && prisma generate && prisma migrate dev --name init",
+    "db:reset": "prisma migrate reset --force"
   },
   "dependencies": {
     "@conform-to/react": "^1.13.2",
     "@conform-to/zod": "^1.13.2",
+    "@prisma/client": "5.22.0",
     "@radix-ui/react-slot": "^1.2.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -43,10 +46,11 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
-    "@types/node": "^20",
+    "@types/node": "^25.0.3",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
     "@vitejs/plugin-react": "^5.0.4",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.0",
     "eslint-config-prettier": "^10.1.8",
@@ -56,9 +60,11 @@
     "jsdom": "^27.0.1",
     "lint-staged": "^16.2.7",
     "prettier": "^3.6.2",
+    "prisma": "5.22.0",
     "storybook": "^10.0.6",
     "tailwindcss": "^4",
-    "typescript": "^5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
     "vitest": "^4.0.1"
   },
   "lint-staged": {
@@ -66,5 +72,8 @@
       "eslint --fix",
       "prettier --write"
     ]
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }

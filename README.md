@@ -8,6 +8,16 @@ First, install dependencies, and then run the development server:
 yarn install --frozen-lockfile
 ```
 
+🚀 One-step Setup (Optional)
+
+For convenience, the following scripts are available:
+
+```bash
+yarn dev:setup
+```
+
+(More Info on Local Development – Prisma Onboarding)
+
 ```bash
 yarn dev
 ```
@@ -17,6 +27,80 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## 🧩 Local Development – Prisma Onboarding
+
+This project uses **Prisma + SQLite** for local development in order to keep the setup simple and accessible for all team members.
+
+The backend logic is mocked locally using Prisma and Next.js API routes.  
+The real backend will be provided by an external team.
+
+### Generate Prisma Client
+
+Generates the Prisma Client based on the current schema.
+
+```bash
+npx prisma generate
+```
+
+### Run database migrations
+
+Creates the local SQLite database and applies all migrations.
+
+```bash
+npx prisma migrate dev
+```
+
+### Seed the database
+
+Populates the database with base and demo data.
+
+```bash
+npx prisma db seed
+```
+
+### One-step Setup (Optional)
+
+For convenience, the following scripts are available:
+
+```bash
+yarn dev:setup
+```
+
+#### This runs:
+
+- dependency installation
+- Prisma client generation
+- migrations
+- database seed
+
+### To fully reset the database:
+
+```bash
+yarn db:reset
+```
+
+⚠️ This will delete all local data and re-apply migrations.
+
+---
+
+## 📦 Requirements
+
+- Node.js `>= 18`
+- Yarn
+- Git
+
+No external database is required for local development.
+
+---
+
+## 🔐 Environment Variables
+
+Create a local environment file:
+
+```bash
+cp .env.example .env
+```
 
 ## Storybook
 
