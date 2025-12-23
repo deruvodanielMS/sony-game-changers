@@ -6,5 +6,6 @@ export interface SearchFieldProps extends Omit<
   debounce?: number
   buttonSearch?: boolean
   defaultValue?: string
+  clearable?: boolean
   'data-testid'?: string
 }

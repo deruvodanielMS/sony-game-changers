@@ -33,7 +33,7 @@ const mockGoal = {
     userName: 'Alice Williams',
     title: 'Improve team collaboration and communication',
     status: GOAL_STATUSES.AWAITING_APPROVAL,
-    goalType: GOAL_TYPES.TEAM,
+    goalType: GOAL_TYPES.BUSINESS,
     avatarUrl: '/profile-img/profile.png',
   },
   ladderGoals: [],
@@ -55,8 +55,8 @@ const mockFilters = [
     label: 'Type',
     'data-testid': 'filter-type',
     options: [
-      { label: 'Team', value: GOAL_TYPES.TEAM },
-      { label: 'Personal', value: GOAL_TYPES.PERSONAL },
+      { label: 'Team', value: GOAL_TYPES.BUSINESS },
+      { label: 'Personal', value: GOAL_TYPES.MANAGER_EFFECTIVENESS },
     ],
   },
 ]
@@ -150,7 +150,7 @@ export const Default: Story = {
 
 const WithActiveFiltersStory = () => {
   const [selectedStatus, setSelectedStatus] = useState<string[]>([GOAL_STATUSES.COMPLETED])
-  const [selectedType, setSelectedType] = useState<string[]>([GOAL_TYPES.TEAM])
+  const [selectedType, setSelectedType] = useState<string[]>([GOAL_TYPES.BUSINESS])
   const [selectedAvatars, setSelectedAvatars] = useState<string[]>(['nn0098'])
   const [searchValue, setSearchValue] = useState('collaboration')
 

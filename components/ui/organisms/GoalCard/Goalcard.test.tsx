@@ -26,7 +26,7 @@ const baseGoal: Goal = {
   title: 'Main Goal',
   description: 'Improve performance',
   userName: 'John Doe',
-  goalType: GOAL_TYPES.PERSONAL,
+  goalType: GOAL_TYPES.BUSINESS,
   status: GOAL_STATUSES.AWAITING_APPROVAL,
 }
 

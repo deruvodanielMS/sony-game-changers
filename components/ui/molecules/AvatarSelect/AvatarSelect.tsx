@@ -18,12 +18,13 @@ const optionClasses =
   'transition-hover w-full flex gap-1 items-center h-3 border-box px-1 py-0_75 cursor-pointer text-neutral-1000 text-body leading-body hover:bg-neutral-100'
 
 const avatarSelectionGradient =
-  'bg-gradient-to-r from-gradient-avatar-from to-gradient-avatar-to !p-[3px]'
+  'bg-gradient-to-r from-gradient-avatar-from to-gradient-avatar-to !p-[3px] hover:!shadow-none box-content'
 
 export function AvatarSelect({
   options,
   selected = [],
   showItems = 5,
+  className,
   onAvatarSelect,
   'data-testid': dataTestid,
 }: AvatarSelectProps) {
@@ -47,7 +48,7 @@ export function AvatarSelect({
   }
 
   return (
-    <div className="flex gap-0 items-center" data-testid={dataTestid}>
+    <div className={cn('flex gap-0 items-center', className)} data-testid={dataTestid}>
       {optionsShown.map(({ url, uid, name }: AvatarSelectOption) => {
         const isSelected = selected?.includes(uid)
         return (

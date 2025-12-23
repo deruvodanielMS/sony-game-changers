@@ -137,7 +137,6 @@ export function LadderingModal({
 
   const handleLink = (/*ambitionId: string*/) => {
     // TODO: Implement link logic with API call
-    console.log('Linking to ambition:', ambitionId)
     // Example: await linkGoalToAmbition(selectedGoal.id, ambitionId)
   }
 

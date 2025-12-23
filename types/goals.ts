@@ -5,8 +5,9 @@ export const GOAL_STATUSES = {
 } as const
 
 export const GOAL_TYPES = {
-  PERSONAL: 'personal',
-  TEAM: 'team',
+  BUSINESS: 'business',
+  PERSONAL_GROWTH_AND_DEVELOPMENT: 'personal_growth_and_development',
+  MANAGER_EFFECTIVENESS: 'manager_effectiveness',
 } as const
 
 export type GoalStatus = (typeof GOAL_STATUSES)[keyof typeof GOAL_STATUSES]

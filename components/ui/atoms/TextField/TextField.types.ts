@@ -15,6 +15,9 @@ export interface TextFieldProps extends Omit<React.InputHTMLAttributes<HTMLInput
 
   /** Passthrough test id */
   'data-test-id'?: string
+
+  /** className prop but for input element */
+  inputClassName?: string
 }
 
 export default TextFieldProps

@@ -13,7 +13,7 @@ export const goalMocks = [
       title:
         'Ensure core title features meet established quality bars to achieve a strong critical reception score and boost future sales.',
       status: GOAL_STATUSES.AWAITING_APPROVAL,
-      goalType: GOAL_TYPES.TEAM,
+      goalType: GOAL_TYPES.BUSINESS,
       description:
         'Deliver a truly compelling, next-generation, immersive gaming experience immersive gaming experience that secures leading industry recognition and high player satisfaction.',
       avatarUrl: '/profile-img/profile.png',
@@ -25,7 +25,7 @@ export const goalMocks = [
         title:
           'Verify the successful operation of all major systems and complete 100% of test cases before Alpha.',
         status: GOAL_STATUSES.DRAFT,
-        goalType: GOAL_TYPES.TEAM,
+        goalType: GOAL_TYPES.MANAGER_EFFECTIVENESS,
         description: 'Increase conversion from 10% to 15%',
       },
       {
@@ -34,7 +34,7 @@ export const goalMocks = [
         title:
           'Integrate all mandatory feedback from playtests into level design by the end of each sprint.',
         status: GOAL_STATUSES.COMPLETED,
-        goalType: GOAL_TYPES.PERSONAL,
+        goalType: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
         avatarUrl: '/profile-img/profile.png',
       },
     ],
@@ -48,7 +48,7 @@ export const goalMocks = [
       title:
         "Strategically increase The Team's technical expertise by implementing targeted upskilling initiatives in critical architectural domains (e.g., CI/CD).",
       status: GOAL_STATUSES.COMPLETED,
-      goalType: GOAL_TYPES.PERSONAL,
+      goalType: GOAL_TYPES.BUSINESS,
       avatarUrl: '/profile-img/profile.png',
     },
     ladderGoals: [],
@@ -61,7 +61,7 @@ export const goalMocks = [
       userName: 'Emma Wilson',
       title: 'Develop comprehensive onboarding program for new team members',
       status: GOAL_STATUSES.DRAFT,
-      goalType: GOAL_TYPES.TEAM,
+      goalType: GOAL_TYPES.MANAGER_EFFECTIVENESS,
       avatarUrl: '/profile-img/profile.png',
     },
     ladderGoals: [],
@@ -74,7 +74,7 @@ export const goalMocks = [
       userName: 'James Miller',
       title: 'Improve code review process and documentation standards',
       status: GOAL_STATUSES.AWAITING_APPROVAL,
-      goalType: GOAL_TYPES.PERSONAL,
+      goalType: GOAL_TYPES.BUSINESS,
       avatarUrl: '/profile-img/profile.png',
     },
     ladderGoals: [],
@@ -87,7 +87,7 @@ export const goalMocks = [
       userName: 'Sofia Rodriguez',
       title: 'Establish quarterly team retrospectives and continuous improvement initiatives',
       status: GOAL_STATUSES.COMPLETED,
-      goalType: GOAL_TYPES.TEAM,
+      goalType: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
       avatarUrl: '/profile-img/profile.png',
     },
     ladderGoals: [],
@@ -117,14 +117,20 @@ export const filterBarMocks = {
         { label: 'Completed', value: GOAL_STATUSES.COMPLETED },
         { label: 'Draft', value: GOAL_STATUSES.DRAFT },
       ],
+      single: true,
     },
     {
       label: 'Type',
       'data-testid': 'filter-category',
       options: [
-        { label: 'Team', value: GOAL_TYPES.TEAM },
-        { label: 'Personal', value: GOAL_TYPES.PERSONAL },
+        { label: 'Business', value: GOAL_TYPES.BUSINESS },
+        { label: 'Manager effecteviness', value: GOAL_TYPES.MANAGER_EFFECTIVENESS },
+        {
+          label: 'Personal growth and development',
+          value: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
+        },
       ],
+      single: true,
     },
   ],
 }

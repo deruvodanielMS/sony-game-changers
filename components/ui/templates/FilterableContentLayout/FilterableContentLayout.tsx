@@ -130,6 +130,7 @@ export function FilterableContentLayout({
                   onChange: searchField.onChange,
                   defaultValue: searchField.value,
                   placeholder: searchField.placeholder,
+                  clearable: searchField.clearable,
                 }
               : undefined
           }

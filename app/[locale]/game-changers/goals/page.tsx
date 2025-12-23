@@ -53,6 +53,7 @@ export default function GameChangersGoalsPage() {
         onChange: setSelectedSearchValue,
         placeholder: t('filterDrawer.searchPlaceholder'),
         label: t('filterDrawer.searchLabel'),
+        clearable: true,
       }}
       onClearFilters={handleClearFilters}
       drawerTitle={t('filterDrawer.title')}

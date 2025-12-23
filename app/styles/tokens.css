@@ -192,6 +192,7 @@
   --space-1: 16px;
   --space-1_5: 24px;
   --space-2: 32px;
+  --space-2_75: 44px;
   --space-3: 48px;
   --space-4: 64px;
   --space-4_5: 72px;
@@ -231,6 +232,7 @@
     --space-1: 12px;
     --space-1_5: 16px;
     --space-2: 24px;
+    --space-2_75: 36px;
     --space-3: 40px;
     --space-4: 48px;
     --space-4_5: 56px;

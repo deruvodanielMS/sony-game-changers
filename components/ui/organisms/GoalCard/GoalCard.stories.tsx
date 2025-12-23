@@ -26,7 +26,7 @@ const baseGoal: Goal = {
   description: 'Become a better team leader',
   avatarUrl: '',
   status: 'draft',
-  goalType: GOAL_TYPES.PERSONAL,
+  goalType: GOAL_TYPES.BUSINESS,
 }
 
 const ladderGoals: Array<Goal> = [

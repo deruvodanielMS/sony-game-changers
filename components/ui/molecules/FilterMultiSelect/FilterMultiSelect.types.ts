@@ -8,5 +8,7 @@ export type FilterMultiSelectProps = {
   onSelect: (selected: Array<string>) => void
   options: Array<FilterMultiSelectOption>
   selected?: Array<string>
+  className?: string
+  single?: boolean
   'data-testid'?: string
 }

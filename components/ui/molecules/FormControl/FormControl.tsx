@@ -83,21 +83,25 @@ export function FormControl({
   mandatory,
   beforeLabel,
   afterLabel,
+  className,
 }: FormControlProps) {
   return (
     <div
       className={cn(
         'w-full flex flex-col items-stretch gap-0_25',
-        !fullWidth && 'max-w-form-control-width',
+        !fullWidth && 'max-w-form-control-width w-auto',
+        className,
       )}
     >
       <Label.Root className="flex flex-col items-stretch gap-0_25">
-        <div className="text-body leading-body text-neutral-1000 font-bold flex gap-0_25 items-center">
-          {beforeLabel}
-          {label}
-          {mandatory && <span className="text-feedback-danger-600">*</span>}
-          {afterLabel}
-        </div>
+        {(label || beforeLabel || afterLabel) && (
+          <div className="text-body leading-body text-neutral-1000 font-bold flex gap-0_25 items-center">
+            {beforeLabel}
+            {label}
+            {mandatory && <span className="text-feedback-danger-600">*</span>}
+            {afterLabel}
+          </div>
+        )}
         {helperBefore &&
           !!helperBefore.length &&
           helperBefore.map((feedback: FeddbackHelperProps, index) => (

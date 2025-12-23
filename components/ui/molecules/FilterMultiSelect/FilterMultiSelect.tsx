@@ -21,6 +21,8 @@ export function FilterMultiSelect({
   options,
   onSelect,
   selected = [],
+  className,
+  single = false,
   'data-testid': dataTestId,
 }: FilterMultiSelectProps) {
   const [open, setOpen] = useState(false)
@@ -33,6 +35,11 @@ export function FilterMultiSelect({
   })
 
   const handleSelectOption = (value: string) => {
+    if (single) {
+      onSelect([value])
+      setOpen(false)
+      return
+    }
     const alreadySelected = selected.includes(value)
 
     const _selected = alreadySelected ? selected.filter((v) => v !== value) : [...selected, value]
@@ -51,7 +58,12 @@ export function FilterMultiSelect({
   })()
 
   return (
-    <Collapsible.Root open={open} onOpenChange={setOpen} data-testid={dataTestId}>
+    <Collapsible.Root
+      open={open}
+      onOpenChange={setOpen}
+      data-testid={dataTestId}
+      className={className}
+    >
       <div className="flex ">
         <Collapsible.Trigger ref={triggerRef} asChild>
           <Button
@@ -59,8 +71,9 @@ export function FilterMultiSelect({
             variant="plain"
             leftIcon={<ListFilter width={20} />}
             onClick={() => setOpen(!open)}
+            title={selectedInfo}
           >
-            {label}: {selectedInfo}
+            {label}: <span className="max-w-6 truncate">{selectedInfo}</span>
           </Button>
         </Collapsible.Trigger>
       </div>

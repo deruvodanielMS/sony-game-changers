@@ -8,10 +8,6 @@ import { FilterBarType } from './FilterBar.types'
 import { Button } from '../../atoms/Button'
 import { useTranslations } from 'next-intl'
 
-const FieldSpacer = () => {
-  return <div className="w-[1px] h-1 bg-neutral-300 srink-0 grow-0 basis-[1px]" />
-}
-
 export function FilterBar({
   children,
   clearFields,
@@ -35,21 +31,19 @@ export function FilterBar({
     }
   }
   return (
-    <section className="w-full h-3 flex justify-between max-sm:flex-col max-sm:h-auto">
-      <form className="flex gap-1 items-center max-sm:flex-wrap max-sm:mb-1">
+    <section className="w-full h-3 flex gap-1 justify-between max-sm:flex-col max-lg:h-auto">
+      <form className="flex gap-1 items-center max-sm:flex-wrap max-sm:mb-1 md:max-lg:flex-wrap">
         {filters.map((props) => (
-          <FilterMultiSelect key={props.label} {...props} />
+          <FilterMultiSelect key={props.label} className="shrink-0" {...props} />
         ))}
-        <FieldSpacer />
         {avatarSelector && <AvatarSelect {...avatarSelector} />}
         {clearFields && (
           <Button className="max-sm:order-last" variant={'plain'} onClick={handleClearFields}>
             {t('clearFieldsButton')}
           </Button>
         )}
-        <FieldSpacer />
         {searchField && (
-          <FormControl className="shrink-0 grow-0 " label={''}>
+          <FormControl className="" label={''}>
             <SearchField {...searchField} />
           </FormControl>
         )}

@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { Collapsible } from 'radix-ui'
-import { ChevronDown, ChevronUp } from 'lucide-react'
+import { ChevronDown, ChevronUp, Shrub } from 'lucide-react'
 import { Card } from '@/components/ui/atoms/Card/Card'
 import { GoalCardProps } from './GoalCard.types'
 import { CornerDownRight, Plus, BriefcaseBusiness, Sprout } from 'lucide-react'
@@ -17,8 +17,9 @@ import { GOAL_TYPES } from '@/types/goals'
 import { LadderingModal } from '@/components/ui/organisms/LadderingModal'
 
 const GoalTypeIcons = {
-  [GOAL_TYPES.PERSONAL]: <Sprout width={20} />,
-  [GOAL_TYPES.TEAM]: <BriefcaseBusiness width={20} />,
+  [GOAL_TYPES.BUSINESS]: <Sprout width={20} />,
+  [GOAL_TYPES.MANAGER_EFFECTIVENESS]: <BriefcaseBusiness width={20} />,
+  [GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT]: <Shrub width={20} />,
 }
 
 export function GoalCard({
