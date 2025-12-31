@@ -97,13 +97,13 @@ export function Sidebar({
         className={cn('flex-1 overflow-y-visible overflow-x-hidden', !noPadding && 'px-1_5 py-1_5')}
       >
         <SidebarNav isCollapsed={isCollapsed}>
-          <SidebarNavItem
+          {/* <SidebarNavItem
             icon={<DashboardIcon className="w-5 h-5" />}
             label={t('home')}
             isCollapsed={isCollapsed}
             href={ROUTES.ROOT}
             onClick={onNavigate}
-          />
+          /> */}
           <SidebarNavItem
             icon={<GameChangersIcon className="w-5 h-5" />}
             label={t('gameChangers')}

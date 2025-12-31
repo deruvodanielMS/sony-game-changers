@@ -72,6 +72,11 @@
     "linkButtonAriaLabel": "Link ambition",
     "selectedGoalLabel": "Selected Ambition"
   },
+  "CreateGoal": {
+    "title": "New Ambition",
+    "description": "Create a new ambition for your team",
+    "back": "Back"
+  },
   "Common": {
     "confirm": "Confirm",
     "cancel": "Cancel"

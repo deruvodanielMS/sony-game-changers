@@ -2,15 +2,18 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
+import { useRouter } from '@/i18n/navigation'
 import { CirclePlus } from 'lucide-react'
 import { GoalsHeader } from '@/components/game-changers/goals/GoalsHeader'
 import { Button } from '@/components/ui/atoms/Button'
 import { GoalCard } from '@/components/ui/organisms/GoalCard'
 import { FilterableContentLayout } from '@/components/ui/templates/FilterableContentLayout'
+import { ROUTES } from '@/common/routes'
 import { goalMocks, filterBarMocks } from './mocks'
 
 export default function GameChangersGoalsPage() {
   const t = useTranslations('Goals')
+  const router = useRouter()
   const [selectedAvatars, setSelectedAvatars] = useState<Array<string>>([])
   const [selectedFilterType, setSelectedFilterType] = useState<Array<string>>([])
   const [selectedFilterStatus, setSelectedFilterStatus] = useState<Array<string>>([])
@@ -67,7 +70,12 @@ export default function GameChangersGoalsPage() {
       }}
       activeFiltersCount={activeFiltersCount}
       primaryAction={
-        <Button variant="primary" className="text-neutral-0" leftIcon={<CirclePlus width={24} />}>
+        <Button
+          variant="primary"
+          className="text-neutral-0"
+          leftIcon={<CirclePlus width={24} />}
+          onClick={() => router.push(ROUTES.GAME_CHANGERS_GOALS_NEW)}
+        >
           {t('newGoal')}
         </Button>
       }

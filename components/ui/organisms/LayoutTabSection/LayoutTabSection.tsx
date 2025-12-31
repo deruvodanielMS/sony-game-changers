@@ -7,12 +7,16 @@ import { Link } from '@/i18n/navigation'
 import { cn } from '@/utils/cn'
 import type { LayoutTabSectionProps, LayoutTabItem } from './LayoutTabSection.types'
 
-export function LayoutTabSection({ children, sections = [] }: LayoutTabSectionProps) {
+export function LayoutTabSection({ children, sections = [], basePath }: LayoutTabSectionProps) {
   const pathname = usePathname()
   const [isNavDrawerOpen, setIsNavDrawerOpen] = useState(false)
   const [, startTransition] = useTransition()
 
-  const current = pathname.split('/').pop() || ''
+  // Extract the section from pathname, handling both /section and /section/subsection
+  const pathParts = pathname.split('/').filter(Boolean)
+  const sectionIndex = pathParts.findIndex((part) => part === basePath)
+  const current =
+    sectionIndex >= 0 && pathParts[sectionIndex + 1] ? pathParts[sectionIndex + 1] : ''
 
   // Detect if navigation drawer is open (mobile only)
   useEffect(() => {
@@ -52,8 +56,8 @@ export function LayoutTabSection({ children, sections = [] }: LayoutTabSectionPr
         >
           <Tabs.List className="hidden md:flex gap-1 py-1_5">
             {sections.map(({ value, label, href, icon }: LayoutTabItem) => (
-              <Tabs.Trigger key={value} value={value} asChild className={tabItemClasses}>
-                <Link href={href}>
+              <Tabs.Trigger key={value} value={value} asChild>
+                <Link href={href} className={tabItemClasses}>
                   {icon}
                   <span className={tabLabelClasses}>{label}</span>
                 </Link>
@@ -65,8 +69,8 @@ export function LayoutTabSection({ children, sections = [] }: LayoutTabSectionPr
           <div className="md:hidden w-full overflow-x-auto overflow-y-hidden py-1 scrollbar-hide">
             <Tabs.List className="flex gap-1">
               {sections.map(({ value, label, href, icon }: LayoutTabItem) => (
-                <Tabs.Trigger key={value} value={value} asChild className={tabItemClasses}>
-                  <Link href={href}>
+                <Tabs.Trigger key={value} value={value} asChild>
+                  <Link href={href} className={tabItemClasses}>
                     {icon}
                     <span className={tabLabelClasses}>{label}</span>
                   </Link>

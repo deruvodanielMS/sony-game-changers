@@ -69,12 +69,12 @@ const sectionsMock = [
 describe('LayoutTabSection', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    mockUsePathname.mockReturnValue('/settings/profile')
+    mockUsePathname.mockReturnValue('/en/game-changers/profile')
   })
 
   it('renders both desktop and mobile tab lists', () => {
     render(
-      <LayoutTabSection sections={sectionsMock}>
+      <LayoutTabSection basePath="game-changers" sections={sectionsMock}>
         <div>Child content</div>
       </LayoutTabSection>,
     )
@@ -85,7 +85,7 @@ describe('LayoutTabSection', () => {
 
   it('renders all section labels and icons', () => {
     render(
-      <LayoutTabSection sections={sectionsMock}>
+      <LayoutTabSection basePath="game-changers" sections={sectionsMock}>
         <div>Children</div>
       </LayoutTabSection>,
     )
@@ -99,7 +99,7 @@ describe('LayoutTabSection', () => {
 
   it('preserves <a> as the interactive element so we can verify hrefs', () => {
     render(
-      <LayoutTabSection sections={sectionsMock}>
+      <LayoutTabSection basePath="game-changers" sections={sectionsMock}>
         <div>Children</div>
       </LayoutTabSection>,
     )
@@ -117,7 +117,7 @@ describe('LayoutTabSection', () => {
 
   it('marks the current tab value based on the pathname (last segment)', () => {
     render(
-      <LayoutTabSection sections={sectionsMock}>
+      <LayoutTabSection basePath="game-changers" sections={sectionsMock}>
         <div>Children</div>
       </LayoutTabSection>,
     )
@@ -128,7 +128,7 @@ describe('LayoutTabSection', () => {
 
   it('renders the children section', () => {
     render(
-      <LayoutTabSection sections={sectionsMock}>
+      <LayoutTabSection basePath="game-changers" sections={sectionsMock}>
         <div data-testid="child-slot">Hello children</div>
       </LayoutTabSection>,
     )
@@ -137,10 +137,10 @@ describe('LayoutTabSection', () => {
   })
 
   it('works with a different pathname (billing active)', () => {
-    mockUsePathname.mockReturnValue('/settings/billing')
+    mockUsePathname.mockReturnValue('/en/game-changers/billing')
 
     render(
-      <LayoutTabSection sections={sectionsMock}>
+      <LayoutTabSection basePath="game-changers" sections={sectionsMock}>
         <div>Children</div>
       </LayoutTabSection>,
     )
@@ -151,7 +151,7 @@ describe('LayoutTabSection', () => {
 
   it('matches snapshot', () => {
     const { container } = render(
-      <LayoutTabSection sections={sectionsMock}>
+      <LayoutTabSection basePath="game-changers" sections={sectionsMock}>
         <div>Snapshot child</div>
       </LayoutTabSection>,
     )

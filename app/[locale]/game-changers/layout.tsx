@@ -1,5 +1,6 @@
 'use client'
 
+import { usePathname } from 'next/navigation'
 import { ROUTES } from '@/common/routes'
 import { useTranslations } from 'next-intl'
 import { LayoutTabSection } from '@/components/ui/organisms/LayoutTabSection/LayoutTabSection'
@@ -13,6 +14,11 @@ import {
 
 export default function GameChangersLayout({ children }: { children: React.ReactNode }) {
   const t = useTranslations('Pages')
+  const pathname = usePathname()
+
+  // Hide tabs on creation/edit pages
+  const shouldHideTabs = pathname.includes('/new') || pathname.includes('/edit')
+
   const sections = [
     {
       label: t('gameChangersGoals'),
@@ -46,5 +52,13 @@ export default function GameChangersLayout({ children }: { children: React.React
     },
   ]
 
-  return <LayoutTabSection sections={sections}>{children}</LayoutTabSection>
+  if (shouldHideTabs) {
+    return <div className="px-3 pt-20 md:pt-1_5">{children}</div>
+  }
+
+  return (
+    <LayoutTabSection basePath="game-changers" sections={sections}>
+      {children}
+    </LayoutTabSection>
+  )
 }

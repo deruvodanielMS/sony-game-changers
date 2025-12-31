@@ -109,7 +109,7 @@ export function FilterableContentLayout({
     <div className="flex flex-col gap-0 md:gap-3">
       {/* Header - hide on scroll only on desktop, always visible on mobile */}
       <div
-        className="md:transition-[transform,opacity] md:duration-base md:ease-out mb-0 pt-20 md:pt-0"
+        className="md:transition-[transform,opacity] md:duration-base md:ease-out mb-0"
         style={{
           transform: shouldHideHeader ? 'translateY(-100%)' : 'translateY(0)',
           opacity: shouldHideHeader ? 0 : 1,
@@ -171,8 +171,8 @@ export function FilterableContentLayout({
           {primaryAction && (
             <div className="shrink-0">
               {/* Clone primary action as icon-only for mobile */}
-              <Button variant="primary" className="text-neutral-0" iconOnly>
-                <CirclePlus width={24} />
+              <Button variant="primary" className="text-neutral-0" iconOnly asChild>
+                {primaryAction}
               </Button>
             </div>
           )}
