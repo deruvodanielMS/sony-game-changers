@@ -13,13 +13,13 @@ import { GoalStatus } from '@/components/ui/molecules/GoalStatus/GoalStatus'
 import { cn } from '@/utils/cn'
 import { Button } from '../../atoms/Button'
 import { useTranslations } from 'next-intl'
-import { GOAL_TYPES } from '@/types/goals'
+import { AMBITION_TYPES, AmbitionStatus } from '@/domain/ambition'
 import { LadderingModal } from '@/components/ui/organisms/LadderingModal'
 
 const GoalTypeIcons = {
-  [GOAL_TYPES.BUSINESS]: <Sprout width={20} />,
-  [GOAL_TYPES.MANAGER_EFFECTIVENESS]: <BriefcaseBusiness width={20} />,
-  [GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT]: <Shrub width={20} />,
+  [AMBITION_TYPES.BUSINESS]: <Sprout width={20} />,
+  [AMBITION_TYPES.MANAGER_EFFECTIVENESS]: <BriefcaseBusiness width={20} />,
+  [AMBITION_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT]: <Shrub width={20} />,
 }
 
 export function GoalCard({
@@ -32,7 +32,7 @@ export function GoalCard({
   const [isLadderingModalOpen, setIsLadderingModalOpen] = useState(false)
   const t = useTranslations('GoalCard')
 
-  const { description, title, avatarUrl, goalType, status, userName } = goal
+  const { description, title, avatarUrl, ambitionType, status, userName } = goal
   const hasChildrenGoals = ladderGoals.length
 
   const handleOpenLadderingModal = () => {
@@ -80,7 +80,7 @@ export function GoalCard({
               !hasChildrenGoals ? 'ml-3' : '',
             )}
           >
-            <div className="relative shrink-0" style={{ width: goalType ? '72px' : '48px' }}>
+            <div className="relative shrink-0" style={{ width: ambitionType ? '72px' : '48px' }}>
               <Image
                 src={avatarUrl || generateInitialsAvatarSrc(userName, { size: 48 })}
                 alt={userName}
@@ -88,16 +88,16 @@ export function GoalCard({
                 height={48}
                 className="rounded-full"
               />
-              {goalType && (
+              {ambitionType && (
                 <div className="absolute top-0 -right-0_25 w-12 h-12 bg-neutral-100 rounded-full text-neutral-1000 flex items-center justify-center">
-                  {GoalTypeIcons[goalType]}
+                  {GoalTypeIcons[ambitionType as keyof typeof GoalTypeIcons]}
                 </div>
               )}
             </div>
             <Typography className="flex-1 max-sm:order-last max-sm:basis-full" variant="h6">
               {title}
             </Typography>
-            <GoalStatus status={status} className="shrink-0 font-bold" />
+            <GoalStatus status={status as AmbitionStatus} className="shrink-0 font-bold" />
           </div>
         </div>
 
@@ -123,7 +123,7 @@ export function GoalCard({
                 >
                   {ladderGoal.title}
                 </Typography>
-                <GoalStatus status={ladderGoal.status} className="grow-0" />
+                <GoalStatus status={ladderGoal.status as AmbitionStatus} className="grow-0" />
               </div>
             ))}
           </div>

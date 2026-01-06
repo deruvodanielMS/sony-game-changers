@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import { vi } from 'vitest'
 import { GoalCard } from './GoalCard'
-import { GOAL_STATUSES, GOAL_TYPES, type Goal } from '@/types/goals'
+import { AMBITION_STATUSES, AMBITION_TYPES, type Ambition } from '@/domain/ambition'
 
 vi.mock('next/image', () => ({
   default: (props: any) => {
@@ -21,21 +21,21 @@ vi.mock('next-intl', () => ({
   },
 }))
 
-const baseGoal: Goal = {
+const baseGoal: Ambition = {
   id: '1',
   title: 'Main Goal',
   description: 'Improve performance',
   userName: 'John Doe',
-  goalType: GOAL_TYPES.BUSINESS,
-  status: GOAL_STATUSES.AWAITING_APPROVAL,
+  ambitionType: AMBITION_TYPES.BUSINESS,
+  status: AMBITION_STATUSES.AWAITING_APPROVAL,
 }
 
-const ladderGoals: Array<Goal> = [
+const ladderGoals: Array<Ambition> = [
   {
     id: '2',
     title: 'Sub Goal A',
     userName: 'Jane Smith',
-    status: GOAL_STATUSES.COMPLETED,
+    status: AMBITION_STATUSES.COMPLETED,
   },
 ]
 

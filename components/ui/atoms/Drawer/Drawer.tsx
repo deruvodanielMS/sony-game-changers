@@ -112,7 +112,7 @@ export function Drawer({
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault()
-        onClose()
+        onClose?.()
       }
     }
 
@@ -143,7 +143,7 @@ export function Drawer({
     if (isMobileBottomDrawer && window.innerWidth < MOBILE_BREAKPOINT) {
       const diff = currentY.current - startY.current
       if (diff > SWIPE_THRESHOLD) {
-        onClose()
+        onClose?.()
       }
       if (containerRef.current) {
         containerRef.current.style.transform = ''
@@ -189,7 +189,7 @@ export function Drawer({
           e.target === overlayRef.current ||
           (e.target as HTMLElement).hasAttribute('aria-hidden')
         ) {
-          onClose()
+          onClose?.()
         }
       }}
     >

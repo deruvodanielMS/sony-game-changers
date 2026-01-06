@@ -7,7 +7,7 @@ import { useRouter } from '@/i18n/navigation'
 export default function GameChangersPage() {
   const router = useRouter()
   useEffect(() => {
-    router.replace(ROUTES.GAME_CHANGERS_GOALS)
+    router.replace(ROUTES.GAME_CHANGERS_AMBITIONS)
   }, [router])
 
   return null

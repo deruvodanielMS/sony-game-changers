@@ -8,9 +8,9 @@ generator client {
 }
 
 model organization {
-  id        Int            @id @default(autoincrement())
+  id        String          @id @default(cuid())
   code      String
-  parentId  Int?
+  parentId  String?
   path      String?
   jobs      jobs[]
   people    people[]
@@ -19,49 +19,50 @@ model organization {
 }
 
 model jobs {
-  id           Int          @id @default(autoincrement())
+  id           String        @id @default(cuid())
   name         String
   code         String
   level        Int
-  orgId        Int
+  orgId        String
   organization organization @relation(fields: [orgId], references: [id])
   people       people[]
 }
 
 model people {
-  id                            Int                     @id @default(autoincrement())
-  email                         String                  @unique
+  id                            String                   @id @default(cuid())
+  email                         String                   @unique
   name                          String
   lastname                      String
+  profileImageUrl               String?
   employeeId                    String?
   workdayId                     String?
   status                        String?
-  orgId                         Int
-  jobId                         Int
-  organization                  organization            @relation(fields: [orgId], references: [id])
-  jobs                          jobs                    @relation(fields: [jobId], references: [id])
-  goals_assignedTo              goals[]                 @relation("peopleTogoals_assignedTo")
-  goals_createdBy               goals[]                 @relation("peopleTogoals_createdBy")
-  checkins_peopleId             checkins[]              @relation("peopleTocheckins_peopleId")
-  checkins_createdBy            checkins[]              @relation("peopleTocheckins_createdBy")
-  feedback_peopleId             feedback[]              @relation("peopleTofeedback_peopleId")
-  feedback_createdBy            feedback[]              @relation("peopleTofeedback_createdBy")
-  performance_reviews_peopleId  performance_reviews[]   @relation("peopleToperformance_reviews_peopleId")
-  performance_reviews_createdBy performance_reviews[]   @relation("peopleToperformance_reviews_createdBy")
+  orgId                         String
+  jobId                         String
+  organization                  organization             @relation(fields: [orgId], references: [id])
+  jobs                          jobs                     @relation(fields: [jobId], references: [id])
+  goals_assignedTo              goals[]                  @relation("peopleTogoals_assignedTo")
+  goals_createdBy               goals[]                  @relation("peopleTogoals_createdBy")
+  checkins_peopleId             checkins[]               @relation("peopleTocheckins_peopleId")
+  checkins_createdBy            checkins[]               @relation("peopleTocheckins_createdBy")
+  feedback_peopleId             feedback[]               @relation("peopleTofeedback_peopleId")
+  feedback_createdBy            feedback[]               @relation("peopleTofeedback_createdBy")
+  performance_reviews_peopleId  performance_reviews[]    @relation("peopleToperformance_reviews_peopleId")
+  performance_reviews_createdBy performance_reviews[]    @relation("peopleToperformance_reviews_createdBy")
   performance_breakdown         performance_breakdown[]
 }
 
 model goals {
-  id                  Int                 @id @default(autoincrement())
+  id                  String              @id @default(cuid())
   title               String
   body                String
   type                String
   status              String
-  parentId            Int?
+  parentId            String?
   path                String?
-  assignedTo          Int
-  createdBy           Int
-  periodId            Int
+  assignedTo          String
+  createdBy           String
+  periodId            String
   parent              goals?              @relation("goalsToparentId", fields: [parentId], references: [id])
   relations           goals[]             @relation("goalsToparentId")
   people_assignedTo   people              @relation("peopleTogoals_assignedTo", fields: [assignedTo], references: [id])
@@ -73,58 +74,58 @@ model goals {
 }
 
 model goal_ambitions {
-  id     Int    @id @default(autoincrement())
+  id     String @id @default(cuid())
   title  String
   body   String
   status String
-  goalId Int
+  goalId String
   goals  goals  @relation(fields: [goalId], references: [id])
 }
 
 model goal_actions {
-  id     Int    @id @default(autoincrement())
+  id     String @id @default(cuid())
   title  String
   body   String
   status String
-  goalId Int
+  goalId String
   goals  goals  @relation(fields: [goalId], references: [id])
 }
 
 model goal_achievements {
-  id     Int    @id @default(autoincrement())
+  id     String @id @default(cuid())
   title  String
   body   String
   status String
-  goalId Int
+  goalId String
   goals  goals  @relation(fields: [goalId], references: [id])
 }
 
 model checkins {
-  id                  Int                 @id @default(autoincrement())
-  peopleId            Int
+  id                  String              @id @default(cuid())
+  peopleId            String
   text                String
-  createdBy           Int
-  periodId            Int
+  createdBy           String
+  periodId            String
   people_peopleId     people              @relation("peopleTocheckins_peopleId", fields: [peopleId], references: [id])
   people_createdBy    people              @relation("peopleTocheckins_createdBy", fields: [createdBy], references: [id])
   performance_periods performance_periods @relation(fields: [periodId], references: [id])
 }
 
 model feedback {
-  id                  Int                 @id @default(autoincrement())
-  peopleId            Int
+  id                  String              @id @default(cuid())
+  peopleId            String
   text                String
   category            String
-  createdBy           Int
-  periodId            Int
+  createdBy           String
+  periodId            String
   people_peopleId     people              @relation("peopleTofeedback_peopleId", fields: [peopleId], references: [id])
   people_createdBy    people              @relation("peopleTofeedback_createdBy", fields: [createdBy], references: [id])
   performance_periods performance_periods @relation(fields: [periodId], references: [id])
 }
 
 model performance_reviews {
-  id                    Int                     @id @default(autoincrement())
-  peopleId              Int
+  id                    String                  @id @default(cuid())
+  peopleId              String
   summary               String
   ambitions_text        String
   achievements_text     String
@@ -133,8 +134,8 @@ model performance_reviews {
   score                 Float
   final_score           Float
   potential_score       Float
-  createdBy             Int
-  periodId              Int
+  createdBy             String
+  periodId              String
   people_peopleId       people                  @relation("peopleToperformance_reviews_peopleId", fields: [peopleId], references: [id])
   people_createdBy      people                  @relation("peopleToperformance_reviews_createdBy", fields: [createdBy], references: [id])
   performance_periods   performance_periods     @relation(fields: [periodId], references: [id])
@@ -142,12 +143,12 @@ model performance_reviews {
 }
 
 model performance_breakdown {
-  id                   Int                    @id @default(autoincrement())
-  performanceReviewId  Int
-  peopleId             Int
+  id                   String                 @id @default(cuid())
+  performanceReviewId  String
+  peopleId             String
   category             String
   score                Float
-  periodId             Int
+  periodId             String
   performance_reviews  performance_reviews    @relation(fields: [performanceReviewId], references: [id])
   people               people                 @relation(fields: [peopleId], references: [id])
   performance_periods  performance_periods    @relation(fields: [periodId], references: [id])
@@ -155,15 +156,15 @@ model performance_breakdown {
 }
 
 model performance_examples {
-  id                    Int                   @id @default(autoincrement())
-  breakdownId           Int
+  id                    String                 @id @default(cuid())
+  breakdownId           String
   type                  String
   text                  String
   performance_breakdown performance_breakdown @relation(fields: [breakdownId], references: [id])
 }
 
 model performance_periods {
-  id                    Int                     @id @default(autoincrement())
+  id                    String                  @id @default(cuid())
   name                  String
   fiscalYear            Int
   start                 DateTime

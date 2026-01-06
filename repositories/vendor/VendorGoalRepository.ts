@@ -1,10 +1,10 @@
+import { Ambition, AmbitionGoalResponse } from '@/domain/ambition'
 import { GoalRepository } from '../GoalRepository'
-import { Goal } from '@/domain/goal'
 
 export class VendorGoalRepository implements GoalRepository {
   private readonly baseUrl = process.env.VENDOR_API_URL!
 
-  async findMany(): Promise<Goal[]> {
+  async findMany(): Promise<Ambition[]> {
     const res = await fetch(`${this.baseUrl}/goals`, {
       headers: {
         Authorization: `Bearer ${process.env.VENDOR_API_TOKEN}`,
@@ -19,7 +19,7 @@ export class VendorGoalRepository implements GoalRepository {
     return data.map(this.toDomain)
   }
 
-  async findById(id: number): Promise<Goal | null> {
+  async findById(id: string): Promise<Ambition | null> {
     const res = await fetch(`${this.baseUrl}/goals/${id}`, {
       headers: {
         Authorization: `Bearer ${process.env.VENDOR_API_TOKEN}`,
@@ -39,19 +39,17 @@ export class VendorGoalRepository implements GoalRepository {
    * @param apiGoal Vendor apiGoal type must be aligned from vendro response
    * @returns Domain Goal Object response
    */
-  private toDomain(apiGoal: Goal): Goal {
+  private toDomain(apiGoal: AmbitionGoalResponse): Ambition {
     return {
       id: apiGoal.id,
       title: apiGoal.title,
-      body: apiGoal.body,
-      type: apiGoal.type,
       status: apiGoal.status,
-      parentId: apiGoal.parentId ?? null,
-      path: apiGoal.path ?? null,
-      assignedTo: apiGoal.assignedTo,
-      createdBy: apiGoal.createdBy,
-      periodId: apiGoal.periodId,
-      createdAt: new Date(apiGoal.createdAt),
+      userName:
+        `${apiGoal.people_assignedTo?.name || ''} ${apiGoal.people_assignedTo?.lastname || ''}`.trim() ||
+        'Unassigned',
+      ambitionType: apiGoal.type,
+      description: apiGoal.body,
+      avatarUrl: apiGoal.people_assignedTo?.profileImageUrl,
     }
   }
 }

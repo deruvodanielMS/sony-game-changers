@@ -3,7 +3,7 @@ export type DrawerSize = 'sm' | 'md' | 'lg' | 'full'
 
 export interface DrawerProps {
   open: boolean
-  onClose: () => void
+  onClose?: () => void
   title?: string
   overlayClose?: boolean
   position?: DrawerPosition

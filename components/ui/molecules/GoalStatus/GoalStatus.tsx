@@ -1,10 +1,10 @@
 import { useTranslations } from 'next-intl'
 import { cn } from '@/utils/cn'
-import type { GoalStatus } from '@/types/goals'
+import type { AmbitionStatus } from '@/domain/ambition'
 
 // This component will display the status of a goal, such as "completed", "draft", or "awaiting approval".
 
-export function GoalStatus({ status, className }: { status: GoalStatus; className: string }) {
+export function GoalStatus({ status, className }: { status: AmbitionStatus; className: string }) {
   const t = useTranslations('Goals')
 
   const statusClasses = {

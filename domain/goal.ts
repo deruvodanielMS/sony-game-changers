@@ -1,16 +1,16 @@
 export type Goal = {
-  id: number
+  id: string
   title: string
   body: string
   type: string
   status: string
 
-  parentId?: number | null
+  parentId?: string | null
   path?: string | null
 
-  assignedTo: number
-  createdBy: number
-  periodId: number
-
-  createdAt: Date
+  assignedTo?: string
+  createdBy?: string
+  periodId?: string
 }
+
+export type GoalDraft = Pick<Goal, 'title' | 'body' | 'type' | 'status'>

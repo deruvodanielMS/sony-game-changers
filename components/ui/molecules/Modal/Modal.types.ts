@@ -2,7 +2,7 @@ export type ModalSize = 'sm' | 'md' | 'lg' | 'full'
 
 export interface ModalProps {
   open: boolean
-  onClose: () => void
+  onClose?: () => void
   overlayClose?: boolean
   size?: ModalSize
   focusTrap?: boolean

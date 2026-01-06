@@ -13,7 +13,7 @@ export default function NewGoalPage() {
     <div className="flex flex-col gap-1 items-start">
       {/* Back button */}
       <Link
-        href={ROUTES.GAME_CHANGERS_GOALS}
+        href={ROUTES.GAME_CHANGERS_AMBITIONS}
         className="inline-flex items-center gap-0_25 text-neutral-1000 hover:opacity-80 transition-opacity"
       >
         <ArrowLeft size={24} className="shrink-0" />

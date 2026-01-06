@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl'
 import { cn } from '@/utils/cn'
 import { SidebarNav } from '@/components/ui/molecules/SidebarNav'
 import { SidebarNavItem } from '@/components/ui/molecules/SidebarNavItem'
-import { DashboardIcon, GameChangersIcon, TeamIcon } from '@/components/ui/foundations/Icons'
+import { GameChangersIcon, TeamIcon } from '@/components/ui/foundations/Icons'
 import type { SidebarProps } from './Sidebar.types'
 import { ROUTES } from '@/common/routes'
 

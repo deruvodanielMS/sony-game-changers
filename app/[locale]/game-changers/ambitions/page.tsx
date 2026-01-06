@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useRouter } from '@/i18n/navigation'
 import { CirclePlus } from 'lucide-react'
@@ -9,7 +9,8 @@ import { Button } from '@/components/ui/atoms/Button'
 import { GoalCard } from '@/components/ui/organisms/GoalCard'
 import { FilterableContentLayout } from '@/components/ui/templates/FilterableContentLayout'
 import { ROUTES } from '@/common/routes'
-import { goalMocks, filterBarMocks } from './mocks'
+import { filterBarMocks } from './mocks'
+import { useAmbitionsStore } from '@/stores/ambitions.store'
 
 export default function GameChangersGoalsPage() {
   const t = useTranslations('Goals')
@@ -18,6 +19,11 @@ export default function GameChangersGoalsPage() {
   const [selectedFilterType, setSelectedFilterType] = useState<Array<string>>([])
   const [selectedFilterStatus, setSelectedFilterStatus] = useState<Array<string>>([])
   const [selectedSearchValue, setSelectedSearchValue] = useState('')
+  const { list, fetchList } = useAmbitionsStore()
+
+  useEffect(() => {
+    fetchList()
+  }, [fetchList])
 
   const { filters, avatarSelector } = filterBarMocks
 
@@ -74,15 +80,16 @@ export default function GameChangersGoalsPage() {
           variant="primary"
           className="text-neutral-0"
           leftIcon={<CirclePlus width={24} />}
-          onClick={() => router.push(ROUTES.GAME_CHANGERS_GOALS_NEW)}
+          onClick={() => router.push(ROUTES.GAME_CHANGERS_AMBITIONS_NEW)}
         >
           {t('newGoal')}
         </Button>
       }
     >
-      {goalMocks.map((goalData) => (
-        <GoalCard key={goalData.goal.id} {...goalData} />
-      ))}
+      {list.map((goalData) => {
+        const { ladderedGoals, ...goal } = goalData
+        return <GoalCard key={goal.id} ladderGoals={ladderedGoals} goal={goal} />
+      })}
     </FilterableContentLayout>
   )
 }

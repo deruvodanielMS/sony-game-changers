@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { GoalCard } from './GoalCard'
-import { Goal, GOAL_TYPES } from '@/types/goals'
+import { Ambition, AMBITION_TYPES } from '@/domain/ambition'
 
 // --------------------------------------------------
 // Storybook Meta
@@ -19,17 +19,17 @@ type Story = StoryObj<typeof GoalCard>
 // --------------------------------------------------
 // Datos de ejemplo
 // --------------------------------------------------
-const baseGoal: Goal = {
+const baseGoal: Ambition = {
   id: 'g1',
   userName: 'John Doe',
   title: 'Improve Leadership Skills',
   description: 'Become a better team leader',
   avatarUrl: '',
   status: 'draft',
-  goalType: GOAL_TYPES.BUSINESS,
+  ambitionType: AMBITION_TYPES.BUSINESS,
 }
 
-const ladderGoals: Array<Goal> = [
+const ladderGoals: Array<Ambition> = [
   {
     id: 'lg1',
     userName: 'Jane Smith',

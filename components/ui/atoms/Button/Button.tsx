@@ -1,6 +1,6 @@
 'use client'
 
-import { forwardRef } from 'react'
+import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
 
@@ -104,7 +104,7 @@ export interface ButtonProps
   className?: string
 }
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       variant,
@@ -147,7 +147,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {isLoading ? (
           <>
             <svg
-              className="animate-spin h-(--space-1) w-(--space-1)"
+              className="animate-spin h-1 w-1"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"

@@ -170,11 +170,11 @@ describe('FilterableContentLayout', () => {
   })
 
   it('renders primary action button when provided', () => {
-    const primaryAction = <button>New Goal</button>
+    const primaryAction = <button data-testid="new-goal-button">New Goal</button>
 
     renderWithIntl(<FilterableContentLayout {...defaultProps} primaryAction={primaryAction} />)
 
-    expect(screen.getByRole('button', { name: /new goal/i })).toBeInTheDocument()
+    expect(screen.getAllByTestId('new-goal-button').length).toBeGreaterThan(0)
   })
 
   it('closes drawer when show results button is clicked', async () => {

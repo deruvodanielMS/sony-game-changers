@@ -151,7 +151,7 @@ export function LadderingModal({
             avatarUrl={ambition.avatarUrl}
             userName={ambition.userName}
             title={ambition.title}
-            onLink={() => handleLink(ambition.id)}
+            onLink={() => handleLink(/*ambition.id*/)}
             data-testid={`ambition-card-${ambition.id}`}
           />
         ))}

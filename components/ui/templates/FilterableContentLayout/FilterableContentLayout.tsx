@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useTransition } from 'react'
-import { CirclePlus, SlidersHorizontal } from 'lucide-react'
+import { SlidersHorizontal } from 'lucide-react'
 import { Button } from '@/components/ui/atoms/Button'
 import { Drawer } from '@/components/ui/atoms/Drawer'
 import { Typography } from '@/components/ui/foundations/Typography'

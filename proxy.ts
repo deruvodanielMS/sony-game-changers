@@ -6,7 +6,7 @@ import { ROUTES } from '@/common/routes'
 const nextIntlMiddleware = createMiddleware(routing)
 
 export function getRedirectPath(pathname: string): string | null {
-  return pathname === ROUTES.ROOT ? ROUTES.GAME_CHANGERS_GOALS : null
+  return pathname === ROUTES.ROOT ? ROUTES.GAME_CHANGERS_AMBITIONS : null
 }
 
 export default function middleware(req: NextRequest) {

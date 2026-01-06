@@ -7,7 +7,7 @@ export class GoalService {
     return this.goalRepo.findMany()
   }
 
-  getGoal(id: number) {
+  getGoal(id: string) {
     return this.goalRepo.findById(id)
   }
 }

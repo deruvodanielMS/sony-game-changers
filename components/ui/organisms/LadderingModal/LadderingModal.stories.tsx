@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { LadderingModal } from './LadderingModal'
-import type { Goal } from '@/types/goals'
+import type { Ambition } from '@/domain/ambition'
 
 const meta: Meta<typeof LadderingModal> = {
   title: 'Organisms/LadderingModal',
@@ -31,7 +31,7 @@ const meta: Meta<typeof LadderingModal> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const mockGoal: Goal = {
+const mockGoal: Ambition = {
   id: '1',
   title:
     'Ensure core title features meet established quality bars to achieve a strong critical reception score.',
@@ -40,7 +40,7 @@ const mockGoal: Goal = {
   avatarUrl: '',
 }
 
-const mockCompletedGoal: Goal = {
+const mockCompletedGoal: Ambition = {
   id: '2',
   title: 'Implement comprehensive testing strategy across all game systems.',
   status: 'completed',
@@ -48,7 +48,7 @@ const mockCompletedGoal: Goal = {
   avatarUrl: '',
 }
 
-const mockAwaitingApprovalGoal: Goal = {
+const mockAwaitingApprovalGoal: Ambition = {
   id: '3',
   title: 'Optimize rendering pipeline for improved performance on all platforms.',
   status: 'awaiting_approval',

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { vi, beforeEach, afterEach } from 'vitest'
 import { NextIntlClientProvider } from 'next-intl'
 import { LadderingModal } from './LadderingModal'
-import type { Goal } from '@/types/goals'
+import type { Ambition } from '@/domain/ambition'
 
 const mockMessages = {
   LadderingModal: {
@@ -22,7 +22,7 @@ const mockMessages = {
   },
 }
 
-const mockGoal: Goal = {
+const mockGoal: Ambition = {
   id: '1',
   title: 'Ensure core title features meet established quality bars',
   status: 'draft',
@@ -144,7 +144,7 @@ describe('LadderingModal', () => {
     })
 
     it('matches snapshot with completed goal', () => {
-      const completedGoal: Goal = {
+      const completedGoal: Ambition = {
         ...mockGoal,
         status: 'completed',
       }

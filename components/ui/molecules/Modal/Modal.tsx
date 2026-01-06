@@ -76,7 +76,7 @@ export function Modal({
       if (!open) return
       if (e.key === 'Escape') {
         e.preventDefault()
-        onClose()
+        onClose?.()
       }
     }
     document.addEventListener('keydown', onKey)
@@ -103,7 +103,7 @@ export function Modal({
       )}
       onMouseDown={(e) => {
         if (!overlayClose) return
-        if (e.target === overlayRef.current) onClose()
+        if (e.target === overlayRef.current) onClose?.()
       }}
     >
       <div className="absolute inset-0 bg-neutral-1000/50 pointer-events-none" aria-hidden />

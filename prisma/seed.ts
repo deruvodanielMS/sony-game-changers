@@ -1,4 +1,7 @@
+import { AMBITION_STATUSES, AMBITION_TYPES } from '@/domain/ambition'
 import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 async function seedBase(prisma: PrismaClient) {
   // Organization
@@ -20,12 +23,25 @@ async function seedBase(prisma: PrismaClient) {
   })
 
   // People
-  const admin = await prisma.people.create({
+  const sarahMiller = await prisma.people.create({
     data: {
-      email: 'admin@test.com',
-      name: 'Admin',
+      email: 'smiller@test.com',
+      name: 'Sarah Miller',
       lastname: 'User',
       status: 'active',
+      profileImageUrl: 'sarah-miller.png',
+      orgId: org.id,
+      jobId: job.id,
+    },
+  })
+
+  const davidBrown = await prisma.people.create({
+    data: {
+      email: 'dbrown@test.com',
+      name: 'David Brown',
+      lastname: 'User',
+      status: 'active',
+      profileImageUrl: 'lars-van-der-zee.png',
       orgId: org.id,
       jobId: job.id,
     },
@@ -36,6 +52,7 @@ async function seedBase(prisma: PrismaClient) {
       email: 'manager@test.com',
       name: 'Manager',
       lastname: 'User',
+      profileImageUrl: 'profile.png',
       status: 'active',
       orgId: org.id,
       jobId: job.id,
@@ -56,16 +73,17 @@ async function seedBase(prisma: PrismaClient) {
   return {
     org,
     job,
-    admin,
+    sarahMiller,
+    davidBrown,
     manager,
     period,
   }
 }
 
 type SeedContext = {
-  adminId: number
-  managerId: number
-  periodId: number
+  ciId: string[]
+  managerId: string
+  periodId: string
 }
 
 async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
@@ -74,10 +92,10 @@ async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
     data: {
       title: 'Mejorar performance del equipo',
       body: 'Incrementar eficiencia y calidad del delivery',
-      type: 'team',
-      status: 'active',
-      assignedTo: ctx.managerId,
-      createdBy: ctx.adminId,
+      type: AMBITION_TYPES.MANAGER_EFFECTIVENESS,
+      status: AMBITION_STATUSES.AWAITING_APPROVAL,
+      assignedTo: ctx.ciId[0],
+      createdBy: ctx.managerId,
       periodId: ctx.periodId,
     },
   })
@@ -87,11 +105,11 @@ async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
     data: {
       title: 'Reducir bugs en producción',
       body: 'Bajar incidentes críticos un 30%',
-      type: 'team',
-      status: 'active',
+      type: AMBITION_TYPES.BUSINESS,
+      status: AMBITION_STATUSES.DRAFT,
       parentId: mainGoal.id,
-      assignedTo: ctx.managerId,
-      createdBy: ctx.adminId,
+      assignedTo: ctx.ciId[1],
+      createdBy: ctx.managerId,
       periodId: ctx.periodId,
     },
   })
@@ -100,11 +118,11 @@ async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
     data: {
       title: 'Mejorar cobertura de tests',
       body: 'Alcanzar 80% de coverage',
-      type: 'individual',
-      status: 'draft',
+      type: AMBITION_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
+      status: AMBITION_STATUSES.COMPLETED,
       parentId: mainGoal.id,
-      assignedTo: ctx.adminId,
-      createdBy: ctx.managerId,
+      assignedTo: ctx.managerId,
+      createdBy: ctx.ciId[0],
       periodId: ctx.periodId,
     },
   })
@@ -115,7 +133,7 @@ async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
       {
         title: 'Adoptar mejores prácticas',
         body: 'Definir estándares de calidad',
-        status: 'active',
+        status: AMBITION_STATUSES.AWAITING_APPROVAL,
         goalId: mainGoal.id,
       },
     ],
@@ -146,15 +164,13 @@ async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
   })
 }
 
-const prisma = new PrismaClient()
-
 async function main() {
   console.log('🌱 Seeding database...')
 
   const base = await seedBase(prisma)
 
   await seedDemo(prisma, {
-    adminId: base.admin.id,
+    ciId: [base.sarahMiller.id, base.davidBrown.id],
     managerId: base.manager.id,
     periodId: base.period.id,
   })
