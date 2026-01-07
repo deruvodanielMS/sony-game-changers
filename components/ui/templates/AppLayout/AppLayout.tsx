@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useCallback, useEffect, startTransition } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { cn } from '@/utils/cn'
 import { Drawer } from '@/components/ui/atoms/Drawer'
 import { MobileHeader } from '@/components/ui/organisms/MobileHeader'
 import { Sidebar } from '@/components/ui/organisms/Sidebar'
 import { useUIStore } from '@/stores/ui.store'
 import { Modal } from '@/components/ui/molecules/Modal'
+import { useWindowSize } from '@/hooks/useMediaQuery'
 
 export interface AppLayoutProps {
   children: React.ReactNode
@@ -20,60 +21,47 @@ export interface AppLayoutProps {
  * Mobile (<768px): Drawer navigation
  */
 export function AppLayout({ children, className }: AppLayoutProps) {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [userCollapsedState, setUserCollapsedState] = useState<boolean | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-  const [mounted, setMounted] = useState(false)
+
+  // Use debounced window size hook (150ms debounce)
+  const { width } = useWindowSize(150)
+
+  const isMobile = width > 0 && width < 768
+  const isTablet = width >= 768 && width < 1440
+  const isDesktop = width >= 1440
 
   const {
     modal: { content: modalContent, ...modalProps },
     drawer: { content: drawerContent, ...drawerProps },
   } = useUIStore()
 
-  // Detect mobile viewport and manage collapsed state
-  useEffect(() => {
-    const checkViewport = () => {
-      const width = window.innerWidth
-      const mobile = width < 768
-      const tablet = width >= 768 && width < 1440
-
-      startTransition(() => {
-        setIsMobile(mobile)
-        // Auto-collapse on tablet (768-1439px)
-        if (tablet) {
-          setSidebarCollapsed(true)
-        }
-        // Auto-expand on desktop (>= 1440px)
-        else if (width >= 1440) {
-          setSidebarCollapsed(false)
-        }
-      })
+  // Derive sidebar collapsed state from viewport and user preference
+  const sidebarCollapsed = useMemo(() => {
+    // User manually toggled: respect their preference
+    if (userCollapsedState !== null) {
+      return userCollapsedState
     }
-
-    checkViewport()
-    startTransition(() => {
-      setMounted(true)
-    })
-    window.addEventListener('resize', checkViewport)
-    return () => window.removeEventListener('resize', checkViewport)
-  }, [])
+    // Auto-collapse on tablet, expand on desktop
+    if (isTablet) return true
+    if (isDesktop) return false
+    return false
+  }, [userCollapsedState, isTablet, isDesktop])
 
   const handleToggle = useCallback(() => {
     if (isMobile) {
       setDrawerOpen((prev) => !prev)
     } else {
-      setSidebarCollapsed((prev) => !prev)
+      setUserCollapsedState((prev) => {
+        const current = prev !== null ? prev : isTablet
+        return !current
+      })
     }
-  }, [isMobile])
+  }, [isMobile, isTablet])
 
   const handleDrawerClose = useCallback(() => {
     setDrawerOpen(false)
   }, [])
-
-  // Don't render until we know the viewport size to prevent flash
-  if (!mounted) {
-    return null
-  }
 
   // Mobile: show header with hamburger and use Drawer
   if (isMobile) {

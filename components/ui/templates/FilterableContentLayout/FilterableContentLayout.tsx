@@ -10,6 +10,8 @@ import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
 import { SearchField } from '@/components/ui/molecules/SearchField'
 import { FilterBar } from '@/components/ui/organisms/GoalFilters/FilterBar'
 import { useScrollDirection } from '@/hooks/useScrollDirection'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { BREAKPOINTS } from '@/common/breakpoints'
 import { cn } from '@/utils/cn'
 import type { FilterableContentLayoutProps } from './FilterableContentLayout.types'
 
@@ -65,21 +67,10 @@ export function FilterableContentLayout({
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false)
   const { scrollDirection, scrollY } = useScrollDirection()
   const [, startTransition] = useTransition()
-  const [isDesktop, setIsDesktop] = useState(false)
   const [isNavDrawerOpen, setIsNavDrawerOpen] = useState(false)
 
-  // Detect desktop viewport with resize listener
-  useEffect(() => {
-    const updateIsDesktop = () => {
-      setIsDesktop(window.innerWidth >= 768)
-    }
-
-    // Initial check
-    updateIsDesktop()
-
-    window.addEventListener('resize', updateIsDesktop)
-    return () => window.removeEventListener('resize', updateIsDesktop)
-  }, [])
+  // Use media query hook for desktop detection
+  const isDesktop = useMediaQuery(BREAKPOINTS.md)
 
   // Detect if navigation drawer is open (mobile only)
   useEffect(() => {

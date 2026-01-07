@@ -1,9 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { Link as LinkIcon } from 'lucide-react'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { BREAKPOINTS } from '@/common/breakpoints'
 import { Modal, ModalHeader, ModalBody } from '@/components/ui/molecules/Modal'
 import { Drawer } from '@/components/ui/atoms/Drawer'
 import { Typography } from '@/components/ui/foundations/Typography'
@@ -109,15 +110,9 @@ export function LadderingModal({
   'data-testid': dataTestId,
 }: LadderingModalProps) {
   const t = useTranslations('LadderingModal')
-  const [isMobile, setIsMobile] = useState(false)
 
-  // Detect mobile screen size
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  // Use media query hook for mobile detection
+  const isMobile = !useMediaQuery(BREAKPOINTS.md)
 
   // Mock data for ambition cards - in real implementation, these would come from props or API
   const ambitions = [

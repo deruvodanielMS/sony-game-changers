@@ -103,6 +103,47 @@ import Link from 'next/link' // ❌ Wrong - doesn't handle locale
 - useMemo and useCallback only when they reduce renders.
 - Keep local UI state only if necessary for visual interaction.
 
+### Responsive Hooks & Media Queries:
+
+**Always use centralized hooks for responsive behavior:**
+
+```tsx
+import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { BREAKPOINTS } from '@/common/breakpoints'
+
+// ✅ Correct - uses matchMedia API (efficient)
+const isMobile = !useMediaQuery(BREAKPOINTS.md)
+const isDesktop = useMediaQuery(BREAKPOINTS.lg)
+
+// ❌ Wrong - manual resize listeners cause excessive re-renders
+useEffect(() => {
+  const handler = () => setWidth(window.innerWidth)
+  window.addEventListener('resize', handler)
+  return () => window.removeEventListener('resize', handler)
+}, [])
+```
+
+**Available hooks:**
+
+- `useMediaQuery(query)` - Detects breakpoint changes via matchMedia API
+- `useWindowSize(debounceMs?)` - Returns debounced window dimensions (default 150ms)
+
+**Breakpoint constants:**
+
+```tsx
+import { BREAKPOINTS } from '@/common/breakpoints'
+
+// Matches Tailwind defaults: sm=640px, md=768px, lg=1024px, xl=1280px, 2xl=1536px
+const isTablet = useMediaQuery(BREAKPOINTS.md)
+```
+
+**Why use these hooks:**
+
+- ⚡ matchMedia API fires only on actual breakpoint changes (not every pixel)
+- ⚡ Debounced resize prevents rapid-fire state updates
+- ⚡ Centralized breakpoints stay in sync with Tailwind classes
+- ✅ Defensive checks handle test environments without browser APIs
+
 ---
 
 ## 2. Custom Hooks Guidelines
@@ -122,6 +163,28 @@ hooks/useName.test.ts
 - Avoid useEffect if the effect can be resolved in render.
 - useMemo / useCallback only if performance benefits.
 - UI or Radix derived hooks must be separated and independent.
+- **Never call setState synchronously inside useEffect** - this triggers cascading renders and will fail ESLint validation. Use lazy initialization in useState instead.
+
+**Performance-critical hooks:**
+
+For responsive behavior, always use existing optimized hooks:
+
+```tsx
+// ✅ Correct - uses matchMedia API
+import { useMediaQuery } from '@/hooks/useMediaQuery'
+const isMobile = !useMediaQuery(BREAKPOINTS.md)
+
+// ✅ Correct - debounced window size
+import { useWindowSize } from '@/hooks/useMediaQuery'
+const { width, height } = useWindowSize(150) // 150ms debounce
+
+// ❌ Wrong - creates performance issues
+useEffect(() => {
+  const handler = () => setWidth(window.innerWidth)
+  window.addEventListener('resize', handler)
+  return () => window.removeEventListener('resize', handler)
+}, [])
+```
 
 ### Hook testing
 

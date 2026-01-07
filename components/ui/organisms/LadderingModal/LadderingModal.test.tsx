@@ -122,8 +122,9 @@ describe('LadderingModal', () => {
       <LadderingModal open onClose={vi.fn()} selectedGoal={mockGoal} data-testid="custom-modal" />,
     )
 
-    // Modal passes data-testid to modal-overlay, not the dialog itself
-    expect(screen.getByTestId('modal-overlay')).toBeInTheDocument()
+    // In test environment, useMediaQuery returns false (mobile), so Drawer is rendered
+    // Drawer passes data-testid to drawer-overlay, not the dialog itself
+    expect(screen.getByTestId('drawer-overlay')).toBeInTheDocument()
   })
 
   describe('Snapshots', () => {

@@ -78,6 +78,40 @@ Radix & accessibility patterns
 - Radix primitives should be wrapped in project components (do not leak primitives directly into pages). Use `asChild` when appropriate.
 - Follow accessibility guidance in `docs/A11Y.md` and prefer role/text queries in tests (see `docs/CODE_GUIDELINES.md`).
 
+Performance & Responsive Hooks - CRITICAL
+
+**Never create manual resize listeners. Always use optimized hooks:**
+
+```tsx
+// ✅ Correct - uses matchMedia API (efficient, only fires on breakpoint changes)
+import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { BREAKPOINTS } from '@/common/breakpoints'
+
+const isMobile = !useMediaQuery(BREAKPOINTS.md)
+const isDesktop = useMediaQuery(BREAKPOINTS.lg)
+
+// ✅ Correct - debounced window size (150ms default)
+import { useWindowSize } from '@/hooks/useMediaQuery'
+const { width, height } = useWindowSize(150)
+
+// ❌ NEVER DO THIS - causes excessive re-renders, fails performance review
+useEffect(() => {
+  const handler = () => setWidth(window.innerWidth)
+  window.addEventListener('resize', handler)
+  return () => window.removeEventListener('resize', handler)
+}, [])
+```
+
+**Breakpoint constants:**
+- Use `BREAKPOINTS` from `common/breakpoints.ts` (matches Tailwind: sm=640px, md=768px, lg=1024px, xl=1280px, 2xl=1536px)
+- Never hardcode pixel values like `'(min-width: 768px)'` - use `BREAKPOINTS.md` instead
+
+**Why this matters:**
+- matchMedia API only fires on actual breakpoint changes (not every pixel)
+- Debounced hooks prevent rapid-fire state updates during resizing
+- Centralized breakpoints stay in sync with Tailwind classes
+- Hooks handle test environments gracefully (no matchMedia mock needed)
+
 Testing & Storybook
 
 - Unit tests use Vitest + React Testing Library. Tests live next to the source file.
