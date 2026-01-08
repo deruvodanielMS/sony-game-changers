@@ -80,5 +80,14 @@
   "Common": {
     "confirm": "Confirm",
     "cancel": "Cancel"
+  },
+  "NotFound": {
+    "title": "Page Not Found",
+    "description": "The page you are looking for does not exist.",
+    "goHome": "Go to Home"
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "description": "An unexpected error has occurred. Please try again later."
   }
 }
