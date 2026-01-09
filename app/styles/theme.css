@@ -108,7 +108,9 @@
   --spacing-form-control-width: var(--form-control-width);
   --container-form-control-width: var(--form-control-width);
   --spacing-icon-rounded-diameter: var(--icon-rounded-diameter);
+}
 
+@theme inline {
   /* Typography – Font Sizes */
   --text-h1: var(--font-size-h1);
   --text-h2: var(--font-size-h2);
@@ -130,6 +132,17 @@
   --leading-body: var(--line-height-body);
   --leading-body-small: var(--line-height-body-small);
   --leading-body-tiny: var(--line-height-body-tiny);
+
+  /* Skeleton Heights */
+  --height-skeleton-text: var(--skeleton-text-height);
+  --height-skeleton-title: var(--skeleton-title-height);
+  --height-skeleton-heading: var(--skeleton-heading-height);
+  --height-skeleton-button: var(--skeleton-button-height);
+
+  /* Spinner Sizes */
+  --size-spinner-small: var(--spinner-small);
+  --size-spinner-medium: var(--spinner-medium);
+  --size-spinner-large: var(--spinner-large);
 
   --radius-tiny: var(--rounded-tiny);
   --radius-small: var(--rounded-small);

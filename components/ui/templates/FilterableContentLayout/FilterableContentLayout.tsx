@@ -159,14 +159,7 @@ export function FilterableContentLayout({
               </span>
             )}
           </Button>
-          {primaryAction && (
-            <div className="shrink-0">
-              {/* Clone primary action as icon-only for mobile */}
-              <Button variant="primary" className="text-neutral-0" iconOnly asChild>
-                {primaryAction}
-              </Button>
-            </div>
-          )}
+          {primaryAction && <div className="shrink-0">{primaryAction}</div>}
         </div>
       </div>
 

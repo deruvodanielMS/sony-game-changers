@@ -22,7 +22,7 @@ export default function GameChangersLayout({ children }: { children: React.React
   const sections = [
     {
       label: t('gameChangersGoals'),
-      value: 'goals',
+      value: 'ambitions',
       href: ROUTES.GAME_CHANGERS_AMBITIONS,
       icon: <RadarIcon className="w-5 h-5" />,
     },

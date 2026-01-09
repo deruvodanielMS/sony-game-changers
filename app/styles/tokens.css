@@ -220,6 +220,19 @@
   --line-height-body: 24px;
   --line-height-body-small: 20px;
   --line-height-body-tiny: 16px;
+
+  /* 💀 Skeleton Heights */
+  --skeleton-text-height: 14px;
+  --skeleton-title-height: 20px;
+  --skeleton-heading-height: 28px;
+  --skeleton-button-height: 40px;
+
+  /* 🔄 Spinner Sizes */
+  --spinner-small: 32px;
+  --spinner-medium: 48px;
+  --spinner-large: 64px;
+  --spinner-duration: 2s;
+  --spinner-stroke-width: 3;
 }
 
 @media (max-width: 768px) {
