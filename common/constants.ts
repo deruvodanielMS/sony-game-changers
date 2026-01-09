@@ -23,3 +23,5 @@ export const Z_INDEX = {
 } as const
 
 export const TOAST_DEFAULT_DURATION = 3000 // in milliseconds
+
+export const MODAL_ANIMATION_DURATION = 150 // in milliseconds

@@ -80,7 +80,10 @@ export function GoalCard({
               !hasChildrenGoals ? 'ml-3' : '',
             )}
           >
-            <div className="relative shrink-0" style={{ width: ambitionType ? '72px' : '48px' }}>
+            <div
+              className="relative shrink-0 z-1"
+              style={{ width: ambitionType ? '72px' : '48px' }}
+            >
               <Image
                 src={avatarUrl || generateInitialsAvatarSrc(userName, { size: 48 })}
                 alt={userName}

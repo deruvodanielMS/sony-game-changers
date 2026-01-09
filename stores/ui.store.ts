@@ -5,6 +5,7 @@ import { ReactNode } from 'react'
 import { DrawerProps } from '@/components/ui/atoms/Drawer'
 import { ModalProps } from '@/components/ui/molecules/Modal'
 import { Toast } from '@/components/ui/atoms/Toast/Toast.types'
+import { MODAL_ANIMATION_DURATION } from '@/common/constants'
 
 type UIState = {
   modal: Omit<ModalProps, 'children'> & {
@@ -50,10 +51,16 @@ export const useUIStore = create<UIState>((set) => ({
       modal: { open: true, content },
     }),
 
-  closeModal: () =>
-    set({
-      modal: { open: false, content: null },
-    }),
+  closeModal: () => {
+    set((state) => ({
+      modal: { ...state.modal, open: false },
+    }))
+    setTimeout(() => {
+      set((state) => ({
+        modal: { ...state.modal, content: null },
+      }))
+    }, MODAL_ANIMATION_DURATION)
+  },
 
   // Drawer
   openDrawer: (content) =>

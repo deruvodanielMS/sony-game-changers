@@ -1,160 +1,233 @@
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { vi, beforeEach, afterEach } from 'vitest'
-import { NextIntlClientProvider } from 'next-intl'
+// LadderingModal.test.tsx
+import React from 'react'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { render, screen, cleanup } from '@testing-library/react'
+import '@testing-library/jest-dom'
+
 import { LadderingModal } from './LadderingModal'
-import type { Ambition } from '@/domain/ambition'
 
-const mockMessages = {
-  LadderingModal: {
-    title: 'Ambition laddering',
-    divisionAmbitionLabel: 'AAA Division Ambition',
-    teamAmbitionLabel: 'AAA Team Ambition',
-    linkButtonAriaLabel: 'Link ambition',
-    selectedGoalLabel: 'Selected Goal',
-  },
-  Goals: {
-    status: {
-      completed: 'Completed',
-      draft: 'Draft',
-      awaiting_approval: 'Awaiting Approval',
-    },
-  },
-}
+// --------------------
+// Mocks
+// --------------------
 
-const mockGoal: Ambition = {
-  id: '1',
-  title: 'Ensure core title features meet established quality bars',
-  status: 'draft',
-  userName: 'Adam Reynolds',
+// React: polyfill useEffectEvent for test envs that don't have it
+vi.mock('react', async () => {
+  const actual = await vi.importActual<typeof import('react')>('react')
+  return {
+    ...actual,
+    useEffectEvent: (fn: any) => fn,
+  }
+})
+
+// next-intl
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key,
+}))
+
+// next/image -> plain img
+vi.mock('next/image', () => ({
+  default: (props: any) => {
+    const src = typeof props.src === 'string' ? props.src : (props.src?.src ?? '')
+    // eslint-disable-next-line jsx-a11y/alt-text
+    return <img {...props} src={src} />
+  },
+}))
+
+// lucide-react icon
+vi.mock('lucide-react', () => ({
+  Link: (props: any) => <svg data-testid="link-icon" {...props} />,
+}))
+
+// UI components (lightweight)
+vi.mock('@/components/ui/molecules/Modal', () => ({
+  ModalHeader: ({ children }: any) => <div data-testid="modal-header">{children}</div>,
+  ModalBody: ({ children }: any) => <div data-testid="modal-body">{children}</div>,
+}))
+
+vi.mock('@/components/ui/atoms/Drawer', () => ({
+  Drawer: ({ children, open, title, ...rest }: any) => (
+    <div data-testid="drawer" data-open={String(open)} data-title={title} {...rest}>
+      {children}
+    </div>
+  ),
+}))
+
+vi.mock('@/components/ui/foundations/Typography', () => ({
+  Typography: ({ children }: any) => <span>{children}</span>,
+}))
+
+vi.mock('@/components/ui/molecules/GoalStatus/GoalStatus', () => ({
+  GoalStatus: ({ status }: any) => <span data-testid="goal-status">{String(status)}</span>,
+}))
+
+vi.mock('@/utils/cn', () => ({
+  cn: (...args: any[]) => args.filter(Boolean).join(' '),
+}))
+
+vi.mock('@/utils/generateInitialsAvatar', () => ({
+  generateInitialsAvatarSrc: (name: string, opts: any) =>
+    `initials://${name}?size=${opts?.size ?? ''}`,
+}))
+
+// useMediaQuery (we control behavior per-test)
+const useMediaQueryMock = vi.fn<boolean, any[]>()
+vi.mock('@/hooks/useMediaQuery', () => ({
+  useMediaQuery: (...args: any[]) => useMediaQueryMock(...args),
+}))
+
+// BREAKPOINTS (only md is used)
+vi.mock('@/common/breakpoints', () => ({
+  BREAKPOINTS: { md: '(min-width: 768px)' },
+}))
+
+// UI store hook
+const openModalSpy = vi.fn()
+const closeModalSpy = vi.fn()
+
+vi.mock('@/stores/ui.store', () => ({
+  useUIStore: () => ({
+    openModal: openModalSpy,
+    closeModal: closeModalSpy,
+  }),
+}))
+
+// --------------------
+// Test data
+// --------------------
+const selectedGoal = {
+  title: 'Improve onboarding flow',
+  userName: 'Ada Lovelace',
   avatarUrl: '',
-}
+  status: 'active',
+} as any
 
-const renderWithIntl = (component: React.ReactElement) => {
-  return render(
-    <NextIntlClientProvider locale="en" messages={mockMessages}>
-      {component}
-    </NextIntlClientProvider>,
-  )
-}
-
-describe('LadderingModal', () => {
+describe('<LadderingModal />', () => {
   beforeEach(() => {
-    // Mock window.innerWidth for desktop (> 768px)
-    Object.defineProperty(window, 'innerWidth', {
-      writable: true,
-      configurable: true,
-      value: 1024,
-    })
+    openModalSpy.mockClear()
+    closeModalSpy.mockClear()
+    useMediaQueryMock.mockReset()
   })
 
   afterEach(() => {
-    vi.clearAllMocks()
+    cleanup()
   })
 
-  it('renders when open', () => {
-    renderWithIntl(<LadderingModal open onClose={vi.fn()} selectedGoal={mockGoal} />)
+  it('opens desktop modal via UI store when open=true and media query matches md (desktop)', () => {
+    // useMediaQuery(BREAKPOINTS.md) === true => isMobile = !true => false
+    useMediaQueryMock.mockReturnValue(true)
 
-    expect(screen.getByRole('dialog')).toBeInTheDocument()
-    expect(screen.getByText('Ambition laddering')).toBeInTheDocument()
+    render(<LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} data-testid="sut" />)
+
+    expect(openModalSpy).toHaveBeenCalledTimes(1)
+    const [desktopModalNode, options] = openModalSpy.mock.calls[0]
+    expect(desktopModalNode).toBeTruthy()
+    expect(options).toMatchObject({
+      size: 'lg',
+      overlayClose: true,
+    })
+    expect(typeof options.onClose).toBe('function')
+
+    // Desktop path returns null (content is rendered via openModal)
+    expect(screen.queryByTestId('drawer')).not.toBeInTheDocument()
   })
 
-  it('does not render when closed', () => {
-    renderWithIntl(<LadderingModal open={false} onClose={vi.fn()} selectedGoal={mockGoal} />)
+  it('closes desktop modal via UI store when open=false on desktop', () => {
+    useMediaQueryMock.mockReturnValue(true)
 
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-  })
-
-  it('calls onClose when close button is clicked', async () => {
-    const onClose = vi.fn()
-    renderWithIntl(<LadderingModal open onClose={onClose} selectedGoal={mockGoal} />)
-
-    const closeButton = screen.getByRole('button', { name: /close/i })
-    await userEvent.click(closeButton)
-
-    expect(onClose).toHaveBeenCalledTimes(1)
-  })
-
-  it('renders both ambition cards', () => {
-    renderWithIntl(<LadderingModal open onClose={vi.fn()} selectedGoal={mockGoal} />)
-
-    expect(screen.getByText('AAA Division Ambition')).toBeInTheDocument()
-    expect(screen.getByText('AAA Team Ambition')).toBeInTheDocument()
-  })
-
-  it('renders link buttons for ambitions', () => {
-    renderWithIntl(<LadderingModal open onClose={vi.fn()} selectedGoal={mockGoal} />)
-
-    const linkButtons = screen.getAllByRole('button', { name: /link ambition/i })
-    expect(linkButtons).toHaveLength(2)
-  })
-
-  it('renders goal preview card with goal details', () => {
-    renderWithIntl(<LadderingModal open onClose={vi.fn()} selectedGoal={mockGoal} />)
-
-    expect(screen.getByText(mockGoal.title)).toBeInTheDocument()
-    expect(screen.getByText(mockGoal.userName)).toBeInTheDocument()
-    expect(screen.getByText('Draft')).toBeInTheDocument()
-  })
-
-  it('displays goal avatar in preview card', () => {
-    renderWithIntl(<LadderingModal open onClose={vi.fn()} selectedGoal={mockGoal} />)
-
-    const avatar = screen.getByAltText(mockGoal.userName)
-    expect(avatar).toBeInTheDocument()
-  })
-
-  it('handles link button clicks', async () => {
-    renderWithIntl(<LadderingModal open onClose={vi.fn()} selectedGoal={mockGoal} />)
-
-    const linkButtons = screen.getAllByRole('button', { name: /link ambition/i })
-
-    // Verify buttons are clickable (future API integration point)
-    await userEvent.click(linkButtons[0])
-    await userEvent.click(linkButtons[1])
-
-    expect(linkButtons[0]).toBeEnabled()
-    expect(linkButtons[1]).toBeEnabled()
-  })
-
-  it('applies custom data-testid', () => {
-    renderWithIntl(
-      <LadderingModal open onClose={vi.fn()} selectedGoal={mockGoal} data-testid="custom-modal" />,
+    const { rerender } = render(
+      <LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} />,
     )
+    expect(openModalSpy).toHaveBeenCalledTimes(1)
 
-    // In test environment, useMediaQuery returns false (mobile), so Drawer is rendered
-    // Drawer passes data-testid to drawer-overlay, not the dialog itself
-    expect(screen.getByTestId('drawer-overlay')).toBeInTheDocument()
+    rerender(<LadderingModal open={false} onClose={vi.fn()} selectedGoal={selectedGoal} />)
+
+    expect(closeModalSpy).toHaveBeenCalledTimes(1)
   })
 
-  describe('Snapshots', () => {
-    it('matches snapshot when open', () => {
-      const { container } = renderWithIntl(
-        <LadderingModal open onClose={vi.fn()} selectedGoal={mockGoal} />,
-      )
+  it('renders Drawer on mobile (media query does NOT match md) and shows ambition cards + goal preview', () => {
+    // useMediaQuery(BREAKPOINTS.md) === false => isMobile = !false => true
+    useMediaQueryMock.mockReturnValue(false)
 
-      expect(container).toMatchSnapshot()
-    })
+    render(<LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} data-testid="sut" />)
 
-    it('matches snapshot when closed', () => {
-      const { container } = renderWithIntl(
-        <LadderingModal open={false} onClose={vi.fn()} selectedGoal={mockGoal} />,
-      )
+    // Drawer should render in-tree for mobile
+    const drawer = screen.getByTestId('drawer')
+    expect(drawer).toBeInTheDocument()
+    expect(drawer).toHaveAttribute('data-open', 'true')
 
-      expect(container).toMatchSnapshot()
-    })
+    // Drawer receives data-test-id (note: prop name is data-test-id, not data-testid)
+    expect(drawer).toHaveAttribute('data-test-id', 'sut')
 
-    it('matches snapshot with completed goal', () => {
-      const completedGoal: Ambition = {
-        ...mockGoal,
-        status: 'completed',
-      }
+    // No desktop modal usage on mobile
+    expect(openModalSpy).not.toHaveBeenCalled()
 
-      const { container } = renderWithIntl(
-        <LadderingModal open onClose={vi.fn()} selectedGoal={completedGoal} />,
-      )
+    // Ambition cards
+    expect(screen.getByTestId('ambition-card-division')).toBeInTheDocument()
+    expect(screen.getByTestId('ambition-card-team')).toBeInTheDocument()
 
-      expect(container).toMatchSnapshot()
-    })
+    // Link buttons aria-label from translations -> key string in mock
+    const linkButtons = screen.getAllByRole('button', { name: 'linkButtonAriaLabel' })
+    expect(linkButtons).toHaveLength(2)
+
+    // Goal preview card
+    expect(screen.getByTestId('goal-preview-card')).toBeInTheDocument()
+    expect(screen.getByText('Improve onboarding flow')).toBeInTheDocument()
+    expect(screen.getByText('Ada Lovelace')).toBeInTheDocument()
+    expect(screen.getByTestId('goal-status')).toHaveTextContent('active')
+  })
+
+  it('closes desktop modal when switching from desktop to mobile while open=true', () => {
+    // Start desktop
+    useMediaQueryMock.mockReturnValue(true)
+    const { rerender } = render(
+      <LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} />,
+    )
+    expect(openModalSpy).toHaveBeenCalledTimes(1)
+    expect(closeModalSpy).toHaveBeenCalledTimes(0)
+
+    // Switch to mobile
+    useMediaQueryMock.mockReturnValue(false)
+    rerender(<LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} />)
+
+    // When isMobile becomes true, effect should call toggleModal(false) => closeModal()
+    expect(closeModalSpy).toHaveBeenCalledTimes(1)
+
+    // And Drawer should now be rendered
+    expect(screen.getByTestId('drawer')).toBeInTheDocument()
+  })
+
+  it('does not open desktop modal if isMobile is true (even when open=true)', () => {
+    useMediaQueryMock.mockReturnValue(false)
+
+    render(<LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} />)
+
+    expect(openModalSpy).not.toHaveBeenCalled()
+    expect(screen.getByTestId('drawer')).toBeInTheDocument()
+  })
+
+  it('when open=true but isMobile is "unknown"/null, it does not open modal (guards with isMobile != null)', () => {
+    // Some media query hooks can return null before hydration.
+    // Component uses: const isMobile = !useMediaQuery(...)
+    // If useMediaQuery returns null, isMobile becomes true (because !null === true)
+    // => mobile path. This test documents that behavior.
+    // If your hook *actually* returns undefined, !undefined === true as well.
+    useMediaQueryMock.mockReturnValue(null as never)
+
+    render(<LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} />)
+
+    expect(openModalSpy).not.toHaveBeenCalled()
+    expect(screen.getByTestId('drawer')).toBeInTheDocument()
+  })
+
+  it('passes translated title to Drawer title and aria-label', () => {
+    useMediaQueryMock.mockReturnValue(false)
+
+    render(<LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} />)
+
+    const drawer = screen.getByTestId('drawer')
+    // Our Drawer mock puts title into data-title
+    expect(drawer).toHaveAttribute('data-title', 'title')
+    // aria-label should also be set
+    expect(drawer).toHaveAttribute('aria-label', 'title')
   })
 })

@@ -103,10 +103,12 @@ useEffect(() => {
 ```
 
 **Breakpoint constants:**
+
 - Use `BREAKPOINTS` from `common/breakpoints.ts` (matches Tailwind: sm=640px, md=768px, lg=1024px, xl=1280px, 2xl=1536px)
 - Never hardcode pixel values like `'(min-width: 768px)'` - use `BREAKPOINTS.md` instead
 
 **Why this matters:**
+
 - matchMedia API only fires on actual breakpoint changes (not every pixel)
 - Debounced hooks prevent rapid-fire state updates during resizing
 - Centralized breakpoints stay in sync with Tailwind classes

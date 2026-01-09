@@ -14,6 +14,7 @@ import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
 import { cn } from '@/utils/cn'
 import type { FilterableContentLayoutProps } from './FilterableContentLayout.types'
+import { Z_INDEX } from '@/common/constants'
 
 /**
  * FilterableContentLayout - Reusable template for pages with sticky header, filters, and mobile drawer
@@ -110,7 +111,13 @@ export function FilterableContentLayout({
       </div>
 
       {/* Desktop: Sticky FilterBar */}
-      <div className="hidden md:block sticky top-24 z-[800] bg-neutral-0 transition-all duration-base">
+      <div
+        className={
+          'hidden md:block sticky top-24 z-[' +
+          (+Z_INDEX.DROPDOWN - 1) +
+          '] bg-neutral-0 transition-all duration-base'
+        }
+      >
         <FilterBar
           clearFields={onClearFilters !== undefined}
           filters={filters}
@@ -133,7 +140,9 @@ export function FilterableContentLayout({
       {/* Mobile: Filter Button that opens drawer */}
       <div
         className={cn(
-          'md:hidden sticky top-28 z-[800] bg-neutral-0 py-1 px-1 transition-opacity duration-base',
+          'md:hidden sticky top-28 z-[' +
+            (+Z_INDEX.DROPDOWN - 1) +
+            '] bg-neutral-0 py-1 px-1 transition-opacity duration-base',
           (isFilterDrawerOpen || isNavDrawerOpen) && 'opacity-0 pointer-events-none',
         )}
       >

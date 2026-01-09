@@ -5,7 +5,8 @@ import Image from 'next/image'
 import { Link as LinkIcon } from 'lucide-react'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
-import { Modal, ModalHeader, ModalBody } from '@/components/ui/molecules/Modal'
+import { useEffect, useMemo, useEffectEvent } from 'react'
+import { ModalHeader, ModalBody } from '@/components/ui/molecules/Modal'
 import { Drawer } from '@/components/ui/atoms/Drawer'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { GoalStatus } from '@/components/ui/molecules/GoalStatus/GoalStatus'
@@ -16,6 +17,8 @@ import type {
   AmbitionCardProps,
   GoalPreviewCardProps,
 } from './LadderingModal.types'
+import { useUIStore } from '@/stores/ui.store'
+import { AmbitionStatus } from '@/domain/ambition'
 
 // Sub-component: Ambition Card (drop zone for linking ambitions)
 function AmbitionCard({
@@ -96,7 +99,7 @@ function GoalPreviewCard({ goal, 'data-testid': dataTestId }: GoalPreviewCardPro
             {userName}
           </Typography>
         </div>
-        <GoalStatus status={status} className="shrink-0" />
+        <GoalStatus status={status as AmbitionStatus} className="shrink-0" />
       </div>
     </div>
   )
@@ -114,48 +117,76 @@ export function LadderingModal({
   // Use media query hook for mobile detection
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
 
-  // Mock data for ambition cards - in real implementation, these would come from props or API
-  const ambitions = [
-    {
-      id: 'division',
-      avatarUrl: '',
-      userName: 'James Miller',
-      title: t('divisionAmbitionLabel'),
-    },
-    {
-      id: 'team',
-      avatarUrl: '',
-      userName: 'Jürgen Schneider',
-      title: t('teamAmbitionLabel'),
-    },
-  ]
+  const { openModal, closeModal } = useUIStore()
+  const { desktopModal, content } = useMemo(() => {
+    // Mock data for ambition cards - in real implementation, these would come from props or API
+    const ambitions = [
+      {
+        id: 'division',
+        avatarUrl: '',
+        userName: 'James Miller',
+        title: t('divisionAmbitionLabel'),
+      },
+      {
+        id: 'team',
+        avatarUrl: '',
+        userName: 'Jürgen Schneider',
+        title: t('teamAmbitionLabel'),
+      },
+    ]
+    // Content shared between Modal and Drawer
+    const content = (
+      <div className="flex flex-col gap-1_5">
+        {/* Ambition Cards Row - Stack on mobile, row on tablet+ */}
+        <div className="flex flex-col sm:flex-row gap-1_5 items-stretch w-full">
+          {ambitions.map((ambition) => (
+            <AmbitionCard
+              key={ambition.id}
+              avatarUrl={ambition.avatarUrl}
+              userName={ambition.userName}
+              title={ambition.title}
+              onLink={() => handleLink(/*ambition.id*/)}
+              data-testid={`ambition-card-${ambition.id}`}
+            />
+          ))}
+        </div>
+
+        {/* Goal Preview Card */}
+        <GoalPreviewCard goal={selectedGoal} data-testid="goal-preview-card" />
+      </div>
+    )
+    const desktopModal = (
+      <>
+        <ModalHeader showClose onClose={onClose}>
+          <Typography variant="h5">{t('title')}</Typography>
+        </ModalHeader>
+
+        <ModalBody className="flex flex-col gap-1_5">{content}</ModalBody>
+      </>
+    )
+    return { desktopModal, content }
+  }, [onClose, t, selectedGoal])
+
+  const toggleModal = useEffectEvent((show: boolean) => {
+    if (show) {
+      openModal(desktopModal, { onClose, size: 'lg', overlayClose: true })
+    } else {
+      closeModal()
+    }
+  })
+
+  useEffect(() => {
+    if (open && isMobile != null && !isMobile) {
+      toggleModal(true)
+    } else if (!open || isMobile) {
+      toggleModal(false)
+    }
+  }, [open, isMobile])
 
   const handleLink = (/*ambitionId: string*/) => {
     // TODO: Implement link logic with API call
     // Example: await linkGoalToAmbition(selectedGoal.id, ambitionId)
   }
-
-  // Content shared between Modal and Drawer
-  const content = (
-    <div className="flex flex-col gap-1_5">
-      {/* Ambition Cards Row - Stack on mobile, row on tablet+ */}
-      <div className="flex flex-col sm:flex-row gap-1_5 items-stretch w-full">
-        {ambitions.map((ambition) => (
-          <AmbitionCard
-            key={ambition.id}
-            avatarUrl={ambition.avatarUrl}
-            userName={ambition.userName}
-            title={ambition.title}
-            onLink={() => handleLink(/*ambition.id*/)}
-            data-testid={`ambition-card-${ambition.id}`}
-          />
-        ))}
-      </div>
-
-      {/* Goal Preview Card */}
-      <GoalPreviewCard goal={selectedGoal} data-testid="goal-preview-card" />
-    </div>
-  )
 
   // Mobile: use Drawer with bottom position (bottom sheet)
   if (isMobile) {
@@ -178,16 +209,7 @@ export function LadderingModal({
     )
   }
 
-  // Desktop: use Modal
-  return (
-    <Modal open={open} onClose={onClose} size="lg" overlayClose data-testid={dataTestId}>
-      <ModalHeader showClose onClose={onClose}>
-        <Typography variant="h5">{t('title')}</Typography>
-      </ModalHeader>
-
-      <ModalBody className="flex flex-col gap-1_5">{content}</ModalBody>
-    </Modal>
-  )
+  return null
 }
 
 LadderingModal.displayName = 'LadderingModal'

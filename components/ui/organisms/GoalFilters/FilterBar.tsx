@@ -5,7 +5,7 @@ import { SearchField } from '@/components/ui/molecules/SearchField'
 import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
 import { FilterMultiSelect } from '@/components/ui/molecules/FilterMultiSelect/FilterMultiSelect'
 import { FilterBarType } from './FilterBar.types'
-import { Button } from '../../atoms/Button'
+import { Button } from '@/components/ui/atoms/Button'
 import { useTranslations } from 'next-intl'
 
 export function FilterBar({

@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom'
 import { cn } from '@/utils/cn'
 import type { ModalProps, ModalSize } from './Modal.types'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
+import { MODAL_ANIMATION_DURATION } from '@/common/constants'
 
 const SIZE_CLASS_MAP: Record<ModalSize, string> = {
   sm: 'max-w-modal-sm',
@@ -52,7 +53,7 @@ export function Modal({
 
       const t = setTimeout(() => {
         updateIsVisible(false)
-      }, 150)
+      }, MODAL_ANIMATION_DURATION)
       return () => clearTimeout(t)
     }
   }, [open])
@@ -98,7 +99,8 @@ export function Modal({
       data-testid="modal-overlay"
       ref={overlayRef}
       className={cn(
-        'fixed inset-0 z-[900] flex items-center justify-center transition-opacity duration-150',
+        'fixed inset-0 flex items-center justify-center transition-opacity duration-150',
+        'z-[700]',
         animateIn ? 'opacity-100' : 'opacity-0',
       )}
       onMouseDown={(e) => {
@@ -116,7 +118,8 @@ export function Modal({
         ref={containerRef}
         tabIndex={-1}
         className={cn(
-          'relative z-10 overflow-hidden flex flex-col p-1 gap-1 pointer-events-auto',
+          'relative overflow-hidden flex flex-col p-1 gap-1 pointer-events-auto',
+          'z-[701]',
           'transition-all duration-150 transform',
           animateIn ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
           containerClasses,
