@@ -1,5 +1,16 @@
-import { AMBITION_STATUSES, AMBITION_TYPES } from '@/domain/ambition'
 import { PrismaClient } from '@prisma/client'
+
+const AMBITION_STATUSES = {
+  COMPLETED: 'completed',
+  DRAFT: 'draft',
+  AWAITING_APPROVAL: 'awaiting_approval',
+} as const
+
+const AMBITION_TYPES = {
+  BUSINESS: 'business',
+  PERSONAL_GROWTH_AND_DEVELOPMENT: 'personal_growth_and_development',
+  MANAGER_EFFECTIVENESS: 'manager_effectiveness',
+} as const
 
 const prisma = new PrismaClient()
 
