@@ -205,7 +205,7 @@ export function FilterableContentLayout({
                         variant="body"
                         fontWeight="semibold"
                         className="mb-0_75"
-                        color="neutral1000"
+                        color="default"
                       >
                         {filter.label}
                       </Typography>
