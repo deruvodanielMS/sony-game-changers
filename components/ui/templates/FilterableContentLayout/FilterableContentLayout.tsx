@@ -211,7 +211,7 @@ export function FilterableContentLayout({
                       </Typography>
                       <div className="flex flex-col gap-0_5">
                         {filter.options.map((option) => {
-                          const isSelected = filter.selected.includes(option.value)
+                          const isSelected = filter.selected?.includes(option.value) ?? false
                           return (
                             <label
                               key={option.value}
@@ -222,8 +222,8 @@ export function FilterableContentLayout({
                                 checked={isSelected}
                                 onChange={() => {
                                   const newSelected = isSelected
-                                    ? filter.selected.filter((v) => v !== option.value)
-                                    : [...filter.selected, option.value]
+                                    ? (filter.selected ?? []).filter((v) => v !== option.value)
+                                    : [...(filter.selected ?? []), option.value]
                                   filter.onSelect(newSelected)
                                 }}
                                 className="w-5 h-5 rounded border-2 border-neutral-400 text-accent-primary focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 cursor-pointer"
