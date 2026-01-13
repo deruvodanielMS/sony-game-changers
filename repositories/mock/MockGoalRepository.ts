@@ -10,7 +10,7 @@ export class MockGoalRepository implements GoalRepository {
       userName: 'Sarah Miller',
       ambitionType: AMBITION_TYPES.BUSINESS,
       description: 'Increase customer satisfaction scores by 15% through improved service quality',
-      avatarUrl: 'sarah-miller.png',
+      avatarUrl: '/profile-img/sarah-miller.png',
       ladderedGoals: [],
     },
     {
@@ -20,7 +20,7 @@ export class MockGoalRepository implements GoalRepository {
       userName: 'Lars Van Der Zee',
       ambitionType: AMBITION_TYPES.BUSINESS,
       description: 'Successfully launch the new analytics dashboard by Q2',
-      avatarUrl: 'lars-van-der-zee.png',
+      avatarUrl: '/profile-img/lars-van-der-zee.png',
       ladderedGoals: [],
     },
     {
@@ -30,7 +30,7 @@ export class MockGoalRepository implements GoalRepository {
       userName: 'Kylie Davies',
       ambitionType: AMBITION_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
       description: 'Refactor legacy code and improve test coverage to 80%',
-      avatarUrl: 'kylie-davies.png',
+      avatarUrl: '/profile-img/kylie-davies.png',
       ladderedGoals: [],
     },
     {
@@ -40,7 +40,7 @@ export class MockGoalRepository implements GoalRepository {
       userName: 'Nia Washington',
       ambitionType: AMBITION_TYPES.BUSINESS,
       description: 'Enter three new regional markets and establish partnerships',
-      avatarUrl: 'nia-washington.png',
+      avatarUrl: '/profile-img/nia-washington.png',
       ladderedGoals: [],
     },
     {
