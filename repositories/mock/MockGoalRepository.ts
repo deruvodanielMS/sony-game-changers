@@ -1,8 +1,8 @@
-import { Ambition, AMBITION_STATUSES, AMBITION_TYPES } from '@/domain/ambition'
+import { Ambition, AmbitionUI, AMBITION_STATUSES, AMBITION_TYPES } from '@/domain/ambition'
 import { GoalRepository } from '../GoalRepository'
 
 export class MockGoalRepository implements GoalRepository {
-  private mockData: Ambition[] = [
+  private mockData: AmbitionUI[] = [
     {
       id: '1',
       title: 'Improve customer satisfaction scores',
@@ -11,6 +11,7 @@ export class MockGoalRepository implements GoalRepository {
       ambitionType: AMBITION_TYPES.BUSINESS,
       description: 'Increase customer satisfaction scores by 15% through improved service quality',
       avatarUrl: '/profile-img/avatar1.png',
+      ladderedGoals: [],
     },
     {
       id: '2',
@@ -20,6 +21,7 @@ export class MockGoalRepository implements GoalRepository {
       ambitionType: AMBITION_TYPES.BUSINESS,
       description: 'Successfully launch the new analytics dashboard by Q2',
       avatarUrl: '/profile-img/avatar2.png',
+      ladderedGoals: [],
     },
     {
       id: '3',
@@ -29,6 +31,7 @@ export class MockGoalRepository implements GoalRepository {
       ambitionType: AMBITION_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
       description: 'Refactor legacy code and improve test coverage to 80%',
       avatarUrl: '/profile-img/avatar3.png',
+      ladderedGoals: [],
     },
     {
       id: '4',
@@ -38,6 +41,7 @@ export class MockGoalRepository implements GoalRepository {
       ambitionType: AMBITION_TYPES.BUSINESS,
       description: 'Enter three new regional markets and establish partnerships',
       avatarUrl: '/profile-img/avatar4.png',
+      ladderedGoals: [],
     },
     {
       id: '5',
@@ -47,6 +51,7 @@ export class MockGoalRepository implements GoalRepository {
       ambitionType: AMBITION_TYPES.MANAGER_EFFECTIVENESS,
       description: 'Implement new workflows and tools to increase team efficiency by 20%',
       avatarUrl: '/profile-img/avatar5.png',
+      ladderedGoals: [],
     },
     {
       id: '6',
@@ -56,16 +61,17 @@ export class MockGoalRepository implements GoalRepository {
       ambitionType: AMBITION_TYPES.BUSINESS,
       description: 'Implement comprehensive security audit and upgrade infrastructure',
       avatarUrl: '/profile-img/avatar6.png',
+      ladderedGoals: [],
     },
   ]
 
-  async findMany(): Promise<Ambition[]> {
+  async findMany(): Promise<AmbitionUI[]> {
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 100))
     return this.mockData
   }
 
-  async findById(id: string): Promise<Ambition | null> {
+  async findById(id: string): Promise<AmbitionUI | null> {
     // Simulate network delay
     await new Promise((resolve) => setTimeout(resolve, 50))
     return this.mockData.find((ambition) => ambition.id === id) || null
