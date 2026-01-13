@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { vi } from 'vitest'
 import { GoalCard } from './GoalCard'
 import { AMBITION_STATUSES, AMBITION_TYPES, type Ambition } from '@/domain/ambition'
@@ -63,22 +63,25 @@ describe('GoalCard', () => {
     expect(screen.getByAltText('John Doe')).toBeInTheDocument()
   })
 
-  it('renders ladder goals and allows collapsing content', () => {
+  it('renders ladder goals and allows collapsing content', async () => {
     render(<GoalCard goal={baseGoal} ladderGoals={ladderGoals} allowAddChildrenGoals={false} />)
 
-    // Collapsible trigger (ChevronDown) - get all buttons and find the collapse one
-    const buttons = screen.getAllByRole('button')
-    const toggleBtn = buttons.find((btn) => btn.getAttribute('aria-expanded') !== null)
-    expect(toggleBtn).toBeInTheDocument()
+    // The Collapsible.Trigger now wraps the entire title div
+    // Find the trigger by looking for the div with cursor-pointer class
+    const triggerDiv = screen.getByText('Main Goal').closest('div[class*="cursor-pointer"]')
+    expect(triggerDiv).toBeInTheDocument()
 
     // Start closed: ladder goal not visible
-    expect(screen.queryByText('Sub Goal A')).toBeNull
+    expect(screen.queryByText('Sub Goal A')).toBeNull()
 
-    // Expand
-    if (!toggleBtn) throw new Error('Toggle button not found')
-    fireEvent.click(toggleBtn)
+    // Expand by clicking the trigger div
+    if (!triggerDiv) throw new Error('Toggle trigger not found')
+    fireEvent.click(triggerDiv)
 
-    expect(screen.getByText('Sub Goal A')).toBeVisible()
+    // Wait for animation to complete
+    await waitFor(() => {
+      expect(screen.getByText('Sub Goal A')).toBeInTheDocument()
+    })
     expect(screen.getByAltText('Jane Smith')).toBeInTheDocument()
   })
 

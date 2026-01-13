@@ -78,6 +78,75 @@ Radix & accessibility patterns
 - Radix primitives should be wrapped in project components (do not leak primitives directly into pages). Use `asChild` when appropriate.
 - Follow accessibility guidance in `docs/A11Y.md` and prefer role/text queries in tests (see `docs/CODE_GUIDELINES.md`).
 
+Animations with Framer Motion - CRITICAL
+
+**All animations MUST use Framer Motion with optimized patterns for performance.**
+
+```tsx
+// ✅ Correct - uses m shorthand, variants, and LazyMotion
+import { m } from 'framer-motion'
+
+const variants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0 },
+}
+
+<m.div variants={variants} initial="hidden" animate="visible">
+  {children}
+</m.div>
+
+// ❌ Wrong - uses full motion import, inline values
+import { motion } from 'framer-motion'
+<motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+```
+
+**Key patterns (already implemented in app):**
+
+1. **LazyMotion** - Root layout wraps everything (reduces bundle ~30KB)
+2. **Variants** - Define animation states outside component
+3. **AnimatePresence** - Exit animations for modals/drawers
+4. **Gestures** - `whileTap={{ scale: 0.95 }}`, `whileHover={{ scale: 1.01 }}`
+5. **Layout animations** - Use `layout` prop for FLIP technique
+6. **AnimatedSection** - Use `components/ui/foundations/AnimatedSection` for page entry animations
+
+**Common usage:**
+
+```tsx
+// Page entry animation
+import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
+
+<AnimatedSection delay={0}>
+  <Header />
+</AnimatedSection>
+
+// Staggered list
+{items.map((item, index) => (
+  <AnimatedSection key={item.id} delay={0.1 + index * 0.05}>
+    <Card />
+  </AnimatedSection>
+))}
+
+// Exit animations
+import { AnimatePresence, m } from 'framer-motion'
+
+<AnimatePresence mode="wait">
+  {isOpen && (
+    <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      {children}
+    </m.div>
+  )}
+</AnimatePresence>
+```
+
+**Testing:**
+
+```tsx
+// Always use waitFor for animated content
+await waitFor(() => {
+  expect(screen.getByText('Content')).toBeInTheDocument()
+})
+```
+
 Performance & Responsive Hooks - CRITICAL
 
 **Never create manual resize listeners. Always use optimized hooks:**

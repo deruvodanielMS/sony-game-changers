@@ -3,7 +3,7 @@
 exports[`SectionHeader > snapshots > matches snapshot with actions 1`] = `
 <div>
   <header
-    class="flex flex-col md:flex-row md:items-center gap-1_5 bg-neutral-0 w-full"
+    class="flex flex-col md:flex-row md:flex-wrap md:items-center gap-1_5 bg-neutral-0 w-full pt-6 md:pt-0"
   >
     <div
       class="flex flex-col gap-0_25 grow min-w-0"
@@ -29,7 +29,7 @@ exports[`SectionHeader > snapshots > matches snapshot with actions 1`] = `
 exports[`SectionHeader > snapshots > matches snapshot with title and description 1`] = `
 <div>
   <header
-    class="flex flex-col md:flex-row md:items-center gap-1_5 bg-neutral-0 w-full"
+    class="flex flex-col md:flex-row md:flex-wrap md:items-center gap-1_5 bg-neutral-0 w-full pt-6 md:pt-0"
   >
     <div
       class="flex flex-col gap-0_25 grow min-w-0"
@@ -54,7 +54,7 @@ exports[`SectionHeader > snapshots > matches snapshot with title and description
 exports[`SectionHeader > snapshots > matches snapshot with title only 1`] = `
 <div>
   <header
-    class="flex flex-col md:flex-row md:items-center gap-1_5 bg-neutral-0 w-full"
+    class="flex flex-col md:flex-row md:flex-wrap md:items-center gap-1_5 bg-neutral-0 w-full pt-6 md:pt-0"
   >
     <div
       class="flex flex-col gap-0_25 grow min-w-0"

@@ -1,11 +1,14 @@
 import { useTranslations } from 'next-intl'
+import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 
 export default function NotificationsPage() {
   const t = useTranslations('Pages')
 
   return (
     <div className="p-1 md:pt-1_5 md:px-3 md:pb-3 mt-4_5 md:mt-0">
-      <h1 className="text-h3 leading-h3 font-bold text-neutral-1000">{t('notifications')}</h1>
+      <AnimatedSection delay={0}>
+        <h1 className="text-h3 leading-h3 font-bold text-neutral-1000">{t('notifications')}</h1>
+      </AnimatedSection>
     </div>
   )
 }

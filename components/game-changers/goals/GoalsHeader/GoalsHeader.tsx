@@ -35,8 +35,9 @@ export function GoalsHeader({ className, 'data-test-id': dataTestId }: GoalsHead
     },
   ]
 
+  // Only show metrics on desktop - hidden on mobile
   const actions = (
-    <>
+    <div className="hidden md:flex gap-0_75">
       {metrics.map((metric) => (
         <MetricCard
           key={metric.value}
@@ -45,7 +46,7 @@ export function GoalsHeader({ className, 'data-test-id': dataTestId }: GoalsHead
           icon={metric.icon}
         />
       ))}
-    </>
+    </div>
   )
 
   return (

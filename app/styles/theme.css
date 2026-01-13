@@ -204,7 +204,15 @@
   /* Z-index */
   --z-drawer-overlay: 750;
   --z-mobile-header: 800;
-  --z-900: 900;
+  --z-tabs: 500;
+  --z-sticky-filters: 450;
+
+  /* Sticky positioning */
+  --sticky-filters-desktop-offset: 6rem; /* 96px - tabs height in desktop */
+  --sticky-filters-mobile-offset: 7rem; /* 112px - mobile header + tabs */
+
+  /* Shadows */
+  --shadow-sticky-light: 0 4px 12px 0 rgba(0, 16, 53, 0.15);
 
   /* Transitions & Animations */
   --duration-fast: var(--transition-duration-fast);

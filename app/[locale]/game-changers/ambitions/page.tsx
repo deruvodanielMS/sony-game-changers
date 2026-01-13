@@ -8,6 +8,7 @@ import { GoalsHeader } from '@/components/game-changers/goals/GoalsHeader'
 import { Button } from '@/components/ui/atoms/Button'
 import { GoalCard } from '@/components/ui/organisms/GoalCard'
 import { FilterableContentLayout } from '@/components/ui/templates/FilterableContentLayout'
+import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { ROUTES } from '@/common/routes'
 import { filterBarMocks } from './mocks'
 import { useAmbitionsStore } from '@/stores/ambitions.store'
@@ -54,7 +55,11 @@ export default function GameChangersGoalsPage() {
 
   return (
     <FilterableContentLayout
-      header={<GoalsHeader />}
+      header={
+        <AnimatedSection delay={0}>
+          <GoalsHeader />
+        </AnimatedSection>
+      }
       filters={_filters}
       avatarSelector={_avatarSelector}
       searchField={{
@@ -86,9 +91,14 @@ export default function GameChangersGoalsPage() {
         </Button>
       }
     >
-      {list.map((goalData) => {
+      {list.map((goalData, index) => {
         const { ladderedGoals, ...goal } = goalData
-        return <GoalCard key={goal.id} ladderGoals={ladderedGoals} goal={goal} />
+        const delay = Math.min(0.1 + index * 0.05, 0.4)
+        return (
+          <AnimatedSection key={goal.id} delay={delay}>
+            <GoalCard ladderGoals={ladderedGoals} goal={goal} />
+          </AnimatedSection>
+        )
       })}
     </FilterableContentLayout>
   )

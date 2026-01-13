@@ -18,7 +18,7 @@ const optionClasses =
   'transition-hover w-full flex gap-1 items-center h-3 border-box px-1 py-0_75 cursor-pointer text-neutral-1000 text-body leading-body hover:bg-neutral-100'
 
 const avatarSelectionGradient =
-  'bg-gradient-to-r from-gradient-avatar-from to-gradient-avatar-to !p-[3px] hover:!shadow-none box-content'
+  'bg-gradient-to-r from-gradient-avatar-from to-gradient-avatar-to p-[2px]'
 
 export function AvatarSelect({
   options,
@@ -52,19 +52,24 @@ export function AvatarSelect({
       {optionsShown.map(({ url, uid, name }: AvatarSelectOption) => {
         const isSelected = selected?.includes(uid)
         return (
-          <Button
+          <button
             key={uid}
             title={name}
-            variant="plain"
-            iconOnly
             onClick={() => handleAvatarSelect(uid)}
             className={cn(
-              '!w-2 !h-2 shrink-0 grow-0 basis-2 -ml-0_25 hover:mb-0_25 z-1 hover:z-2',
+              'w-2 h-2 shrink-0 grow-0 -ml-0_25 z-1 hover:z-2 rounded-full transition-transform hover:scale-105',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2',
               isSelected && avatarSelectionGradient,
             )}
           >
-            <Image src={url} alt={name} width={32} height={32} className="rounded-full" />
-          </Button>
+            <Image
+              src={url}
+              alt={name}
+              width={32}
+              height={32}
+              className={cn('rounded-full', isSelected ? 'w-full h-full' : '')}
+            />
+          </button>
         )
       })}
 

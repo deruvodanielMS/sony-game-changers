@@ -1,5 +1,19 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## 🛠️ Tech Stack
+
+- **Framework:** [Next.js 16](https://nextjs.org) (App Router)
+- **UI Library:** [React 19](https://react.dev)
+- **Language:** [TypeScript 5](https://www.typescriptlang.org)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com) + CSS Variables
+- **Animations:** [Framer Motion 12](https://www.framer.com/motion) (LazyMotion optimized)
+- **UI Primitives:** [Radix UI](https://www.radix-ui.com)
+- **Internationalization:** [next-intl](https://next-intl-docs.vercel.app)
+- **State Management:** [Zustand](https://zustand-demo.pmnd.rs)
+- **Testing:** [Vitest](https://vitest.dev) + [React Testing Library](https://testing-library.com/react)
+- **Storybook:** [Storybook 8](https://storybook.js.org)
+- **Database (local):** [Prisma](https://www.prisma.io) + SQLite
+
 ## Getting Started
 
 First, install dependencies, and then run the development server:

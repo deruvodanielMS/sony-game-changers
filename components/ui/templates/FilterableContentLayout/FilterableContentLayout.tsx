@@ -1,20 +1,19 @@
 'use client'
 
-import { useState, useEffect, useTransition } from 'react'
+import { useState } from 'react'
 import { SlidersHorizontal } from 'lucide-react'
 import { Button } from '@/components/ui/atoms/Button'
 import { Drawer } from '@/components/ui/atoms/Drawer'
 import { Typography } from '@/components/ui/foundations/Typography'
-import { FilterMultiSelect } from '@/components/ui/molecules/FilterMultiSelect'
 import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
 import { SearchField } from '@/components/ui/molecules/SearchField'
 import { FilterBar } from '@/components/ui/organisms/GoalFilters/FilterBar'
+import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { useScrollDirection } from '@/hooks/useScrollDirection'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
 import { cn } from '@/utils/cn'
 import type { FilterableContentLayoutProps } from './FilterableContentLayout.types'
-import { Z_INDEX } from '@/common/constants'
 
 /**
  * FilterableContentLayout - Reusable template for pages with sticky header, filters, and mobile drawer
@@ -67,35 +66,15 @@ export function FilterableContentLayout({
 }: FilterableContentLayoutProps) {
   const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false)
   const { scrollDirection, scrollY } = useScrollDirection()
-  const [, startTransition] = useTransition()
-  const [isNavDrawerOpen, setIsNavDrawerOpen] = useState(false)
 
   // Use media query hook for desktop detection
   const isDesktop = useMediaQuery(BREAKPOINTS.md)
 
-  // Detect if navigation drawer is open (mobile only)
-  useEffect(() => {
-    const mainContent = document.querySelector('main[data-test-id="app-main-content-mobile"]')
-    if (!mainContent) return
-
-    const updateDrawerState = () => {
-      const drawerOpen = mainContent.getAttribute('data-drawer-open') === 'true'
-      startTransition(() => {
-        setIsNavDrawerOpen(drawerOpen)
-      })
-    }
-
-    // Initial check
-    updateDrawerState()
-
-    const observer = new MutationObserver(updateDrawerState)
-    observer.observe(mainContent, { attributes: true, attributeFilter: ['data-drawer-open'] })
-
-    return () => observer.disconnect()
-  }, [])
-
   // Hide header when scrolling down past 100px, show when scrolling up (only on desktop)
   const shouldHideHeader = isDesktop && scrollDirection === 'down' && scrollY > 100
+
+  // Show shadow when content is scrolling behind sticky elements
+  const showStickyShadow = scrollY > 10
 
   return (
     <div className="flex flex-col gap-0 md:gap-3">
@@ -112,64 +91,65 @@ export function FilterableContentLayout({
 
       {/* Desktop: Sticky FilterBar */}
       <div
-        className={
-          'hidden md:block sticky top-24 z-[' +
-          (+Z_INDEX.DROPDOWN - 1) +
-          '] bg-neutral-0 transition-all duration-base'
-        }
-      >
-        <FilterBar
-          clearFields={onClearFilters !== undefined}
-          filters={filters}
-          avatarSelector={avatarSelector}
-          searchField={
-            searchField
-              ? {
-                  onChange: searchField.onChange,
-                  defaultValue: searchField.value,
-                  placeholder: searchField.placeholder,
-                  clearable: searchField.clearable,
-                }
-              : undefined
-          }
-        >
-          {primaryAction}
-        </FilterBar>
-      </div>
-
-      {/* Mobile: Filter Button that opens drawer */}
-      <div
         className={cn(
-          'md:hidden sticky top-28 z-[' +
-            (+Z_INDEX.DROPDOWN - 1) +
-            '] bg-neutral-0 py-1 px-1 transition-opacity duration-base',
-          (isFilterDrawerOpen || isNavDrawerOpen) && 'opacity-0 pointer-events-none',
+          'hidden md:block sticky top-[var(--sticky-filters-desktop-offset)] z-[var(--z-sticky-filters)] bg-neutral-0 pb-1 transition-all duration-base',
+          showStickyShadow && '[box-shadow:var(--shadow-sticky-light)]',
         )}
       >
-        <div className="flex gap-1 justify-between">
-          <Button
-            variant="secondary"
-            className="flex-1 relative"
-            leftIcon={<SlidersHorizontal width={20} />}
-            onClick={() => setIsFilterDrawerOpen(true)}
-            aria-label={
-              activeFiltersCount > 0
-                ? `${translations.filtersButton} (${activeFiltersCount} active)`
-                : translations.filtersButton
+        <AnimatedSection delay={0.05}>
+          <FilterBar
+            clearFields={onClearFilters !== undefined}
+            filters={filters}
+            avatarSelector={avatarSelector}
+            searchField={
+              searchField
+                ? {
+                    onChange: searchField.onChange,
+                    defaultValue: searchField.value,
+                    placeholder: searchField.placeholder,
+                    clearable: searchField.clearable,
+                  }
+                : undefined
             }
           >
-            {translations.filtersButton}
-            {activeFiltersCount > 0 && (
-              <span
-                className="absolute -top-0_25 -right-0_25 inline-flex items-center justify-center w-5 h-5 text-body-tiny bg-accent-primary text-neutral-0 rounded-full font-bold"
-                aria-label={`${activeFiltersCount} active filters`}
-              >
-                {activeFiltersCount}
-              </span>
-            )}
-          </Button>
-          {primaryAction && <div className="shrink-0">{primaryAction}</div>}
-        </div>
+            {primaryAction}
+          </FilterBar>
+        </AnimatedSection>
+      </div>
+
+      {/* Mobile: Filter Button that opens drawer - sticky below tabs */}
+      <div
+        className={cn(
+          'md:hidden sticky top-[var(--sticky-filters-mobile-offset)] z-[var(--z-sticky-filters)] bg-neutral-0 py-1 px-1 -mb-1',
+          showStickyShadow && '[box-shadow:var(--shadow-sticky-light)]',
+        )}
+      >
+        <AnimatedSection delay={0.05}>
+          <div className="flex gap-1 justify-between">
+            <Button
+              variant="secondary"
+              className="flex-1 relative"
+              leftIcon={<SlidersHorizontal width={20} />}
+              onClick={() => setIsFilterDrawerOpen(true)}
+              aria-label={
+                activeFiltersCount > 0
+                  ? `${translations.filtersButton} (${activeFiltersCount} active)`
+                  : translations.filtersButton
+              }
+            >
+              {translations.filtersButton}
+              {activeFiltersCount > 0 && (
+                <span
+                  className="absolute -top-0_25 -right-0_25 inline-flex items-center justify-center w-5 h-5 text-body-tiny bg-accent-primary text-neutral-0 rounded-full font-bold"
+                  aria-label={`${activeFiltersCount} active filters`}
+                >
+                  {activeFiltersCount}
+                </span>
+              )}
+            </Button>
+            {primaryAction && <div className="shrink-0">{primaryAction}</div>}
+          </div>
+        </AnimatedSection>
       </div>
 
       {/* Mobile Filter Drawer */}
@@ -218,9 +198,44 @@ export function FilterableContentLayout({
                     {translations.filterByLabel}
                   </Typography>
                 )}
-                <div className="flex flex-col gap-0_75">
+                <div className="flex flex-col gap-1_5">
                   {filters.map((filter) => (
-                    <FilterMultiSelect key={filter.label} {...filter} />
+                    <div key={filter.label} className="border-b border-neutral-200 pb-1_5">
+                      <Typography
+                        variant="body"
+                        fontWeight="semibold"
+                        className="mb-0_75"
+                        color="neutral1000"
+                      >
+                        {filter.label}
+                      </Typography>
+                      <div className="flex flex-col gap-0_5">
+                        {filter.options.map((option) => {
+                          const isSelected = filter.selected.includes(option.value)
+                          return (
+                            <label
+                              key={option.value}
+                              className="flex items-center gap-0_75 cursor-pointer py-0_5"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={() => {
+                                  const newSelected = isSelected
+                                    ? filter.selected.filter((v) => v !== option.value)
+                                    : [...filter.selected, option.value]
+                                  filter.onSelect(newSelected)
+                                }}
+                                className="w-5 h-5 rounded border-2 border-neutral-400 text-accent-primary focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 cursor-pointer"
+                              />
+                              <Typography variant="body" color="neutral800">
+                                {option.label}
+                              </Typography>
+                            </label>
+                          )
+                        })}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -282,7 +297,9 @@ export function FilterableContentLayout({
       </Drawer>
 
       {/* Content */}
-      <div className={cn('flex flex-col gap-1 md:gap-1_5', contentClassName)}>{children}</div>
+      <div className={cn('flex flex-col gap-1 md:gap-1_5 pt-1 md:pt-0', contentClassName)}>
+        {children}
+      </div>
     </div>
   )
 }

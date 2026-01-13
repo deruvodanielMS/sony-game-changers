@@ -2,6 +2,7 @@
 
 import { useEffect, useEffectEvent, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { AnimatePresence, m } from 'framer-motion'
 import { cn } from '@/utils/cn'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 import type { DrawerProps, DrawerPosition, DrawerSize } from './Drawer.types'
@@ -156,107 +157,125 @@ export function Drawer({
   const containerClasses = cn(
     'fixed bg-neutral-0 box-border overflow-hidden flex flex-col',
     'shadow-[0px_25px_66px_-20px_rgba(0,16,53,0.24)] shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)]',
-    'transition-transform duration-slower ease-in-out',
     POSITION_CLASS_MAP[position],
     SIZE_CLASS_MAP[position][size],
-    // Slide animation based on position
-    mounted && open ? SLIDE_TRANSFORM_MAP[position].open : SLIDE_TRANSFORM_MAP[position].closed,
     // Mobile sheet styling for bottom drawer
     position === 'bottom' && 'md:rounded-t-default rounded-t-large',
     className,
   )
 
-  const overlayClasses = cn(
-    'fixed inset-0 z-[var(--z-drawer-overlay)]',
-    'transition-opacity duration-slower ease-in-out',
-    mounted && open ? 'opacity-100' : 'opacity-0',
-  )
+  const overlayClasses = 'fixed inset-0 z-[var(--z-drawer-overlay)]'
 
-  const backdropClasses = cn(
-    'absolute inset-0 bg-neutral-1000/50 transition-opacity duration-slower ease-in-out',
-    mounted && open ? 'opacity-100' : 'opacity-0',
-  )
+  const backdropClasses = 'absolute inset-0 bg-neutral-1000/50'
+
+  const getSlideAnimation = (position: DrawerPosition) => {
+    switch (position) {
+      case 'left':
+        return { initial: { x: '-100%' }, animate: { x: 0 }, exit: { x: '-100%' } }
+      case 'right':
+        return { initial: { x: '100%' }, animate: { x: 0 }, exit: { x: '100%' } }
+      case 'top':
+        return { initial: { y: '-100%' }, animate: { y: 0 }, exit: { y: '-100%' } }
+      case 'bottom':
+        return { initial: { y: '100%' }, animate: { y: 0 }, exit: { y: '100%' } }
+    }
+  }
 
   const overlay = (
-    <div
-      data-testid="drawer-overlay"
-      data-test-id={dataTestId}
-      ref={overlayRef}
-      className={overlayClasses}
-      onClick={(e) => {
-        if (!overlayClose) return
-        if (
-          e.target === overlayRef.current ||
-          (e.target as HTMLElement).hasAttribute('aria-hidden')
-        ) {
-          onClose?.()
-        }
-      }}
-    >
-      <div className={backdropClasses} aria-hidden />
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={ariaLabel ?? title ?? 'Drawer dialog'}
-        data-testid="drawer-container"
-        ref={containerRef}
-        tabIndex={-1}
-        className={containerClasses}
-        onClick={(e) => e.stopPropagation()}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        {/* Mobile handle for bottom drawer */}
-        {position === 'bottom' && (
-          <div className="md:hidden flex justify-center py-0_5">
-            <div className="w-2 h-0_25 bg-neutral-300 rounded-default" />
-          </div>
-        )}
-
-        {/* Header */}
-        {title && (
-          <header className="flex items-center gap-0_75 px-1_5 py-1 border-b border-neutral-200">
-            <div className="flex-1 text-title-medium font-semibold text-neutral-1000">{title}</div>
-            {showClose && (
-              <button
-                onClick={onClose}
-                className={cn(
-                  'shrink-0 w-icon-sm h-icon-sm flex items-center justify-center rounded-small hover:bg-neutral-100 transition-colors duration-base',
-                  hideCloseOnMobile && 'md:flex hidden',
-                )}
-                aria-label="Close drawer"
-                data-testid="drawer-close-button"
-              >
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                  <path
-                    d="M15 5L5 15M5 5L15 15"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              </button>
-            )}
-          </header>
-        )}
-
-        {/* Body */}
-        <div className="flex-1 overflow-y-auto px-1_5 py-1" data-testid="drawer-body">
-          {children}
-        </div>
-
-        {/* Footer with actions */}
-        {actions && (
-          <footer
-            className="flex items-center justify-end gap-0_75 px-1_5 py-1 border-t border-neutral-200 bg-neutral-50"
-            data-testid="drawer-footer"
+    <AnimatePresence mode="wait">
+      {open && (
+        <div
+          data-testid="drawer-overlay"
+          data-test-id={dataTestId}
+          ref={overlayRef}
+          className={overlayClasses}
+          onClick={(e) => {
+            if (!overlayClose) return
+            if (
+              e.target === overlayRef.current ||
+              (e.target as HTMLElement).hasAttribute('aria-hidden')
+            ) {
+              onClose?.()
+            }
+          }}
+        >
+          <m.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className={backdropClasses}
+            aria-hidden
+          />
+          <m.div
+            role="dialog"
+            aria-modal="true"
+            aria-label={ariaLabel ?? title ?? 'Drawer dialog'}
+            data-testid="drawer-container"
+            ref={containerRef}
+            tabIndex={-1}
+            className={containerClasses}
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            {...getSlideAnimation(position)}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
           >
-            {actions}
-          </footer>
-        )}
-      </div>
-    </div>
+            {/* Mobile handle for bottom drawer */}
+            {position === 'bottom' && (
+              <div className="md:hidden flex justify-center py-0_5">
+                <div className="w-2 h-0_25 bg-neutral-300 rounded-default" />
+              </div>
+            )}
+
+            {/* Header */}
+            {title && (
+              <header className="flex items-center gap-0_75 px-1_5 py-1 border-b border-neutral-200">
+                <div className="flex-1 text-title-medium font-semibold text-neutral-1000">
+                  {title}
+                </div>
+                {showClose && (
+                  <button
+                    onClick={onClose}
+                    className={cn(
+                      'shrink-0 w-icon-sm h-icon-sm flex items-center justify-center rounded-small hover:bg-neutral-100 transition-colors duration-base',
+                      hideCloseOnMobile && 'md:flex hidden',
+                    )}
+                    aria-label="Close drawer"
+                    data-testid="drawer-close-button"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                      <path
+                        d="M15 5L5 15M5 5L15 15"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </header>
+            )}
+
+            {/* Body */}
+            <div className="flex-1 overflow-y-auto px-1_5 py-1" data-testid="drawer-body">
+              {children}
+            </div>
+
+            {/* Footer with actions */}
+            {actions && (
+              <footer
+                className="flex items-center justify-end gap-0_75 px-1_5 py-1 border-t border-neutral-200 bg-neutral-50"
+                data-testid="drawer-footer"
+              >
+                {actions}
+              </footer>
+            )}
+          </m.div>
+        </div>
+      )}
+    </AnimatePresence>
   )
 
   return typeof document !== 'undefined' ? createPortal(overlay, document.body) : null

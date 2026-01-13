@@ -49,7 +49,7 @@ export function LayoutTabSection({ children, sections = [], basePath }: LayoutTa
         {/* Desktop: Sticky navigation */}
         <div
           className={cn(
-            'sticky top-16 md:top-0 z-[900] bg-neutral-0 px-1 md:px-3',
+            'sticky top-16 md:top-0 z-[var(--z-tabs)] bg-neutral-0 px-1 md:px-3',
             'transition-opacity duration-base',
             isNavDrawerOpen && 'md:opacity-100 opacity-0 pointer-events-none',
           )}

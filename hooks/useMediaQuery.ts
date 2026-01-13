@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 
 /**
  * useMediaQuery - Hook to detect media query changes with optimized performance
@@ -47,19 +47,22 @@ export function useMediaQuery(query: string): boolean {
  * @returns object with width and height
  */
 export function useWindowSize(debounceMs = 150) {
-  const [windowSize, setWindowSize] = useState(() => {
-    // Initialize with current window size (only in browser)
-    if (typeof window !== 'undefined') {
-      return {
-        width: window.innerWidth,
-        height: window.innerHeight,
-      }
-    }
-    return {
-      width: 0,
-      height: 0,
-    }
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
   })
+
+  // Set initial size synchronously to match first render and prevent hydration mismatch
+  // Safe to disable rule: useLayoutEffect runs synchronously after DOM updates but before paint,
+  // ensuring accurate initial measurements without SSR/client discrepancies
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useLayoutEffect(() => {
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    })
+  }, [])
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
     const handleResize = () => {

@@ -103,6 +103,150 @@ import Link from 'next/link' // ❌ Wrong - doesn't handle locale
 - useMemo and useCallback only when they reduce renders.
 - Keep local UI state only if necessary for visual interaction.
 
+### Animations with Framer Motion:
+
+**Required:** All animations must use Framer Motion with optimized patterns.
+
+**Core Principles:**
+
+1. **LazyMotion** - CRITICAL for bundle size reduction (~30KB savings)
+2. **Variants** - Cleaner code, better performance
+3. **AnimatePresence** - Smooth exit animations
+4. **Gestures** - Interactive feedback (hover, tap)
+5. **Layout animations** - FLIP technique for smooth resizing
+
+**Setup:**
+
+```tsx
+// Root layout (AppLayout.tsx already configured)
+import { LazyMotion, domMax } from 'framer-motion'
+
+export function AppLayout({ children }) {
+  return (
+    <LazyMotion features={domMax} strict>
+      {children}
+    </LazyMotion>
+  )
+}
+```
+
+**Import convention:**
+
+```tsx
+// ✅ Use m shorthand for better performance
+import { m, AnimatePresence } from 'framer-motion'
+
+// ❌ Don't use full motion import
+import { motion } from 'framer-motion'
+```
+
+**Variants pattern:**
+
+```tsx
+// ✅ Correct - reusable, performant
+const variants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0 },
+}
+
+<m.div variants={variants} initial="hidden" animate="visible" transition={{ duration: 0.3 }}>
+  {children}
+</m.div>
+
+// ❌ Wrong - inline values are less performant
+<m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+  {children}
+</m.div>
+```
+
+**Gestures:**
+
+```tsx
+// Button feedback
+<m.span whileTap={{ scale: 0.95 }} transition={{ duration: 0.1 }}>
+  {children}
+</m.span>
+
+// Card hover effect
+<m.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.2 }}>
+  {children}
+</m.div>
+```
+
+**Exit animations:**
+
+```tsx
+import { AnimatePresence, m } from 'framer-motion'
+
+<AnimatePresence mode="wait">
+  {isOpen && (
+    <m.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      {children}
+    </m.div>
+  )}
+</AnimatePresence>
+```
+
+**Layout animations (FLIP):**
+
+```tsx
+// Smooth height/width changes
+<m.div layout transition={{ duration: 0.3, ease: 'easeInOut' }}>
+  {children}
+</m.div>
+```
+
+**Staggered animations:**
+
+Use `AnimatedSection` component for consistent page entry animations:
+
+```tsx
+import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
+
+// Single element
+<AnimatedSection delay={0}>
+  <Header />
+</AnimatedSection>
+
+// Staggered list
+{items.map((item, index) => (
+  <AnimatedSection key={item.id} delay={0.1 + index * 0.05}>
+    <Card {...item} />
+  </AnimatedSection>
+))}
+```
+
+**Testing animations:**
+
+```tsx
+import { render, screen, waitFor } from '@testing-library/react'
+
+// Use waitFor for animated content
+it('shows content after animation', async () => {
+  render(<AnimatedComponent />)
+  
+  await waitFor(() => {
+    expect(screen.getByText('Content')).toBeInTheDocument()
+  })
+})
+```
+
+**Performance tips:**
+
+- ✅ Use LazyMotion wrapper at root level
+- ✅ Use m instead of motion
+- ✅ Define variants outside component
+- ✅ Use layout prop for size changes (FLIP technique)
+- ✅ Keep transitions short (0.2-0.3s)
+- ❌ Don't animate on every render
+- ❌ Don't use heavy transforms on large elements
+- ❌ Don't nest too many animated components
+
 ### Responsive Hooks & Media Queries:
 
 **Always use centralized hooks for responsive behavior:**

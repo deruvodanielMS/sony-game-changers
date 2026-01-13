@@ -19,7 +19,7 @@ export function SectionHeader({
   return (
     <header
       className={cn(
-        'flex flex-col md:flex-row md:items-center gap-1_5 bg-neutral-0 w-full',
+        'flex flex-col md:flex-row md:flex-wrap md:items-center gap-1_5 bg-neutral-0 w-full pt-6 md:pt-0',
         className,
       )}
       data-test-id={dataTestId}
