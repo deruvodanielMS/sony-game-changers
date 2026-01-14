@@ -6,30 +6,30 @@ export default function Loading() {
       {/* Back button skeleton */}
       <div className="flex items-center gap-0_5">
         <Skeleton variant="circular" width="var(--space-1_5)" height="var(--space-1_5)" />
-        <Skeleton variant="text" width="80px" />
+        <Skeleton variant="body" width="80px" />
       </div>
 
       {/* Title skeleton */}
-      <Skeleton variant="heading" width="250px" />
+      <Skeleton variant="h2" width="250px" />
 
       {/* Description skeleton */}
       <div className="flex flex-col gap-0_5">
-        <Skeleton variant="text" width="100%" />
-        <Skeleton variant="text" width="60%" />
+        <Skeleton variant="body" width="100%" />
+        <Skeleton variant="body" width="60%" />
       </div>
 
       {/* Form skeleton */}
       <div className="flex flex-col gap-1 mt-1">
         <div className="flex flex-col gap-0_5">
-          <Skeleton variant="text" width="100px" />
+          <Skeleton variant="body" width="100px" />
           <Skeleton variant="rectangular" width="100%" height="var(--space-3)" />
         </div>
         <div className="flex flex-col gap-0_5">
-          <Skeleton variant="text" width="120px" />
+          <Skeleton variant="body" width="120px" />
           <Skeleton variant="rectangular" width="100%" height="var(--space-3)" />
         </div>
         <div className="flex flex-col gap-0_5">
-          <Skeleton variant="text" width="140px" />
+          <Skeleton variant="body" width="140px" />
           <Skeleton variant="rectangular" width="100%" height="120px" />
         </div>
         <div className="flex gap-0_75 mt-1">

@@ -6,7 +6,7 @@ import { API_ROUTES } from '@/common/routes'
 
 type AmbitionsState = {
   // Estado visible
-  list: AmbitionUI[]
+  list: AmbitionUI[] | null
   selected: AmbitionUI | null
 
   // Estado de edición
@@ -30,7 +30,7 @@ type AmbitionsState = {
 }
 
 export const useAmbitionsStore = create<AmbitionsState>((set) => ({
-  list: [],
+  list: null,
   selected: null,
 
   draft: null,
@@ -74,7 +74,7 @@ export const useAmbitionsStore = create<AmbitionsState>((set) => ({
   // Sync con backend
   applyUpdate: (ambition) =>
     set((state) => ({
-      list: state.list.map((a) => (a.id === ambition.id ? ambition : a)),
+      list: state.list?.map((a) => (a.id === ambition.id ? ambition : a)),
       selected: state.selected?.id === ambition.id ? ambition : state.selected,
       draft: null,
       editingAmbitionId: null,
@@ -82,7 +82,7 @@ export const useAmbitionsStore = create<AmbitionsState>((set) => ({
 
   removeAmbition: (id) =>
     set((state) => ({
-      list: state.list.filter((a) => a.id !== id),
+      list: state.list?.filter((a) => a.id !== id),
       selected: state.selected?.id === id ? null : state.selected,
       draft: null,
       editingAmbitionId: null,

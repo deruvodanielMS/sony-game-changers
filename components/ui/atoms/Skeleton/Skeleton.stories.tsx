@@ -17,10 +17,24 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['text', 'title', 'heading', 'circular', 'rectangular', 'avatar', 'button'],
+      options: [
+        'circular',
+        'rectangular',
+        'avatar',
+        'button',
+        'h1',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6',
+        'body',
+        'bodySmall',
+        'bodyTiny',
+      ],
       description: 'Variant of the skeleton placeholder',
       table: {
-        defaultValue: { summary: 'text' },
+        defaultValue: { summary: 'body' },
       },
     },
     width: {
@@ -49,25 +63,67 @@ export const Default: Story = {
   ),
 }
 
-export const Text: Story = {
+export const Body: Story = {
   render: () => (
     <div className="max-w-md">
-      <Skeleton variant="text" width="300px" />
+      <Skeleton variant="body" width="300px" />
     </div>
   ),
 }
 
-export const Title: Story = {
+export const BodySmall: Story = {
   args: {
-    variant: 'title',
+    variant: 'bodySmall',
+    width: '160px',
+  },
+}
+
+export const BodyTiny: Story = {
+  args: {
+    variant: 'bodyTiny',
+    width: '100px',
+  },
+}
+
+export const H1: Story = {
+  args: {
+    variant: 'h1',
+    width: '400px',
+  },
+}
+
+export const H2: Story = {
+  args: {
+    variant: 'h2',
+    width: '300px',
+  },
+}
+
+export const H3: Story = {
+  args: {
+    variant: 'h3',
     width: '200px',
   },
 }
 
-export const Heading: Story = {
+export const H4: Story = {
   args: {
-    variant: 'heading',
-    width: '300px',
+    variant: 'h4',
+    width: '180px',
+  },
+}
+
+export const H5: Story = {
+  args: {
+    variant: 'h5',
+    width: '160px',
+  },
+}
+
+export const H6: Story = {
+  args: {
+    variant: 'h6',
+    width: '140px',
   },
 }
 
@@ -97,16 +153,16 @@ export const AllVariants: Story = {
   render: () => (
     <div className="flex flex-col gap-1_5 max-w-2xl">
       <div className="flex flex-col gap-0_5">
-        <span className="text-xs text-neutral-600 font-medium">Text (default)</span>
-        <Skeleton variant="text" width="100%" />
+        <span className="text-xs text-neutral-600 font-medium">Body (default)</span>
+        <Skeleton variant="body" width="100%" />
       </div>
       <div className="flex flex-col gap-0_5">
         <span className="text-xs text-neutral-600 font-medium">Title</span>
-        <Skeleton variant="title" width="200px" />
+        <Skeleton variant="h3" width="200px" />
       </div>
       <div className="flex flex-col gap-0_5">
         <span className="text-xs text-neutral-600 font-medium">Heading</span>
-        <Skeleton variant="heading" width="300px" />
+        <Skeleton variant="h2" width="300px" />
       </div>
       <div className="flex flex-col gap-0_5">
         <span className="text-xs text-neutral-600 font-medium">Circular</span>
@@ -131,10 +187,10 @@ export const AllVariants: Story = {
 export const TextBlock: Story = {
   render: () => (
     <div className="flex flex-col gap-0_5 max-w-xl">
-      <Skeleton variant="title" width="60%" />
-      <Skeleton variant="text" width="100%" />
-      <Skeleton variant="text" width="95%" />
-      <Skeleton variant="text" width="80%" />
+      <Skeleton variant="h3" width="60%" />
+      <Skeleton variant="body" width="100%" />
+      <Skeleton variant="body" width="95%" />
+      <Skeleton variant="body" width="80%" />
     </div>
   ),
 }
@@ -144,9 +200,9 @@ export const UserCard: Story = {
     <div className="flex items-start gap-0_75 p-1 border border-neutral-300 rounded-default max-w-md">
       <Skeleton variant="avatar" width="var(--space-3)" />
       <div className="flex-1 flex flex-col gap-0_5">
-        <Skeleton variant="title" width="150px" />
-        <Skeleton variant="text" width="100%" />
-        <Skeleton variant="text" width="70%" />
+        <Skeleton variant="h3" width="150px" />
+        <Skeleton variant="body" width="100%" />
+        <Skeleton variant="body" width="70%" />
       </div>
     </div>
   ),
@@ -156,10 +212,10 @@ export const ArticlePreview: Story = {
   render: () => (
     <div className="flex flex-col gap-0_75 p-1 border border-neutral-300 rounded-default max-w-md">
       <Skeleton variant="rectangular" width="100%" height="150px" />
-      <Skeleton variant="heading" width="80%" />
-      <Skeleton variant="text" width="100%" />
-      <Skeleton variant="text" width="95%" />
-      <Skeleton variant="text" width="60%" />
+      <Skeleton variant="h2" width="80%" />
+      <Skeleton variant="body" width="100%" />
+      <Skeleton variant="body" width="95%" />
+      <Skeleton variant="body" width="60%" />
       <div className="flex gap-0_5 mt-0_5">
         <Skeleton variant="button" width="100px" />
         <Skeleton variant="button" width="80px" />
@@ -172,15 +228,15 @@ export const FormSkeleton: Story = {
   render: () => (
     <div className="flex flex-col gap-0_75 p-1 border border-neutral-300 rounded-default max-w-md">
       <div className="flex flex-col gap-0_25">
-        <Skeleton variant="text" width="80px" />
+        <Skeleton variant="body" width="80px" />
         <Skeleton variant="rectangular" width="100%" height="var(--space-2_75)" />
       </div>
       <div className="flex flex-col gap-0_25">
-        <Skeleton variant="text" width="100px" />
+        <Skeleton variant="body" width="100px" />
         <Skeleton variant="rectangular" width="100%" height="var(--space-2_75)" />
       </div>
       <div className="flex flex-col gap-0_25">
-        <Skeleton variant="text" width="120px" />
+        <Skeleton variant="body" width="120px" />
         <Skeleton variant="rectangular" width="100%" height="100px" />
       </div>
       <div className="flex gap-0_5">
@@ -201,8 +257,8 @@ export const ListSkeleton: Story = {
         >
           <Skeleton variant="circular" width="var(--space-2_75)" height="var(--space-2_75)" />
           <div className="flex-1 flex flex-col gap-0_25">
-            <Skeleton variant="title" width="60%" />
-            <Skeleton variant="text" width="80%" />
+            <Skeleton variant="h3" width="60%" />
+            <Skeleton variant="body" width="80%" />
           </div>
         </div>
       ))}

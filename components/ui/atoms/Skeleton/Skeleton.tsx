@@ -6,9 +6,15 @@ const skeletonVariants = cva(
   {
     variants: {
       variant: {
-        text: 'h-skeleton-text rounded-tiny',
-        title: 'h-skeleton-title rounded-tiny',
-        heading: 'h-skeleton-heading rounded-tiny',
+        h1: 'h-skeleton-h1 rounded-tiny',
+        h2: 'h-skeleton-h2 rounded-tiny',
+        h3: 'h-skeleton-h3 rounded-tiny',
+        h4: 'h-skeleton-h4 rounded-tiny',
+        h5: 'h-skeleton-h5 rounded-tiny',
+        h6: 'h-skeleton-h6 rounded-tiny',
+        body: 'h-skeleton-body rounded-tiny',
+        bodySmall: 'h-skeleton-body-small rounded-tiny',
+        bodyTiny: 'h-skeleton-body-tiny rounded-tiny',
         circular: 'rounded-full',
         rectangular: 'rounded-small',
         avatar: 'rounded-full aspect-square',
@@ -16,7 +22,7 @@ const skeletonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: 'text',
+      variant: 'body',
     },
   },
 )

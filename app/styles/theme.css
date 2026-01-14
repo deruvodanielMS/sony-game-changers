@@ -134,10 +134,17 @@
   --leading-body-tiny: var(--line-height-body-tiny);
 
   /* Skeleton Heights */
-  --height-skeleton-text: var(--skeleton-text-height);
-  --height-skeleton-title: var(--skeleton-title-height);
-  --height-skeleton-heading: var(--skeleton-heading-height);
+
   --height-skeleton-button: var(--skeleton-button-height);
+  --height-skeleton-h1: var(--font-size-h1);
+  --height-skeleton-h2: var(--font-size-h2);
+  --height-skeleton-h3: var(--font-size-h3);
+  --height-skeleton-h4: var(--font-size-h4);
+  --height-skeleton-h5: var(--font-size-h5);
+  --height-skeleton-h6: var(--font-size-h6);
+  --height-skeleton-body: var(--font-size-body);
+  --height-skeleton-body-small: var(--font-size-body-small);
+  --height-skeleton-body-tiny: var(--font-size-body-tiny);
 
   /* Spinner Sizes */
   --size-spinner-small: var(--spinner-small);

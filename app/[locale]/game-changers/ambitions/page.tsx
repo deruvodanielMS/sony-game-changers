@@ -12,6 +12,7 @@ import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { ROUTES } from '@/common/routes'
 import { filterBarMocks } from './mocks'
 import { useAmbitionsStore } from '@/stores/ambitions.store'
+import { AmbitionsLoading } from '@/components/ui/molecules/Loadings'
 
 export default function GameChangersGoalsPage() {
   const t = useTranslations('Goals')
@@ -52,6 +53,10 @@ export default function GameChangersGoalsPage() {
     selectedFilterType.length +
     selectedAvatars.length +
     (selectedSearchValue ? 1 : 0)
+
+  if (list === null) {
+    return <AmbitionsLoading />
+  }
 
   return (
     <FilterableContentLayout

@@ -22,19 +22,19 @@ describe('Skeleton', () => {
     it('renders text variant correctly (default)', () => {
       render(<Skeleton data-testid="skeleton" />)
       const skeleton = screen.getByTestId('skeleton')
-      expect(skeleton).toHaveClass('h-skeleton-text', 'rounded-tiny')
+      expect(skeleton).toHaveClass('h-skeleton-body', 'rounded-tiny')
     })
 
     it('renders title variant correctly', () => {
-      render(<Skeleton variant="title" data-testid="skeleton" />)
+      render(<Skeleton variant="h1" data-testid="skeleton" />)
       const skeleton = screen.getByTestId('skeleton')
-      expect(skeleton).toHaveClass('h-skeleton-title', 'rounded-tiny')
+      expect(skeleton).toHaveClass('h-skeleton-h1', 'rounded-tiny')
     })
 
     it('renders heading variant correctly', () => {
-      render(<Skeleton variant="heading" data-testid="skeleton" />)
+      render(<Skeleton variant="h2" data-testid="skeleton" />)
       const skeleton = screen.getByTestId('skeleton')
-      expect(skeleton).toHaveClass('h-skeleton-heading', 'rounded-tiny')
+      expect(skeleton).toHaveClass('h-skeleton-h2', 'rounded-tiny')
     })
 
     it('renders circular variant correctly', () => {
@@ -105,7 +105,7 @@ describe('Skeleton', () => {
     it('applies custom className alongside default classes', () => {
       render(<Skeleton className="custom-class" data-testid="skeleton" />)
       const skeleton = screen.getByTestId('skeleton')
-      expect(skeleton).toHaveClass('custom-class', 'animate-pulse', 'h-skeleton-text')
+      expect(skeleton).toHaveClass('custom-class', 'animate-pulse', 'h-skeleton-body')
     })
   })
 
