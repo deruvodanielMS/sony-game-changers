@@ -10,7 +10,7 @@ export default function Loading() {
     >
       {/* Header skeleton */}
       <div className="flex items-center justify-between mb-1">
-        <Skeleton variant="heading" width="200px" />
+        <Skeleton variant="rectangular" width="200px" height="32px" />
         <Skeleton variant="button" width="160px" height="40px" />
       </div>
 

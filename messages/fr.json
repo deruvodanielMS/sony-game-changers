@@ -93,5 +93,27 @@
   "Error": {
     "title": "Quelque chose a mal tourné",
     "description": "Une erreur inattendue s'est produite. Veuillez réessayer plus tard."
+  },
+  "AmbitionDetail": {
+    "breadcrumb": {
+      "ambitions": "Ambitions",
+      "detail": "Détail de l'ambition"
+    },
+    "actions": {
+      "sendForApproval": "Envoyer pour approbation",
+      "sendBack": "Renvoyer",
+      "approve": "Approuver",
+      "moreOptions": "Plus d'options"
+    },
+    "metadata": {
+      "createdBy": "Créé par :",
+      "assignedTo": "Assigné à :",
+      "lastUpdate": "Dernière mise à jour :",
+      "on": "le"
+    },
+    "progress": {
+      "completed": "Terminé",
+      "fullLaddering": "Échelle complète"
+    }
   }
 }

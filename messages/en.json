@@ -93,5 +93,27 @@
   "Error": {
     "title": "Something went wrong",
     "description": "An unexpected error has occurred. Please try again later."
+  },
+  "AmbitionDetail": {
+    "breadcrumb": {
+      "ambitions": "Ambitions",
+      "detail": "Ambition detail"
+    },
+    "actions": {
+      "sendForApproval": "Send for Approval",
+      "sendBack": "Send Back",
+      "approve": "Approve",
+      "moreOptions": "More options"
+    },
+    "metadata": {
+      "createdBy": "Created by:",
+      "assignedTo": "Assigned to:",
+      "lastUpdate": "Last Update:",
+      "on": "on"
+    },
+    "progress": {
+      "completed": "Completed",
+      "fullLaddering": "Full Laddering"
+    }
   }
 }
