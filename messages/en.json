@@ -135,6 +135,14 @@
       "totalAmbitions": "{count} total Ambitions",
       "previousPage": "Previous page",
       "nextPage": "Next page"
+    },
+    "activity": {
+      "addCommentPlaceholder": "Add a comment...",
+      "completed": "Completed",
+      "approved": "approved the Ambition",
+      "changedStatus": "changed the status",
+      "created": "created the Ambition as",
+      "theAmbition": "the Ambition"
     }
   }
 }

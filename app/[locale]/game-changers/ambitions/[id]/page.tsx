@@ -12,6 +12,7 @@ import {
   Plus,
   Grid2x2,
   List,
+  ArrowRight,
 } from 'lucide-react'
 import { Breadcrumb } from '@/components/ui/molecules/Breadcrumb'
 import { CollapsibleSection } from '@/components/ui/molecules/CollapsibleSection'
@@ -89,6 +90,38 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
     { uid: '3', name: 'Kylie Davies', url: '/profile-img/kylie-davies.png' },
     { uid: '4', name: 'Sarah Miller', url: '/profile-img/sarah-miller.png' },
     { uid: '5', name: 'Profile', url: '/profile-img/profile.png' },
+  ]
+
+  // Mock activity feed data - TODO: Replace with real data from API
+  const activityFeed = [
+    {
+      id: '1',
+      user: { name: 'James Miller', avatar: '/profile-img/profile.png' },
+      action: 'completed',
+      target: 'the Ambition',
+      date: 'Dec 15, 2025',
+    },
+    {
+      id: '2',
+      user: { name: 'Rupert Sterling', avatar: '/profile-img/lars-van-der-zee.png' },
+      action: 'approved',
+      date: 'Dec 14, 2025',
+    },
+    {
+      id: '3',
+      user: { name: 'James Miller', avatar: '/profile-img/profile.png' },
+      action: 'statusChange',
+      from: 'Draft',
+      to: 'Awaiting Approval',
+      date: 'Dec 13, 2025',
+    },
+    {
+      id: '4',
+      user: { name: 'James Miller', avatar: '/profile-img/profile.png' },
+      action: 'created',
+      status: 'Draft',
+      date: 'Dec 10, 2025',
+    },
   ]
 
   // Mock achievements data - TODO: Replace with real data from API
@@ -652,6 +685,108 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
             <Typography variant="body">
               {t('ladderedAmbitions.totalAmbitions', { count: ladderedAmbitions.length })}
             </Typography>
+          </div>
+        </div>
+      </AnimatedSection>
+
+      {/* Activity Feed Section */}
+      <AnimatedSection delay={0.25}>
+        <div className="flex flex-col gap-2_5 w-full">
+          {/* Add Comment */}
+          <div className="flex gap-1 items-start w-full">
+            <div className="relative size-2 rounded-full shrink-0 overflow-hidden">
+              <Image
+                src="/profile-img/profile.png"
+                alt="Current user"
+                width={32}
+                height={32}
+                className="object-cover"
+              />
+            </div>
+            <div className="flex-1">
+              <textarea
+                placeholder={t('activity.addCommentPlaceholder')}
+                className="w-full h-[92px] px-1 py-0_75 border border-neutral-300 rounded-small bg-neutral-0 text-neutral-600 placeholder:text-neutral-600 resize-none focus:outline-none focus:ring-2 focus:ring-accent-primary"
+              />
+            </div>
+          </div>
+
+          {/* Activity History */}
+          <div className="flex flex-col gap-2 w-full">
+            {activityFeed.map((activity) => (
+              <div key={activity.id} className="flex gap-1 items-start w-full">
+                <div className="relative size-2 rounded-full shrink-0 overflow-hidden">
+                  <Image
+                    src={activity.user.avatar}
+                    alt={activity.user.name}
+                    width={32}
+                    height={32}
+                    className="object-cover"
+                  />
+                </div>
+                <div className="flex flex-col gap-0_25 flex-1">
+                  <div className="flex gap-0_5 h-2 items-center">
+                    <Typography variant="body" fontWeight="bold">
+                      {activity.user.name}
+                    </Typography>
+                    {activity.action === 'completed' && (
+                      <Typography variant="body">
+                        <span className="font-bold text-feedback-success-600">
+                          {t('activity.completed')}
+                        </span>{' '}
+                        {t('activity.theAmbition')}
+                      </Typography>
+                    )}
+                    {activity.action === 'approved' && (
+                      <Typography variant="body">{t('activity.approved')}</Typography>
+                    )}
+                    {activity.action === 'statusChange' && (
+                      <>
+                        <Typography variant="body">{t('activity.changedStatus')}</Typography>
+                        <div className="flex gap-0_5 items-center">
+                          <div className="px-0_5 py-0_125 bg-extra-blue-100 rounded-default">
+                            <Typography
+                              variant="body"
+                              fontWeight="bold"
+                              className="text-extra-blue-600"
+                            >
+                              {activity.from}
+                            </Typography>
+                          </div>
+                          <ArrowRight className="size-1 text-neutral-1000" />
+                          <div className="px-0_5 py-0_125 bg-extra-pink-100 rounded-default">
+                            <Typography
+                              variant="body"
+                              fontWeight="bold"
+                              className="text-extra-pink-600"
+                            >
+                              {activity.to}
+                            </Typography>
+                          </div>
+                        </div>
+                      </>
+                    )}
+                    {activity.action === 'created' && (
+                      <>
+                        <Typography variant="body">{t('activity.created')}</Typography>
+                        <div className="px-0_5 py-0_125 bg-extra-blue-100 rounded-default">
+                          <Typography
+                            variant="body"
+                            fontWeight="bold"
+                            className="text-extra-blue-600"
+                          >
+                            {activity.status}
+                          </Typography>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <Typography variant="bodySmall" className="text-neutral-500">
+                    {activity.date}
+                  </Typography>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </AnimatedSection>

@@ -135,6 +135,14 @@
       "totalAmbitions": "{count} ambitions au total",
       "previousPage": "Page précédente",
       "nextPage": "Page suivante"
+    },
+    "activity": {
+      "addCommentPlaceholder": "Ajouter un commentaire...",
+      "completed": "Terminé",
+      "approved": "a approuvé l'ambition",
+      "changedStatus": "a changé le statut",
+      "created": "a créé l'ambition en tant que",
+      "theAmbition": "l'ambition"
     }
   }
 }
