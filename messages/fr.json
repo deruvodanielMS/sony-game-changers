@@ -117,6 +117,24 @@
     "progress": {
       "completed": "Terminé",
       "fullLaddering": "Échelle complète"
+    },
+    "achievements": {
+      "title": "Réalisations",
+      "collapse": "Réduire les réalisations",
+      "expand": "Développer les réalisations",
+      "progress": {
+        "notStarted": "Non commencé",
+        "onTrack": "Sur la bonne voie",
+        "offTrack": "Hors piste"
+      }
+    },
+    "ladderedAmbitions": {
+      "title": "Ambitions échelonnées",
+      "searchPlaceholder": "Rechercher...",
+      "addButton": "Ajouter une ambition échelonnée",
+      "totalAmbitions": "{count} ambitions au total",
+      "previousPage": "Page précédente",
+      "nextPage": "Page suivante"
     }
   }
 }

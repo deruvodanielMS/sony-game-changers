@@ -3,17 +3,30 @@
 import { use, useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { MoreHorizontal, CornerDownRight, Target, Info, ChevronUp } from 'lucide-react'
+import {
+  MoreHorizontal,
+  CornerDownRight,
+  Target,
+  Info,
+  Check,
+  Plus,
+  Grid2x2,
+  List,
+} from 'lucide-react'
 import { Breadcrumb } from '@/components/ui/molecules/Breadcrumb'
+import { CollapsibleSection } from '@/components/ui/molecules/CollapsibleSection'
+import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { Button } from '@/components/ui/atoms/Button'
 import { ProgressRing } from '@/components/ui/atoms/ProgressRing'
+import { SearchField } from '@/components/ui/molecules/SearchField'
 import { generateInitialsAvatarSrc } from '@/utils/generateInitialsAvatar'
 import { useAmbitionsStore } from '@/stores/ambitions.store'
 import { ROUTES } from '@/common/routes'
 import { AMBITION_TYPES } from '@/domain/ambition'
 import { Shrub, BriefcaseBusiness, Sprout } from 'lucide-react'
+import { cn } from '@/utils/cn'
 
 const GoalTypeIcons = {
   [AMBITION_TYPES.BUSINESS]: <Sprout className="size-1_5 text-neutral-0" />,
@@ -28,6 +41,95 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
 
   // State for collapsible sections - must be before early returns
   const [isActionsOpen, setIsActionsOpen] = useState(true)
+  const [isAchievementsOpen, setIsAchievementsOpen] = useState(true)
+
+  // State for laddered ambitions search and view mode
+  const [ladderedSearch, setLadderedSearch] = useState('')
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [selectedAvatars, setSelectedAvatars] = useState<string[]>([])
+
+  // Mock laddered ambitions data - TODO: Replace with real data from API
+  const ladderedAmbitions = [
+    {
+      id: '1',
+      title:
+        'Optimize the cross-platform entitlement engine to ensure seamless delivery of digital service benefits to device owners.',
+      assignee: {
+        name: 'Lars van der Zee',
+        avatar: '/profile-img/lars-van-der-zee.png',
+      },
+      progress: 33,
+    },
+    {
+      id: '2',
+      title:
+        'Integrate all mandatory feedback from playtests into level design by the end of each sprint.',
+      assignee: {
+        name: 'Jürgen Schneider',
+        avatar: '/profile-img/profile.png',
+      },
+      progress: 66,
+    },
+    {
+      id: '3',
+      title:
+        'Scale the cross-platform entitlement engine to facilitate frictionless monetization and the automated provisioning of premium service tiers across the global device footprint.',
+      assignee: {
+        name: 'Amélie Martin',
+        avatar: '/profile-img/sarah-miller.png',
+      },
+      progress: 33,
+    },
+  ]
+
+  // Mock avatar options for face pile
+  const avatarOptions = [
+    { uid: '1', name: 'Nia Washington', url: '/profile-img/nia-washington.png' },
+    { uid: '2', name: 'Lars van der Zee', url: '/profile-img/lars-van-der-zee.png' },
+    { uid: '3', name: 'Kylie Davies', url: '/profile-img/kylie-davies.png' },
+    { uid: '4', name: 'Sarah Miller', url: '/profile-img/sarah-miller.png' },
+    { uid: '5', name: 'Profile', url: '/profile-img/profile.png' },
+  ]
+
+  // Mock achievements data - TODO: Replace with real data from API
+  const [achievements, setAchievements] = useState([
+    {
+      id: 1,
+      text: 'Lead a cross-functional project',
+      completed: true,
+      progress: null as 'not-started' | 'on-track' | 'off-track' | null,
+    },
+    {
+      id: 2,
+      text: 'Mentor a junior team member',
+      completed: false,
+      progress: null as 'not-started' | 'on-track' | 'off-track' | null,
+    },
+    {
+      id: 3,
+      text: 'Complete advanced leadership training',
+      completed: false,
+      progress: null as 'not-started' | 'on-track' | 'off-track' | null,
+    },
+  ])
+
+  const handleAchievementToggle = (id: number) => {
+    setAchievements((prev) =>
+      prev.map((achievement) =>
+        achievement.id === id
+          ? { ...achievement, completed: !achievement.completed, progress: null }
+          : achievement,
+      ),
+    )
+  }
+
+  const handleProgressChange = (id: number, progress: 'not-started' | 'on-track' | 'off-track') => {
+    setAchievements((prev) =>
+      prev.map((achievement) =>
+        achievement.id === id ? { ...achievement, progress } : achievement,
+      ),
+    )
+  }
 
   useEffect(() => {
     if (!list) {
@@ -253,46 +355,304 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
 
       {/* Actions Section */}
       <AnimatedSection delay={0.15}>
-        <div className="flex flex-col gap-0_5 items-start w-full">
-          {/* Title with collapse button */}
-          <div className="flex gap-0_75 items-center w-full">
-            <div className="flex items-center justify-center">
+        <CollapsibleSection
+          title={t('actions.title')}
+          open={isActionsOpen}
+          onToggle={setIsActionsOpen}
+        >
+          {actions.map((action, index) => (
+            <div
+              key={index}
+              className="border-b border-solid border-neutral-200 flex gap-0.625 h-3.5 items-center px-1 py-0.5 w-full last:border-b-0"
+            >
+              {/* Bullet point */}
+              <div className="size-0.375 rounded-full bg-neutral-1000 shrink-0" />
+
+              {/* Action text */}
+              <Typography variant="body" className="text-neutral-1000 shrink-0">
+                {action}
+              </Typography>
+            </div>
+          ))}
+        </CollapsibleSection>
+      </AnimatedSection>
+
+      {/* Achievements Section */}
+      <AnimatedSection delay={0.2}>
+        <CollapsibleSection
+          title={t('achievements.title')}
+          open={isAchievementsOpen}
+          onToggle={setIsAchievementsOpen}
+        >
+          {achievements.map((achievement) => (
+            <div
+              key={achievement.id}
+              className={cn(
+                'flex items-center p-1.5 rounded-1 border border-solid',
+                achievement.completed
+                  ? 'bg-extra-green-100 border-extra-green-200'
+                  : 'bg-neutral-0 border-neutral-200',
+              )}
+            >
+              {/* Content wrapper */}
+              <div className="flex items-center gap-0.5 flex-1 min-w-0">
+                {/* Checkbox */}
+                <label className="flex items-center gap-0.5 cursor-pointer flex-1 min-w-0">
+                  <input
+                    type="checkbox"
+                    checked={achievement.completed}
+                    onChange={() => handleAchievementToggle(achievement.id)}
+                    className="sr-only"
+                    aria-label={achievement.text}
+                  />
+                  <div
+                    className={cn(
+                      'shrink-0 size-1.5 rounded flex items-center justify-center transition-all',
+                      achievement.completed
+                        ? 'bg-extra-green-500'
+                        : 'bg-transparent border-2 border-neutral-600',
+                    )}
+                  >
+                    {achievement.completed && (
+                      <Check className="size-3 text-neutral-0" strokeWidth={3} />
+                    )}
+                  </div>
+                  <Typography variant="body" color="default" className="min-w-0">
+                    {achievement.text}
+                  </Typography>
+                </label>
+              </div>
+
+              {/* Progress Selector - Only show for non-completed achievements */}
+              {!achievement.completed && (
+                <div className="flex gap-0.25 bg-neutral-100 p-0.25 rounded-full shrink-0 ml-1.5">
+                  {(['not-started', 'on-track', 'off-track'] as const).map((progressOption) => {
+                    const isSelected = achievement.progress === progressOption
+                    const labels = {
+                      'not-started': t('achievements.progress.notStarted'),
+                      'on-track': t('achievements.progress.onTrack'),
+                      'off-track': t('achievements.progress.offTrack'),
+                    }
+                    const colors = {
+                      'not-started': {
+                        bg: 'bg-neutral-200',
+                        text: 'text-neutral-700',
+                      },
+                      'on-track': {
+                        bg: 'bg-extra-blue-100',
+                        text: 'text-extra-blue-600',
+                      },
+                      'off-track': {
+                        bg: 'bg-feedback-danger-100',
+                        text: 'text-feedback-danger-600',
+                      },
+                    }
+
+                    return (
+                      <button
+                        key={progressOption}
+                        onClick={() => handleProgressChange(achievement.id, progressOption)}
+                        className={cn(
+                          'px-1 py-0.5 rounded-full transition-all',
+                          isSelected
+                            ? cn(colors[progressOption].bg, colors[progressOption].text)
+                            : 'text-neutral-600',
+                        )}
+                      >
+                        <Typography
+                          variant="bodySmall"
+                          fontWeight="semibold"
+                          className="whitespace-nowrap"
+                        >
+                          {labels[progressOption]}
+                        </Typography>
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
+          ))}
+        </CollapsibleSection>
+      </AnimatedSection>
+
+      {/* Laddered Ambitions Section */}
+      <AnimatedSection delay={0.2}>
+        <div className="flex flex-col gap-1 w-full">
+          {/* Title + Filters */}
+          <div className="flex gap-1_5 h-3 items-end justify-end w-full">
+            <Typography variant="h6" fontWeight="semibold" className="flex-1">
+              {t('ladderedAmbitions.title')}
+            </Typography>
+            <div className="flex gap-1_5 items-center">
+              {/* Search Field */}
+              <SearchField
+                className="w-[280px]"
+                placeholder={t('ladderedAmbitions.searchPlaceholder')}
+                value={ladderedSearch}
+                onChange={setLadderedSearch}
+              />
+
+              {/* Avatar Filter */}
+              <AvatarSelect
+                options={avatarOptions}
+                selected={selectedAvatars}
+                onAvatarSelect={setSelectedAvatars}
+                showItems={5}
+              />
+
+              {/* View Toggle Icons */}
               <button
-                className="bg-neutral-200 flex items-center justify-center p-0_25 rounded-full hover:bg-neutral-300 transition-colors"
-                onClick={() => setIsActionsOpen(!isActionsOpen)}
-                aria-label={isActionsOpen ? t('actions.collapse') : t('actions.expand')}
+                aria-label="Grid view"
+                onClick={() => setViewMode('grid')}
+                className={cn(
+                  'flex items-center justify-center p-0_25 rounded-full transition-colors',
+                  viewMode === 'grid' ? 'bg-neutral-200' : 'hover:bg-neutral-100',
+                )}
               >
-                <ChevronUp
-                  className={`size-1_5 text-neutral-1000 transition-transform duration-300 ${
-                    isActionsOpen ? 'rotate-180' : ''
-                  }`}
-                />
+                <Grid2x2 className="size-1_5 text-neutral-1000" />
+              </button>
+              <button
+                aria-label="List view"
+                onClick={() => setViewMode('list')}
+                className={cn(
+                  'flex items-center justify-center p-0_25 rounded-full transition-colors',
+                  viewMode === 'list' ? 'bg-neutral-200' : 'hover:bg-neutral-100',
+                )}
+              >
+                <List className="size-1_5 text-neutral-1000" />
               </button>
             </div>
-            <Typography variant="h6" className="text-neutral-1000">
-              {t('actions.title')}
-            </Typography>
           </div>
 
-          {/* Actions list */}
-          {isActionsOpen && (
-            <div className="flex flex-col items-start w-full">
-              {actions.map((action, index) => (
+          {/* Laddered Ambitions - Grid or List View */}
+          {viewMode === 'grid' ? (
+            <div className="flex gap-1 w-full">
+              {ladderedAmbitions.map((ambition) => (
                 <div
-                  key={index}
-                  className="border-b border-solid border-neutral-200 flex gap-0_625 h-3_5 items-center px-1 py-0_5 w-full"
+                  key={ambition.id}
+                  className="flex-1 flex flex-col gap-1 bg-neutral-0 border border-neutral-300 rounded-1_5 p-1_5"
                 >
-                  {/* Bullet point */}
-                  <div className="size-0_375 rounded-full bg-neutral-1000 shrink-0" />
+                  {/* Title */}
+                  <Typography
+                    variant="body"
+                    className="h-3 overflow-hidden text-ellipsis line-clamp-2"
+                  >
+                    {ambition.title}
+                  </Typography>
 
-                  {/* Action text */}
-                  <Typography variant="body" className="text-neutral-1000 shrink-0">
-                    {action}
+                  {/* Employee + Progress */}
+                  <div className="flex gap-1 h-[42px] items-center w-full">
+                    {/* Employee Info */}
+                    <div className="flex-1 flex gap-1 h-2_5 items-center min-w-0">
+                      <div className="relative size-2_5 rounded-full shrink-0 overflow-hidden">
+                        <Image
+                          src={ambition.assignee.avatar}
+                          alt={ambition.assignee.name}
+                          width={40}
+                          height={40}
+                          className="object-cover"
+                        />
+                      </div>
+                      <Typography
+                        variant="body"
+                        fontWeight="bold"
+                        className="overflow-hidden text-ellipsis whitespace-nowrap"
+                      >
+                        {ambition.assignee.name}
+                      </Typography>
+                    </div>
+
+                    {/* Progress Bar */}
+                    <div className="flex flex-col gap-0_125 items-start justify-center shrink-0">
+                      <Typography
+                        variant="bodySmall"
+                        fontWeight="bold"
+                        className="text-right w-[100px]"
+                      >
+                        {ambition.progress}%
+                      </Typography>
+                      <div className="relative w-[100px] h-0_5 rounded-full bg-neutral-200 overflow-hidden">
+                        <div
+                          className="absolute top-0 left-0 h-full rounded-full bg-[#01a79a]"
+                          style={{ width: `${ambition.progress}%` }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col w-full bg-neutral-0 border border-neutral-300 rounded-1_5 overflow-hidden">
+              {/* Table Header */}
+              <div className="grid grid-cols-[auto_1fr_auto] gap-1_5 px-1_5 py-1 bg-neutral-100 border-b border-neutral-300">
+                <Typography variant="bodySmall" fontWeight="bold" className="uppercase">
+                  NAME
+                </Typography>
+                <Typography variant="bodySmall" fontWeight="bold" className="uppercase">
+                  AMBITION
+                </Typography>
+                <Typography variant="bodySmall" fontWeight="bold" className="uppercase">
+                  STATUS
+                </Typography>
+              </div>
+
+              {/* Table Rows */}
+              {ladderedAmbitions.map((ambition, index) => (
+                <div
+                  key={ambition.id}
+                  className={cn(
+                    'grid grid-cols-[auto_1fr_auto] gap-1_5 px-1_5 py-1 items-center',
+                    index !== ladderedAmbitions.length - 1 && 'border-b border-neutral-300',
+                  )}
+                >
+                  {/* Name column with avatar */}
+                  <div className="flex gap-1 items-center">
+                    <div className="relative size-2_5 rounded-full shrink-0 overflow-hidden">
+                      <Image
+                        src={ambition.assignee.avatar}
+                        alt={ambition.assignee.name}
+                        width={40}
+                        height={40}
+                        className="object-cover"
+                      />
+                    </div>
+                    <Typography variant="body" fontWeight="bold">
+                      {ambition.assignee.name}
+                    </Typography>
+                  </div>
+
+                  {/* Ambition column */}
+                  <Typography variant="body">{ambition.title}</Typography>
+
+                  {/* Status column */}
+                  <Typography variant="body" className="text-extra-blue-600">
+                    Draft
                   </Typography>
                 </div>
               ))}
             </div>
           )}
+
+          {/* Actions Row */}
+          <div className="flex h-2_5 items-center justify-between w-full">
+            {/* Add Button */}
+            <Button
+              variant="plain"
+              className="flex gap-0_5 h-full items-center justify-center px-0_75 py-0_25 rounded-xlarge"
+            >
+              <Plus className="size-1_5" />
+              <Typography variant="bodySmall" fontWeight="semibold">
+                {t('ladderedAmbitions.addButton')}
+              </Typography>
+            </Button>
+
+            {/* Total Count */}
+            <Typography variant="body">
+              {t('ladderedAmbitions.totalAmbitions', { count: ladderedAmbitions.length })}
+            </Typography>
+          </div>
         </div>
       </AnimatedSection>
     </div>

@@ -117,6 +117,24 @@
     "progress": {
       "completed": "Completed",
       "fullLaddering": "Full Laddering"
+    },
+    "achievements": {
+      "title": "Achievements",
+      "collapse": "Collapse achievements",
+      "expand": "Expand achievements",
+      "progress": {
+        "notStarted": "Not started",
+        "onTrack": "On Track",
+        "offTrack": "Off Track"
+      }
+    },
+    "ladderedAmbitions": {
+      "title": "Laddered Ambitions",
+      "searchPlaceholder": "Search...",
+      "addButton": "Add Laddered Ambition",
+      "totalAmbitions": "{count} total Ambitions",
+      "previousPage": "Previous page",
+      "nextPage": "Next page"
     }
   }
 }
