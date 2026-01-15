@@ -1,9 +1,9 @@
 'use client'
 
-import { use, useEffect } from 'react'
+import { use, useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { MoreHorizontal, CornerDownRight, Target, Info } from 'lucide-react'
+import { MoreHorizontal, CornerDownRight, Target, Info, ChevronUp } from 'lucide-react'
 import { Breadcrumb } from '@/components/ui/molecules/Breadcrumb'
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { Typography } from '@/components/ui/foundations/Typography'
@@ -25,6 +25,9 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   const t = useTranslations('AmbitionDetail')
   const { id } = use(params)
   const { list, fetchList, selected, selectAmbition } = useAmbitionsStore()
+
+  // State for collapsible sections - must be before early returns
+  const [isActionsOpen, setIsActionsOpen] = useState(true)
 
   useEffect(() => {
     if (!list) {
@@ -64,6 +67,13 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   const showApprovalActions = status === 'awaiting_approval'
   const showSendForApproval = status === 'draft'
   const showAnyActions = showApprovalActions || showSendForApproval
+
+  // Mock actions data - TODO: replace with real data
+  const actions = [
+    'Launch exclusive cross-platform content bundles that leverage internal media production assets to drive deeper user engagement within the ecosystem.',
+    'Deploy unified loyalty programs that reward users for engagement across both physical and digital products while ensuring scalable backend integration.',
+    'Enhance the global distribution infrastructure to ensure low-latency delivery of high-fidelity digital media across all regional server nodes efficiently.',
+  ]
 
   const breadcrumbItems = [
     { label: t('breadcrumb.ambitions'), href: ROUTES.GAME_CHANGERS_AMBITIONS },
@@ -238,6 +248,51 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
               </div>
             </div>
           </div>
+        </div>
+      </AnimatedSection>
+
+      {/* Actions Section */}
+      <AnimatedSection delay={0.15}>
+        <div className="flex flex-col gap-0_5 items-start w-full">
+          {/* Title with collapse button */}
+          <div className="flex gap-0_75 items-center w-full">
+            <div className="flex items-center justify-center">
+              <button
+                className="bg-neutral-200 flex items-center justify-center p-0_25 rounded-full hover:bg-neutral-300 transition-colors"
+                onClick={() => setIsActionsOpen(!isActionsOpen)}
+                aria-label={isActionsOpen ? t('actions.collapse') : t('actions.expand')}
+              >
+                <ChevronUp
+                  className={`size-1_5 text-neutral-1000 transition-transform duration-300 ${
+                    isActionsOpen ? 'rotate-180' : ''
+                  }`}
+                />
+              </button>
+            </div>
+            <Typography variant="h6" className="text-neutral-1000">
+              {t('actions.title')}
+            </Typography>
+          </div>
+
+          {/* Actions list */}
+          {isActionsOpen && (
+            <div className="flex flex-col items-start w-full">
+              {actions.map((action, index) => (
+                <div
+                  key={index}
+                  className="border-b border-solid border-neutral-200 flex gap-0_625 h-3_5 items-center px-1 py-0_5 w-full"
+                >
+                  {/* Bullet point */}
+                  <div className="size-0_375 rounded-full bg-neutral-1000 shrink-0" />
+
+                  {/* Action text */}
+                  <Typography variant="body" className="text-neutral-1000 shrink-0">
+                    {action}
+                  </Typography>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </AnimatedSection>
     </div>

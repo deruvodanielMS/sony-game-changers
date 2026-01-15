@@ -103,7 +103,10 @@
       "sendForApproval": "Send for Approval",
       "sendBack": "Send Back",
       "approve": "Approve",
-      "moreOptions": "More options"
+      "moreOptions": "More options",
+      "title": "Actions",
+      "collapse": "Collapse actions",
+      "expand": "Expand actions"
     },
     "metadata": {
       "createdBy": "Created by:",
