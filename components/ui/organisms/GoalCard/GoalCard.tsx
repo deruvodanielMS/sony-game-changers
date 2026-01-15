@@ -5,6 +5,7 @@ import { m } from 'framer-motion'
 import Image from 'next/image'
 import { Collapsible } from 'radix-ui'
 import { ChevronDown, Shrub } from 'lucide-react'
+import { Link } from '@/i18n/navigation'
 import { Card } from '@/components/ui/atoms/Card/Card'
 import { GoalCardProps } from './GoalCard.types'
 import { CornerDownRight, Plus, BriefcaseBusiness, Sprout } from 'lucide-react'
@@ -16,6 +17,7 @@ import { Button } from '../../atoms/Button'
 import { useTranslations } from 'next-intl'
 import { AMBITION_TYPES, AmbitionStatus } from '@/domain/ambition'
 import { LadderingModal } from '@/components/ui/organisms/LadderingModal'
+import { ROUTES } from '@/common/routes'
 
 const GoalTypeIcons = {
   [AMBITION_TYPES.BUSINESS]: <Sprout width={20} />,
@@ -43,7 +45,7 @@ export function GoalCard({
   const [isLadderingModalOpen, setIsLadderingModalOpen] = useState(false)
   const t = useTranslations('GoalCard')
 
-  const { description, title, avatarUrl, ambitionType, status, userName } = goal
+  const { id, description, title, avatarUrl, ambitionType, status, userName } = goal
   const hasChildrenGoals = ladderGoals.length
 
   const handleOpenLadderingModal = () => {
@@ -116,9 +118,12 @@ export function GoalCard({
                     </div>
                   )}
                 </div>
-                <Typography className="flex-1 max-sm:order-last max-sm:basis-full" variant="h6">
-                  {title}
-                </Typography>
+                <Link
+                  href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
+                  className="flex-1 max-sm:order-last max-sm:basis-full hover:text-accent-primary transition-colors"
+                >
+                  <Typography variant="h6">{title}</Typography>
+                </Link>
                 <GoalStatus status={status as AmbitionStatus} className="shrink-0 font-bold" />
               </div>
             </div>
