@@ -144,5 +144,9 @@
       "created": "a créé l'ambition en tant que",
       "theAmbition": "l'ambition"
     }
+  },
+  "CommentInput": {
+    "placeholder": "Ajouter un commentaire...",
+    "submitHint": "Appuyez sur Ctrl+Entrée pour soumettre"
   }
 }

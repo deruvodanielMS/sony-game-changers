@@ -144,5 +144,9 @@
       "created": "created the Ambition as",
       "theAmbition": "the Ambition"
     }
+  },
+  "CommentInput": {
+    "placeholder": "Add a comment...",
+    "submitHint": "Press Ctrl+Enter to submit"
   }
 }
