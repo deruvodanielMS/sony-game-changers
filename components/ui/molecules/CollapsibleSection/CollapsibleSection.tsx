@@ -1,20 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import * as Accordion from '@radix-ui/react-accordion'
 import { ChevronUp } from 'lucide-react'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { cn } from '@/utils/cn'
 import type { CollapsibleSectionProps } from './CollapsibleSection.types'
 
 /**
- * CollapsibleSection - Reusable accordion component for expandable content sections
+ * CollapsibleSection - Reusable accordion component using Radix UI
  *
  * Features:
- * - Controlled or uncontrolled collapse state
- * - Smooth rotation animation on chevron icon
- * - Customizable title and content
- * - Accessible with ARIA attributes
- * - Consistent styling with design system
+ * - Built on Radix UI Accordion for accessibility
+ * - Keyboard navigation support
+ * - Smooth animations
+ * - Controlled or uncontrolled state
+ * - ARIA attributes automatically handled
  *
  * @example
  * ```tsx
@@ -31,47 +31,41 @@ export function CollapsibleSection({
   onToggle,
   className,
 }: CollapsibleSectionProps) {
-  const [internalOpen, setInternalOpen] = useState(defaultOpen)
+  // Convert boolean to Accordion value format
+  const value = open !== undefined ? (open ? 'item' : '') : undefined
+  const defaultValue = defaultOpen ? 'item' : ''
 
-  // Use controlled state if provided, otherwise use internal state
-  const isOpen = open !== undefined ? open : internalOpen
-
-  const handleToggle = () => {
+  const handleValueChange = (newValue: string) => {
     if (onToggle) {
-      onToggle(!isOpen)
-    } else {
-      setInternalOpen(!internalOpen)
+      onToggle(newValue === 'item')
     }
   }
 
   return (
-    <div className={cn('flex flex-col gap-1 items-start w-full', className)}>
-      {/* Header with chevron and title */}
-      <button
-        onClick={handleToggle}
-        className="flex gap-0.75 items-center w-full"
-        aria-expanded={isOpen}
-        aria-controls={`collapsible-content-${title}`}
-      >
-        <div
-          className={cn(
-            'flex items-center justify-center size-2 transition-transform',
-            !isOpen && 'rotate-180 scale-y-[-100%]',
-          )}
-        >
-          <ChevronUp className="size-1.5 text-neutral-1000" aria-hidden="true" />
-        </div>
-        <Typography variant="h6" fontWeight="semibold" color="default">
-          {title}
-        </Typography>
-      </button>
+    <Accordion.Root
+      type="single"
+      collapsible
+      value={value}
+      defaultValue={defaultValue}
+      onValueChange={handleValueChange}
+      className={cn('flex flex-col gap-1 items-start w-full', className)}
+    >
+      <Accordion.Item value="item" className="w-full">
+        <Accordion.Header className="w-full">
+          <Accordion.Trigger className="flex gap-0.75 items-center w-full group">
+            <div className="flex items-center justify-center size-2 transition-transform group-data-[state=closed]:rotate-180 group-data-[state=closed]:scale-y-[-100%]">
+              <ChevronUp className="size-1.5 text-neutral-1000" aria-hidden="true" />
+            </div>
+            <Typography variant="h6" fontWeight="semibold" color="default">
+              {title}
+            </Typography>
+          </Accordion.Trigger>
+        </Accordion.Header>
 
-      {/* Content */}
-      {isOpen && (
-        <div id={`collapsible-content-${title}`} className="flex flex-col gap-0.5 w-full">
+        <Accordion.Content className="flex flex-col gap-0.5 w-full overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
           {children}
-        </div>
-      )}
-    </div>
+        </Accordion.Content>
+      </Accordion.Item>
+    </Accordion.Root>
   )
 }
