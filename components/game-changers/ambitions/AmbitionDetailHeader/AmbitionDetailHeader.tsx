@@ -1,21 +1,16 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Target, Info, Sprout, BriefcaseBusiness, Shrub } from 'lucide-react'
+import { Info } from 'lucide-react'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { ProgressRing } from '@/components/ui/atoms/ProgressRing'
 import { Avatar } from '@/components/ui/atoms/Avatar'
-import { AMBITION_TYPES } from '@/domain/ambition'
+import { TypeIcon } from '@/components/ui/molecules/TypeIcon'
+import { MetadataDisplay } from '@/components/ui/molecules/MetadataDisplay'
 import { cn } from '@/utils/cn'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
 import type { AmbitionDetailHeaderProps } from './AmbitionDetailHeader.types'
-
-const GoalTypeIcons = {
-  [AMBITION_TYPES.BUSINESS]: <Sprout className="size-1.5 text-neutral-0" />,
-  [AMBITION_TYPES.MANAGER_EFFECTIVENESS]: <BriefcaseBusiness className="size-1.5 text-neutral-0" />,
-  [AMBITION_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT]: <Shrub className="size-1.5 text-neutral-0" />,
-}
 
 export function AmbitionDetailHeader({
   title,
@@ -45,13 +40,7 @@ export function AmbitionDetailHeader({
         {/* Title and Icon */}
         <div className={cn('flex gap-1 items-center w-full', isMobile ? 'h-auto' : 'h-4')}>
           {/* Goal Type Icon with gradient background */}
-          {ambitionType && (
-            <div className="bg-gradient-to-l from-[#5577f4] to-[#d061ff] flex items-center justify-center p-0.625 rounded-full shrink-0 size-3">
-              {GoalTypeIcons[ambitionType as keyof typeof GoalTypeIcons] || (
-                <Target className="size-1.5 text-neutral-0" />
-              )}
-            </div>
-          )}
+          {ambitionType && <TypeIcon type={ambitionType} size="md" />}
 
           {/* Goal Title */}
           <Typography
@@ -71,17 +60,16 @@ export function AmbitionDetailHeader({
           )}
         >
           {/* Created by */}
-          <div className="flex gap-0.5 items-center justify-end shrink-0">
-            <Avatar src={avatarUrl} alt={userName} size="sm" />
-            <Typography variant="bodySmall" className="text-neutral-600">
-              {t('metadata.createdBy')} <span className="font-bold">{userName}</span>{' '}
-              {createdDate && (
-                <>
-                  {t('metadata.on')} <span className="font-bold">{createdDate}</span>
-                </>
-              )}
-            </Typography>
-          </div>
+          <MetadataDisplay
+            userName={userName}
+            avatarUrl={avatarUrl}
+            createdDate={createdDate}
+            updatedDate={updatedDate}
+            size={isMobile ? 'sm' : 'md'}
+            createdByLabel={t('metadata.createdBy')}
+            onLabel={t('metadata.on')}
+            lastUpdateLabel={t('metadata.lastUpdate')}
+          />
 
           {/* Divider */}
           {!isMobile && <div className="bg-neutral-300 h-1 w-px shrink-0" />}
@@ -93,22 +81,6 @@ export function AmbitionDetailHeader({
               {t('metadata.assignedTo')} <span className="font-bold">{userName}</span>
             </Typography>
           </div>
-
-          {/* Divider */}
-          {!isMobile && <div className="bg-neutral-300 h-1 w-px shrink-0" />}
-
-          {/* Last Update */}
-          {updatedDate && (
-            <Typography
-              variant="bodySmall"
-              className={cn(
-                'text-neutral-600 shrink-0',
-                !isMobile && 'overflow-hidden text-ellipsis',
-              )}
-            >
-              {t('metadata.lastUpdate')} <span className="font-bold">{updatedDate}</span>
-            </Typography>
-          )}
         </div>
       </div>
 
