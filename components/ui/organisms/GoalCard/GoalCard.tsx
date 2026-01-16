@@ -4,26 +4,20 @@ import { useState } from 'react'
 import { m } from 'framer-motion'
 import Image from 'next/image'
 import { Collapsible } from 'radix-ui'
-import { ChevronDown, Shrub } from 'lucide-react'
+import { ChevronDown, CornerDownRight, Plus } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { Card } from '@/components/ui/atoms/Card/Card'
 import { GoalCardProps } from './GoalCard.types'
-import { CornerDownRight, Plus, BriefcaseBusiness, Sprout } from 'lucide-react'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { generateInitialsAvatarSrc } from '@/utils/generateInitialsAvatar'
 import { GoalStatus } from '@/components/ui/molecules/GoalStatus/GoalStatus'
+import { TypeIcon } from '@/components/ui/molecules/TypeIcon'
 import { cn } from '@/utils/cn'
 import { Button } from '../../atoms/Button'
 import { useTranslations } from 'next-intl'
-import { AMBITION_TYPES, AmbitionStatus } from '@/domain/ambition'
+import { AmbitionStatus } from '@/domain/ambition'
 import { LadderingModal } from '@/components/ui/organisms/LadderingModal'
 import { ROUTES } from '@/common/routes'
-
-const GoalTypeIcons = {
-  [AMBITION_TYPES.BUSINESS]: <Sprout width={20} />,
-  [AMBITION_TYPES.MANAGER_EFFECTIVENESS]: <BriefcaseBusiness width={20} />,
-  [AMBITION_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT]: <Shrub width={20} />,
-}
 
 const cardHoverVariants = {
   rest: { scale: 1 },
@@ -113,8 +107,8 @@ export function GoalCard({
                     className="rounded-full"
                   />
                   {ambitionType && (
-                    <div className="absolute top-0 -right-0_25 w-12 h-12 bg-neutral-100 rounded-full text-neutral-1000 flex items-center justify-center">
-                      {GoalTypeIcons[ambitionType as keyof typeof GoalTypeIcons]}
+                    <div className="absolute top-0 -right-0_25 w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center">
+                      <TypeIcon type={ambitionType} size="sm" />
                     </div>
                   )}
                 </div>
