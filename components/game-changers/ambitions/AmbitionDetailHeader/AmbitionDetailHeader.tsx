@@ -1,11 +1,10 @@
 'use client'
 
-import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { Target, Info, Sprout, BriefcaseBusiness, Shrub } from 'lucide-react'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { ProgressRing } from '@/components/ui/atoms/ProgressRing'
-import { generateInitialsAvatarSrc } from '@/utils/generateInitialsAvatar'
+import { Avatar } from '@/components/ui/atoms/Avatar'
 import { AMBITION_TYPES } from '@/domain/ambition'
 import { cn } from '@/utils/cn'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -73,13 +72,7 @@ export function AmbitionDetailHeader({
         >
           {/* Created by */}
           <div className="flex gap-0.5 items-center justify-end shrink-0">
-            <Image
-              src={avatarUrl || generateInitialsAvatarSrc(userName, { size: 24 })}
-              alt={userName}
-              width={24}
-              height={24}
-              className="size-1.5 rounded-full"
-            />
+            <Avatar src={avatarUrl} alt={userName} size="sm" />
             <Typography variant="bodySmall" className="text-neutral-600">
               {t('metadata.createdBy')} <span className="font-bold">{userName}</span>{' '}
               {createdDate && (
@@ -95,13 +88,7 @@ export function AmbitionDetailHeader({
 
           {/* Assigned to */}
           <div className="flex gap-0.5 items-center justify-end shrink-0">
-            <Image
-              src={avatarUrl || generateInitialsAvatarSrc(userName, { size: 24 })}
-              alt={userName}
-              width={24}
-              height={24}
-              className="size-1.5 rounded-full"
-            />
+            <Avatar src={avatarUrl} alt={userName} size="sm" />
             <Typography variant="bodySmall" className="text-neutral-600">
               {t('metadata.assignedTo')} <span className="font-bold">{userName}</span>
             </Typography>

@@ -1,10 +1,11 @@
 'use client'
 
-import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { m } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Typography } from '@/components/ui/foundations/Typography'
+import { Badge } from '@/components/ui/atoms/Badge'
+import { Avatar } from '@/components/ui/atoms/Avatar'
 import { cn } from '@/utils/cn'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
@@ -25,26 +26,20 @@ const listVariants = {
   },
 }
 
-function StatusTag({
+function StatusBadge({
   status,
   variant = 'draft',
 }: {
   status: string
   variant?: 'draft' | 'awaiting-approval' | 'completed'
 }) {
-  const colors = {
-    draft: 'bg-extra-blue-100 text-extra-blue-600',
-    'awaiting-approval': 'bg-extra-pink-100 text-extra-pink-600',
-    completed: 'bg-feedback-success-100 text-feedback-success-600',
+  const badgeVariantMap = {
+    draft: 'info' as const,
+    'awaiting-approval': 'primary' as const,
+    completed: 'success' as const,
   }
 
-  return (
-    <div className={cn('px-0.5 py-0.125 rounded-default', colors[variant])}>
-      <Typography variant="body" fontWeight="bold">
-        {status}
-      </Typography>
-    </div>
-  )
+  return <Badge variant={badgeVariantMap[variant]}>{status}</Badge>
 }
 
 function ActivityContent({ activity }: { activity: ActivityItem }) {
@@ -67,9 +62,9 @@ function ActivityContent({ activity }: { activity: ActivityItem }) {
         <>
           <Typography variant="body">{t('changedStatus')}</Typography>
           <div className="flex gap-0.5 items-center flex-wrap">
-            <StatusTag status={activity.from || ''} variant="draft" />
+            <StatusBadge status={activity.from || ''} variant="draft" />
             <ArrowRight className="size-1 text-neutral-1000" />
-            <StatusTag status={activity.to || ''} variant="awaiting-approval" />
+            <StatusBadge status={activity.to || ''} variant="awaiting-approval" />
           </div>
         </>
       )
@@ -78,7 +73,7 @@ function ActivityContent({ activity }: { activity: ActivityItem }) {
       return (
         <>
           <Typography variant="body">{t('created')}</Typography>
-          <StatusTag status={activity.status || ''} variant="draft" />
+          <StatusBadge status={activity.status || ''} variant="draft" />
         </>
       )
 
@@ -100,15 +95,7 @@ export function AmbitionActivityFeed({
     <div className={cn('flex flex-col w-full', isMobile ? 'gap-2' : 'gap-2.5', className)}>
       {/* Add Comment */}
       <div className={cn('flex items-start w-full', isMobile ? 'gap-0.5' : 'gap-1')}>
-        <div className="relative size-2 rounded-full shrink-0 overflow-hidden">
-          <Image
-            src={currentUserAvatar || '/profile-img/profile.png'}
-            alt="Current user"
-            width={32}
-            height={32}
-            className="object-cover"
-          />
-        </div>
+        <Avatar src={currentUserAvatar} alt="Current user" size="md" />
         <div className="flex-1">
           <textarea
             placeholder={t('addCommentPlaceholder')}
@@ -142,15 +129,7 @@ export function AmbitionActivityFeed({
             transition={{ duration: 0.3 }}
             className={cn('flex items-start w-full', isMobile ? 'gap-0.5' : 'gap-1')}
           >
-            <div className="relative size-2 rounded-full shrink-0 overflow-hidden">
-              <Image
-                src={activity.user.avatar}
-                alt={activity.user.name}
-                width={32}
-                height={32}
-                className="object-cover"
-              />
-            </div>
+            <Avatar src={activity.user.avatar} alt={activity.user.name} size="md" />
             <div className={cn('flex flex-col flex-1', isMobile ? 'gap-0.125' : 'gap-0.25')}>
               <div
                 className={cn(

@@ -3,9 +3,9 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { m } from 'framer-motion'
-import { Check } from 'lucide-react'
 import { CollapsibleSection } from '@/components/ui/molecules/CollapsibleSection'
 import { Typography } from '@/components/ui/foundations/Typography'
+import { Checkbox } from '@/components/ui/atoms/Checkbox'
 import { cn } from '@/utils/cn'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
@@ -74,25 +74,11 @@ export function AmbitionAchievements({
             <div className={cn('flex items-center gap-0.5 flex-1 min-w-0', isMobile && 'w-full')}>
               {/* Checkbox */}
               <label className="flex items-center gap-0.5 cursor-pointer flex-1 min-w-0">
-                <input
-                  type="checkbox"
+                <Checkbox
                   checked={achievement.completed}
-                  onChange={() => handleAchievementToggle(achievement.id)}
-                  className="sr-only"
+                  onCheckedChange={() => handleAchievementToggle(achievement.id)}
                   aria-label={achievement.text}
                 />
-                <div
-                  className={cn(
-                    'shrink-0 size-1.5 rounded flex items-center justify-center transition-all',
-                    achievement.completed
-                      ? 'bg-extra-green-500'
-                      : 'bg-transparent border-2 border-neutral-600',
-                  )}
-                >
-                  {achievement.completed && (
-                    <Check className="size-1.5 text-neutral-0" strokeWidth={3} />
-                  )}
-                </div>
                 <Typography variant="body" color="default" className="min-w-0">
                   {achievement.text}
                 </Typography>
