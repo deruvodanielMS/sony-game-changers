@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { m } from 'framer-motion'
-import { Collapsible } from 'radix-ui'
 import { ChevronDown, Plus } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { Card } from '@/components/ui/atoms/Card/Card'
@@ -12,6 +11,7 @@ import { Avatar } from '@/components/ui/atoms/Avatar'
 import { GoalStatus } from '@/components/ui/molecules/GoalStatus/GoalStatus'
 import { TypeIcon } from '@/components/ui/molecules/TypeIcon'
 import { LadderGoal } from '@/components/ui/molecules/LadderGoal'
+import { CollapsibleSection } from '@/components/ui/molecules/CollapsibleSection'
 import { cn } from '@/utils/cn'
 import { Button } from '../../atoms/Button'
 import { useTranslations } from 'next-intl'
@@ -22,11 +22,6 @@ import { ROUTES } from '@/common/routes'
 const cardHoverVariants = {
   rest: { scale: 1 },
   hover: { scale: 1.01 },
-}
-
-const collapsibleContentVariants = {
-  collapsed: { opacity: 0, height: 0 },
-  expanded: { opacity: 1, height: 'auto' },
 }
 
 export function GoalCard({
@@ -60,74 +55,82 @@ export function GoalCard({
     >
       <Card data-testid={dataTestId} className="flex flex-col gap-1_5 items-stretch relative">
         {description && <LadderGoal text={description} onClick={handleOpenLadderingModal} />}
-        <Collapsible.Root open={open} onOpenChange={setOpen}>
-          <Collapsible.Trigger asChild disabled={!hasChildrenGoals}>
-            <div className={cn('flex items-center gap-0_5', hasChildrenGoals && 'cursor-pointer')}>
-              {!!hasChildrenGoals && (
+
+        {hasChildrenGoals ? (
+          <CollapsibleSection
+            defaultOpen={false}
+            open={open}
+            onToggle={setOpen}
+            contentClassName="ml-2 pl-0_5 gap-1 pt-1"
+            renderTrigger={(isOpen) => (
+              <div className="flex items-center gap-0_5 cursor-pointer">
                 <button className="IconButton cursor-pointer">
                   <ChevronDown
                     width={32}
                     className={cn(
                       'grow-0 shrink-0 transition-transform duration-300',
-                      open && 'rotate-180',
+                      isOpen && 'rotate-180',
                     )}
                   />
                 </button>
-              )}
-              <div
-                className={cn(
-                  'w-full flex gap-1 items-center max-sm:flex-wrap',
-                  !hasChildrenGoals ? 'ml-3' : '',
-                )}
-              >
-                <div
-                  className="relative shrink-0"
-                  style={{ width: ambitionType ? '72px' : '48px' }}
-                >
-                  <Avatar src={avatarUrl} alt={userName} size="lg" />
-                  {ambitionType && (
-                    <div className="absolute top-0 -right-0_25">
-                      <TypeIcon type={ambitionType} variant="badge" />
-                    </div>
-                  )}
-                </div>
-                <Link
-                  href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
-                  className="flex-1 max-sm:order-last max-sm:basis-full hover:text-accent-primary transition-colors"
-                >
-                  <Typography variant="h6">{title}</Typography>
-                </Link>
-                <GoalStatus status={status as AmbitionStatus} className="shrink-0 font-bold" />
-              </div>
-            </div>
-          </Collapsible.Trigger>
-
-          <Collapsible.Content className="overflow-hidden" asChild>
-            <m.div
-              layout
-              variants={collapsibleContentVariants}
-              initial="collapsed"
-              animate="expanded"
-              exit="collapsed"
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="ml-2 pl-0_5 flex flex-col gap-1 pt-1"
-            >
-              {ladderGoals.map((ladderGoal) => (
-                <LadderGoal key={ladderGoal.id} size="small" className="max-sm:flex-wrap">
-                  <Avatar src={ladderGoal.avatarUrl} alt={ladderGoal.userName} size="lg" />
-                  <Typography
-                    className="grow-1 basis-1 max-sm:order-last max-sm:basis-full max-sm:border-b max-sm:border-neutral-300 max-sm:pb-1"
-                    color="neutral600"
-                    variant="body"
+                <div className="w-full flex gap-1 items-center max-sm:flex-wrap">
+                  <div
+                    className="relative shrink-0"
+                    style={{ width: ambitionType ? '72px' : '48px' }}
                   >
-                    {ladderGoal.title}
-                  </Typography>
-                  <GoalStatus status={ladderGoal.status as AmbitionStatus} className="grow-0" />
-                </LadderGoal>
-              ))}
-            </m.div>
-          </Collapsible.Content>
-        </Collapsible.Root>
+                    <Avatar src={avatarUrl} alt={userName} size="lg" />
+                    {ambitionType && (
+                      <div className="absolute top-0 -right-0_25">
+                        <TypeIcon type={ambitionType} variant="badge" />
+                      </div>
+                    )}
+                  </div>
+                  <Link
+                    href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
+                    className="flex-1 max-sm:order-last max-sm:basis-full hover:text-accent-primary transition-colors"
+                  >
+                    <Typography variant="h6">{title}</Typography>
+                  </Link>
+                  <GoalStatus status={status as AmbitionStatus} className="shrink-0 font-bold" />
+                </div>
+              </div>
+            )}
+          >
+            {ladderGoals.map((ladderGoal) => (
+              <LadderGoal key={ladderGoal.id} size="small" className="max-sm:flex-wrap">
+                <Avatar src={ladderGoal.avatarUrl} alt={ladderGoal.userName} size="lg" />
+                <Typography
+                  className="grow-1 basis-1 max-sm:order-last max-sm:basis-full max-sm:border-b max-sm:border-neutral-300 max-sm:pb-1"
+                  color="neutral600"
+                  variant="body"
+                >
+                  {ladderGoal.title}
+                </Typography>
+                <GoalStatus status={ladderGoal.status as AmbitionStatus} className="grow-0" />
+              </LadderGoal>
+            ))}
+          </CollapsibleSection>
+        ) : (
+          <div className="flex items-center gap-0_5">
+            <div className="ml-3 w-full flex gap-1 items-center max-sm:flex-wrap">
+              <div className="relative shrink-0" style={{ width: ambitionType ? '72px' : '48px' }}>
+                <Avatar src={avatarUrl} alt={userName} size="lg" />
+                {ambitionType && (
+                  <div className="absolute top-0 -right-0_25">
+                    <TypeIcon type={ambitionType} variant="badge" />
+                  </div>
+                )}
+              </div>
+              <Link
+                href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
+                className="flex-1 max-sm:order-last max-sm:basis-full hover:text-accent-primary transition-colors"
+              >
+                <Typography variant="h6">{title}</Typography>
+              </Link>
+              <GoalStatus status={status as AmbitionStatus} className="shrink-0 font-bold" />
+            </div>
+          </div>
+        )}
         {(allowAddChildrenGoals || !!hasChildrenGoals) && (
           <div
             className={cn(

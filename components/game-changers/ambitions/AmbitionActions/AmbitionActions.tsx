@@ -1,43 +1,33 @@
 'use client'
 
-import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { CollapsibleSection } from '@/components/ui/molecules/CollapsibleSection'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { cn } from '@/utils/cn'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { BREAKPOINTS } from '@/common/breakpoints'
 import type { AmbitionActionsProps } from './AmbitionActions.types'
 
 export function AmbitionActions({ actions, defaultOpen = true, className }: AmbitionActionsProps) {
   const t = useTranslations('AmbitionDetail.actions')
-  const isMobile = !useMediaQuery(BREAKPOINTS.md)
-  const [isOpen, setIsOpen] = useState(defaultOpen)
 
   return (
-    <div className={className}>
-      <CollapsibleSection title={t('title')} open={isOpen} onToggle={setIsOpen}>
-        {actions.map((action, index) => (
+    <CollapsibleSection title={t('title')} defaultOpen={defaultOpen} className={className}>
+      {actions.map((action, index) => (
+        <div
+          key={index}
+          className="border-b border-neutral-200 flex items-start gap-1 w-full last:border-b-0 py-1 pl-0_5"
+        >
+          {/* Bullet point - 6px circle */}
           <div
-            key={index}
-            className={cn(
-              'border-b border-solid border-neutral-200 flex items-center w-full last:border-b-0',
-              isMobile ? 'gap-0.5 px-0.75 py-0.5 min-h-12' : 'gap-0.625 h-3.5 px-1 py-0.5',
-            )}
-          >
-            {/* Bullet point */}
-            <div className="size-0.375 rounded-full bg-neutral-1000 shrink-0" />
+            className="rounded-full bg-neutral-800 shrink-0"
+            style={{ width: '6px', height: '6px', marginTop: '9px' }}
+          />
 
-            {/* Action text */}
-            <Typography
-              variant="body"
-              className={cn('text-neutral-1000 flex-1', isMobile && 'text-sm')}
-            >
-              {action}
-            </Typography>
-          </div>
-        ))}
-      </CollapsibleSection>
-    </div>
+          {/* Action text */}
+          <Typography variant="body" color="neutral1000" className="flex-1">
+            {action}
+          </Typography>
+        </div>
+      ))}
+    </CollapsibleSection>
   )
 }

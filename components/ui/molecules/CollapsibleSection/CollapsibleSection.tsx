@@ -1,71 +1,94 @@
 'use client'
 
-import * as Accordion from '@radix-ui/react-accordion'
-import { ChevronUp } from 'lucide-react'
+import { useState } from 'react'
+import { Collapsible } from 'radix-ui'
+import { ChevronDown } from 'lucide-react'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { cn } from '@/utils/cn'
 import type { CollapsibleSectionProps } from './CollapsibleSection.types'
 
 /**
- * CollapsibleSection - Reusable accordion component using Radix UI
+ * CollapsibleSection - Reusable collapsible component with smooth CSS animations
  *
  * Features:
- * - Built on Radix UI Accordion for accessibility
- * - Keyboard navigation support
- * - Smooth animations
+ * - Smooth collapse/expand animations
  * - Controlled or uncontrolled state
- * - ARIA attributes automatically handled
+ * - Accessible chevron icon that rotates
+ * - h6 Typography for title
+ * - Custom trigger support via renderTrigger
  *
  * @example
  * ```tsx
+ * // Simple usage with title
  * <CollapsibleSection title="Actions" defaultOpen>
+ *   <div>Your content here</div>
+ * </CollapsibleSection>
+ *
+ * // Custom trigger
+ * <CollapsibleSection
+ *   renderTrigger={(open) => <CustomTrigger open={open} />}
+ *   defaultOpen
+ * >
  *   <div>Your content here</div>
  * </CollapsibleSection>
  * ```
  */
 export function CollapsibleSection({
   title,
+  renderTrigger,
   children,
   defaultOpen = true,
-  open,
+  open: controlledOpen,
   onToggle,
   className,
+  contentClassName,
 }: CollapsibleSectionProps) {
-  // Convert boolean to Accordion value format
-  const value = open !== undefined ? (open ? 'item' : '') : undefined
-  const defaultValue = defaultOpen ? 'item' : ''
+  const [internalOpen, setInternalOpen] = useState(defaultOpen)
+  const isControlled = controlledOpen !== undefined
+  const open = isControlled ? controlledOpen : internalOpen
 
-  const handleValueChange = (newValue: string) => {
-    if (onToggle) {
-      onToggle(newValue === 'item')
+  const handleToggle = (newOpen: boolean) => {
+    if (!isControlled) {
+      setInternalOpen(newOpen)
     }
+    onToggle?.(newOpen)
   }
 
-  return (
-    <Accordion.Root
-      type="single"
-      collapsible
-      value={value}
-      defaultValue={defaultValue}
-      onValueChange={handleValueChange}
-      className={cn('flex flex-col gap-1 items-start w-full', className)}
-    >
-      <Accordion.Item value="item" className="w-full">
-        <Accordion.Header className="w-full">
-          <Accordion.Trigger className="flex gap-0.75 items-center w-full group">
-            <div className="flex items-center justify-center size-2 transition-transform group-data-[state=closed]:rotate-180 group-data-[state=closed]:scale-y-[-100%]">
-              <ChevronUp className="size-1.5 text-neutral-1000" aria-hidden="true" />
-            </div>
-            <Typography variant="h6" fontWeight="semibold" color="default">
-              {title}
-            </Typography>
-          </Accordion.Trigger>
-        </Accordion.Header>
+  const defaultTrigger = (
+    <div className="flex gap-0_5 items-center cursor-pointer w-full mb-0_5">
+      <ChevronDown
+        width={24}
+        height={24}
+        className={cn(
+          'text-neutral-1000 transition-transform duration-300 shrink-0',
+          open && 'rotate-180',
+        )}
+      />
+      <Typography variant="h6" color="neutral1000">
+        {title}
+      </Typography>
+    </div>
+  )
 
-        <Accordion.Content className="flex flex-col gap-0.5 w-full overflow-hidden data-[state=open]:animate-accordion-down data-[state=closed]:animate-accordion-up">
+  return (
+    <div className={cn('flex flex-col w-full', className)}>
+      <Collapsible.Root open={open} onOpenChange={handleToggle}>
+        <Collapsible.Trigger asChild>
+          {renderTrigger ? renderTrigger(open) : defaultTrigger}
+        </Collapsible.Trigger>
+
+        <Collapsible.Content
+          className={cn(
+            'flex flex-col w-full overflow-hidden',
+            'transition-all duration-300 ease-in-out',
+            'data-[state=closed]:animate-collapse-up',
+            'data-[state=open]:animate-collapse-down',
+            contentClassName,
+          )}
+        >
           {children}
-        </Accordion.Content>
-      </Accordion.Item>
-    </Accordion.Root>
+        </Collapsible.Content>
+      </Collapsible.Root>
+    </div>
   )
 }
