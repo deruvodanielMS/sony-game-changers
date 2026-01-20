@@ -284,7 +284,7 @@
   --rounded-tiny: 4px;
   --rounded-small: 8px;
   --rounded-default: 16px;
-  --rounded-large: 16px;
+  --rounded-large: 24px;
   --rounded-x-large: 48px;
   --rounded-badge: 58px;
 }
@@ -294,7 +294,7 @@
     --rounded-tiny: 2px;
     --rounded-small: 6px;
     --rounded-default: 12px;
-    --rounded-large: 12px;
+    --rounded-large: 16px;
     --rounded-x-large: 24px;
     --rounded-badge: 40px;
   }

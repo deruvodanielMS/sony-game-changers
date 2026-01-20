@@ -41,6 +41,14 @@ export interface ProgressRingProps {
   percentageVariant?: 'h5' | 'h6' | 'body'
 
   /**
+   * Layout variant for the component
+   * - 'default': percentage inside ring (or just ring if showPercentage=false)
+   * - 'side': percentage displayed to the right of the ring
+   * @default 'default'
+   */
+  layout?: 'default' | 'side'
+
+  /**
    * Additional CSS classes
    */
   className?: string

@@ -38,7 +38,8 @@ export const mockLadderedAmbitions: LadderedAmbition[] = [
       name: 'Lars van der Zee',
       avatar: '/profile-img/lars-van-der-zee.png',
     },
-    progress: 33,
+    progress: 75,
+    status: 'In Progress',
   },
   {
     id: '2',
@@ -49,7 +50,8 @@ export const mockLadderedAmbitions: LadderedAmbition[] = [
       name: 'Jürgen Schneider',
       avatar: '/profile-img/profile.png',
     },
-    progress: 66,
+    progress: 0,
+    status: 'Draft',
   },
   {
     id: '3',
@@ -60,7 +62,8 @@ export const mockLadderedAmbitions: LadderedAmbition[] = [
       name: 'Amélie Martin',
       avatar: '/profile-img/sarah-miller.png',
     },
-    progress: 33,
+    progress: 75,
+    status: 'In Progress',
   },
 ]
 

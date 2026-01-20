@@ -18,6 +18,7 @@ export function ProgressRing({
   backgroundColor = '#E8E4FF',
   showPercentage = false,
   percentageVariant = 'h5',
+  layout = 'default',
   className,
   'data-test-id': dataTestId,
 }: ProgressRingProps) {
@@ -80,6 +81,19 @@ export function ProgressRing({
     return ringElement
   }
 
+  // Side layout: percentage displayed to the right of the ring
+  if (layout === 'side') {
+    return (
+      <div className={cn('flex gap-0.5 items-center', className)} data-test-id={dataTestId}>
+        {ringElement}
+        <Typography variant="body" fontWeight="bold" className="text-neutral-1000 text-right">
+          {normalizedProgress}%
+        </Typography>
+      </div>
+    )
+  }
+
+  // Default layout: percentage inside the ring
   return (
     <div
       className={cn('relative flex items-center justify-center', className)}

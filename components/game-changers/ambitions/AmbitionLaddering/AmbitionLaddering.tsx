@@ -9,6 +9,8 @@ import { SearchField } from '@/components/ui/molecules/SearchField'
 import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { Button } from '@/components/ui/atoms/Button'
+import { ProgressRing } from '@/components/ui/atoms/ProgressRing'
+import { Badge } from '@/components/ui/atoms/Badge'
 import { cn } from '@/utils/cn'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
@@ -109,7 +111,7 @@ export function AmbitionLaddering({
                 aria-label="Grid view"
                 onClick={() => setViewMode('grid')}
                 className={cn(
-                  'flex items-center justify-center p-0.25 rounded-full transition-colors',
+                  'flex items-center justify-center p-0.25 rounded-full transition-colors cursor-pointer',
                   viewMode === 'grid' ? 'bg-neutral-200' : 'hover:bg-neutral-100',
                 )}
               >
@@ -119,7 +121,7 @@ export function AmbitionLaddering({
                 aria-label="List view"
                 onClick={() => setViewMode('list')}
                 className={cn(
-                  'flex items-center justify-center p-0.25 rounded-full transition-colors',
+                  'flex items-center justify-center p-0.25 rounded-full transition-colors cursor-pointer',
                   viewMode === 'list' ? 'bg-neutral-200' : 'hover:bg-neutral-100',
                 )}
               >
@@ -151,7 +153,7 @@ export function AmbitionLaddering({
                 variants={cardVariants}
                 transition={{ duration: 0.3 }}
                 className={cn(
-                  'flex flex-col gap-1 bg-neutral-0 border border-neutral-300 rounded-1.5 p-1.5',
+                  'flex flex-col gap-1 bg-neutral-0 border border-neutral-300 rounded-large p-1.5 cursor-pointer hover:border-neutral-400 transition-colors',
                   !isMobile && !isTablet && 'flex-1',
                   isTablet && 'flex-[0_0_calc(50%-0.5rem)]',
                 )}
@@ -168,12 +170,12 @@ export function AmbitionLaddering({
                 <div className="flex gap-1 items-center w-full">
                   {/* Employee Info */}
                   <div className="flex-1 flex gap-1 items-center min-w-0">
-                    <div className="relative size-2.5 rounded-full shrink-0 overflow-hidden">
+                    <div className="relative size-3 rounded-full shrink-0 overflow-hidden">
                       <Image
                         src={ambition.assignee.avatar}
                         alt={ambition.assignee.name}
-                        width={40}
-                        height={40}
+                        width={48}
+                        height={48}
                         className="object-cover"
                       />
                     </div>
@@ -186,20 +188,32 @@ export function AmbitionLaddering({
                     </Typography>
                   </div>
 
-                  {/* Progress Bar */}
-                  <div className="flex flex-col gap-0.125 items-start justify-center shrink-0">
-                    <Typography variant="bodySmall" fontWeight="bold" className="text-right w-25">
-                      {ambition.progress}%
-                    </Typography>
-                    <div className="relative w-25 h-0.5 rounded-full bg-neutral-200 overflow-hidden">
-                      <m.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${ambition.progress}%` }}
-                        transition={{ duration: 0.5, ease: 'easeOut' }}
-                        className="absolute top-0 left-0 h-full rounded-full bg-[#01a79a]"
-                      />
+                  {/* Progress - Desktop: Ring, Mobile: Bar */}
+                  {!isMobile ? (
+                    <ProgressRing
+                      progress={ambition.progress}
+                      size={40}
+                      strokeWidth={6}
+                      showPercentage
+                      layout="side"
+                      color="var(--color-extra-green-600)"
+                      className="shrink-0"
+                    />
+                  ) : (
+                    <div className="flex flex-col gap-0.125 items-start justify-center shrink-0">
+                      <Typography variant="bodySmall" fontWeight="bold" className="text-right w-25">
+                        {ambition.progress}%
+                      </Typography>
+                      <div className="relative w-25 h-0.5 rounded-full bg-neutral-200 overflow-hidden">
+                        <m.div
+                          initial={{ width: 0 }}
+                          animate={{ width: `${ambition.progress}%` }}
+                          transition={{ duration: 0.5, ease: 'easeOut' }}
+                          className="absolute top-0 left-0 h-full rounded-full bg-[#01a79a]"
+                        />
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </m.div>
             ))}
@@ -213,10 +227,10 @@ export function AmbitionLaddering({
             animate="visible"
             exit="hidden"
             variants={listVariants}
-            className="flex flex-col w-full bg-neutral-0 border border-neutral-300 rounded-1.5 overflow-hidden"
+            className="flex flex-col w-full bg-neutral-0 border border-neutral-300 rounded-large overflow-hidden"
           >
             {/* Table Header */}
-            <div className="grid grid-cols-[auto_1fr_auto] gap-1.5 px-1.5 py-1 bg-neutral-100 border-b border-neutral-300">
+            <div className="grid grid-cols-[200px_1fr_140px] gap-1.5 px-1.5 py-1 bg-neutral-100 border-b border-neutral-300">
               <Typography variant="bodySmall" fontWeight="bold" className="uppercase">
                 NAME
               </Typography>
@@ -234,22 +248,22 @@ export function AmbitionLaddering({
                 key={ambition.id}
                 variants={cardVariants}
                 className={cn(
-                  'grid grid-cols-[auto_1fr_auto] gap-1.5 px-1.5 py-1 items-center',
+                  'grid grid-cols-[200px_1fr_140px] gap-1.5 px-1.5 py-1 items-center cursor-pointer hover:bg-neutral-100 transition-colors',
                   index !== filteredAmbitions.length - 1 && 'border-b border-neutral-300',
                 )}
               >
                 {/* Name column with avatar */}
                 <div className="flex gap-1 items-center">
-                  <div className="relative size-2.5 rounded-full shrink-0 overflow-hidden">
+                  <div className="relative size-3 rounded-full shrink-0 overflow-hidden">
                     <Image
                       src={ambition.assignee.avatar}
                       alt={ambition.assignee.name}
-                      width={40}
-                      height={40}
+                      width={48}
+                      height={48}
                       className="object-cover"
                     />
                   </div>
-                  <Typography variant="body" fontWeight="bold">
+                  <Typography variant="body" fontWeight="bold" className="truncate">
                     {ambition.assignee.name}
                   </Typography>
                 </div>
@@ -260,9 +274,11 @@ export function AmbitionLaddering({
                 </Typography>
 
                 {/* Status column */}
-                <Typography variant="body" className="text-extra-blue-600">
-                  {ambition.status || 'Draft'}
-                </Typography>
+                <div className="flex justify-start">
+                  <Badge variant="info" size="md">
+                    {ambition.status || 'Draft'}
+                  </Badge>
+                </div>
               </m.div>
             ))}
           </m.div>
@@ -279,16 +295,12 @@ export function AmbitionLaddering({
         {/* Add Button */}
         <Button
           variant="plain"
+          size="small"
           onClick={onAddAmbition}
-          className={cn(
-            'flex gap-0.5 items-center justify-center px-0.75 py-0.25 rounded-xlarge',
-            isMobile && 'w-full h-2.5',
-          )}
+          leftIcon={<Plus className="size-1.5" />}
+          className={cn(isMobile && 'w-full')}
         >
-          <Plus className="size-1.5" />
-          <Typography variant="bodySmall" fontWeight="semibold">
-            {t('addButton')}
-          </Typography>
+          {t('addButton')}
         </Button>
 
         {/* Total Count */}
