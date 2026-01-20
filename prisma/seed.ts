@@ -1,3 +1,4 @@
+import { EMPLOYEE_EMAIL_BY_ROLE } from '@/common/constants'
 import { AMBITION_STATUSES, AMBITION_TYPES } from '@/domain/ambition'
 import { PrismaClient } from '@prisma/client'
 
@@ -37,7 +38,7 @@ async function seedBase(prisma: PrismaClient) {
 
   const davidBrown = await prisma.people.create({
     data: {
-      email: 'dbrown@test.com',
+      email: EMPLOYEE_EMAIL_BY_ROLE.IC,
       name: 'David Brown',
       lastname: 'User',
       status: 'active',
@@ -49,7 +50,7 @@ async function seedBase(prisma: PrismaClient) {
 
   const manager = await prisma.people.create({
     data: {
-      email: 'manager@test.com',
+      email: EMPLOYEE_EMAIL_BY_ROLE.MANAGER,
       name: 'Manager',
       lastname: 'User',
       profileImageUrl: 'profile.png',

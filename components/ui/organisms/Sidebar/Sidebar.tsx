@@ -9,6 +9,7 @@ import { SidebarNavItem } from '@/components/ui/molecules/SidebarNavItem'
 import { GameChangersIcon, TeamIcon } from '@/components/ui/foundations/Icons'
 import type { SidebarProps } from './Sidebar.types'
 import { ROUTES } from '@/common/routes'
+import { useUserStore } from '@/stores/user.store'
 
 /**
  * Sidebar - Application sidebar with navigation items
@@ -25,6 +26,7 @@ export function Sidebar({
   'data-test-id': dataTestId,
 }: SidebarProps) {
   const t = useTranslations('Sidebar')
+  const { user } = useUserStore()
 
   return (
     <aside
@@ -135,14 +137,14 @@ export function Sidebar({
           <SidebarNavItem
             icon={
               <Image
-                src="/profile-img/profile.png"
-                alt={t('profile')}
+                src={`/profile-img/${user?.profileImageUrl || 'profile.png'}`}
+                alt={`${user?.name} ${user?.lastname}`.trim() || t('profile')}
                 className="w-5 h-5 rounded-full object-cover"
                 width={24}
                 height={24}
               />
             }
-            label={t('profile')}
+            label={`${user?.name} ${user?.lastname}`.trim() || t('profile')}
             isCollapsed={isCollapsed}
             href={ROUTES.PROFILE}
             onClick={onNavigate}

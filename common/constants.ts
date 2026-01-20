@@ -24,4 +24,12 @@ export const Z_INDEX = {
 
 export const TOAST_DEFAULT_DURATION = 3000 // in milliseconds
 
-export const MODAL_ANIMATION_DURATION = 150 // in milliseconds
+export const MODAL_ANIMATION_DURATION = 150 // in millisecondsº
+
+/** DEV only */
+export const EMPLOYEE_EMAIL_BY_ROLE = {
+  MANAGER: 'manager@employee.test',
+  IC: 'ic@employee.test',
+} as const
+
+export const DEFAULT_EMPLOYEE_EMAIL = EMPLOYEE_EMAIL_BY_ROLE.MANAGER

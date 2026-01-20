@@ -1,11 +1,15 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { signOut } from 'next-auth/react'
 import { LanguageSwitcher } from '@/components/ui/molecules/LanguageSwitcher'
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
+import { Button } from '@/components/ui/atoms/Button'
+import { useUserStore } from '@/stores/user.store'
 
 export default function ProfilePage() {
   const t = useTranslations('Pages')
+  const { clearUser } = useUserStore()
 
   return (
     <div className="p-1 md:pt-1_5 md:px-3 md:pb-3 mt-4_5 md:mt-0">
@@ -19,8 +23,21 @@ export default function ProfilePage() {
           <h2 className="text-h5 leading-h5 font-semibold text-neutral-1000 mb-4">
             {t('languageSettings')}
           </h2>
-          <div className="max-w-xs">
+          <div className="max-w-xs mb-4">
             <LanguageSwitcher isCollapsed={false} />
+          </div>
+          <div className="max-w-xs">
+            <Button
+              variant={'secondary'}
+              onClick={() => {
+                clearUser()
+                signOut({
+                  callbackUrl: '/',
+                })
+              }}
+            >
+              {t('signOut')}
+            </Button>
           </div>
         </section>
       </AnimatedSection>

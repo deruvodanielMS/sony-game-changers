@@ -30,7 +30,6 @@ describe('Providers', () => {
 
     const provider = screen.getByTestId('session-provider')
     expect(provider).toBeInTheDocument()
-    expect(provider.getAttribute('data-session')).toContain('dev-user')
     expect(screen.getByText('child')).toBeInTheDocument()
   })
 

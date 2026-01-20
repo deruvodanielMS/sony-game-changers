@@ -23,6 +23,7 @@ const BASE_API = '/api'
 
 export const API_ROUTES = {
   AMBITIONS: `${BASE_API}/ambitions`,
+  USER: `${BASE_API}/user`,
 } as const
 
 export type ApiRoutes = typeof API_ROUTES

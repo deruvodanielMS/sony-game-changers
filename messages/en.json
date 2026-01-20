@@ -37,7 +37,8 @@
     "myTeam": "My Team",
     "notifications": "Notifications",
     "profile": "Profile",
-    "languageSettings": "Language Settings"
+    "languageSettings": "Language Settings",
+    "signOut": "Sign Out"
   },
   "Goals": {
     "title": "Your Team Ambitions",
