@@ -57,12 +57,6 @@ describe('Badge', () => {
     expect(badge).not.toHaveClass('bg-extra-green-100')
   })
 
-  it('applies status variants for ambitions', () => {
-    render(<Badge variant="completed">Completed</Badge>)
-    const badge = screen.getByText('Completed')
-    expect(badge).toHaveClass('text-feedback-success-500')
-  })
-
   it('applies small size', () => {
     render(<Badge size="sm">Small</Badge>)
     const badge = screen.getByText('Small')

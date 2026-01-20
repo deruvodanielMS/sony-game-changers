@@ -73,81 +73,87 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   ]
 
   return (
-    <div className="flex flex-col gap-4 w-full">
-      <AnimatedSection delay={0}>
-        {/* Breadcrumb and Main Actions */}
-        <div
-          className={`flex w-full ${isMobile ? 'flex-col gap-1' : 'items-center justify-between'}`}
-        >
-          <Breadcrumb items={breadcrumbItems} />
+    <div className="flex flex-col w-full">
+      {/* Top section: Breadcrumb, LadderGoal, Header with 24px spacing */}
+      <div className="flex flex-col gap-1_5 w-full">
+        <AnimatedSection delay={0}>
+          {/* Breadcrumb and Main Actions */}
+          <div
+            className={`flex w-full ${isMobile ? 'flex-col gap-1' : 'items-center justify-between'}`}
+          >
+            <Breadcrumb items={breadcrumbItems} />
 
-          {/* Main Actions */}
-          {showAnyActions && (
-            <div className={`flex gap-1 items-center ${isMobile ? 'h-auto' : 'h-2.5'}`}>
-              {/* Awaiting Approval: Send Back + Approve buttons */}
-              {showApprovalActions && (
-                <>
-                  <Button variant="secondary">{t('actions.sendBack')}</Button>
-                  <Button variant="primary">{t('actions.approve')}</Button>
-                </>
-              )}
+            {/* Main Actions */}
+            {showAnyActions && (
+              <div className={`flex gap-1 items-center ${isMobile ? 'h-auto' : 'h-2.5'}`}>
+                {/* Awaiting Approval: Send Back + Approve buttons */}
+                {showApprovalActions && (
+                  <>
+                    <Button variant="secondary">{t('actions.sendBack')}</Button>
+                    <Button variant="primary">{t('actions.approve')}</Button>
+                  </>
+                )}
 
-              {/* Draft: Send for Approval button */}
-              {showSendForApproval && (
-                <Button variant="primary">{t('actions.sendForApproval')}</Button>
-              )}
+                {/* Draft: Send for Approval button */}
+                {showSendForApproval && (
+                  <Button variant="primary">{t('actions.sendForApproval')}</Button>
+                )}
 
-              {/* More Options Icon Button */}
-              <button
-                className="flex items-center justify-center p-0.25 rounded-full hover:bg-neutral-100 transition-colors"
-                aria-label={t('actions.moreOptions')}
-              >
-                <MoreHorizontal className="size-1.5 text-neutral-1000" />
-              </button>
-            </div>
-          )}
-        </div>
-      </AnimatedSection>
-
-      {/* Laddered Goal section */}
-      {parentAmbition && (
-        <AnimatedSection delay={0.05}>
-          <LadderGoal text={parentAmbition.title} />
+                {/* More Options Icon Button */}
+                <button
+                  className="flex items-center justify-center p-0.25 rounded-full hover:bg-neutral-100 transition-colors"
+                  aria-label={t('actions.moreOptions')}
+                >
+                  <MoreHorizontal className="size-1.5 text-neutral-1000" />
+                </button>
+              </div>
+            )}
+          </div>
         </AnimatedSection>
-      )}
 
-      {/* Goal Header section */}
-      <AnimatedSection delay={0.1}>
-        <AmbitionDetailHeader
-          title={title}
-          userName={userName}
-          avatarUrl={avatarUrl || undefined}
-          ambitionType={ambitionType}
-          progress={progress}
-          createdDate="10/08/2025"
-          updatedDate="10/08/2025, 10:15 am"
-        />
-      </AnimatedSection>
+        {/* Laddered Goal section */}
+        {parentAmbition && (
+          <AnimatedSection delay={0.05}>
+            <LadderGoal text={parentAmbition.title} />
+          </AnimatedSection>
+        )}
 
-      {/* Actions Section */}
-      <AnimatedSection delay={0.15}>
-        <AmbitionActions actions={mockActions} />
-      </AnimatedSection>
+        {/* Goal Header section */}
+        <AnimatedSection delay={0.1}>
+          <AmbitionDetailHeader
+            title={title}
+            userName={userName}
+            avatarUrl={avatarUrl || undefined}
+            ambitionType={ambitionType}
+            progress={progress}
+            createdDate="10/08/2025"
+            updatedDate="10/08/2025, 10:15 am"
+          />
+        </AnimatedSection>
+      </div>
 
-      {/* Achievements Section */}
-      <AnimatedSection delay={0.2}>
-        <AmbitionAchievements achievements={mockAchievements} />
-      </AnimatedSection>
+      {/* Content sections with 64px spacing */}
+      <div className="flex flex-col gap-4 w-full mt-4">
+        {/* Actions Section */}
+        <AnimatedSection delay={0.15}>
+          <AmbitionActions actions={mockActions} />
+        </AnimatedSection>
 
-      {/* Laddered Ambitions Section */}
-      <AnimatedSection delay={0.25}>
-        <AmbitionLaddering ambitions={mockLadderedAmbitions} avatarOptions={mockAvatarOptions} />
-      </AnimatedSection>
+        {/* Achievements Section */}
+        <AnimatedSection delay={0.2}>
+          <AmbitionAchievements achievements={mockAchievements} />
+        </AnimatedSection>
 
-      {/* Activity Feed Section */}
-      <AnimatedSection delay={0.3}>
-        <AmbitionActivityFeed activities={mockActivityFeed} />
-      </AnimatedSection>
+        {/* Laddered Ambitions Section */}
+        <AnimatedSection delay={0.25}>
+          <AmbitionLaddering ambitions={mockLadderedAmbitions} avatarOptions={mockAvatarOptions} />
+        </AnimatedSection>
+
+        {/* Activity Feed Section */}
+        <AnimatedSection delay={0.3}>
+          <AmbitionActivityFeed activities={mockActivityFeed} />
+        </AnimatedSection>
+      </div>
     </div>
   )
 }

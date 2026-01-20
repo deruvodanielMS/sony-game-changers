@@ -24,42 +24,16 @@ const cardHoverVariants = {
   hover: {},
 }
 
-// Map ambition status to Badge variant
+// Map ambition status to Badge variant (using status-specific variants)
 const statusToBadgeVariant = (
   status: AmbitionStatus,
-):
-  | 'completed'
-  | 'draft'
-  | 'awaiting-approval'
-  | 'approved'
-  | 'in-progress'
-  | 'on-track'
-  | 'off-track'
-  | 'archived'
-  | 'not-started'
-  | 'default' => {
-  const statusMap: Record<AmbitionStatus, string> = {
-    completed: 'completed',
+): 'draft' | 'awaiting-approval' | 'completed' | 'default' => {
+  const statusMap: Record<AmbitionStatus, 'draft' | 'awaiting-approval' | 'completed'> = {
     draft: 'draft',
     awaiting_approval: 'awaiting-approval',
-    approved: 'approved',
-    in_progress: 'in-progress',
-    on_track: 'on-track',
-    off_track: 'off-track',
-    archived: 'archived',
-    not_started: 'not-started',
+    completed: 'completed',
   }
-  return (statusMap[status] || 'default') as
-    | 'completed'
-    | 'draft'
-    | 'awaiting-approval'
-    | 'approved'
-    | 'in-progress'
-    | 'on-track'
-    | 'off-track'
-    | 'archived'
-    | 'not-started'
-    | 'default'
+  return statusMap[status] || 'default'
 }
 
 export function GoalCard({
