@@ -60,10 +60,7 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   const parentAmbition = ladderedGoals?.[0]
 
   // Calculate progress based on laddered goals completion
-  const totalLadderedGoals = ladderedGoals?.length || 0
-  const completedLadderedGoals = ladderedGoals?.filter((g) => g.status === 'completed').length || 0
   const progress = 80 // Mock data - TODO: Calculate from actual completion
-  // totalLadderedGoals > 0 ? Math.round((completedLadderedGoals / totalLadderedGoals) * 100) : 0
 
   // Determine which action buttons to show based on status
   const showApprovalActions = status === 'awaiting_approval'
@@ -76,7 +73,7 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   ]
 
   return (
-    <div className="flex flex-col gap-1.5 w-full">
+    <div className="flex flex-col gap-4 w-full">
       <AnimatedSection delay={0}>
         {/* Breadcrumb and Main Actions */}
         <div

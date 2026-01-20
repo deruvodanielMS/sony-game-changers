@@ -138,6 +138,7 @@
       "nextPage": "Page suivante"
     },
     "activity": {
+      "title": "Activité",
       "addCommentPlaceholder": "Ajouter un commentaire...",
       "completed": "Terminé",
       "approved": "a approuvé l'ambition",
@@ -148,6 +149,8 @@
   },
   "CommentInput": {
     "placeholder": "Ajouter un commentaire...",
-    "submitHint": "Appuyez sur Ctrl+Entrée pour soumettre"
+    "submitHint": "Appuyez sur Ctrl+Entrée pour soumettre",
+    "cancel": "Annuler",
+    "save": "Enregistrer"
   }
 }

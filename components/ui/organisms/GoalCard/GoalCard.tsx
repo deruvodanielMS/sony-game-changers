@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/atoms/Card/Card'
 import { GoalCardProps } from './GoalCard.types'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { Avatar } from '@/components/ui/atoms/Avatar'
-import { GoalStatus } from '@/components/ui/molecules/GoalStatus/GoalStatus'
+import { Badge } from '@/components/ui/atoms/Badge'
 import { TypeIcon } from '@/components/ui/molecules/TypeIcon'
 import { LadderGoal } from '@/components/ui/molecules/LadderGoal'
 import { CollapsibleSection } from '@/components/ui/molecules/CollapsibleSection'
@@ -20,8 +20,46 @@ import { LadderingModal } from '@/components/ui/organisms/LadderingModal'
 import { ROUTES } from '@/common/routes'
 
 const cardHoverVariants = {
-  rest: { scale: 1 },
-  hover: { scale: 1.01 },
+  rest: {},
+  hover: {},
+}
+
+// Map ambition status to Badge variant
+const statusToBadgeVariant = (
+  status: AmbitionStatus,
+):
+  | 'completed'
+  | 'draft'
+  | 'awaiting-approval'
+  | 'approved'
+  | 'in-progress'
+  | 'on-track'
+  | 'off-track'
+  | 'archived'
+  | 'not-started'
+  | 'default' => {
+  const statusMap: Record<AmbitionStatus, string> = {
+    completed: 'completed',
+    draft: 'draft',
+    awaiting_approval: 'awaiting-approval',
+    approved: 'approved',
+    in_progress: 'in-progress',
+    on_track: 'on-track',
+    off_track: 'off-track',
+    archived: 'archived',
+    not_started: 'not-started',
+  }
+  return (statusMap[status] || 'default') as
+    | 'completed'
+    | 'draft'
+    | 'awaiting-approval'
+    | 'approved'
+    | 'in-progress'
+    | 'on-track'
+    | 'off-track'
+    | 'archived'
+    | 'not-started'
+    | 'default'
 }
 
 export function GoalCard({
@@ -33,6 +71,7 @@ export function GoalCard({
   const [open, setOpen] = useState(false)
   const [isLadderingModalOpen, setIsLadderingModalOpen] = useState(false)
   const t = useTranslations('GoalCard')
+  const tGoals = useTranslations('Goals')
 
   const { id, description, title, avatarUrl, ambitionType, status, userName } = goal
   const hasChildrenGoals = ladderGoals.length
@@ -61,7 +100,7 @@ export function GoalCard({
             defaultOpen={false}
             open={open}
             onToggle={setOpen}
-            contentClassName="ml-2 pl-0_5 gap-1 pt-1"
+            contentClassName="gap-1 pt-1 pl-2"
             renderTrigger={(isOpen) => (
               <div className="flex items-center gap-0_5 cursor-pointer">
                 <button className="IconButton cursor-pointer">
@@ -91,7 +130,9 @@ export function GoalCard({
                   >
                     <Typography variant="h6">{title}</Typography>
                   </Link>
-                  <GoalStatus status={status as AmbitionStatus} className="shrink-0 font-bold" />
+                  <Badge variant={statusToBadgeVariant(status as AmbitionStatus)}>
+                    {tGoals(`status.${status}`)}
+                  </Badge>
                 </div>
               </div>
             )}
@@ -100,13 +141,15 @@ export function GoalCard({
               <LadderGoal key={ladderGoal.id} size="small" className="max-sm:flex-wrap">
                 <Avatar src={ladderGoal.avatarUrl} alt={ladderGoal.userName} size="lg" />
                 <Typography
-                  className="grow-1 basis-1 max-sm:order-last max-sm:basis-full max-sm:border-b max-sm:border-neutral-300 max-sm:pb-1"
+                  className="flex-1 min-w-0 max-sm:order-last max-sm:basis-full max-sm:border-b max-sm:border-neutral-300 max-sm:pb-1"
                   color="neutral600"
                   variant="body"
                 >
                   {ladderGoal.title}
                 </Typography>
-                <GoalStatus status={ladderGoal.status as AmbitionStatus} className="grow-0" />
+                <Badge variant={statusToBadgeVariant(ladderGoal.status as AmbitionStatus)}>
+                  {tGoals(`status.${ladderGoal.status}`)}
+                </Badge>
               </LadderGoal>
             ))}
           </CollapsibleSection>
@@ -127,7 +170,9 @@ export function GoalCard({
               >
                 <Typography variant="h6">{title}</Typography>
               </Link>
-              <GoalStatus status={status as AmbitionStatus} className="shrink-0 font-bold" />
+              <Badge variant={statusToBadgeVariant(status as AmbitionStatus)}>
+                {tGoals(`status.${status}`)}
+              </Badge>
             </div>
           </div>
         )}

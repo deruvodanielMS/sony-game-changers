@@ -38,6 +38,7 @@
   --color-feedback-success-100: var(--feedback-success-100);
   --color-feedback-success-200: var(--feedback-success-200);
   --color-feedback-success-400: var(--feedback-success-400);
+  --color-feedback-success-500: var(--feedback-success-500);
   --color-feedback-success-600: var(--feedback-success-600);
   --color-feedback-success-800: var(--feedback-success-800);
   --color-feedback-success-950: var(--feedback-success-950);
@@ -92,6 +93,14 @@
   --color-extra-green-600: var(--extra-green-600);
   --color-extra-green-800: var(--extra-green-800);
   --color-extra-green-950: var(--extra-green-950);
+
+  /* Extra - Purple */
+  --color-extra-purple-100: var(--extra-purple-100);
+  --color-extra-purple-200: var(--extra-purple-200);
+  --color-extra-purple-300: var(--extra-purple-300);
+  --color-extra-purple-600: var(--extra-purple-600);
+  --color-extra-purple-800: var(--extra-purple-800);
+  --color-extra-purple-950: var(--extra-purple-950);
 
   /* EXTRA - Goals */
 

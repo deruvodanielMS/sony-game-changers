@@ -286,12 +286,7 @@ export function AmbitionLaddering({
       </AnimatePresence>
 
       {/* Actions Row */}
-      <div
-        className={cn(
-          'flex items-center justify-between w-full',
-          isMobile ? 'flex-col gap-1 h-auto' : 'h-2.5',
-        )}
-      >
+      <div className={cn('flex items-center justify-between w-full')}>
         {/* Add Button */}
         <Button
           variant="plain"

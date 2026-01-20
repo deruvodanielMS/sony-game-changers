@@ -55,7 +55,7 @@ export function CollapsibleSection({
   }
 
   const defaultTrigger = (
-    <div className="flex gap-0_5 items-center cursor-pointer w-full mb-0_5">
+    <div className="flex gap-0_5 items-center cursor-pointer w-full mb-1">
       <ChevronDown
         width={24}
         height={24}

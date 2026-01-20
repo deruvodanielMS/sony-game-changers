@@ -46,7 +46,9 @@ export function LadderGoal({
       )}
 
       {/* Content */}
-      {children || (
+      {children ? (
+        <div className="flex items-center gap-1 flex-1 min-w-0">{children}</div>
+      ) : (
         <span className="flex-1 min-w-0 overflow-hidden text-ellipsis text-body leading-body text-neutral-600 line-clamp-1">
           {text}
         </span>

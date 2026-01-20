@@ -4,6 +4,7 @@ import { useState, useCallback, KeyboardEvent } from 'react'
 import { useTranslations } from 'next-intl'
 import { Avatar } from '@/components/ui/atoms/Avatar'
 import { TextArea } from '@/components/ui/atoms/TextArea'
+import { Button } from '@/components/ui/atoms/Button'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { cn } from '@/utils/cn'
 import type { CommentInputProps } from './CommentInput.types'
@@ -38,10 +39,12 @@ export function CommentInput({
   defaultValue,
   onChange,
   onSubmit,
+  onCancel,
   disabled,
   height,
   maxLength,
   showCharCount = false,
+  showActions = false,
   size = 'md',
   avatarSize = 'md',
   className,
@@ -68,70 +71,102 @@ export function CommentInput({
     [isControlled, onChange],
   )
 
+  const handleCancel = useCallback(() => {
+    if (!isControlled) {
+      setInternalValue('')
+    }
+    onCancel?.()
+  }, [isControlled, onCancel])
+
+  const handleSave = useCallback(() => {
+    const trimmedValue = value.trim()
+    if (trimmedValue && onSubmit) {
+      onSubmit(trimmedValue)
+      if (!isControlled) {
+        setInternalValue('')
+      }
+    }
+  }, [value, onSubmit, isControlled])
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLTextAreaElement>) => {
       if (e.key === 'Enter' && (e.ctrlKey || e.metaKey) && onSubmit) {
         e.preventDefault()
-        const trimmedValue = value.trim()
-
-        if (trimmedValue) {
-          onSubmit(trimmedValue)
-
-          // Clear value after submit (only for uncontrolled)
-          if (!isControlled) {
-            setInternalValue('')
-          }
-        }
+        handleSave()
       }
     },
-    [value, onSubmit, isControlled],
+    [handleSave, onSubmit],
   )
 
   const charCount = value.length
   const isOverLimit = maxLength ? charCount > maxLength : false
 
   return (
-    <div className={cn('flex items-start w-full gap-1', className)} data-testid={dataTestId}>
-      <Avatar src={avatarSrc} alt={avatarAlt} size={avatarSize} />
+    <div className="flex flex-col w-full gap-1">
+      <div className={cn('flex items-start w-full gap-1', className)} data-testid={dataTestId}>
+        <Avatar src={avatarSrc} alt={avatarAlt} size={avatarSize} />
 
-      <div className="flex-1 flex flex-col gap-0.5">
-        <TextArea
-          value={value}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          placeholder={placeholder || t('placeholder')}
-          disabled={disabled}
-          resize="none"
-          className={cn(
-            sizeMap[size].height,
-            sizeMap[size].textSize,
-            'transition-shadow',
-            textareaClassName,
+        <div className="flex-1 flex flex-col gap-0.5">
+          <TextArea
+            value={value}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            placeholder={placeholder || t('placeholder')}
+            disabled={disabled}
+            resize="none"
+            className={cn(
+              sizeMap[size].height,
+              sizeMap[size].textSize,
+              'transition-shadow',
+              textareaClassName,
+            )}
+            data-testid={dataTestId ? `${dataTestId}-textarea` : undefined}
+            style={height ? { height } : undefined}
+          />
+
+          {showCharCount && maxLength && (
+            <div className="flex justify-end">
+              <Typography
+                variant="bodySmall"
+                className={cn(
+                  'transition-colors',
+                  isOverLimit ? 'text-feedback-error-600' : 'text-neutral-500',
+                )}
+              >
+                {charCount}/{maxLength}
+              </Typography>
+            </div>
           )}
-          data-testid={dataTestId ? `${dataTestId}-textarea` : undefined}
-          style={height ? { height } : undefined}
-        />
 
-        {showCharCount && maxLength && (
-          <div className="flex justify-end">
-            <Typography
-              variant="bodySmall"
-              className={cn(
-                'transition-colors',
-                isOverLimit ? 'text-feedback-error-600' : 'text-neutral-500',
-              )}
-            >
-              {charCount}/{maxLength}
+          {onSubmit && !showActions && (
+            <Typography variant="bodySmall" className="text-neutral-500">
+              {t('submitHint')}
             </Typography>
-          </div>
-        )}
-
-        {onSubmit && (
-          <Typography variant="bodySmall" className="text-neutral-500">
-            {t('submitHint')}
-          </Typography>
-        )}
+          )}
+        </div>
       </div>
+
+      {showActions && (
+        <div className="flex gap-1 items-center justify-end">
+          <Button
+            variant="plain"
+            size="small"
+            onClick={handleCancel}
+            data-testid={dataTestId ? `${dataTestId}-cancel` : undefined}
+          >
+            {t('cancel')}
+          </Button>
+          <Button
+            variant="secondary"
+            size="small"
+            onClick={handleSave}
+            disabled={disabled || isOverLimit || value.trim().length === 0}
+            data-testid={dataTestId ? `${dataTestId}-save` : undefined}
+          >
+            {t('save')}
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

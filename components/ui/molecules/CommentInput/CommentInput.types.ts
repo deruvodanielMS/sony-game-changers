@@ -35,6 +35,11 @@ export interface CommentInputProps {
   onSubmit?: (value: string) => void
 
   /**
+   * Callback when cancel button is clicked
+   */
+  onCancel?: () => void
+
+  /**
    * Whether the textarea is disabled
    */
   disabled?: boolean
@@ -54,6 +59,12 @@ export interface CommentInputProps {
    * @default false
    */
   showCharCount?: boolean
+
+  /**
+   * Whether to show action buttons (Cancel/Save)
+   * @default false
+   */
+  showActions?: boolean
 
   /**
    * Size variant

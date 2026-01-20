@@ -38,6 +38,7 @@
   --feedback-success-100: #d9f3eb;
   --feedback-success-200: #b2e7d7;
   --feedback-success-400: #96d334;
+  --feedback-success-500: #15c691;
   --feedback-success-600: #00b079;
   --feedback-success-800: #3d5f06;
   --feedback-success-950: #1c2c02;
@@ -84,6 +85,13 @@
   --extra-blue-600: #5577f4;
   --extra-blue-800: #0c32bb;
   --extra-blue-950: #0d2c9c;
+
+  --extra-purple-100: #f3e8ff;
+  --extra-purple-200: #e9d5ff;
+  --extra-purple-300: #d8b4fe;
+  --extra-purple-600: #9561ff;
+  --extra-purple-800: #7e22ce;
+  --extra-purple-950: #581c87;
 }
 
 /* ---------- DARK THEME ---------- */
@@ -199,6 +207,7 @@
   --space-1: 16px;
   --space-1_5: 24px;
   --space-2: 32px;
+  --space-2_5: 40px;
   --space-2_75: 44px;
   --space-3: 48px;
   --space-4: 64px;

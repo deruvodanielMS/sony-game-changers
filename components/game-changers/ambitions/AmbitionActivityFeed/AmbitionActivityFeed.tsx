@@ -91,36 +91,48 @@ export function AmbitionActivityFeed({
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
 
   return (
-    <div className={cn('flex flex-col w-full', isMobile ? 'gap-2' : 'gap-2.5', className)}>
-      {/* Add Comment */}
-      <CommentInput
-        avatarSrc={currentUserAvatar}
-        avatarAlt="Current user"
-        avatarSize="md"
-        size={isMobile ? 'sm' : 'md'}
-        onSubmit={onCommentSubmit}
-        className={isMobile ? 'gap-0.5' : 'gap-1'}
-      />
+    <div className={cn('flex flex-col w-full gap-1', className)}>
+      {/* Title */}
+      <Typography variant="h6" fontWeight="semibold" className="text-neutral-1000">
+        {t('title')}
+      </Typography>
 
-      {/* Activity History */}
-      <m.div
-        initial="hidden"
-        animate="visible"
-        variants={listVariants}
-        className={cn('flex flex-col w-full', isMobile ? 'gap-1.5' : 'gap-2')}
-      >
-        {activities.map((activity) => (
-          <ActivityItem
-            key={activity.id}
-            user={activity.user}
-            date={activity.date}
-            size={isMobile ? 'sm' : 'md'}
+      {/* Content */}
+      <div className="flex flex-col w-full gap-1">
+        {/* Add Comment */}
+        <div className="flex flex-col w-full items-end gap-1">
+          <CommentInput
+            avatarSrc={currentUserAvatar}
+            avatarAlt="Current user"
             avatarSize="md"
-          >
-            <ActivityContent activity={activity} />
-          </ActivityItem>
-        ))}
-      </m.div>
+            size={isMobile ? 'sm' : 'md'}
+            placeholder={t('addCommentPlaceholder')}
+            onSubmit={onCommentSubmit}
+            showActions
+            className={isMobile ? 'gap-0.5' : 'gap-1'}
+          />
+        </div>
+
+        {/* Activity History */}
+        <m.div
+          initial="hidden"
+          animate="visible"
+          variants={listVariants}
+          className={cn('flex flex-col w-full', isMobile ? 'gap-2' : 'gap-2')}
+        >
+          {activities.map((activity) => (
+            <ActivityItem
+              key={activity.id}
+              user={activity.user}
+              date={activity.date}
+              size={isMobile ? 'sm' : 'md'}
+              avatarSize="md"
+            >
+              <ActivityContent activity={activity} />
+            </ActivityItem>
+          ))}
+        </m.div>
+      </div>
     </div>
   )
 }
