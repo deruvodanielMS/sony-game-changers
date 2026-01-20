@@ -35,10 +35,10 @@
   --feedback-info-800: #075985;
   --feedback-info-950: #082f49;
 
-  --feedback-success-100: #f7fded;
-  --feedback-success-200: #d6f3a7;
+  --feedback-success-100: #d9f3eb;
+  --feedback-success-200: #b2e7d7;
   --feedback-success-400: #96d334;
-  --feedback-success-600: #5f9605;
+  --feedback-success-600: #00b079;
   --feedback-success-800: #3d5f06;
   --feedback-success-950: #1c2c02;
 
@@ -121,7 +121,7 @@
   --feedback-success-100: #1c2c02;
   --feedback-success-200: #3d5f06;
   --feedback-success-400: #5f9605;
-  --feedback-success-600: #96d334;
+  --feedback-success-600: #00b079;
   --feedback-success-800: #c0ed78;
   --feedback-success-950: #f7fded;
 
@@ -284,7 +284,7 @@
   --rounded-tiny: 4px;
   --rounded-small: 8px;
   --rounded-default: 16px;
-  --rounded-large: 24px;
+  --rounded-large: 16px;
   --rounded-x-large: 48px;
   --rounded-badge: 58px;
 }
@@ -294,7 +294,7 @@
     --rounded-tiny: 2px;
     --rounded-small: 6px;
     --rounded-default: 12px;
-    --rounded-large: 16px;
+    --rounded-large: 12px;
     --rounded-x-large: 24px;
     --rounded-badge: 40px;
   }

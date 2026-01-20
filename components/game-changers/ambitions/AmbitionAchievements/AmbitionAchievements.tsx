@@ -46,7 +46,12 @@ export function AmbitionAchievements({
 
   return (
     <div className={className}>
-      <CollapsibleSection title={t('title')} open={isOpen} onToggle={setIsOpen}>
+      <CollapsibleSection
+        title={t('title')}
+        open={isOpen}
+        onToggle={setIsOpen}
+        contentClassName="gap-1"
+      >
         {achievements.map((achievement) => (
           <AchievementItem
             key={achievement.id}

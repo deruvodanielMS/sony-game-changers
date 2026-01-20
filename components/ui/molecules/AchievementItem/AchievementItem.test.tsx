@@ -30,12 +30,12 @@ describe('AchievementItem', () => {
     })
   })
 
-  it('applies line-through when completed', async () => {
+  it('does NOT apply line-through when completed (design spec)', async () => {
     render(<AchievementItem text="Completed task" completed />)
 
     await waitFor(() => {
       const text = screen.getByText('Completed task')
-      expect(text).toHaveClass('line-through')
+      expect(text).not.toHaveClass('line-through')
     })
   })
 
@@ -117,16 +117,16 @@ describe('AchievementItem', () => {
 
     await waitFor(() => {
       const container = screen.getByTestId('achievement')
-      expect(container).toHaveClass('flex-col', 'items-start', 'gap-1')
+      expect(container).toHaveClass('flex-col', 'items-center')
     })
   })
 
-  it('applies completed background color', async () => {
+  it('applies completed background color (feedback-success)', async () => {
     render(<AchievementItem text="Task 1" completed data-test-id="achievement" />)
 
     await waitFor(() => {
       const container = screen.getByTestId('achievement')
-      expect(container).toHaveClass('bg-extra-green-100', 'border-extra-green-200')
+      expect(container).toHaveClass('bg-feedback-success-100', 'border-feedback-success-200')
     })
   })
 

@@ -23,7 +23,7 @@ const checkboxVariants = cva(
         lg: 'size-2',
       },
       checked: {
-        true: 'bg-extra-green-500 border-extra-green-500',
+        true: 'bg-feedback-success-600 border-feedback-success-600',
         false: 'bg-transparent border-neutral-600',
       },
     },
