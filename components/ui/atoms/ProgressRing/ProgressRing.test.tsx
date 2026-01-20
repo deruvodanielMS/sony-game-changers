@@ -60,10 +60,11 @@ describe('ProgressRing', () => {
     expect(stops[1]).toHaveAttribute('offset', '100%')
   })
 
-  it('applies rotate-[-90deg] class for correct start position', () => {
+  it('applies rotation classes for counterclockwise direction', () => {
     const { container } = render(<ProgressRing progress={50} />)
     const svg = container.querySelector('svg')
-    expect(svg).toHaveClass('rotate-[-90deg]')
+    expect(svg).toHaveClass('rotate-90')
+    expect(svg).toHaveClass('scale-x-[-1]')
   })
 
   describe('snapshots', () => {

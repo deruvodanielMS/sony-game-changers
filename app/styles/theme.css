@@ -23,6 +23,9 @@
   --color-neutral-900: var(--neutral-900);
   --color-neutral-1000: var(--neutral-1000);
 
+  /* Dividers */
+  --color-divider-default: var(--divider-default);
+
   /* Feedback - Info */
   --color-feedback-info-100: var(--feedback-info-100);
   --color-feedback-info-200: var(--feedback-info-200);
@@ -35,6 +38,7 @@
   --color-feedback-success-100: var(--feedback-success-100);
   --color-feedback-success-200: var(--feedback-success-200);
   --color-feedback-success-400: var(--feedback-success-400);
+  --color-feedback-success-500: var(--feedback-success-500);
   --color-feedback-success-600: var(--feedback-success-600);
   --color-feedback-success-800: var(--feedback-success-800);
   --color-feedback-success-950: var(--feedback-success-950);
@@ -82,6 +86,22 @@
   --color-extra-pink-800: var(--extra-pink-800);
   --color-extra-pink-950: var(--extra-pink-950);
 
+  /* Extra - Green */
+  --color-extra-green-100: var(--extra-green-100);
+  --color-extra-green-200: var(--extra-green-200);
+  --color-extra-green-300: var(--extra-green-300);
+  --color-extra-green-600: var(--extra-green-600);
+  --color-extra-green-800: var(--extra-green-800);
+  --color-extra-green-950: var(--extra-green-950);
+
+  /* Extra - Purple */
+  --color-extra-purple-100: var(--extra-purple-100);
+  --color-extra-purple-200: var(--extra-purple-200);
+  --color-extra-purple-300: var(--extra-purple-300);
+  --color-extra-purple-600: var(--extra-purple-600);
+  --color-extra-purple-800: var(--extra-purple-800);
+  --color-extra-purple-950: var(--extra-purple-950);
+
   /* EXTRA - Goals */
 
   --color-goal-completed: var(--goal-completed);
@@ -94,6 +114,7 @@
   --spacing-0_125: var(--space-0_125);
   --spacing-0_25: var(--space-0_25);
   --spacing-0_5: var(--space-0_5);
+  --spacing-0_625: var(--space-0_625);
   --spacing-0_75: var(--space-0_75);
   --spacing-1: var(--space-1);
   --spacing-1_5: var(--space-1_5);
@@ -154,7 +175,9 @@
   --radius-tiny: var(--rounded-tiny);
   --radius-small: var(--rounded-small);
   --radius-default: var(--rounded-default);
+  --radius-large: var(--rounded-large);
   --radius-x-large: var(--rounded-x-large);
+  --radius-badge: var(--rounded-badge);
 
   /* Modal */
 

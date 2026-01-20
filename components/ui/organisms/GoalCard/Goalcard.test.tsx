@@ -21,6 +21,14 @@ vi.mock('next-intl', () => ({
   },
 }))
 
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ children, href, ...props }: { children: React.ReactNode; href: string }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
+}))
+
 const baseGoal: Ambition = {
   id: '1',
   title: 'Main Goal',

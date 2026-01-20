@@ -21,7 +21,13 @@
   --neutral-900: #100f2a;
   --neutral-1000: #030217;
 
-  /* 💬 Feedback */
+  /* �� Dividers */
+  --divider-default: #474b69;
+
+  /* � Dividers */
+  --divider-default: #d9d9d9;
+
+  /* �💬 Feedback */
   --feedback-info-100: #f0f9ff;
   --feedback-info-200: #bae6fd;
   --feedback-info-400: #38bdf8;
@@ -29,10 +35,11 @@
   --feedback-info-800: #075985;
   --feedback-info-950: #082f49;
 
-  --feedback-success-100: #f7fded;
-  --feedback-success-200: #d6f3a7;
+  --feedback-success-100: #d9f3eb;
+  --feedback-success-200: #b2e7d7;
   --feedback-success-400: #96d334;
-  --feedback-success-600: #5f9605;
+  --feedback-success-500: #15c691;
+  --feedback-success-600: #00b079;
   --feedback-success-800: #3d5f06;
   --feedback-success-950: #1c2c02;
 
@@ -78,6 +85,13 @@
   --extra-blue-600: #5577f4;
   --extra-blue-800: #0c32bb;
   --extra-blue-950: #0d2c9c;
+
+  --extra-purple-100: #f3e8ff;
+  --extra-purple-200: #e9d5ff;
+  --extra-purple-300: #d8b4fe;
+  --extra-purple-600: #9561ff;
+  --extra-purple-800: #7e22ce;
+  --extra-purple-950: #581c87;
 }
 
 /* ---------- DARK THEME ---------- */
@@ -115,7 +129,7 @@
   --feedback-success-100: #1c2c02;
   --feedback-success-200: #3d5f06;
   --feedback-success-400: #5f9605;
-  --feedback-success-600: #96d334;
+  --feedback-success-600: #00b079;
   --feedback-success-800: #c0ed78;
   --feedback-success-950: #f7fded;
 
@@ -188,10 +202,12 @@
   --space-0_125: 2px;
   --space-0_25: 4px;
   --space-0_5: 8px;
+  --space-0_625: 10px;
   --space-0_75: 12px;
   --space-1: 16px;
   --space-1_5: 24px;
   --space-2: 32px;
+  --space-2_5: 40px;
   --space-2_75: 44px;
   --space-3: 48px;
   --space-4: 64px;
@@ -277,7 +293,9 @@
   --rounded-tiny: 4px;
   --rounded-small: 8px;
   --rounded-default: 16px;
+  --rounded-large: 24px;
   --rounded-x-large: 48px;
+  --rounded-badge: 58px;
 }
 
 @media (max-width: 768px) {
@@ -285,7 +303,9 @@
     --rounded-tiny: 2px;
     --rounded-small: 6px;
     --rounded-default: 12px;
+    --rounded-large: 16px;
     --rounded-x-large: 24px;
+    --rounded-badge: 40px;
   }
 }
 

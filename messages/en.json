@@ -94,5 +94,64 @@
   "Error": {
     "title": "Something went wrong",
     "description": "An unexpected error has occurred. Please try again later."
+  },
+  "AmbitionDetail": {
+    "breadcrumb": {
+      "ambitions": "Ambitions",
+      "detail": "Ambition detail"
+    },
+    "actions": {
+      "sendForApproval": "Send for Approval",
+      "sendBack": "Send Back",
+      "approve": "Approve",
+      "moreOptions": "More options",
+      "title": "Actions",
+      "collapse": "Collapse actions",
+      "expand": "Expand actions"
+    },
+    "metadata": {
+      "type": "Type",
+      "createdBy": "Created by",
+      "assignedTo": "Assigned to",
+      "lastUpdate": "Last Update",
+      "on": "on"
+    },
+    "progress": {
+      "completed": "Completed",
+      "fullLaddering": "Full Laddering"
+    },
+    "achievements": {
+      "title": "Achievements",
+      "collapse": "Collapse achievements",
+      "expand": "Expand achievements",
+      "progress": {
+        "notStarted": "Not started",
+        "onTrack": "On Track",
+        "offTrack": "Off Track"
+      }
+    },
+    "ladderedAmbitions": {
+      "title": "Laddered Ambitions",
+      "searchPlaceholder": "Search...",
+      "addButton": "Add Laddered Ambition",
+      "totalAmbitions": "{count} total Ambitions",
+      "previousPage": "Previous page",
+      "nextPage": "Next page"
+    },
+    "activity": {
+      "title": "Activity",
+      "addCommentPlaceholder": "Add a comment...",
+      "completed": "Completed",
+      "approved": "approved the Ambition",
+      "changedStatus": "changed the status",
+      "created": "created the Ambition as",
+      "theAmbition": "the Ambition"
+    }
+  },
+  "CommentInput": {
+    "placeholder": "Add a comment...",
+    "submitHint": "Press Ctrl+Enter to submit",
+    "cancel": "Cancel",
+    "save": "Save"
   }
 }

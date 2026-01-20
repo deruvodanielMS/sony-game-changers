@@ -114,6 +114,7 @@ import { motion } from 'framer-motion'
 ```tsx
 // Page entry animation
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
+
 ;<AnimatedSection delay={0}>
   <Header />
 </AnimatedSection>
@@ -129,6 +130,7 @@ import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 
 // Exit animations
 import { AnimatePresence, m } from 'framer-motion'
+
 ;<AnimatePresence mode="wait">
   {isOpen && (
     <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
