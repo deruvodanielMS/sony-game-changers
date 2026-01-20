@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { AppLayout } from '@/components/ui/templates/AppLayout'
+import { AuthGuard } from '@/components/ui/organisms/AuthGuard/AuthGuard'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Metadata')
@@ -16,5 +17,9 @@ export default async function LangLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  return <AppLayout>{children}</AppLayout>
+  return (
+    <AuthGuard>
+      <AppLayout>{children}</AppLayout>
+    </AuthGuard>
+  )
 }
