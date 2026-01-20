@@ -8,7 +8,23 @@ export interface BadgeProps {
    * Visual variant of the badge
    * @default 'default'
    */
-  variant?: 'default' | 'success' | 'warning' | 'error' | 'info' | 'primary' | 'secondary'
+  variant?:
+    | 'default'
+    | 'success'
+    | 'warning'
+    | 'error'
+    | 'info'
+    | 'primary'
+    | 'secondary'
+    | 'draft'
+    | 'awaiting-approval'
+    | 'approved'
+    | 'in-progress'
+    | 'on-track'
+    | 'off-track'
+    | 'completed'
+    | 'archived'
+    | 'not-started'
 
   /**
    * Size of the badge
