@@ -72,18 +72,44 @@ export const MultipleRings: Story = {
   },
   render: () => (
     <div className="flex gap-2 items-center">
-      <div className="flex flex-col items-center gap-0_5">
+      <div className="flex flex-col items-center gap-0.5">
         <ProgressRing progress={75} size={48} strokeWidth={6} />
         <span className="text-body-small text-neutral-500">75%</span>
       </div>
-      <div className="flex flex-col items-center gap-0_5">
+      <div className="flex flex-col items-center gap-0.5">
         <ProgressRing progress={50} size={48} strokeWidth={6} />
         <span className="text-body-small text-neutral-500">50%</span>
       </div>
-      <div className="flex flex-col items-center gap-0_5">
+      <div className="flex flex-col items-center gap-0.5">
         <ProgressRing progress={25} size={48} strokeWidth={6} />
         <span className="text-body-small text-neutral-500">25%</span>
       </div>
     </div>
   ),
+}
+
+/**
+ * Progress ring with percentage text inside (Desktop size)
+ */
+export const WithPercentage: Story = {
+  args: {
+    progress: 80,
+    size: 96,
+    strokeWidth: 6,
+    showPercentage: true,
+    percentageVariant: 'h5',
+  },
+}
+
+/**
+ * Progress ring with percentage text inside (Mobile size)
+ */
+export const SmallWithPercentage: Story = {
+  args: {
+    progress: 65,
+    size: 48,
+    strokeWidth: 6,
+    showPercentage: true,
+    percentageVariant: 'h6',
+  },
 }

@@ -26,43 +26,44 @@ describe('TypeIcon', () => {
     expect(icon).toHaveAttribute('aria-label', 'personal-growth-and-development ambition')
   })
 
-  it('applies small size', () => {
-    render(<TypeIcon type="business" size="sm" data-test-id="type-icon" />)
+  it('applies metadata variant with correct size', () => {
+    render(<TypeIcon type="business" variant="metadata" data-test-id="type-icon" />)
 
     const icon = screen.getByTestId('type-icon')
-    expect(icon).toHaveClass('size-2')
+    expect(icon).toHaveClass('size-1.5')
+    expect(icon).toHaveClass('bg-neutral-600')
   })
 
-  it('applies medium size by default', () => {
+  it('applies badge variant by default', () => {
     render(<TypeIcon type="business" data-test-id="type-icon" />)
 
     const icon = screen.getByTestId('type-icon')
     expect(icon).toHaveClass('size-3')
+    expect(icon).toHaveClass('bg-neutral-100')
   })
 
-  it('applies large size', () => {
-    render(<TypeIcon type="business" size="lg" data-test-id="type-icon" />)
+  it('applies badge variant explicitly', () => {
+    render(<TypeIcon type="business" variant="badge" data-test-id="type-icon" />)
 
     const icon = screen.getByTestId('type-icon')
-    expect(icon).toHaveClass('size-4')
+    expect(icon).toHaveClass('size-3')
+    expect(icon).toHaveClass('bg-neutral-100')
   })
 
-  it('applies custom gradient', () => {
-    render(<TypeIcon type="business" gradient={['#ff0000', '#00ff00']} data-test-id="type-icon" />)
+  it('renders correct icon for business type', () => {
+    const { container } = render(<TypeIcon type="business" data-test-id="type-icon" />)
 
-    const icon = screen.getByTestId('type-icon')
-    expect(icon).toHaveStyle({
-      backgroundImage: 'linear-gradient(to left, #ff0000, #00ff00)',
-    })
+    const icon = container.querySelector('svg')
+    expect(icon).toBeInTheDocument()
   })
 
-  it('applies default gradient', () => {
+  it('renders with solid background colors instead of gradients', () => {
     render(<TypeIcon type="business" data-test-id="type-icon" />)
 
-    const icon = screen.getByTestId('type-icon')
-    expect(icon).toHaveStyle({
-      backgroundImage: 'linear-gradient(to left, #5577f4, #d061ff)',
-    })
+    const iconElement = screen.getByTestId('type-icon')
+    expect(iconElement).toHaveClass('bg-neutral-100')
+    // Should not have inline background-image style (gradients removed)
+    expect(iconElement).not.toHaveAttribute('style', expect.stringContaining('background'))
   })
 
   it('applies custom className', () => {

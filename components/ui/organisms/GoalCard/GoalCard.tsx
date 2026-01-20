@@ -2,16 +2,16 @@
 
 import { useState } from 'react'
 import { m } from 'framer-motion'
-import Image from 'next/image'
 import { Collapsible } from 'radix-ui'
-import { ChevronDown, CornerDownRight, Plus } from 'lucide-react'
+import { ChevronDown, Plus } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { Card } from '@/components/ui/atoms/Card/Card'
 import { GoalCardProps } from './GoalCard.types'
 import { Typography } from '@/components/ui/foundations/Typography'
-import { generateInitialsAvatarSrc } from '@/utils/generateInitialsAvatar'
+import { Avatar } from '@/components/ui/atoms/Avatar'
 import { GoalStatus } from '@/components/ui/molecules/GoalStatus/GoalStatus'
 import { TypeIcon } from '@/components/ui/molecules/TypeIcon'
+import { LadderGoal } from '@/components/ui/molecules/LadderGoal'
 import { cn } from '@/utils/cn'
 import { Button } from '../../atoms/Button'
 import { useTranslations } from 'next-intl'
@@ -59,22 +59,7 @@ export function GoalCard({
       className="isolate"
     >
       <Card data-testid={dataTestId} className="flex flex-col gap-1_5 items-stretch relative">
-        {description && (
-          <button
-            onClick={handleOpenLadderingModal}
-            className={cn(
-              'h-2 flex items-center gap-0_5 w-full text-left',
-              'hover:text-neutral-800 transition-colors',
-              'cursor-pointer group',
-            )}
-            aria-label={t('openLadderingModalLabel')}
-          >
-            <CornerDownRight width={20} className="shrink-0" />
-            <Typography color="neutral600" className="truncate group-hover:text-neutral-800">
-              {description}
-            </Typography>
-          </button>
-        )}
+        {description && <LadderGoal text={description} onClick={handleOpenLadderingModal} />}
         <Collapsible.Root open={open} onOpenChange={setOpen}>
           <Collapsible.Trigger asChild disabled={!hasChildrenGoals}>
             <div className={cn('flex items-center gap-0_5', hasChildrenGoals && 'cursor-pointer')}>
@@ -99,16 +84,10 @@ export function GoalCard({
                   className="relative shrink-0"
                   style={{ width: ambitionType ? '72px' : '48px' }}
                 >
-                  <Image
-                    src={avatarUrl || generateInitialsAvatarSrc(userName, { size: 48 })}
-                    alt={userName}
-                    width={48}
-                    height={48}
-                    className="rounded-full"
-                  />
+                  <Avatar src={avatarUrl} alt={userName} size="lg" />
                   {ambitionType && (
-                    <div className="absolute top-0 -right-0_25 w-12 h-12 bg-neutral-100 rounded-full flex items-center justify-center">
-                      <TypeIcon type={ambitionType} size="sm" />
+                    <div className="absolute top-0 -right-0_25">
+                      <TypeIcon type={ambitionType} variant="badge" />
                     </div>
                   )}
                 </div>
@@ -134,18 +113,8 @@ export function GoalCard({
               className="ml-2 pl-0_5 flex flex-col gap-1 pt-1"
             >
               {ladderGoals.map((ladderGoal) => (
-                <div key={ladderGoal.id} className="flex gap-1 items-center max-sm:flex-wrap">
-                  <CornerDownRight width={16} className="text-neutral-600" />
-                  <Image
-                    src={
-                      ladderGoal.avatarUrl ||
-                      generateInitialsAvatarSrc(ladderGoal.userName, { size: 40 })
-                    }
-                    alt={ladderGoal.userName}
-                    width={48}
-                    height={48}
-                    className="rounded-full shrink-0 grow-0"
-                  />
+                <LadderGoal key={ladderGoal.id} size="small" className="max-sm:flex-wrap">
+                  <Avatar src={ladderGoal.avatarUrl} alt={ladderGoal.userName} size="lg" />
                   <Typography
                     className="grow-1 basis-1 max-sm:order-last max-sm:basis-full max-sm:border-b max-sm:border-neutral-300 max-sm:pb-1"
                     color="neutral600"
@@ -154,7 +123,7 @@ export function GoalCard({
                     {ladderGoal.title}
                   </Typography>
                   <GoalStatus status={ladderGoal.status as AmbitionStatus} className="grow-0" />
-                </div>
+                </LadderGoal>
               ))}
             </m.div>
           </Collapsible.Content>

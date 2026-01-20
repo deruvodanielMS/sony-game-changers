@@ -115,21 +115,23 @@ import { motion } from 'framer-motion'
 // Page entry animation
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 
-<AnimatedSection delay={0}>
+;<AnimatedSection delay={0}>
   <Header />
 </AnimatedSection>
 
 // Staggered list
-{items.map((item, index) => (
-  <AnimatedSection key={item.id} delay={0.1 + index * 0.05}>
-    <Card />
-  </AnimatedSection>
-))}
+{
+  items.map((item, index) => (
+    <AnimatedSection key={item.id} delay={0.1 + index * 0.05}>
+      <Card />
+    </AnimatedSection>
+  ))
+}
 
 // Exit animations
 import { AnimatePresence, m } from 'framer-motion'
 
-<AnimatePresence mode="wait">
+;<AnimatePresence mode="wait">
   {isOpen && (
     <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
       {children}

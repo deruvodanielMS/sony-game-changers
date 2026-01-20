@@ -23,6 +23,9 @@
   --color-neutral-900: var(--neutral-900);
   --color-neutral-1000: var(--neutral-1000);
 
+  /* Dividers */
+  --color-divider-default: var(--divider-default);
+
   /* Feedback - Info */
   --color-feedback-info-100: var(--feedback-info-100);
   --color-feedback-info-200: var(--feedback-info-200);
@@ -82,6 +85,14 @@
   --color-extra-pink-800: var(--extra-pink-800);
   --color-extra-pink-950: var(--extra-pink-950);
 
+  /* Extra - Green */
+  --color-extra-green-100: var(--extra-green-100);
+  --color-extra-green-200: var(--extra-green-200);
+  --color-extra-green-300: var(--extra-green-300);
+  --color-extra-green-600: var(--extra-green-600);
+  --color-extra-green-800: var(--extra-green-800);
+  --color-extra-green-950: var(--extra-green-950);
+
   /* EXTRA - Goals */
 
   --color-goal-completed: var(--goal-completed);
@@ -94,6 +105,7 @@
   --spacing-0_125: var(--space-0_125);
   --spacing-0_25: var(--space-0_25);
   --spacing-0_5: var(--space-0_5);
+  --spacing-0_625: var(--space-0_625);
   --spacing-0_75: var(--space-0_75);
   --spacing-1: var(--space-1);
   --spacing-1_5: var(--space-1_5);
@@ -154,7 +166,9 @@
   --radius-tiny: var(--rounded-tiny);
   --radius-small: var(--rounded-small);
   --radius-default: var(--rounded-default);
+  --radius-large: var(--rounded-large);
   --radius-x-large: var(--rounded-x-large);
+  --radius-badge: var(--rounded-badge);
 
   /* Modal */
 

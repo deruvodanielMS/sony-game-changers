@@ -2,6 +2,7 @@
 
 import { useId } from 'react'
 import { cn } from '@/utils/cn'
+import { Typography } from '@/components/ui/foundations/Typography'
 import type { ProgressRingProps } from './ProgressRing.types'
 
 /**
@@ -13,7 +14,10 @@ export function ProgressRing({
   progress = 0,
   size = 48,
   strokeWidth = 6,
+  color,
   backgroundColor = '#E8E4FF',
+  showPercentage = false,
+  percentageVariant = 'h5',
   className,
   'data-test-id': dataTestId,
 }: ProgressRingProps) {
@@ -23,20 +27,25 @@ export function ProgressRing({
   const strokeDashoffset = circumference - (normalizedProgress / 100) * circumference
   const gradientId = `progress-gradient-${useId()}`
 
-  return (
+  // Use solid color if provided, otherwise use gradient
+  const useGradient = !color
+
+  const ringElement = (
     <svg
       width={size}
       height={size}
       viewBox={`0 0 ${size} ${size}`}
-      className={cn('rotate-[-90deg]', className)}
+      className={cn('rotate-90 scale-x-[-1]', !showPercentage && className)}
       data-test-id={dataTestId}
     >
-      <defs>
-        <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style={{ stopColor: 'var(--color-extra-blue-600)' }} />
-          <stop offset="100%" style={{ stopColor: 'var(--color-extra-pink-600)' }} />
-        </linearGradient>
-      </defs>
+      {useGradient && (
+        <defs>
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style={{ stopColor: 'var(--color-extra-blue-600)' }} />
+            <stop offset="100%" style={{ stopColor: 'var(--color-extra-pink-600)' }} />
+          </linearGradient>
+        </defs>
+      )}
 
       {/* Background circle */}
       <circle
@@ -48,20 +57,41 @@ export function ProgressRing({
         strokeWidth={strokeWidth}
       />
 
-      {/* Progress circle with gradient */}
+      {/* Progress circle with color or gradient */}
       <circle
         cx={size / 2}
         cy={size / 2}
         r={radius}
         fill="none"
-        stroke={`url(#${gradientId})`}
+        stroke={color ? undefined : `url(#${gradientId})`}
         strokeWidth={strokeWidth}
         strokeDasharray={circumference}
         strokeDashoffset={strokeDashoffset}
         strokeLinecap="round"
-        style={{ transition: 'stroke-dashoffset 0.3s ease' }}
+        style={{
+          transition: 'stroke-dashoffset 0.3s ease',
+          ...(color && { stroke: color }),
+        }}
       />
     </svg>
+  )
+
+  if (!showPercentage) {
+    return ringElement
+  }
+
+  return (
+    <div
+      className={cn('relative flex items-center justify-center', className)}
+      style={{ width: size, height: size }}
+    >
+      {ringElement}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <Typography variant={percentageVariant} className="text-neutral-1000">
+          {normalizedProgress}%
+        </Typography>
+      </div>
+    </div>
   )
 }
 

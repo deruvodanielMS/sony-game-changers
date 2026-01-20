@@ -29,6 +29,18 @@ export interface ProgressRingProps {
   backgroundColor?: string
 
   /**
+   * Whether to show the percentage text in the center
+   * @default false
+   */
+  showPercentage?: boolean
+
+  /**
+   * Typography variant for the percentage text
+   * @default 'h5'
+   */
+  percentageVariant?: 'h5' | 'h6' | 'body'
+
+  /**
    * Additional CSS classes
    */
   className?: string

@@ -178,7 +178,7 @@ const variants = {
 ```tsx
 import { AnimatePresence, m } from 'framer-motion'
 
-<AnimatePresence mode="wait">
+;<AnimatePresence mode="wait">
   {isOpen && (
     <m.div
       initial={{ opacity: 0 }}
@@ -209,16 +209,18 @@ Use `AnimatedSection` component for consistent page entry animations:
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 
 // Single element
-<AnimatedSection delay={0}>
+;<AnimatedSection delay={0}>
   <Header />
 </AnimatedSection>
 
 // Staggered list
-{items.map((item, index) => (
-  <AnimatedSection key={item.id} delay={0.1 + index * 0.05}>
-    <Card {...item} />
-  </AnimatedSection>
-))}
+{
+  items.map((item, index) => (
+    <AnimatedSection key={item.id} delay={0.1 + index * 0.05}>
+      <Card {...item} />
+    </AnimatedSection>
+  ))
+}
 ```
 
 **Testing animations:**
@@ -229,7 +231,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 // Use waitFor for animated content
 it('shows content after animation', async () => {
   render(<AnimatedComponent />)
-  
+
   await waitFor(() => {
     expect(screen.getByText('Content')).toBeInTheDocument()
   })

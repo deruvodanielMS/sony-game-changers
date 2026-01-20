@@ -1,12 +1,13 @@
 import type { LucideIcon } from 'lucide-react'
+import type { AmbitionType as DomainAmbitionType } from '@/domain/ambition'
 
-export type AmbitionType = 'business' | 'manager-effectiveness' | 'personal-growth-and-development'
+export type AmbitionType = DomainAmbitionType
 
 export interface TypeIconProps {
   /**
    * Type of ambition which determines the icon displayed
    */
-  type: AmbitionType
+  type: AmbitionType | string
 
   /**
    * Custom icon to override the default icon for the type
@@ -14,16 +15,12 @@ export interface TypeIconProps {
   icon?: LucideIcon
 
   /**
-   * Size of the icon container
-   * @default "md"
+   * Visual variant of the icon
+   * - badge: 48px container with neutral-100 background and neutral-1000 icon (for GoalCard)
+   * - metadata: 24px container with neutral-600 background and neutral-0 icon (for AmbitionDetailHeader)
+   * @default "badge"
    */
-  size?: 'sm' | 'md' | 'lg'
-
-  /**
-   * Custom gradient colors (from, to)
-   * @default ["#5577f4", "#d061ff"]
-   */
-  gradient?: [string, string]
+  variant?: 'badge' | 'metadata'
 
   /**
    * Additional CSS classes for the container

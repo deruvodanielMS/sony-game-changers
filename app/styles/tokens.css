@@ -21,7 +21,13 @@
   --neutral-900: #100f2a;
   --neutral-1000: #030217;
 
-  /* 💬 Feedback */
+  /* �� Dividers */
+  --divider-default: #474b69;
+
+  /* � Dividers */
+  --divider-default: #d9d9d9;
+
+  /* �💬 Feedback */
   --feedback-info-100: #f0f9ff;
   --feedback-info-200: #bae6fd;
   --feedback-info-400: #38bdf8;
@@ -188,6 +194,7 @@
   --space-0_125: 2px;
   --space-0_25: 4px;
   --space-0_5: 8px;
+  --space-0_625: 10px;
   --space-0_75: 12px;
   --space-1: 16px;
   --space-1_5: 24px;
@@ -277,7 +284,9 @@
   --rounded-tiny: 4px;
   --rounded-small: 8px;
   --rounded-default: 16px;
+  --rounded-large: 24px;
   --rounded-x-large: 48px;
+  --rounded-badge: 58px;
 }
 
 @media (max-width: 768px) {
@@ -285,7 +294,9 @@
     --rounded-tiny: 2px;
     --rounded-small: 6px;
     --rounded-default: 12px;
+    --rounded-large: 16px;
     --rounded-x-large: 24px;
+    --rounded-badge: 40px;
   }
 }
 

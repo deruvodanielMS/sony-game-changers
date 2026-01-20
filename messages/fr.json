@@ -109,9 +109,10 @@
       "expand": "Développer les actions"
     },
     "metadata": {
-      "createdBy": "Créé par :",
-      "assignedTo": "Assigné à :",
-      "lastUpdate": "Dernière mise à jour :",
+      "type": "Type",
+      "createdBy": "Créé par",
+      "assignedTo": "Assigné à",
+      "lastUpdate": "Dernière mise à jour",
       "on": "le"
     },
     "progress": {

@@ -3,69 +3,72 @@
 import { Target, Sprout, BriefcaseBusiness, Shrub } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import type { TypeIconProps, AmbitionType } from './TypeIcon.types'
+import { AMBITION_TYPES } from '@/domain/ambition'
 
-const defaultIcons: Record<AmbitionType, typeof Sprout> = {
-  business: Sprout,
-  'manager-effectiveness': BriefcaseBusiness,
+type IconKey = 'business' | 'manager-effectiveness' | 'personal-growth-and-development'
+
+const typeToIconKey: Record<AmbitionType, IconKey> = {
+  [AMBITION_TYPES.BUSINESS]: 'business',
+  [AMBITION_TYPES.MANAGER_EFFECTIVENESS]: 'manager-effectiveness',
+  [AMBITION_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT]: 'personal-growth-and-development',
+}
+
+const defaultIcons: Record<IconKey, typeof Sprout> = {
+  business: BriefcaseBusiness,
+  'manager-effectiveness': Sprout,
   'personal-growth-and-development': Shrub,
 }
 
-const sizeMap = {
-  sm: {
-    container: 'size-2',
-    icon: 'size-1',
-    padding: 'p-0.375',
+const variantStyles = {
+  badge: {
+    container: 'size-3 p-0.625 bg-neutral-100',
+    icon: 'size-1.5 text-neutral-1000',
   },
-  md: {
-    container: 'size-3',
-    icon: 'size-1.5',
-    padding: 'p-0.625',
-  },
-  lg: {
-    container: 'size-4',
-    icon: 'size-2',
-    padding: 'p-0.75',
+  metadata: {
+    container: 'size-1.5 bg-neutral-600',
+    icon: 'size-0.75 text-neutral-0',
   },
 }
 
 /**
- * TypeIcon - Displays an icon with gradient background for ambition types
+ * TypeIcon - Displays an icon for ambition types
  *
- * A molecule component that shows an icon within a circular gradient background.
+ * A molecule component that shows an icon within a circular background.
  * Used to visually identify different types of ambitions (Business, Manager Effectiveness, Personal Growth).
+ *
+ * Supports two variants:
+ * - badge: 48px container with neutral-100 background (for GoalCard)
+ * - metadata: 24px container with neutral-600 background (for AmbitionDetailHeader metadata)
  *
  * @example
  * ```tsx
- * <TypeIcon type="business" size="md" />
- * <TypeIcon type="manager-effectiveness" gradient={["#ff0000", "#00ff00"]} />
+ * <TypeIcon type="business" variant="badge" />
+ * <TypeIcon type="manager-effectiveness" variant="metadata" />
  * ```
  */
 export function TypeIcon({
   type,
   icon: CustomIcon,
-  size = 'md',
-  gradient = ['#5577f4', '#d061ff'],
+  variant = 'badge',
   className,
   'data-test-id': dataTestId,
 }: TypeIconProps) {
-  const Icon = CustomIcon || defaultIcons[type] || Target
+  const iconKey = (typeToIconKey[type as AmbitionType] as IconKey) || 'business'
+  const Icon = CustomIcon || defaultIcons[iconKey] || Target
+  const styles = variantStyles[variant]
 
   return (
     <div
       className={cn(
         'flex items-center justify-center rounded-full shrink-0',
-        sizeMap[size].container,
-        sizeMap[size].padding,
+        styles.container,
         className,
       )}
-      style={{
-        backgroundImage: `linear-gradient(to left, ${gradient[0]}, ${gradient[1]})`,
-      }}
       data-testid={dataTestId}
       role="img"
       aria-label={`${type} ambition`}
     >
-      <Icon className={cn(sizeMap[size].icon, 'text-neutral-0')} />
+      <Icon className={styles.icon} />
     </div>
   )
 }
