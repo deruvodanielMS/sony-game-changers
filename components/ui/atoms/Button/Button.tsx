@@ -154,6 +154,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         <m.span
           className="inline-flex items-center justify-center w-full h-full gap-0.5"
           variants={tapVariants}
+          initial="rest"
+          animate="rest"
+          whileTap="tap"
           transition={{ duration: 0.1 }}
         >
           {isLoading ? (
