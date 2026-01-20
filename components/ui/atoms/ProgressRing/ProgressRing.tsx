@@ -31,12 +31,16 @@ export function ProgressRing({
   // Use solid color if provided, otherwise use gradient
   const useGradient = !color
 
+  // Rotate 90 degrees clockwise and flip horizontally to achieve counterclockwise progress starting from top
+  const RING_ROTATION = 'rotate-90'
+  const RING_HORIZONTAL_FLIP = 'scale-x-[-1]'
+
   const ringElement = (
     <svg
       width={size}
       height={size}
       viewBox={`0 0 ${size} ${size}`}
-      className={cn('rotate-90 scale-x-[-1]', !showPercentage && className)}
+      className={cn(RING_ROTATION, RING_HORIZONTAL_FLIP, !showPercentage && className)}
       data-test-id={dataTestId}
     >
       {useGradient && (

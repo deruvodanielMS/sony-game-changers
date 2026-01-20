@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { Rocket } from 'lucide-react'
+import { Rocket, Target, Star } from 'lucide-react'
 import { TypeIcon } from './TypeIcon'
 
 const meta: Meta<typeof TypeIcon> = {

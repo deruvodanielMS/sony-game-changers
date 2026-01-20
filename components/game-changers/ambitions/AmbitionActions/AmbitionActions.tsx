@@ -6,6 +6,10 @@ import { Typography } from '@/components/ui/foundations/Typography'
 import { cn } from '@/utils/cn'
 import type { AmbitionActionsProps } from './AmbitionActions.types'
 
+// Bullet point design tokens
+const BULLET_SIZE = '6px' // Small circular bullet point size
+const BULLET_VERTICAL_OFFSET = '9px' // Aligns bullet with first line of text (body font line-height compensation)
+
 export function AmbitionActions({ actions, defaultOpen = true, className }: AmbitionActionsProps) {
   const t = useTranslations('AmbitionDetail.actions')
 
@@ -16,10 +20,10 @@ export function AmbitionActions({ actions, defaultOpen = true, className }: Ambi
           key={index}
           className="border-b border-neutral-200 flex items-start gap-1 w-full last:border-b-0 py-1 pl-0_5"
         >
-          {/* Bullet point - 6px circle */}
+          {/* Bullet point */}
           <div
             className="rounded-full bg-neutral-800 shrink-0"
-            style={{ width: '6px', height: '6px', marginTop: '9px' }}
+            style={{ width: BULLET_SIZE, height: BULLET_SIZE, marginTop: BULLET_VERTICAL_OFFSET }}
           />
 
           {/* Action text */}
