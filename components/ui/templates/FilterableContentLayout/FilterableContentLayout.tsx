@@ -205,13 +205,13 @@ export function FilterableContentLayout({
                         variant="body"
                         fontWeight="semibold"
                         className="mb-0_75"
-                        color="neutral1000"
+                        color="default"
                       >
                         {filter.label}
                       </Typography>
                       <div className="flex flex-col gap-0_5">
                         {filter.options.map((option) => {
-                          const isSelected = filter.selected.includes(option.value)
+                          const isSelected = filter.selected?.includes(option.value) ?? false
                           return (
                             <label
                               key={option.value}
@@ -221,9 +221,10 @@ export function FilterableContentLayout({
                                 type="checkbox"
                                 checked={isSelected}
                                 onChange={() => {
+                                  const currentSelected = filter.selected ?? []
                                   const newSelected = isSelected
-                                    ? filter.selected.filter((v) => v !== option.value)
-                                    : [...filter.selected, option.value]
+                                    ? currentSelected.filter((v) => v !== option.value)
+                                    : [...currentSelected, option.value]
                                   filter.onSelect(newSelected)
                                 }}
                                 className="w-5 h-5 rounded border-2 border-neutral-400 text-accent-primary focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 cursor-pointer"

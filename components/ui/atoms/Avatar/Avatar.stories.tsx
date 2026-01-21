@@ -86,6 +86,9 @@ export const SquareShape: Story = {
 }
 
 export const AllSizes: Story = {
+  args: {
+    alt: 'User',
+  },
   render: () => (
     <div className="flex items-center gap-2">
       <Avatar alt="User" size="xs" />
@@ -98,6 +101,9 @@ export const AllSizes: Story = {
 }
 
 export const AllShapes: Story = {
+  args: {
+    alt: 'User',
+  },
   render: () => (
     <div className="flex items-center gap-2">
       <Avatar alt="User" shape="circle" />

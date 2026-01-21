@@ -93,6 +93,9 @@ export const Large: Story = {
 }
 
 export const AllVariants: Story = {
+  args: {
+    children: 'Badge',
+  },
   render: () => (
     <div className="flex flex-wrap gap-1">
       <Badge variant="default">Default</Badge>
@@ -107,6 +110,9 @@ export const AllVariants: Story = {
 }
 
 export const AllSizes: Story = {
+  args: {
+    children: 'Badge',
+  },
   render: () => (
     <div className="flex items-center gap-1">
       <Badge size="sm">Small</Badge>

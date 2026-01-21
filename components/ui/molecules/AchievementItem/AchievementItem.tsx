@@ -106,7 +106,7 @@ export function AchievementItem({
           />
           <Typography
             variant="body"
-            color="neutral1000"
+            color="default"
             className={cn('flex-1', isMobile && 'text-sm')}
           >
             {text}

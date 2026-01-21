@@ -7,6 +7,7 @@ import { AchievementItem } from '@/components/ui/molecules/AchievementItem'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
 import type { AmbitionAchievementsProps, Achievement } from './AmbitionAchievements.types'
+import type { ProgressStatus } from '@/components/ui/molecules/AchievementItem/AchievementItem.types'
 
 export function AmbitionAchievements({
   achievements: initialAchievements,
@@ -31,10 +32,7 @@ export function AmbitionAchievements({
     })
   }
 
-  const handleProgressChange = (
-    id: string | number,
-    progress: 'not-started' | 'on-track' | 'off-track',
-  ) => {
+  const handleProgressChange = (id: string | number, progress: ProgressStatus) => {
     setAchievements((prev) => {
       const updated = prev.map((achievement) =>
         achievement.id === id ? { ...achievement, progress } : achievement,
