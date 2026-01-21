@@ -8,7 +8,7 @@ export function createRepository<T>(
   const envKey = options?.envKey ?? 'REPOSITORY_SOURCE'
   const defaultKey = options?.defaultKey
 
-  const selected = process.env[envKey] ?? defaultKey
+  const selected = (process.env[envKey] ?? defaultKey)?.trim()
 
   if (!selected) {
     throw new Error(`Missing repository source (${envKey})`)
