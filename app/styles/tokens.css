@@ -346,9 +346,9 @@
   --drawer-width-sm: 320px;
   --drawer-width-md: 420px;
   --drawer-width-lg: 560px;
-  --drawer-height-sm: 256px;
-  --drawer-height-md: 320px;
-  --drawer-height-lg: 384px;
+  --drawer-height-sm: 60vh;
+  --drawer-height-md: 70vh;
+  --drawer-height-lg: 80vh;
 }
 
 /* Transitions & Animations */

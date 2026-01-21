@@ -10,7 +10,7 @@ export default function Loading() {
     >
       {/* Header skeleton */}
       <div className="flex items-center justify-between mb-1">
-        <Skeleton variant="heading" width="200px" />
+        <Skeleton variant="h3" width="200px" />
         <Skeleton variant="button" width="160px" height="40px" />
       </div>
 
@@ -28,12 +28,12 @@ export default function Loading() {
             <div className="flex items-center gap-1 mb-1">
               <Skeleton variant="circular" width="48px" height="48px" />
               <div className="flex-1 flex flex-col gap-0_5">
-                <Skeleton variant="title" width="70%" />
-                <Skeleton variant="text" width="110px" />
+                <Skeleton variant="h6" width="70%" />
+                <Skeleton variant="body" width="110px" />
               </div>
             </div>
-            <Skeleton variant="text" width="100%" />
-            <Skeleton variant="text" width="85%" />
+            <Skeleton variant="body" width="100%" />
+            <Skeleton variant="body" width="85%" />
           </Card>
         ))}
       </div>

@@ -78,6 +78,9 @@ export const ManyLevels: Story = {
  * Visual showcase in different contexts
  */
 export const AllVariants: Story = {
+  args: {
+    items: [{ label: 'Example' }],
+  },
   render: () => (
     <div className="flex flex-col gap-3">
       <div>

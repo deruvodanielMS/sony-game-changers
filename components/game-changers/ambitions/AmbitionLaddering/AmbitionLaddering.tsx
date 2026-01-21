@@ -95,7 +95,7 @@ export function AmbitionLaddering({
           />
 
           {/* Avatar Filter */}
-          {avatarOptions?.length > 0 && (
+          {avatarOptions && avatarOptions.length > 0 && (
             <AvatarSelect
               options={avatarOptions}
               selected={selectedAvatars}

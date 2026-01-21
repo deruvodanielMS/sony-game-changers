@@ -37,6 +37,7 @@ export function AppLayout({ children, className }: AppLayoutProps) {
   const {
     modal: { content: modalContent, ...modalProps },
     drawer: { content: drawerContent, ...drawerProps },
+    drawerKey,
   } = useUIStore()
 
   // Mark as mounted after first render to avoid hydration mismatch
@@ -169,7 +170,9 @@ export function AppLayout({ children, className }: AppLayoutProps) {
 
       {/* Shared Modal and Drawer */}
       <Modal {...modalProps}>{modalContent}</Modal>
-      <Drawer {...drawerProps}>{drawerContent}</Drawer>
+      <Drawer key={drawerKey} {...drawerProps}>
+        {drawerContent}
+      </Drawer>
     </LazyMotion>
   )
 }

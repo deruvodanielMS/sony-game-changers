@@ -64,7 +64,7 @@ export function CollapsibleSection({
           open && 'rotate-180',
         )}
       />
-      <Typography variant="h6" color="neutral1000">
+      <Typography variant="h6" color="default">
         {title}
       </Typography>
     </div>

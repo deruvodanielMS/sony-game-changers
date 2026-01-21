@@ -1,9 +1,7 @@
 'use client'
 
-import { useState } from 'react'
 import { SlidersHorizontal } from 'lucide-react'
 import { Button } from '@/components/ui/atoms/Button'
-import { Drawer } from '@/components/ui/atoms/Drawer'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
 import { SearchField } from '@/components/ui/molecules/SearchField'
@@ -12,8 +10,29 @@ import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { useScrollDirection } from '@/hooks/useScrollDirection'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
+import { useUIStore } from '@/stores/ui.store'
 import { cn } from '@/utils/cn'
 import type { FilterableContentLayoutProps } from './FilterableContentLayout.types'
+
+// Constants
+const SCROLL_THRESHOLD = 100 // px - threshold to hide header on scroll
+const SHADOW_THRESHOLD = 10 // px - threshold to show sticky shadow
+
+// Sub-component: Active filter count badge (DRY principle)
+function FilterBadge({ count, className }: { count: number; className?: string }) {
+  if (count === 0) return null
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center justify-center w-5 h-5 text-body-tiny rounded-full font-bold',
+        className,
+      )}
+      aria-label={`${count} active filters`}
+    >
+      {count}
+    </span>
+  )
+}
 
 /**
  * FilterableContentLayout - Reusable template for pages with sticky header, filters, and mobile drawer
@@ -64,17 +83,17 @@ export function FilterableContentLayout({
   activeFiltersCount = 0,
   contentClassName,
 }: FilterableContentLayoutProps) {
-  const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false)
+  const { openDrawer, closeDrawer } = useUIStore()
   const { scrollDirection, scrollY } = useScrollDirection()
 
   // Use media query hook for desktop detection
   const isDesktop = useMediaQuery(BREAKPOINTS.md)
 
-  // Hide header when scrolling down past 100px, show when scrolling up (only on desktop)
-  const shouldHideHeader = isDesktop && scrollDirection === 'down' && scrollY > 100
+  // Hide header when scrolling down past threshold, show when scrolling up (only on desktop)
+  const shouldHideHeader = isDesktop && scrollDirection === 'down' && scrollY > SCROLL_THRESHOLD
 
   // Show shadow when content is scrolling behind sticky elements
-  const showStickyShadow = scrollY > 10
+  const showStickyShadow = scrollY > SHADOW_THRESHOLD
 
   return (
     <div className="flex flex-col gap-0 md:gap-3">
@@ -93,7 +112,7 @@ export function FilterableContentLayout({
       <div
         className={cn(
           'hidden md:block sticky top-[var(--sticky-filters-desktop-offset)] z-[var(--z-sticky-filters)] bg-neutral-0 pb-1 transition-all duration-base',
-          showStickyShadow && '[box-shadow:var(--shadow-sticky-light)]',
+          showStickyShadow && 'shadow-sticky-light',
         )}
       >
         <AnimatedSection delay={0.05}>
@@ -130,7 +149,150 @@ export function FilterableContentLayout({
               variant="secondary"
               className="flex-1 relative"
               leftIcon={<SlidersHorizontal width={20} />}
-              onClick={() => setIsFilterDrawerOpen(true)}
+              onClick={() => {
+                const drawerContent = (
+                  <div className="flex flex-col h-full">
+                    {/* Scrollable content */}
+                    <div className="flex-1 overflow-y-auto px-1_5 pb-1_5">
+                      {/* Search First - Most used action */}
+                      {searchField && (
+                        <div className="mb-1_5">
+                          {translations.searchLabel && (
+                            <Typography
+                              variant="bodySmall"
+                              fontWeight="semibold"
+                              className="mb-0_5"
+                              color="neutral800"
+                            >
+                              {translations.searchLabel}
+                            </Typography>
+                          )}
+                          <SearchField
+                            onChange={searchField.onChange}
+                            defaultValue={searchField.value}
+                            placeholder={searchField.placeholder}
+                          />
+                        </div>
+                      )}
+
+                      {/* Filters Section */}
+                      {filters.length > 0 && (
+                        <div className="mb-1_5">
+                          {translations.filterByLabel && (
+                            <Typography
+                              variant="bodySmall"
+                              fontWeight="semibold"
+                              className="mb-0_75"
+                              color="neutral800"
+                            >
+                              {translations.filterByLabel}
+                            </Typography>
+                          )}
+                          <div className="flex flex-col gap-1_5">
+                            {filters.map((filter) => (
+                              <div
+                                key={filter.label}
+                                className="border-b border-neutral-200 pb-1_5"
+                              >
+                                <Typography
+                                  variant="body"
+                                  fontWeight="semibold"
+                                  className="mb-0_75"
+                                  color="neutral800"
+                                >
+                                  {filter.label}
+                                </Typography>
+                                <div className="flex flex-col gap-0_5">
+                                  {filter.options.map((option) => {
+                                    const isSelected =
+                                      filter.selected?.includes(option.value) ?? false
+                                    return (
+                                      <label
+                                        key={option.value}
+                                        className="flex items-center gap-0_75 cursor-pointer py-0_5"
+                                      >
+                                        <input
+                                          type="checkbox"
+                                          checked={isSelected}
+                                          onChange={() => {
+                                            const currentSelected = filter.selected ?? []
+                                            const newSelected = isSelected
+                                              ? currentSelected.filter((v) => v !== option.value)
+                                              : [...currentSelected, option.value]
+                                            filter.onSelect(newSelected)
+                                          }}
+                                          className="w-5 h-5 rounded border-2 border-neutral-400 text-accent-primary focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 cursor-pointer"
+                                        />
+                                        <Typography variant="body" color="neutral800">
+                                          {option.label}
+                                        </Typography>
+                                      </label>
+                                    )
+                                  })}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Avatar Selector */}
+                      {avatarSelector && (
+                        <div className="mb-1_5">
+                          {translations.teamMembersLabel && (
+                            <Typography
+                              variant="bodySmall"
+                              fontWeight="semibold"
+                              className="mb-0_75"
+                              color="neutral800"
+                            >
+                              {translations.teamMembersLabel}
+                            </Typography>
+                          )}
+                          <AvatarSelect {...avatarSelector} />
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Sticky Footer with actions */}
+                    <div className="sticky bottom-0 bg-neutral-0 border-t border-neutral-300 px-1_5 py-1 flex gap-0_75">
+                      <Button
+                        variant="secondary"
+                        onClick={() => {
+                          onClearFilters?.()
+                          closeDrawer()
+                        }}
+                        className="flex-1"
+                        disabled={activeFiltersCount === 0}
+                      >
+                        {translations.clearAll}
+                      </Button>
+                      <Button
+                        variant="primary"
+                        onClick={() => closeDrawer()}
+                        className="flex-1 text-neutral-0 relative"
+                        aria-label={
+                          activeFiltersCount > 0
+                            ? `${translations.showResults} (${activeFiltersCount} active filters)`
+                            : translations.showResults
+                        }
+                      >
+                        {translations.showResults}
+                        <FilterBadge
+                          count={activeFiltersCount}
+                          className="ml-0_5 bg-neutral-0 text-accent-primary"
+                        />
+                      </Button>
+                    </div>
+                  </div>
+                )
+
+                openDrawer(drawerContent, {
+                  title: drawerTitle,
+                  position: 'bottom',
+                  size: 'lg',
+                })
+              }}
               aria-label={
                 activeFiltersCount > 0
                   ? `${translations.filtersButton} (${activeFiltersCount} active)`
@@ -138,165 +300,16 @@ export function FilterableContentLayout({
               }
             >
               {translations.filtersButton}
-              {activeFiltersCount > 0 && (
-                <span
-                  className="absolute -top-0_25 -right-0_25 inline-flex items-center justify-center w-5 h-5 text-body-tiny bg-accent-primary text-neutral-0 rounded-full font-bold"
-                  aria-label={`${activeFiltersCount} active filters`}
-                >
-                  {activeFiltersCount}
-                </span>
-              )}
+              <FilterBadge
+                count={activeFiltersCount}
+                className="absolute -top-0_25 -right-0_25 bg-accent-primary text-neutral-0"
+              />
             </Button>
             {primaryAction && <div className="shrink-0">{primaryAction}</div>}
           </div>
         </AnimatedSection>
       </div>
 
-      {/* Mobile Filter Drawer */}
-      <Drawer
-        open={isFilterDrawerOpen}
-        onClose={() => setIsFilterDrawerOpen(false)}
-        title={drawerTitle}
-        position="bottom"
-        size="full"
-        className="h-[85vh]! md:h-[80vh]!"
-      >
-        <div className="flex flex-col h-full">
-          {/* Scrollable content */}
-          <div className="flex-1 overflow-y-auto px-1_5 pb-1_5">
-            {/* Search First - Most used action */}
-            {searchField && (
-              <div className="mb-1_5">
-                {translations.searchLabel && (
-                  <Typography
-                    variant="bodySmall"
-                    fontWeight="semibold"
-                    className="mb-0_5"
-                    color="neutral800"
-                  >
-                    {translations.searchLabel}
-                  </Typography>
-                )}
-                <SearchField
-                  onChange={searchField.onChange}
-                  defaultValue={searchField.value}
-                  placeholder={searchField.placeholder}
-                />
-              </div>
-            )}
-
-            {/* Filters Section */}
-            {filters.length > 0 && (
-              <div className="mb-1_5">
-                {translations.filterByLabel && (
-                  <Typography
-                    variant="bodySmall"
-                    fontWeight="semibold"
-                    className="mb-0_75"
-                    color="neutral800"
-                  >
-                    {translations.filterByLabel}
-                  </Typography>
-                )}
-                <div className="flex flex-col gap-1_5">
-                  {filters.map((filter) => (
-                    <div key={filter.label} className="border-b border-neutral-200 pb-1_5">
-                      <Typography
-                        variant="body"
-                        fontWeight="semibold"
-                        className="mb-0_75"
-                        color="neutral1000"
-                      >
-                        {filter.label}
-                      </Typography>
-                      <div className="flex flex-col gap-0_5">
-                        {filter.options.map((option) => {
-                          const isSelected = filter.selected.includes(option.value)
-                          return (
-                            <label
-                              key={option.value}
-                              className="flex items-center gap-0_75 cursor-pointer py-0_5"
-                            >
-                              <input
-                                type="checkbox"
-                                checked={isSelected}
-                                onChange={() => {
-                                  const newSelected = isSelected
-                                    ? filter.selected.filter((v) => v !== option.value)
-                                    : [...filter.selected, option.value]
-                                  filter.onSelect(newSelected)
-                                }}
-                                className="w-5 h-5 rounded border-2 border-neutral-400 text-accent-primary focus:ring-2 focus:ring-accent-primary focus:ring-offset-2 cursor-pointer"
-                              />
-                              <Typography variant="body" color="neutral800">
-                                {option.label}
-                              </Typography>
-                            </label>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Avatar Selector */}
-            {avatarSelector && (
-              <div className="mb-1_5">
-                {translations.teamMembersLabel && (
-                  <Typography
-                    variant="bodySmall"
-                    fontWeight="semibold"
-                    className="mb-0_75"
-                    color="neutral800"
-                  >
-                    {translations.teamMembersLabel}
-                  </Typography>
-                )}
-                <AvatarSelect {...avatarSelector} />
-              </div>
-            )}
-          </div>
-
-          {/* Sticky Footer with actions */}
-          <div className="sticky bottom-0 bg-neutral-0 border-t border-neutral-300 px-1_5 py-1 flex gap-0_75">
-            <Button
-              variant="secondary"
-              onClick={() => {
-                onClearFilters?.()
-                setIsFilterDrawerOpen(false)
-              }}
-              className="flex-1"
-              disabled={activeFiltersCount === 0}
-            >
-              {translations.clearAll}
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => setIsFilterDrawerOpen(false)}
-              className="flex-1 text-neutral-0 relative"
-              aria-label={
-                activeFiltersCount > 0
-                  ? `${translations.showResults} (${activeFiltersCount} active filters)`
-                  : translations.showResults
-              }
-            >
-              {translations.showResults}
-              {activeFiltersCount > 0 && (
-                <span
-                  className="ml-0_5 inline-flex items-center justify-center w-5 h-5 text-body-tiny bg-neutral-0 text-accent-primary rounded-full font-bold"
-                  aria-hidden="true"
-                >
-                  {activeFiltersCount}
-                </span>
-              )}
-            </Button>
-          </div>
-        </div>
-      </Drawer>
-
-      {/* Content */}
       <div className={cn('flex flex-col gap-1 md:gap-1_5 pt-1 md:pt-0', contentClassName)}>
         {children}
       </div>

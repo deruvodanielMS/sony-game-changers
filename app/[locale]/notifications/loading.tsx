@@ -5,7 +5,7 @@ export default function Loading() {
     <div className="flex flex-col gap-1_5 p-1_5" role="status" aria-label="Loading">
       {/* Page header */}
       <div className="flex items-center justify-between">
-        <Skeleton variant="heading" width="200px" />
+        <Skeleton variant="h3" width="200px" />
         <Skeleton variant="button" width="120px" />
       </div>
 
@@ -18,9 +18,9 @@ export default function Loading() {
           >
             <Skeleton variant="circular" width="var(--space-2_75)" height="var(--space-2_75)" />
             <div className="flex-1 flex flex-col gap-0_5">
-              <Skeleton variant="title" width="70%" />
-              <Skeleton variant="text" width="100%" />
-              <Skeleton variant="text" width="40%" />
+              <Skeleton variant="h6" width="70%" />
+              <Skeleton variant="body" width="100%" />
+              <Skeleton variant="body" width="40%" />
             </div>
             <Skeleton variant="circular" width="var(--space-0_5)" height="var(--space-0_5)" />
           </div>

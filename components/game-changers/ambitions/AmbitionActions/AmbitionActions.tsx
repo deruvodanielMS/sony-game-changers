@@ -27,7 +27,7 @@ export function AmbitionActions({ actions, defaultOpen = true, className }: Ambi
           />
 
           {/* Action text */}
-          <Typography variant="body" color="neutral1000" className="flex-1">
+          <Typography variant="body" color="default" className="flex-1">
             {action}
           </Typography>
         </div>
