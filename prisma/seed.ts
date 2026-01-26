@@ -1,6 +1,21 @@
-import { EMPLOYEE_EMAIL_BY_ROLE } from '@/common/constants'
-import { AMBITION_STATUSES, AMBITION_TYPES } from '@/domain/ambition'
 import { PrismaClient } from '@prisma/client'
+
+const EMPLOYEE_EMAIL_BY_ROLE = {
+  MANAGER: 'manager@employee.test',
+  IC: 'ic@employee.test',
+} as const
+
+const GOAL_STATUSES = {
+  COMPLETED: 'completed',
+  DRAFT: 'draft',
+  AWAITING_APPROVAL: 'awaiting_approval',
+} as const
+
+const GOAL_TYPES = {
+  BUSINESS: 'business',
+  PERSONAL_GROWTH_AND_DEVELOPMENT: 'personal_growth_and_development',
+  MANAGER_EFFECTIVENESS: 'manager_effectiveness',
+} as const
 
 const prisma = new PrismaClient()
 
@@ -88,41 +103,53 @@ type SeedContext = {
 }
 
 async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
-  // Goal padre
-  const mainGoal = await prisma.goals.create({
+  // parent Goal For Manager, allowed to ladder
+  const managerGoal = await prisma.goals.create({
     data: {
-      title: 'Mejorar performance del equipo',
-      body: 'Incrementar eficiencia y calidad del delivery',
-      type: AMBITION_TYPES.MANAGER_EFFECTIVENESS,
-      status: AMBITION_STATUSES.AWAITING_APPROVAL,
-      assignedTo: ctx.ciId[0],
+      title: 'Improve team performance',
+      body: 'Increase efficiency and quality of delivery',
+      type: GOAL_TYPES.MANAGER_EFFECTIVENESS,
+      status: GOAL_STATUSES.AWAITING_APPROVAL,
+      assignedTo: ctx.managerId,
       createdBy: ctx.managerId,
       periodId: ctx.periodId,
     },
   })
 
-  // Goals hijos
-  const childGoal1 = await prisma.goals.create({
+  const managerSelfGoal = await prisma.goals.create({
     data: {
-      title: 'Reducir bugs en producción',
-      body: 'Bajar incidentes críticos un 30%',
-      type: AMBITION_TYPES.BUSINESS,
-      status: AMBITION_STATUSES.DRAFT,
-      parentId: mainGoal.id,
+      title: 'Improve team delivery predictability',
+      body: 'Ensure the team consistently meets commitments by improving planning and estimation',
+      type: GOAL_TYPES.MANAGER_EFFECTIVENESS,
+      status: GOAL_STATUSES.AWAITING_APPROVAL,
+      assignedTo: ctx.managerId,
+      createdBy: ctx.managerId,
+      periodId: ctx.periodId,
+    },
+  })
+
+  // Child Goals
+  const managerIcGoal = await prisma.goals.create({
+    data: {
+      title: 'Reduce bugs in production',
+      body: 'Reduce critical incidents by 30%',
+      type: GOAL_TYPES.BUSINESS,
+      status: GOAL_STATUSES.DRAFT,
       assignedTo: ctx.ciId[1],
       createdBy: ctx.managerId,
       periodId: ctx.periodId,
+      parentId: managerGoal.id,
     },
   })
 
-  const childGoal2 = await prisma.goals.create({
+  const icGoal = await prisma.goals.create({
     data: {
-      title: 'Mejorar cobertura de tests',
-      body: 'Alcanzar 80% de coverage',
-      type: AMBITION_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
-      status: AMBITION_STATUSES.COMPLETED,
-      parentId: mainGoal.id,
-      assignedTo: ctx.managerId,
+      title: 'Improve test coverage',
+      body: 'Achieve 80% coverage on all services',
+      type: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
+      status: GOAL_STATUSES.COMPLETED,
+      parentId: managerGoal.id,
+      assignedTo: ctx.ciId[0],
       createdBy: ctx.ciId[0],
       periodId: ctx.periodId,
     },
@@ -132,10 +159,29 @@ async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
   await prisma.goal_ambitions.createMany({
     data: [
       {
-        title: 'Adoptar mejores prácticas',
-        body: 'Definir estándares de calidad',
-        status: AMBITION_STATUSES.AWAITING_APPROVAL,
-        goalId: mainGoal.id,
+        title: 'Reduce critical incidents by 30%',
+        body: '',
+        status: GOAL_STATUSES.AWAITING_APPROVAL,
+        goalId: managerIcGoal.id,
+      },
+      {
+        title: 'Achieve 80% coverage on all services',
+        body: '',
+        status: GOAL_STATUSES.AWAITING_APPROVAL,
+        goalId: icGoal.id,
+      },
+      {
+        title:
+          'Ensure the team consistently meets commitments by improving planning and estimation',
+        body: '',
+        status: GOAL_STATUSES.AWAITING_APPROVAL,
+        goalId: managerSelfGoal.id,
+      },
+      {
+        title: 'Reduce critical incidents by 30%',
+        body: '',
+        status: GOAL_STATUSES.AWAITING_APPROVAL,
+        goalId: managerGoal.id,
       },
     ],
   })
@@ -144,10 +190,76 @@ async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
   await prisma.goal_actions.createMany({
     data: [
       {
-        title: 'Agregar pipeline de CI',
-        body: 'Automatizar tests y lint',
+        title: 'Add a mandatory code review before merging any change',
+        body: '',
         status: 'active',
-        goalId: childGoal2.id,
+        goalId: managerIcGoal.id,
+      },
+      {
+        title: 'Fix the top recurring bugs first by reviewing recent production issues',
+        body: '',
+        status: 'active',
+        goalId: managerIcGoal.id,
+      },
+      {
+        title: 'Deploy smaller, more frequent changes instead of large releases',
+        body: '',
+        status: 'active',
+        goalId: managerIcGoal.id,
+      },
+      {
+        title: 'Write tests for every new feature before considering it done',
+        body: '',
+        status: 'active',
+        goalId: icGoal.id,
+      },
+      {
+        title: 'Add tests when fixing bugs to prevent regressions',
+        body: '',
+        status: 'active',
+        goalId: icGoal.id,
+      },
+      {
+        title: 'Track coverage in the CI pipeline and review it regularly',
+        body: '',
+        status: 'active',
+        goalId: icGoal.id,
+      },
+      {
+        title: 'Run regular sprint planning sessions with clear scope and priorities',
+        body: '',
+        status: 'active',
+        goalId: managerSelfGoal.id,
+      },
+      {
+        title: 'Break work into smaller, well-defined tasks to improve estimation accuracy',
+        body: '',
+        status: 'active',
+        goalId: managerSelfGoal.id,
+      },
+      {
+        title: 'Review past sprint results to adjust estimates and planning practices',
+        body: '',
+        status: 'active',
+        goalId: managerSelfGoal.id,
+      },
+      {
+        title: 'Enforce code reviews and quality checks before any production release',
+        body: '',
+        status: 'active',
+        goalId: managerGoal.id,
+      },
+      {
+        title: 'Prioritize bug fixes in planning sessions alongside new feature work',
+        body: '',
+        status: 'active',
+        goalId: managerGoal.id,
+      },
+      {
+        title: 'Review production incidents with the team to identify root causes and improvements',
+        body: '',
+        status: 'active',
+        goalId: managerGoal.id,
       },
     ],
   })
@@ -156,10 +268,76 @@ async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
   await prisma.goal_achievements.createMany({
     data: [
       {
-        title: 'Primer release estable',
-        body: 'Release sin hotfixes',
-        status: 'done',
-        goalId: childGoal1.id,
+        title: 'Decreased production bugs by X% compared to the previous period',
+        body: '',
+        status: 'active',
+        goalId: managerIcGoal.id,
+      },
+      {
+        title: 'Reduced critical incidents by addressing the most frequent root causes',
+        body: '',
+        status: 'active',
+        goalId: managerIcGoal.id,
+      },
+      {
+        title: 'Improved release stability through smaller and safer deployments',
+        body: '',
+        status: 'active',
+        goalId: managerIcGoal.id,
+      },
+      {
+        title: 'Increased automated test coverage across key modules',
+        body: '',
+        status: 'active',
+        goalId: icGoal.id,
+      },
+      {
+        title: 'Added regression tests for previously untested critical paths',
+        body: '',
+        status: 'active',
+        goalId: icGoal.id,
+      },
+      {
+        title: 'Improved build reliability by catching issues earlier with tests',
+        body: '',
+        status: 'active',
+        goalId: icGoal.id,
+      },
+      {
+        title: 'Increased sprint commitment completion rate across the team',
+        body: '',
+        status: 'active',
+        goalId: managerSelfGoal.id,
+      },
+      {
+        title: 'Reduced carry-over work between sprints',
+        body: '',
+        status: 'active',
+        goalId: managerSelfGoal.id,
+      },
+      {
+        title: 'Improved accuracy of delivery estimates, leading to more reliable timelines',
+        body: '',
+        status: 'active',
+        goalId: managerSelfGoal.id,
+      },
+      {
+        title: 'Reduced the number of production bugs reported per release',
+        body: '',
+        status: 'active',
+        goalId: managerGoal.id,
+      },
+      {
+        title: 'Lowered severity of production incidents through better prevention',
+        body: '',
+        status: 'active',
+        goalId: managerGoal.id,
+      },
+      {
+        title: 'Improved overall product stability as reflected in fewer customer issuesnpx prisma',
+        body: '',
+        status: 'active',
+        goalId: managerGoal.id,
       },
     ],
   })

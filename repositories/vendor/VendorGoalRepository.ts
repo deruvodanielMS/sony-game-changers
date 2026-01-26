@@ -1,11 +1,11 @@
-import { Ambition, AmbitionGoalResponse } from '@/domain/ambition'
+import { Goal, GoalAmbitionsResponse } from '@/domain/goal'
 import { GoalRepository } from '../GoalRepository'
 
 export class VendorGoalRepository implements GoalRepository {
   private readonly baseUrl = process.env.VENDOR_API_URL!
 
-  async findMany(): Promise<Ambition[]> {
-    const res = await fetch(`${this.baseUrl}/goals`, {
+  async findMany(email?: string): Promise<Goal[]> {
+    const res = await fetch(`${this.baseUrl}/goals${email ? `?email=${email}` : ''}`, {
       headers: {
         Authorization: `Bearer ${process.env.VENDOR_API_TOKEN}`,
       },
@@ -19,7 +19,7 @@ export class VendorGoalRepository implements GoalRepository {
     return data.map(this.toDomain)
   }
 
-  async findById(id: string): Promise<Ambition | null> {
+  async findById(id: string): Promise<Goal | null> {
     const res = await fetch(`${this.baseUrl}/goals/${id}`, {
       headers: {
         Authorization: `Bearer ${process.env.VENDOR_API_TOKEN}`,
@@ -39,15 +39,20 @@ export class VendorGoalRepository implements GoalRepository {
    * @param apiGoal Vendor apiGoal type must be aligned from vendro response
    * @returns Domain Goal Object response
    */
-  private toDomain(apiGoal: AmbitionGoalResponse): Ambition {
+  private toDomain(apiGoal: GoalAmbitionsResponse): Goal {
+    const hasParent =
+      apiGoal.parent != null
+        ? { parent: { id: apiGoal.parent.id, title: apiGoal.parent.title } }
+        : {}
     return {
+      ...hasParent,
       id: apiGoal.id,
       title: apiGoal.title,
       status: apiGoal.status,
       userName:
         `${apiGoal.people_assignedTo?.name || ''} ${apiGoal.people_assignedTo?.lastname || ''}`.trim() ||
         'Unassigned',
-      ambitionType: apiGoal.type,
+      goalType: apiGoal.type,
       description: apiGoal.body,
       avatarUrl: apiGoal.people_assignedTo?.profileImageUrl,
     }

@@ -23,7 +23,7 @@ export type RouteValues = Routes[keyof Routes]
 const BASE_API = '/api'
 
 export const API_ROUTES = {
-  AMBITIONS: `${BASE_API}/ambitions`,
+  GOALS: `${BASE_API}/goals`,
   USER: `${BASE_API}/user`,
 } as const
 
