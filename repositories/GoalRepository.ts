@@ -1,6 +1,6 @@
-import { Ambition } from '@/domain/ambition'
+import { Goal } from '@/domain/goal'
 
 export interface GoalRepository {
-  findMany(): Promise<Ambition[]>
-  findById(id: string): Promise<Ambition | null>
+  findMany(email?: string): Promise<Goal[]>
+  findById(id: string): Promise<Goal | null>
 }

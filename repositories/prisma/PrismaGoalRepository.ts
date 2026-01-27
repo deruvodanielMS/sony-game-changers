@@ -1,62 +1,79 @@
 import { prisma } from '@/lib/prisma'
 import { GoalRepository } from '@/repositories/GoalRepository'
-import { AmbitionGoalResponse, AmbitionUI } from '@/domain/ambition'
+import { GoalAmbitionsResponse, GoalUI } from '@/domain/goal'
 
-const ambitionMapper = (goal: AmbitionGoalResponse): AmbitionUI => {
+const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
+  const hasParent = goal.parent ? { parent: { id: goal.parent.id, title: goal.parent.title } } : {}
   return {
+    ...hasParent,
     id: goal.id,
     title: goal.title,
     status: goal.status,
     userName:
       `${goal.people_assignedTo?.name || ''} ${goal.people_assignedTo?.lastname || ''}`.trim() ||
       'Unassigned',
-    ambitionType: goal.type,
+    goalType: goal.type,
     description: goal.body,
     avatarUrl: goal.people_assignedTo?.profileImageUrl
       ? `/profile-img/${goal.people_assignedTo.profileImageUrl}`
       : null,
-    ladderedGoals: (goal.goal_ambitions || []).map((ambition) => ({
-      id: ambition.id,
-      title: ambition.title,
-      status: ambition.status,
+    ladderedGoals: (goal.relations || []).map((relation) => ({
+      id: relation.id,
+      title: relation.title,
+      status: relation.status,
       userName:
-        `${goal.people_assignedTo?.name || ''} ${goal.people_assignedTo?.lastname || ''}`.trim() ||
+        `${relation.people_assignedTo?.name || ''} ${relation.people_assignedTo?.lastname || ''}`.trim() ||
         'Unassigned',
+      avatarUrl: goal.people_assignedTo?.profileImageUrl
+        ? `/profile-img/${relation.people_assignedTo.profileImageUrl}`
+        : null,
     })),
   }
 }
 
 export class PrismaGoalRepository implements GoalRepository {
-  async findMany(): Promise<AmbitionUI[]> {
+  async findMany(email?: string): Promise<GoalUI[]> {
     const list = (await prisma.goals.findMany({
-      orderBy: { createdBy: 'desc' },
-      select: {
-        id: true,
-        title: true,
-        body: true,
-        type: true,
-        status: true,
+      where: email
+        ? {
+            people_assignedTo: {
+              is: {
+                email: email,
+              },
+            },
+          }
+        : undefined,
+      include: {
         people_assignedTo: {
           select: {
+            id: true,
             name: true,
             lastname: true,
             profileImageUrl: true,
           },
         },
-        goal_ambitions: {
-          select: {
-            id: true,
-            title: true,
-            status: true,
+        parent: {
+          select: { id: true, title: true },
+        },
+        relations: {
+          include: {
+            people_assignedTo: {
+              select: {
+                id: true,
+                name: true,
+                lastname: true,
+                profileImageUrl: true,
+              },
+            },
           },
         },
       },
-    })) as unknown as AmbitionGoalResponse[]
-    return list.map(ambitionMapper)
+    })) as unknown as GoalAmbitionsResponse[]
+    return list.map(goalMapper)
   }
 
-  async findById(id: string): Promise<AmbitionUI | null> {
-    const ambition = (await prisma.goals.findUnique({
+  async findById(id: string): Promise<GoalUI | null> {
+    const goal = (await prisma.goals.findUnique({
       where: { id },
       select: {
         id: true,
@@ -78,7 +95,7 @@ export class PrismaGoalRepository implements GoalRepository {
           },
         },
       },
-    })) as unknown as AmbitionGoalResponse | null
-    return ambition ? ambitionMapper(ambition) : null
+    })) as unknown as GoalAmbitionsResponse | null
+    return goal ? goalMapper(goal) : null
   }
 }

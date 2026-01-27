@@ -35,6 +35,12 @@ export async function GET(req: Request) {
     return Response.json({ error: 'Email is required' }, { status: 400 })
   }
 
-  const user = await userService.getUser(email)
-  return Response.json(user)
+  try {
+    const user = await userService.getUser(email)
+    return Response.json(user)
+  } catch (error) {
+    console.error('[GET /user] >', email, error)
+
+    return NextResponse.json({ error: 'Failed to fetch user' }, { status: 500 })
+  }
 }

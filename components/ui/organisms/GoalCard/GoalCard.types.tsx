@@ -1,8 +1,8 @@
-import type { Ambition } from '@/domain/ambition'
+import type { Goal } from '@/domain/goal'
 
 export type GoalCardProps = {
-  goal: Ambition
-  ladderGoals: Omit<Ambition, 'ladderedGoals'>[]
+  goal: Goal
+  ladderGoals: Omit<Goal, 'parent'>[]
   allowAddChildrenGoals?: boolean
   'data-testid'?: string
 }

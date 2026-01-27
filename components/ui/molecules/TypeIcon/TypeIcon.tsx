@@ -3,14 +3,14 @@
 import { Target, Sprout, BriefcaseBusiness, Shrub } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import type { TypeIconProps, AmbitionType } from './TypeIcon.types'
-import { AMBITION_TYPES } from '@/domain/ambition'
+import { GOAL_TYPES } from '@/domain/goal'
 
 type IconKey = 'business' | 'manager-effectiveness' | 'personal-growth-and-development'
 
 const typeToIconKey: Record<AmbitionType, IconKey> = {
-  [AMBITION_TYPES.BUSINESS]: 'business',
-  [AMBITION_TYPES.MANAGER_EFFECTIVENESS]: 'manager-effectiveness',
-  [AMBITION_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT]: 'personal-growth-and-development',
+  [GOAL_TYPES.BUSINESS]: 'business',
+  [GOAL_TYPES.MANAGER_EFFECTIVENESS]: 'manager-effectiveness',
+  [GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT]: 'personal-growth-and-development',
 }
 
 const defaultIcons: Record<IconKey, typeof Sprout> = {
