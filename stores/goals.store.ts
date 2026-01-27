@@ -88,16 +88,22 @@ export const useGoalsStore = create<GoalsState>((set) => ({
       editingGoalId: null,
     })),
   fetchList: async () => {
+    console.log('🔄 GoalsStore: Starting fetchList...')
     try {
+      console.log('📡 GoalsStore: Fetching from', API_ROUTES.GOALS)
       const res = await fetch(API_ROUTES.GOALS)
+
+      console.log('📨 GoalsStore: Response status:', res.status, res.statusText)
 
       if (!res.ok) {
         throw new Error('Failed to fetch goals')
       }
       const goals = await res.json()
+      console.log('✅ GoalsStore: Received', goals?.length || 0, 'goals')
       set({ list: goals })
-    } catch {
-      // Handle error as needed
+    } catch (error) {
+      console.error('❌ GoalsStore: Error fetching goals:', error)
+      set({ list: [] })
     }
   },
 }))

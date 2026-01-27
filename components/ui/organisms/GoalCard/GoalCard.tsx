@@ -205,10 +205,7 @@ export function GoalCard({
                   />
                 </button>
                 <div className="w-full flex gap-1 items-center max-sm:flex-wrap">
-                  <div
-                    className="relative shrink-0"
-                    style={{ width: goalType ? '72px' : '48px' }}
-                  >
+                  <div className="relative shrink-0" style={{ width: goalType ? '72px' : '48px' }}>
                     <Avatar src={avatarUrl} alt={userName} size="lg" />
                     {goalType && (
                       <div className="absolute top-0 -right-0_25">

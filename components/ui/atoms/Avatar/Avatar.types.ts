@@ -16,12 +16,6 @@ export interface AvatarProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number
 
   /**
-   * Shape of the avatar
-   * @default 'circle'
-   */
-  shape?: 'circle' | 'square'
-
-  /**
    * Fallback to show when no src is provided.
    * If not provided, will generate initials from alt text.
    */

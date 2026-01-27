@@ -13,10 +13,6 @@ const meta = {
       control: 'select',
       options: ['xs', 'sm', 'md', 'lg', 'xl'],
     },
-    shape: {
-      control: 'select',
-      options: ['circle', 'square'],
-    },
   },
 } satisfies Meta<typeof Avatar>
 
@@ -78,13 +74,6 @@ export const SizeXL: Story = {
   },
 }
 
-export const SquareShape: Story = {
-  args: {
-    alt: 'User',
-    shape: 'square',
-  },
-}
-
 export const AllSizes: Story = {
   args: {
     alt: 'User',
@@ -96,18 +85,6 @@ export const AllSizes: Story = {
       <Avatar alt="User" size="md" />
       <Avatar alt="User" size="lg" />
       <Avatar alt="User" size="xl" />
-    </div>
-  ),
-}
-
-export const AllShapes: Story = {
-  args: {
-    alt: 'User',
-  },
-  render: () => (
-    <div className="flex items-center gap-2">
-      <Avatar alt="User" shape="circle" />
-      <Avatar alt="User" shape="square" />
     </div>
   ),
 }

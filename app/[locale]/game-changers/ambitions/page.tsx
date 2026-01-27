@@ -24,7 +24,10 @@ export default function GameChangersGoalsPage() {
   const { list, fetchList } = useGoalsStore()
 
   useEffect(() => {
+    console.log('🔍 GameChangersGoalsPage: Fetching goals list...')
     fetchList()
+      .then(() => console.log('✅ GameChangersGoalsPage: Goals fetched successfully'))
+      .catch((error) => console.error('❌ GameChangersGoalsPage: Error fetching goals:', error))
   }, [fetchList])
 
   const { filters, avatarSelector } = filterBarMocks
@@ -55,8 +58,11 @@ export default function GameChangersGoalsPage() {
     (selectedSearchValue ? 1 : 0)
 
   if (list === null) {
+    console.log('⏳ GameChangersGoalsPage: Still loading goals...')
     return <AmbitionsLoading />
   }
+
+  console.log('📊 GameChangersGoalsPage: Rendering', list.length, 'goals')
 
   return (
     <FilterableContentLayout
