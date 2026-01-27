@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { LadderGoal } from './LadderGoal'
 
 const meta = {
-  title: 'UI/Molecules/LadderGoal',
+  title: 'Molecules/LadderGoal',
   component: LadderGoal,
   parameters: {
     layout: 'padded',

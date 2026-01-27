@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { CheckCircle, XCircle, Info, AlertTriangle } from 'lucide-react'
+import { CheckCircle, XCircle, Info as InfoIcon, AlertTriangle } from 'lucide-react'
 import { Toast } from './Toast'
 
 const meta: Meta<typeof Toast> = {
@@ -56,7 +56,7 @@ export const Info: Story = {
     variant: 'info',
     content: (
       <div className="flex items-center gap-2">
-        <Info className="text-feedback-info-600" size={20} />
+        <InfoIcon className="text-feedback-info-600" size={20} />
         <span>New updates available</span>
       </div>
     ),
@@ -110,7 +110,7 @@ export const AllVariants: Story = {
       <Toast
         content={
           <div className="flex items-center gap-2">
-            <Info className="text-feedback-info-600" size={20} />
+            <InfoIcon className="text-feedback-info-600" size={20} />
             <span>Info notification</span>
           </div>
         }

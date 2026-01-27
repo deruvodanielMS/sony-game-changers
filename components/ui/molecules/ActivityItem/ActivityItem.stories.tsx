@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/atoms/Badge'
 import { ArrowRight } from 'lucide-react'
 
 const meta: Meta<typeof ActivityItem> = {
-  title: 'UI/Molecules/ActivityItem',
+  title: 'Molecules/ActivityItem',
   component: ActivityItem,
   parameters: {
     layout: 'padded',

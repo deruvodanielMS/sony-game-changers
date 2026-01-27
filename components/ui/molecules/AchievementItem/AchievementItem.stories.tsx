@@ -4,7 +4,7 @@ import { AchievementItem } from './AchievementItem'
 import type { ProgressStatus } from './AchievementItem.types'
 
 const meta: Meta<typeof AchievementItem> = {
-  title: 'UI/Molecules/AchievementItem',
+  title: 'Molecules/AchievementItem',
   component: AchievementItem,
   parameters: {
     layout: 'padded',

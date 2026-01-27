@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { Avatar } from './Avatar'
 
 const meta = {
-  title: 'UI/Atoms/Avatar',
+  title: 'Atoms/Avatar',
   component: Avatar,
   parameters: {
     layout: 'centered',

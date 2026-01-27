@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Checkbox } from './Checkbox'
 
 const meta = {
-  title: 'UI/Atoms/Checkbox',
+  title: 'Atoms/Checkbox',
   component: Checkbox,
   parameters: {
     layout: 'centered',
