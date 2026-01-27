@@ -11,7 +11,7 @@ import { FilterableContentLayout } from '@/components/ui/templates/FilterableCon
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { ROUTES } from '@/common/routes'
 import { filterBarMocks } from './mocks'
-import { useAmbitionsStore } from '@/stores/ambitions.store'
+import { useGoalsStore } from '@/stores/goals.store'
 import { AmbitionsLoading } from '@/components/ui/molecules/Loadings'
 
 export default function GameChangersGoalsPage() {
@@ -21,10 +21,13 @@ export default function GameChangersGoalsPage() {
   const [selectedFilterType, setSelectedFilterType] = useState<Array<string>>([])
   const [selectedFilterStatus, setSelectedFilterStatus] = useState<Array<string>>([])
   const [selectedSearchValue, setSelectedSearchValue] = useState('')
-  const { list, fetchList } = useAmbitionsStore()
+  const { list, fetchList } = useGoalsStore()
 
   useEffect(() => {
+    console.log('🔍 GameChangersGoalsPage: Fetching goals list...')
     fetchList()
+      .then(() => console.log('✅ GameChangersGoalsPage: Goals fetched successfully'))
+      .catch((error) => console.error('❌ GameChangersGoalsPage: Error fetching goals:', error))
   }, [fetchList])
 
   const { filters, avatarSelector } = filterBarMocks
@@ -55,8 +58,11 @@ export default function GameChangersGoalsPage() {
     (selectedSearchValue ? 1 : 0)
 
   if (list === null) {
+    console.log('⏳ GameChangersGoalsPage: Still loading goals...')
     return <AmbitionsLoading />
   }
+
+  console.log('📊 GameChangersGoalsPage: Rendering', list.length, 'goals')
 
   return (
     <FilterableContentLayout

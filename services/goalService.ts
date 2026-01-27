@@ -3,8 +3,8 @@ import { GoalRepository } from '@/repositories/GoalRepository'
 export class GoalService {
   constructor(private readonly goalRepo: GoalRepository) {}
 
-  listGoals() {
-    return this.goalRepo.findMany()
+  listGoals(email?: string) {
+    return this.goalRepo.findMany(email)
   }
 
   getGoal(id: string) {

@@ -1,4 +1,4 @@
-import { AMBITION_STATUSES, AMBITION_TYPES } from '@/domain/ambition'
+import { GOAL_STATUSES, GOAL_TYPES } from '@/domain/goal'
 
 /**
  * Mock data for development and testing
@@ -12,8 +12,8 @@ export const goalMocks = [
       userName: 'Alice Williams',
       title:
         'Ensure core title features meet established quality bars to achieve a strong critical reception score and boost future sales.',
-      status: AMBITION_STATUSES.AWAITING_APPROVAL,
-      goalType: AMBITION_TYPES.BUSINESS,
+      status: GOAL_STATUSES.AWAITING_APPROVAL,
+      goalType: GOAL_TYPES.BUSINESS,
       description:
         'Deliver a truly compelling, next-generation, immersive gaming experience immersive gaming experience that secures leading industry recognition and high player satisfaction.',
       avatarUrl: '/profile-img/profile.png',
@@ -24,8 +24,8 @@ export const goalMocks = [
         userName: 'Bob Smith',
         title:
           'Verify the successful operation of all major systems and complete 100% of test cases before Alpha.',
-        status: AMBITION_STATUSES.DRAFT,
-        goalType: AMBITION_TYPES.MANAGER_EFFECTIVENESS,
+        status: GOAL_STATUSES.DRAFT,
+        goalType: GOAL_TYPES.MANAGER_EFFECTIVENESS,
         description: 'Increase conversion from 10% to 15%',
       },
       {
@@ -33,8 +33,8 @@ export const goalMocks = [
         userName: 'Charlie Johnson',
         title:
           'Integrate all mandatory feedback from playtests into level design by the end of each sprint.',
-        status: AMBITION_STATUSES.COMPLETED,
-        goalType: AMBITION_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
+        status: GOAL_STATUSES.COMPLETED,
+        goalType: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
         avatarUrl: '/profile-img/profile.png',
       },
     ],
@@ -47,8 +47,8 @@ export const goalMocks = [
       userName: 'David Brown',
       title:
         "Strategically increase The Team's technical expertise by implementing targeted upskilling initiatives in critical architectural domains (e.g., CI/CD).",
-      status: AMBITION_STATUSES.COMPLETED,
-      goalType: AMBITION_TYPES.BUSINESS,
+      status: GOAL_STATUSES.COMPLETED,
+      goalType: GOAL_TYPES.BUSINESS,
       avatarUrl: '/profile-img/profile.png',
     },
     ladderGoals: [],
@@ -60,8 +60,8 @@ export const goalMocks = [
       id: 'goal-5',
       userName: 'Emma Wilson',
       title: 'Develop comprehensive onboarding program for new team members',
-      status: AMBITION_STATUSES.DRAFT,
-      goalType: AMBITION_TYPES.MANAGER_EFFECTIVENESS,
+      status: GOAL_STATUSES.DRAFT,
+      goalType: GOAL_TYPES.MANAGER_EFFECTIVENESS,
       avatarUrl: '/profile-img/profile.png',
     },
     ladderGoals: [],
@@ -73,8 +73,8 @@ export const goalMocks = [
       id: 'goal-6',
       userName: 'James Miller',
       title: 'Improve code review process and documentation standards',
-      status: AMBITION_STATUSES.AWAITING_APPROVAL,
-      goalType: AMBITION_TYPES.BUSINESS,
+      status: GOAL_STATUSES.AWAITING_APPROVAL,
+      goalType: GOAL_TYPES.BUSINESS,
       avatarUrl: '/profile-img/profile.png',
     },
     ladderGoals: [],
@@ -86,8 +86,8 @@ export const goalMocks = [
       id: 'goal-7',
       userName: 'Sofia Rodriguez',
       title: 'Establish quarterly team retrospectives and continuous improvement initiatives',
-      status: AMBITION_STATUSES.COMPLETED,
-      goalType: AMBITION_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
+      status: GOAL_STATUSES.COMPLETED,
+      goalType: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
       avatarUrl: '/profile-img/profile.png',
     },
     ladderGoals: [],
@@ -113,9 +113,9 @@ export const filterBarMocks = {
       label: 'Status',
       'data-testid': 'filter-status',
       options: [
-        { label: 'Awaiting Approval', value: AMBITION_STATUSES.AWAITING_APPROVAL },
-        { label: 'Completed', value: AMBITION_STATUSES.COMPLETED },
-        { label: 'Draft', value: AMBITION_STATUSES.DRAFT },
+        { label: 'Awaiting Approval', value: GOAL_STATUSES.AWAITING_APPROVAL },
+        { label: 'Completed', value: GOAL_STATUSES.COMPLETED },
+        { label: 'Draft', value: GOAL_STATUSES.DRAFT },
       ],
       single: true,
     },
@@ -123,11 +123,11 @@ export const filterBarMocks = {
       label: 'Type',
       'data-testid': 'filter-category',
       options: [
-        { label: 'Business', value: AMBITION_TYPES.BUSINESS },
-        { label: 'Manager effecteviness', value: AMBITION_TYPES.MANAGER_EFFECTIVENESS },
+        { label: 'Business', value: GOAL_TYPES.BUSINESS },
+        { label: 'Manager effecteviness', value: GOAL_TYPES.MANAGER_EFFECTIVENESS },
         {
           label: 'Personal growth and development',
-          value: AMBITION_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
+          value: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
         },
       ],
       single: true,

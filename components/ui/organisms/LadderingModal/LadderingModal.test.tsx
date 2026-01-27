@@ -56,7 +56,7 @@ vi.mock('@/components/ui/foundations/Typography', () => ({
   Typography: ({ children }: any) => <span>{children}</span>,
 }))
 
-vi.mock('@/components/ui/molecules/GoalStatus/GoalStatus', () => ({
+vi.mock('@/components/ui/molecules/GoalStatus', () => ({
   GoalStatus: ({ status }: any) => <span data-testid="goal-status">{String(status)}</span>,
 }))
 

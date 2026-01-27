@@ -19,7 +19,7 @@ const checkboxVariants = cva(
     variants: {
       size: {
         sm: 'size-1',
-        md: 'size-1.5',
+        md: 'size-1_5',
         lg: 'size-2',
       },
       checked: {
@@ -35,9 +35,9 @@ const checkboxVariants = cva(
 )
 
 const iconSizeMap = {
-  sm: 'size-0.75',
-  md: 'size-1.5',
-  lg: 'size-1.5',
+  sm: 'w-3 h-3',
+  md: 'w-4 h-4',
+  lg: 'w-5 h-5',
 }
 
 export type CheckboxVariants = VariantProps<typeof checkboxVariants>

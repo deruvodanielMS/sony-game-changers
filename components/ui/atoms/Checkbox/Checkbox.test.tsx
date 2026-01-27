@@ -76,7 +76,7 @@ describe('Checkbox', () => {
   it('applies md size', () => {
     render(<Checkbox size="md" data-test-id="checkbox" aria-label="Test checkbox" />)
     const checkbox = screen.getByTestId('checkbox')
-    expect(checkbox).toHaveClass('size-1.5')
+    expect(checkbox).toHaveClass('size-1_5')
   })
 
   it('applies lg size', () => {
