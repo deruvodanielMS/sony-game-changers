@@ -9,7 +9,7 @@ import { useEffect, useMemo, useEffectEvent } from 'react'
 import { ModalHeader, ModalBody } from '@/components/ui/molecules/Modal'
 import { Drawer } from '@/components/ui/atoms/Drawer'
 import { Typography } from '@/components/ui/foundations/Typography'
-import { GoalStatus } from '@/components/ui/molecules/GoalStatus/GoalStatus'
+import { GoalStatus } from '@/components/ui/molecules/GoalStatus'
 import { cn } from '@/utils/cn'
 import { generateInitialsAvatarSrc } from '@/utils/generateInitialsAvatar'
 import type {

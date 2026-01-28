@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { LadderingModal } from './LadderingModal'
-import type { Ambition } from '@/domain/ambition'
+import type { Goal } from '@/domain/goal'
 
 const meta: Meta<typeof LadderingModal> = {
   title: 'Organisms/LadderingModal',
@@ -31,7 +31,7 @@ const meta: Meta<typeof LadderingModal> = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-const mockGoal: Ambition = {
+const mockGoal: Goal = {
   id: '1',
   title:
     'Ensure core title features meet established quality bars to achieve a strong critical reception score.',
@@ -40,7 +40,7 @@ const mockGoal: Ambition = {
   avatarUrl: '',
 }
 
-const mockCompletedGoal: Ambition = {
+const mockCompletedGoal: Goal = {
   id: '2',
   title: 'Implement comprehensive testing strategy across all game systems.',
   status: 'completed',
@@ -48,7 +48,7 @@ const mockCompletedGoal: Ambition = {
   avatarUrl: '',
 }
 
-const mockAwaitingApprovalGoal: Ambition = {
+const mockAwaitingApprovalGoal: Goal = {
   id: '3',
   title: 'Optimize rendering pipeline for improved performance on all platforms.',
   status: 'awaiting_approval',
@@ -61,13 +61,14 @@ export const Default: Story = {
   args: {
     open: true,
     selectedGoal: mockGoal,
+    onClose: () => {},
   },
 }
 
 export const WithCompletedGoal: Story = {
   args: {
     open: true,
-    selectedGoal: mockCompletedGoal,
+    onClose: () => {},
   },
 }
 
@@ -75,6 +76,7 @@ export const WithAwaitingApprovalGoal: Story = {
   args: {
     open: true,
     selectedGoal: mockAwaitingApprovalGoal,
+    onClose: () => {},
   },
 }
 
@@ -82,6 +84,7 @@ export const Closed: Story = {
   args: {
     open: false,
     selectedGoal: mockGoal,
+    onClose: () => {},
   },
 }
 
@@ -93,6 +96,7 @@ export const WithLongTitle: Story = {
       title:
         'This is an extremely long goal title that should demonstrate how the component handles text overflow and wrapping in various screen sizes and container widths to ensure proper display and readability.',
     },
+    onClose: () => {},
   },
 }
 
@@ -100,6 +104,7 @@ export const MobileBottomSheet: Story = {
   args: {
     open: true,
     selectedGoal: mockGoal,
+    onClose: () => {},
   },
   parameters: {
     viewport: {
@@ -115,5 +120,6 @@ export const WithShortTitle: Story = {
       ...mockGoal,
       title: 'Quick win goal',
     },
+    onClose: () => {},
   },
 }

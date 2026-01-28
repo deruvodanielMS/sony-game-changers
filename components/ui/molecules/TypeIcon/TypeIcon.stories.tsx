@@ -3,7 +3,7 @@ import { Rocket, Target, Star } from 'lucide-react'
 import { TypeIcon } from './TypeIcon'
 
 const meta: Meta<typeof TypeIcon> = {
-  title: 'UI/Molecules/TypeIcon',
+  title: 'Molecules/TypeIcon',
   component: TypeIcon,
   parameters: {
     layout: 'centered',

@@ -25,7 +25,9 @@ export default meta
 type Story = StoryObj<typeof SearchField>
 
 export const Default: Story = {
-  args: {},
+  args: {
+    onChange: (value: string) => console.log('Search value:', value),
+  },
 }
 
 export const WithDebounce: Story = {
@@ -80,5 +82,6 @@ export const Disabled: Story = {
   args: {
     disabled: true,
     placeholder: 'Search disabled...',
+    onChange: (value: string) => console.log('Search value:', value),
   },
 }

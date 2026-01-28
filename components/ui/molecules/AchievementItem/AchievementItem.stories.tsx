@@ -4,7 +4,7 @@ import { AchievementItem } from './AchievementItem'
 import type { ProgressStatus } from './AchievementItem.types'
 
 const meta: Meta<typeof AchievementItem> = {
-  title: 'UI/Molecules/AchievementItem',
+  title: 'Molecules/AchievementItem',
   component: AchievementItem,
   parameters: {
     layout: 'padded',
@@ -36,6 +36,8 @@ type Story = StoryObj<typeof AchievementItem>
 export const Default: Story = {
   args: {
     text: 'Complete onboarding process',
+    onToggle: (completed: boolean) => console.log('Toggled:', completed),
+    onProgressChange: (progress: ProgressStatus) => console.log('Progress:', progress),
   },
 }
 
@@ -43,6 +45,8 @@ export const Completed: Story = {
   args: {
     text: 'Finish Q1 performance review',
     completed: true,
+    onToggle: (completed: boolean) => console.log('Toggled:', completed),
+    onProgressChange: (progress: ProgressStatus) => console.log('Progress:', progress),
   },
 }
 
@@ -50,6 +54,8 @@ export const NotStarted: Story = {
   args: {
     text: 'Set up team meeting schedule',
     progress: 'not-started',
+    onToggle: (completed: boolean) => console.log('Toggled:', completed),
+    onProgressChange: (progress: ProgressStatus) => console.log('Progress:', progress),
   },
 }
 
@@ -57,6 +63,8 @@ export const OnTrack: Story = {
   args: {
     text: 'Improve customer satisfaction score',
     progress: 'on-track',
+    onToggle: (completed: boolean) => console.log('Toggled:', completed),
+    onProgressChange: (progress: ProgressStatus) => console.log('Progress:', progress),
   },
 }
 
@@ -64,6 +72,8 @@ export const OffTrack: Story = {
   args: {
     text: 'Reduce response time by 20%',
     progress: 'off-track',
+    onToggle: (completed: boolean) => console.log('Toggled:', completed),
+    onProgressChange: (progress: ProgressStatus) => console.log('Progress:', progress),
   },
 }
 
@@ -71,6 +81,7 @@ export const WithoutProgressSelector: Story = {
   args: {
     text: 'Simple task without progress tracking',
     showProgressSelector: false,
+    onToggle: (completed: boolean) => console.log('Toggled:', completed),
   },
 }
 
@@ -79,6 +90,8 @@ export const SmallSize: Story = {
     text: 'Mobile-sized achievement item',
     size: 'sm',
     progress: 'on-track',
+    onToggle: (completed: boolean) => console.log('Toggled:', completed),
+    onProgressChange: (progress: ProgressStatus) => console.log('Progress:', progress),
   },
 }
 
