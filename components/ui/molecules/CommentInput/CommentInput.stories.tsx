@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { CommentInput } from './CommentInput'
 
 const meta: Meta<typeof CommentInput> = {
-  title: 'UI/Molecules/CommentInput',
+  title: 'Molecules/CommentInput',
   component: CommentInput,
   parameters: {
     layout: 'padded',

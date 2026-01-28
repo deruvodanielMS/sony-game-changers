@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/atoms/Button'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { CirclePlus } from 'lucide-react'
 import { useState } from 'react'
-import { AMBITION_STATUSES, AMBITION_TYPES } from '@/domain/ambition'
+import { GOAL_STATUSES, GOAL_TYPES } from '@/domain/goal'
 import type { FilterableContentLayoutProps } from './FilterableContentLayout.types'
 
 const meta = {
@@ -32,8 +32,8 @@ const mockGoal = {
     id: 'goal-1',
     userName: 'Alice Williams',
     title: 'Improve team collaboration and communication',
-    status: AMBITION_STATUSES.AWAITING_APPROVAL,
-    goalType: AMBITION_TYPES.BUSINESS,
+    status: GOAL_STATUSES.AWAITING_APPROVAL,
+    goalType: GOAL_TYPES.BUSINESS,
     avatarUrl: '/profile-img/profile.png',
   },
   ladderGoals: [],
@@ -46,17 +46,17 @@ const mockFilters = [
     label: 'Status',
     'data-testid': 'filter-status',
     options: [
-      { label: 'Awaiting Approval', value: AMBITION_STATUSES.AWAITING_APPROVAL },
-      { label: 'Completed', value: AMBITION_STATUSES.COMPLETED },
-      { label: 'Draft', value: AMBITION_STATUSES.DRAFT },
+      { label: 'Awaiting Approval', value: GOAL_STATUSES.AWAITING_APPROVAL },
+      { label: 'Completed', value: GOAL_STATUSES.COMPLETED },
+      { label: 'Draft', value: GOAL_STATUSES.DRAFT },
     ],
   },
   {
     label: 'Type',
     'data-testid': 'filter-type',
     options: [
-      { label: 'Team', value: AMBITION_TYPES.BUSINESS },
-      { label: 'Personal', value: AMBITION_TYPES.MANAGER_EFFECTIVENESS },
+      { label: 'Team', value: GOAL_TYPES.BUSINESS },
+      { label: 'Personal', value: GOAL_TYPES.MANAGER_EFFECTIVENESS },
     ],
   },
 ]
@@ -149,8 +149,8 @@ export const Default: Story = {
 }
 
 const WithActiveFiltersStory = () => {
-  const [selectedStatus, setSelectedStatus] = useState<string[]>([AMBITION_STATUSES.COMPLETED])
-  const [selectedType, setSelectedType] = useState<string[]>([AMBITION_TYPES.BUSINESS])
+  const [selectedStatus, setSelectedStatus] = useState<string[]>([GOAL_STATUSES.COMPLETED])
+  const [selectedType, setSelectedType] = useState<string[]>([GOAL_TYPES.BUSINESS])
   const [selectedAvatars, setSelectedAvatars] = useState<string[]>(['nn0098'])
   const [searchValue, setSearchValue] = useState('collaboration')
 

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { LadderGoal } from './LadderGoal'
 
 const meta = {
-  title: 'UI/Molecules/LadderGoal',
+  title: 'Molecules/LadderGoal',
   component: LadderGoal,
   parameters: {
     layout: 'padded',
@@ -56,16 +56,11 @@ export const Clickable: Story = {
  * Long text that gets truncated with ellipsis
  */
 export const LongText: Story = {
-  args: {
-    text: 'This is a very long goal description that demonstrates how the component handles text overflow with ellipsis truncation to maintain the layout integrity',
-  },
-  decorators: [
-    (Story) => (
-      <div style={{ maxWidth: '400px' }}>
-        <Story />
-      </div>
-    ),
-  ],
+  render: () => (
+    <div style={{ maxWidth: '400px' }}>
+      <LadderGoal text="This is a very long goal description that demonstrates how the component handles text overflow with ellipsis truncation to maintain the layout integrity" />
+    </div>
+  ),
 }
 
 /**
@@ -113,15 +108,9 @@ export const InCardContext: Story = {
  * Dark background variant
  */
 export const OnDarkBackground: Story = {
-  args: {
-    text: 'Increase company revenue by 25%',
-    onClick: () => {},
-  },
-  decorators: [
-    (Story) => (
-      <div className="bg-neutral-1000 p-3" data-theme="dark">
-        <Story />
-      </div>
-    ),
-  ],
+  render: () => (
+    <div className="bg-neutral-1000 p-3" data-theme="dark">
+      <LadderGoal text="Increase company revenue by 25%" onClick={() => {}} />
+    </div>
+  ),
 }

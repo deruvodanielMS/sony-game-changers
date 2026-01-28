@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 import { MetadataDisplay } from './MetadataDisplay'
 
 const meta: Meta<typeof MetadataDisplay> = {
-  title: 'UI/Molecules/MetadataDisplay',
+  title: 'Molecules/MetadataDisplay',
   component: MetadataDisplay,
   parameters: {
     layout: 'padded',

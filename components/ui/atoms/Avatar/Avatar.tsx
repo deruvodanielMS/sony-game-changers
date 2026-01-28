@@ -6,23 +6,18 @@ import { cn } from '@/utils/cn'
 import { generateInitialsAvatarSrc } from '@/utils/generateInitialsAvatar'
 import type { AvatarProps } from './Avatar.types'
 
-const avatarVariants = cva('relative overflow-hidden shrink-0', {
+const avatarVariants = cva('relative overflow-hidden shrink-0 rounded-full', {
   variants: {
     size: {
       xs: 'size-1',
-      sm: 'size-1.5',
+      sm: 'size-1_5',
       md: 'size-2',
       lg: 'size-3',
       xl: 'size-4',
     },
-    shape: {
-      circle: 'rounded-full',
-      square: 'rounded-default',
-    },
   },
   defaultVariants: {
     size: 'md',
-    shape: 'circle',
   },
 })
 
@@ -59,19 +54,20 @@ export function Avatar({
   src,
   alt = 'Avatar',
   size = 'md',
-  shape = 'circle',
   fallback,
   className,
   'data-test-id': dataTestId,
 }: AvatarProps) {
   const pixelSize = getPixelSize(size)
-  const imageSrc = src || (fallback ? null : generateInitialsAvatarSrc(alt, { size: pixelSize }))
+  const borderRadius = pixelSize / 2
+  const imageSrc =
+    src || (fallback ? null : generateInitialsAvatarSrc(alt, { size: pixelSize, borderRadius }))
 
   const sizeClass = typeof size === 'number' ? undefined : size
 
   return (
     <div
-      className={cn(avatarVariants({ size: sizeClass, shape }), className)}
+      className={cn(avatarVariants({ size: sizeClass }), className)}
       style={typeof size === 'number' ? { width: size, height: size } : undefined}
       data-testid={dataTestId}
     >

@@ -62,7 +62,7 @@ describe('Avatar', () => {
   it('applies sm size', () => {
     render(<Avatar alt="User" size="sm" data-test-id="avatar" />)
     const avatar = screen.getByTestId('avatar')
-    expect(avatar).toHaveClass('size-1.5')
+    expect(avatar).toHaveClass('size-1_5')
   })
 
   it('applies lg size', () => {
@@ -89,10 +89,10 @@ describe('Avatar', () => {
     expect(avatar).toHaveClass('rounded-full')
   })
 
-  it('applies square shape', () => {
-    render(<Avatar alt="User" shape="square" data-test-id="avatar" />)
+  it('always applies circle shape (square removed)', () => {
+    render(<Avatar alt="User" data-test-id="avatar" />)
     const avatar = screen.getByTestId('avatar')
-    expect(avatar).toHaveClass('rounded-default')
+    expect(avatar).toHaveClass('rounded-full')
   })
 
   it('merges custom className', () => {
