@@ -98,7 +98,8 @@
   "AmbitionDetail": {
     "breadcrumb": {
       "ambitions": "Ambitions",
-      "detail": "Ambition detail"
+      "detail": "Ambition detail",
+      "loadingBreadcrumbNavigation": "Loading breadcrumb navigation..."
     },
     "actions": {
       "sendForApproval": "Send for Approval",

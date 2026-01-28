@@ -1,16 +1,8 @@
+import { GoalUI } from '@/domain/goal'
+
 export type ViewMode = 'grid' | 'list'
 
-export interface LadderedAmbition {
-  id: string
-  title: string
-  assignee: {
-    uid?: string
-    name: string
-    avatar: string
-  }
-  progress: number
-  status?: string
-}
+export type LadderedAmbition = Omit<GoalUI, 'parent' | 'ladderedGoals'>
 
 export interface AvatarOption {
   uid: string

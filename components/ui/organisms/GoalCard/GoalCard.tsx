@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { m } from 'framer-motion'
 import Image from 'next/image'
-import { ChevronDown, Plus, Shrub, Link as LinkIcon, Sprout, BriefcaseBusiness } from 'lucide-react'
+import { ChevronDown, Plus, Link as LinkIcon } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { Card } from '@/components/ui/atoms/Card/Card'
 import { GoalCardProps } from './GoalCard.types'
@@ -17,20 +17,13 @@ import { GoalStatus } from '@/components/ui/molecules/GoalStatus'
 import { cn } from '@/utils/cn'
 import { Button } from '../../atoms/Button'
 import { useTranslations } from 'next-intl'
-import { GOAL_TYPES, GoalStatus as GoalStatusType } from '@/domain/goal'
-import { LadderingModal } from '@/components/ui/organisms/LadderingModal'
+import { GoalStatus as GoalStatusType } from '@/domain/goal'
 import { ROUTES } from '@/common/routes'
 import { useUIStore } from '@/stores/ui.store'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
 import { ModalHeader, ModalBody } from '@/components/ui/molecules/Modal'
 import { generateInitialsAvatarSrc } from '@/utils/generateInitialsAvatar'
-
-const GoalTypeIcons = {
-  [GOAL_TYPES.BUSINESS]: <Sprout width={20} />,
-  [GOAL_TYPES.MANAGER_EFFECTIVENESS]: <BriefcaseBusiness width={20} />,
-  [GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT]: <Shrub width={20} />,
-}
 
 const cardHoverVariants = {
   rest: {},
@@ -62,7 +55,7 @@ export function GoalCard({
   const { openModal, openDrawer, closeModal, closeDrawer } = useUIStore()
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
 
-  const { id, description, title, avatarUrl, goalType, status, userName, parent } = goal
+  const { id, title, avatarUrl, goalType, status, userName, parent } = goal
   const hasChildrenGoals = ladderGoals.length
 
   const handleOpenLadderingModal = () => {
@@ -205,10 +198,7 @@ export function GoalCard({
                   />
                 </button>
                 <div className="w-full flex gap-1 items-center max-sm:flex-wrap">
-                  <div
-                    className="relative shrink-0"
-                    style={{ width: goalType ? '72px' : '48px' }}
-                  >
+                  <div className="relative shrink-0" style={{ width: goalType ? '72px' : '48px' }}>
                     <Avatar src={avatarUrl} alt={userName} size="lg" />
                     {goalType && (
                       <div className="absolute top-0 -right-0_25">

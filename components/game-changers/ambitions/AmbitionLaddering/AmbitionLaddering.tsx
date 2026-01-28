@@ -14,7 +14,7 @@ import { Badge } from '@/components/ui/atoms/Badge'
 import { cn } from '@/utils/cn'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
-import type { AmbitionLadderingProps, ViewMode } from './AmbitionLaddering.types'
+import type { AmbitionLadderingProps, LadderedAmbition, ViewMode } from './AmbitionLaddering.types'
 
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -50,14 +50,14 @@ export function AmbitionLaddering({
   const [searchQuery, setSearchQuery] = useState('')
 
   // Filter ambitions based on search and avatar selection
-  const filteredAmbitions = ambitions.filter((ambition) => {
+  const filteredAmbitions = ambitions.filter((ambition: LadderedAmbition) => {
     const matchesSearch =
       searchQuery === '' ||
       ambition.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ambition.assignee.name.toLowerCase().includes(searchQuery.toLowerCase())
+      ambition.userName.toLowerCase().includes(searchQuery.toLowerCase())
 
     const matchesAvatar =
-      selectedAvatars.length === 0 || selectedAvatars.includes(ambition.assignee.uid || '')
+      selectedAvatars.length === 0 || selectedAvatars.includes(ambition.uid || '')
 
     return matchesSearch && matchesAvatar
   })
@@ -172,8 +172,8 @@ export function AmbitionLaddering({
                   <div className="flex-1 flex gap-1 items-center min-w-0">
                     <div className="relative size-3 rounded-full shrink-0 overflow-hidden">
                       <Image
-                        src={ambition.assignee.avatar}
-                        alt={ambition.assignee.name}
+                        src={ambition.avatarUrl || '/profile-img/default.png'}
+                        alt={ambition.userName}
                         width={48}
                         height={48}
                         className="object-cover"
@@ -184,7 +184,7 @@ export function AmbitionLaddering({
                       fontWeight="bold"
                       className="overflow-hidden text-ellipsis whitespace-nowrap"
                     >
-                      {ambition.assignee.name}
+                      {ambition.userName}
                     </Typography>
                   </div>
 
@@ -256,15 +256,15 @@ export function AmbitionLaddering({
                 <div className="flex gap-1 items-center">
                   <div className="relative size-3 rounded-full shrink-0 overflow-hidden">
                     <Image
-                      src={ambition.assignee.avatar}
-                      alt={ambition.assignee.name}
+                      src={ambition.avatarUrl || '/profile-img/default.png'}
+                      alt={ambition.userName}
                       width={48}
                       height={48}
                       className="object-cover"
                     />
                   </div>
                   <Typography variant="body" fontWeight="bold" className="truncate">
-                    {ambition.assignee.name}
+                    {ambition.userName}
                   </Typography>
                 </div>
 

@@ -177,7 +177,6 @@ const variants = {
 
 ```tsx
 import { AnimatePresence, m } from 'framer-motion'
-
 ;<AnimatePresence mode="wait">
   {isOpen && (
     <m.div

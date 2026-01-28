@@ -63,23 +63,16 @@ model goals {
   assignedTo          String
   createdBy           String
   periodId            String
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  progress            Int
   parent              goals?              @relation("goalsToparentId", fields: [parentId], references: [id])
   relations           goals[]             @relation("goalsToparentId")
   people_assignedTo   people              @relation("peopleTogoals_assignedTo", fields: [assignedTo], references: [id])
   people_createdBy    people              @relation("peopleTogoals_createdBy", fields: [createdBy], references: [id])
   performance_periods performance_periods @relation(fields: [periodId], references: [id])
-  goal_ambitions      goal_ambitions[]
   goal_actions        goal_actions[]
   goal_achievements   goal_achievements[]
-}
-
-model goal_ambitions {
-  id     String @id @default(cuid())
-  title  String
-  body   String
-  status String
-  goalId String
-  goals  goals  @relation(fields: [goalId], references: [id])
 }
 
 model goal_actions {
@@ -97,6 +90,7 @@ model goal_achievements {
   body   String
   status String
   goalId String
+  progress String
   goals  goals  @relation(fields: [goalId], references: [id])
 }
 

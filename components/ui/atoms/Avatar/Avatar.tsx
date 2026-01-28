@@ -57,7 +57,7 @@ function getPixelSize(size: AvatarProps['size']): number {
  */
 export function Avatar({
   src,
-  alt,
+  alt = 'Avatar',
   size = 'md',
   shape = 'circle',
   fallback,

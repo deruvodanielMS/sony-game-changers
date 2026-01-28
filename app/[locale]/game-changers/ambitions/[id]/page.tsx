@@ -14,38 +14,34 @@ import { AmbitionActions } from '@/components/game-changers/ambitions/AmbitionAc
 import { AmbitionAchievements } from '@/components/game-changers/ambitions/AmbitionAchievements'
 import { AmbitionLaddering } from '@/components/game-changers/ambitions/AmbitionLaddering'
 import { AmbitionActivityFeed } from '@/components/game-changers/ambitions/AmbitionActivityFeed'
-import { useAmbitionsStore } from '@/stores/ambitions.store'
+import { useGoalsStore } from '@/stores/goals.store'
 import { ROUTES } from '@/common/routes'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
 import {
+  /* Just for Mocking Data
+  mockActions,
   mockAchievements,
-  mockLadderedAmbitions,
+  mockLadderedAmbitions, */
   mockAvatarOptions,
   mockActivityFeed,
-  mockActions,
 } from './mockData'
+import { GOAL_STATUSES } from '@/domain/goal'
+import { useDateFormat } from '@/hooks/useDateFormat'
 
 export default function AmbitionDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const t = useTranslations('AmbitionDetail')
   const { id } = use(params)
-  const { list, fetchList, selected, selectAmbition } = useAmbitionsStore()
+  const { fetchGoal, selected, selectGoal } = useGoalsStore()
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
+  const { formatDate, formatDateTime } = useDateFormat()
 
   useEffect(() => {
-    if (!list) {
-      fetchList()
+    fetchGoal(id)
+    return () => {
+      selectGoal(null)
     }
-  }, [list, fetchList])
-
-  useEffect(() => {
-    if (list && id) {
-      const ambition = list.find((a) => a.id === id)
-      if (ambition) {
-        selectAmbition(ambition)
-      }
-    }
-  }, [list, id, selectAmbition])
+  }, [id, fetchGoal, selectGoal])
 
   if (!selected) {
     return (
@@ -54,8 +50,8 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
         <div className="flex flex-col gap-1.5 w-full">
           <AnimatedSection delay={0}>
             {/* Breadcrumb skeleton */}
-            <nav aria-label={t('loadingBreadcrumbNavigation')}>
-              <span className="sr-only">{t('loadingBreadcrumbNavigation')}</span>
+            <nav aria-label={t('breadcrumb.loadingBreadcrumbNavigation')}>
+              <span className="sr-only">{t('breadcrumb.loadingBreadcrumbNavigation')}</span>
               <div className="flex items-center gap-0.5" aria-hidden="true">
                 <Skeleton width="80px" height="16px" />
                 <Skeleton width="16px" height="16px" />
@@ -190,15 +186,26 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
     )
   }
 
-  const { title, userName, avatarUrl, ambitionType, ladderedGoals, status } = selected
+  const {
+    title,
+    userName,
+    avatarUrl,
+    goalType,
+    ladderedGoals,
+    status,
+    goalAchievements,
+    goalActions,
+    progress,
+    createdAt,
+    updatedAt,
+  } = selected
   const parentAmbition = ladderedGoals?.[0]
 
   // Calculate progress based on laddered goals completion
-  const progress = 80 // Mock data - TODO: Calculate from actual completion
 
   // Determine which action buttons to show based on status
-  const showApprovalActions = status === 'awaiting_approval'
-  const showSendForApproval = status === 'draft'
+  const showApprovalActions = status === GOAL_STATUSES.AWAITING_APPROVAL
+  const showSendForApproval = status === GOAL_STATUSES.DRAFT
   const showAnyActions = showApprovalActions || showSendForApproval
 
   const breadcrumbItems = [
@@ -258,10 +265,10 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
             title={title}
             userName={userName}
             avatarUrl={avatarUrl || undefined}
-            ambitionType={ambitionType}
+            ambitionType={goalType}
             progress={progress}
-            createdDate="10/08/2025"
-            updatedDate="10/08/2025, 10:15 am"
+            createdDate={formatDate(createdAt)}
+            updatedDate={formatDateTime(updatedAt)}
           />
         </AnimatedSection>
       </div>
@@ -270,17 +277,17 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
       <div className="flex flex-col gap-4 w-full mt-4">
         {/* Actions Section */}
         <AnimatedSection delay={0.15}>
-          <AmbitionActions actions={mockActions} />
+          <AmbitionActions actions={goalActions || []} />
         </AnimatedSection>
 
         {/* Achievements Section */}
         <AnimatedSection delay={0.2}>
-          <AmbitionAchievements achievements={mockAchievements} />
+          <AmbitionAchievements achievements={goalAchievements || []} />
         </AnimatedSection>
 
         {/* Laddered Ambitions Section */}
         <AnimatedSection delay={0.25}>
-          <AmbitionLaddering ambitions={mockLadderedAmbitions} avatarOptions={mockAvatarOptions} />
+          <AmbitionLaddering ambitions={ladderedGoals} avatarOptions={mockAvatarOptions} />
         </AnimatedSection>
 
         {/* Activity Feed Section */}

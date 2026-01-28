@@ -45,20 +45,13 @@ CREATE TABLE "goals" (
     "assignedTo" TEXT NOT NULL,
     "createdBy" TEXT NOT NULL,
     "periodId" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "progress" INTEGER NOT NULL,
     CONSTRAINT "goals_parentId_fkey" FOREIGN KEY ("parentId") REFERENCES "goals" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT "goals_assignedTo_fkey" FOREIGN KEY ("assignedTo") REFERENCES "people" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "goals_createdBy_fkey" FOREIGN KEY ("createdBy") REFERENCES "people" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "goals_periodId_fkey" FOREIGN KEY ("periodId") REFERENCES "performance_periods" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
--- CreateTable
-CREATE TABLE "goal_ambitions" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "title" TEXT NOT NULL,
-    "body" TEXT NOT NULL,
-    "status" TEXT NOT NULL,
-    "goalId" TEXT NOT NULL,
-    CONSTRAINT "goal_ambitions_goalId_fkey" FOREIGN KEY ("goalId") REFERENCES "goals" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -78,6 +71,7 @@ CREATE TABLE "goal_achievements" (
     "body" TEXT NOT NULL,
     "status" TEXT NOT NULL,
     "goalId" TEXT NOT NULL,
+    "progress" TEXT NOT NULL,
     CONSTRAINT "goal_achievements_goalId_fkey" FOREIGN KEY ("goalId") REFERENCES "goals" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 

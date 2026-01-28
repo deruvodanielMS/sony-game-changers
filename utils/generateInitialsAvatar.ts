@@ -16,11 +16,13 @@ export function generateInitialsAvatarSrc(name: string, options: AvatarOptions =
   } = options
 
   const initials = name
-    .trim()
-    .split(/\s+/)
-    .map((n) => n[0].toUpperCase())
-    .slice(0, 2)
-    .join('')
+    ? name
+        .trim()
+        .split(/\s+/)
+        .map((n) => n[0].toUpperCase())
+        .slice(0, 2)
+        .join('')
+    : 'NN'
 
   const svg = `
 <svg

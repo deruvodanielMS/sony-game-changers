@@ -1,5 +1,7 @@
+import { GoalAAA } from '@/domain/goal'
+
 export interface AmbitionActionsProps {
-  actions: string[]
+  actions: GoalAAA[]
   defaultOpen?: boolean
   className?: string
 }

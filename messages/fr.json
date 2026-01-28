@@ -98,7 +98,8 @@
   "AmbitionDetail": {
     "breadcrumb": {
       "ambitions": "Ambitions",
-      "detail": "Détail de l'ambition"
+      "detail": "Détail de l'ambition",
+      "loadingBreadcrumbNavigation": "Chargement de la navigation par fil d'Ariane..."
     },
     "actions": {
       "sendForApproval": "Envoyer pour approbation",

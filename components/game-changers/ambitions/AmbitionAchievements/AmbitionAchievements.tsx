@@ -8,6 +8,9 @@ import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
 import type { AmbitionAchievementsProps, Achievement } from './AmbitionAchievements.types'
 import type { ProgressStatus } from '@/components/ui/molecules/AchievementItem/AchievementItem.types'
+import { GOAL_STATUSES, GoalStatus } from '@/domain/goal'
+
+const isAchievementCompleted = (status: GoalStatus) => status === GOAL_STATUSES.COMPLETED
 
 export function AmbitionAchievements({
   achievements: initialAchievements,
@@ -24,7 +27,11 @@ export function AmbitionAchievements({
     setAchievements((prev) => {
       const updated = prev.map((achievement) =>
         achievement.id === id
-          ? { ...achievement, completed: !achievement.completed, progress: null }
+          ? {
+              ...achievement,
+              completed: !isAchievementCompleted(achievement.status as GoalStatus),
+              progress: null,
+            }
           : achievement,
       )
       onAchievementChange?.(updated)
@@ -53,8 +60,8 @@ export function AmbitionAchievements({
         {achievements.map((achievement) => (
           <AchievementItem
             key={achievement.id}
-            text={achievement.text}
-            completed={achievement.completed}
+            text={achievement.title}
+            completed={isAchievementCompleted(achievement.status as GoalStatus)}
             progress={achievement.progress}
             onToggle={() => handleAchievementToggle(achievement.id)}
             onProgressChange={(progress) => handleProgressChange(achievement.id, progress)}

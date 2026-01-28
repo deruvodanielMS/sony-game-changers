@@ -1,8 +1,7 @@
-export interface Achievement {
-  id: string | number
-  text: string
-  completed: boolean
-  progress: 'not-started' | 'on-track' | 'off-track' | null
+import { AchievementProgressStatus, GoalAAA } from '@/domain/goal'
+
+export type Achievement = GoalAAA & {
+  progress: AchievementProgressStatus | null
 }
 
 export interface AmbitionAchievementsProps {

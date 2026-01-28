@@ -110,6 +110,7 @@ async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
       body: 'Increase efficiency and quality of delivery',
       type: GOAL_TYPES.MANAGER_EFFECTIVENESS,
       status: GOAL_STATUSES.AWAITING_APPROVAL,
+      progress: 50,
       assignedTo: ctx.managerId,
       createdBy: ctx.managerId,
       periodId: ctx.periodId,
@@ -122,6 +123,7 @@ async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
       body: 'Ensure the team consistently meets commitments by improving planning and estimation',
       type: GOAL_TYPES.MANAGER_EFFECTIVENESS,
       status: GOAL_STATUSES.AWAITING_APPROVAL,
+      progress: 80,
       assignedTo: ctx.managerId,
       createdBy: ctx.managerId,
       periodId: ctx.periodId,
@@ -135,6 +137,7 @@ async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
       body: 'Reduce critical incidents by 30%',
       type: GOAL_TYPES.BUSINESS,
       status: GOAL_STATUSES.DRAFT,
+      progress: 0,
       assignedTo: ctx.ciId[1],
       createdBy: ctx.managerId,
       periodId: ctx.periodId,
@@ -148,42 +151,12 @@ async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
       body: 'Achieve 80% coverage on all services',
       type: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
       status: GOAL_STATUSES.COMPLETED,
+      progress: 100,
       parentId: managerGoal.id,
       assignedTo: ctx.ciId[0],
       createdBy: ctx.ciId[0],
       periodId: ctx.periodId,
     },
-  })
-
-  // Ambitions
-  await prisma.goal_ambitions.createMany({
-    data: [
-      {
-        title: 'Reduce critical incidents by 30%',
-        body: '',
-        status: GOAL_STATUSES.AWAITING_APPROVAL,
-        goalId: managerIcGoal.id,
-      },
-      {
-        title: 'Achieve 80% coverage on all services',
-        body: '',
-        status: GOAL_STATUSES.AWAITING_APPROVAL,
-        goalId: icGoal.id,
-      },
-      {
-        title:
-          'Ensure the team consistently meets commitments by improving planning and estimation',
-        body: '',
-        status: GOAL_STATUSES.AWAITING_APPROVAL,
-        goalId: managerSelfGoal.id,
-      },
-      {
-        title: 'Reduce critical incidents by 30%',
-        body: '',
-        status: GOAL_STATUSES.AWAITING_APPROVAL,
-        goalId: managerGoal.id,
-      },
-    ],
   })
 
   // Actions
@@ -272,72 +245,84 @@ async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
         body: '',
         status: 'active',
         goalId: managerIcGoal.id,
+        progress: 'not-started',
       },
       {
         title: 'Reduced critical incidents by addressing the most frequent root causes',
         body: '',
         status: 'active',
         goalId: managerIcGoal.id,
+        progress: 'not-started',
       },
       {
         title: 'Improved release stability through smaller and safer deployments',
         body: '',
         status: 'active',
         goalId: managerIcGoal.id,
+        progress: 'on-track',
       },
       {
         title: 'Increased automated test coverage across key modules',
         body: '',
         status: 'active',
         goalId: icGoal.id,
+        progress: 'on-track',
       },
       {
         title: 'Added regression tests for previously untested critical paths',
         body: '',
         status: 'active',
         goalId: icGoal.id,
+        progress: 'not-started',
       },
       {
         title: 'Improved build reliability by catching issues earlier with tests',
         body: '',
         status: 'active',
         goalId: icGoal.id,
+        progress: 'not-started',
       },
       {
         title: 'Increased sprint commitment completion rate across the team',
         body: '',
         status: 'active',
         goalId: managerSelfGoal.id,
+        progress: 'off-track',
       },
       {
         title: 'Reduced carry-over work between sprints',
         body: '',
         status: 'active',
         goalId: managerSelfGoal.id,
+        progress: 'off-track',
       },
       {
         title: 'Improved accuracy of delivery estimates, leading to more reliable timelines',
         body: '',
         status: 'active',
         goalId: managerSelfGoal.id,
+        progress: 'not-started',
       },
       {
         title: 'Reduced the number of production bugs reported per release',
         body: '',
         status: 'active',
         goalId: managerGoal.id,
+        progress: 'not-started',
       },
       {
         title: 'Lowered severity of production incidents through better prevention',
         body: '',
         status: 'active',
         goalId: managerGoal.id,
+        progress: 'not-started',
       },
       {
         title: 'Improved overall product stability as reflected in fewer customer issuesnpx prisma',
         body: '',
         status: 'active',
         goalId: managerGoal.id,
+        progress: 'on-track',
       },
     ],
   })

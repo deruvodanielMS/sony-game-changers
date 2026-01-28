@@ -3,7 +3,6 @@
 import { useTranslations } from 'next-intl'
 import { CollapsibleSection } from '@/components/ui/molecules/CollapsibleSection'
 import { Typography } from '@/components/ui/foundations/Typography'
-import { cn } from '@/utils/cn'
 import type { AmbitionActionsProps } from './AmbitionActions.types'
 
 // Bullet point design tokens
@@ -28,7 +27,7 @@ export function AmbitionActions({ actions, defaultOpen = true, className }: Ambi
 
           {/* Action text */}
           <Typography variant="body" color="default" className="flex-1">
-            {action}
+            {action.title}
           </Typography>
         </div>
       ))}

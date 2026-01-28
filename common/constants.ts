@@ -1,5 +1,5 @@
 export const LANGUAGES = {
-  ES: 'fr',
+  FR: 'fr',
   EN: 'en',
 } as const
 
@@ -8,6 +8,8 @@ export const SUPPORTED_LANGUAGES: Array<string> = Object.entries(LANGUAGES).map(
 )
 
 export const DEFAULT_LANGUAGE = LANGUAGES.EN
+
+export type LanguageCode = (typeof LANGUAGES)[keyof typeof LANGUAGES]
 
 export const DEBOUNCE_DELAY = 300
 
