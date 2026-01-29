@@ -1,6 +1,13 @@
 import { prisma } from '@/lib/prisma'
+import type { Prisma } from '@prisma/client'
 import { GoalRepository } from '@/repositories/GoalRepository'
-import { GoalAmbitionsResponse, GoalUI } from '@/domain/goal'
+import {
+  ACHIEVEMENT_PROGRESS_STATUSES,
+  CreateGoalDTO,
+  GOAL_STATUSES,
+  GoalAmbitionsResponse,
+  GoalUI,
+} from '@/domain/goal'
 
 const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
   const hasParent = goal.parent ? { parent: { id: goal.parent.id, title: goal.parent.title } } : {}
@@ -131,5 +138,87 @@ export class PrismaGoalRepository implements GoalRepository {
       },
     })) as unknown as GoalAmbitionsResponse | null
     return goal ? goalMapper(goal) : null
+  }
+
+  async create(goal: CreateGoalDTO): Promise<GoalUI> {
+    const data: Prisma.goalsCreateInput = {
+      title: goal.title,
+      body: goal.description ?? '',
+      type: goal.goalType as string,
+      status: goal.status as string,
+      progress: goal.progress ?? 0,
+      people_assignedTo: { connect: { id: goal.assignedTo } },
+      people_createdBy: { connect: { id: goal.createdBy } },
+      performance_periods: { connect: { id: goal.periodId } },
+      ...(!!goal.parentId ? { parent: { connect: { id: goal.parentId } } } : {}),
+      ...(goal.goalAchievements.length > 0
+        ? {
+            goal_achievements: {
+              create: goal.goalAchievements.map((a) => ({
+                title: a.title,
+                body: a.body ?? '',
+                status: a.status ?? GOAL_STATUSES.DRAFT,
+                progress: a.progress ?? ACHIEVEMENT_PROGRESS_STATUSES.NOT_STARTED,
+              })),
+            },
+          }
+        : {}),
+      ...(goal.goalActions.length > 0
+        ? {
+            goal_actions: {
+              create: goal.goalActions.map((a) => ({
+                title: a.title,
+                body: a.body ?? '',
+                status: a.status ?? GOAL_STATUSES.DRAFT,
+              })),
+            },
+          }
+        : {}),
+    }
+
+    const createdGoal = (await prisma.goals.create({
+      data,
+      include: {
+        people_assignedTo: {
+          select: {
+            id: true,
+            name: true,
+            lastname: true,
+            profileImageUrl: true,
+          },
+        },
+        parent: {
+          select: { id: true, title: true },
+        },
+        goal_achievements: {
+          select: {
+            id: true,
+            title: true,
+            status: true,
+            progress: true,
+          },
+        },
+        goal_actions: {
+          select: {
+            id: true,
+            title: true,
+            status: true,
+          },
+        },
+        relations: {
+          include: {
+            people_assignedTo: {
+              select: {
+                id: true,
+                name: true,
+                lastname: true,
+                profileImageUrl: true,
+              },
+            },
+          },
+        },
+      },
+    })) as unknown as GoalAmbitionsResponse
+    return goalMapper(createdGoal)
   }
 }

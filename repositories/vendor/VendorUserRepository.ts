@@ -17,17 +17,18 @@ export class VendorUserRepository implements UserRepository {
 
     return this.toDomain(await res.json())
   }
-  toDomain(apiUser: User): User {
+  toDomain(apiUser: Partial<User>): User {
     return {
-      email: apiUser.email,
-      name: apiUser.name,
-      lastname: apiUser.lastname,
-      profileImageUrl: apiUser.profileImageUrl,
-      employeeId: apiUser.employeeId,
-      workdayId: apiUser.workdayId,
-      status: apiUser.status,
-      orgId: apiUser.orgId,
-      jobId: apiUser.jobId,
+      id: apiUser.id,
+      email: apiUser.email || '',
+      name: apiUser.name || '',
+      lastname: apiUser.lastname || '',
+      profileImageUrl: apiUser.profileImageUrl ?? null,
+      employeeId: apiUser.employeeId ?? null,
+      workdayId: apiUser.workdayId ?? null,
+      status: apiUser.status ?? null,
+      orgId: apiUser.orgId || '',
+      jobId: apiUser.jobId || '',
     }
   }
 }

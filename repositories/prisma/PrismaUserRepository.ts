@@ -7,6 +7,7 @@ export class PrismaUserRepository implements UserRepository {
     const user = await prisma.people.findUnique({
       where: { email },
       select: {
+        id: true,
         email: true,
         name: true,
         lastname: true,

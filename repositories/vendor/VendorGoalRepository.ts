@@ -1,4 +1,4 @@
-import { Goal, GoalAmbitionsResponse } from '@/domain/goal'
+import { Goal, GoalAmbitionsResponse, CreateGoalDTO } from '@/domain/goal'
 import { GoalRepository } from '../GoalRepository'
 
 export class VendorGoalRepository implements GoalRepository {
@@ -17,6 +17,24 @@ export class VendorGoalRepository implements GoalRepository {
 
     const data = await res.json()
     return data.map(this.toDomain)
+  }
+
+  async create(goal: CreateGoalDTO): Promise<Goal> {
+    const res = await fetch(`${this.baseUrl}/goals`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.VENDOR_API_TOKEN}`,
+      },
+      body: JSON.stringify(goal),
+    })
+
+    if (!res.ok) {
+      throw new Error('Failed to create goal')
+    }
+
+    const data = await res.json()
+    return this.toDomain(data)
   }
 
   async findById(id: string): Promise<Goal | null> {

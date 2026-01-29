@@ -1,7 +1,12 @@
 import { GoalRepository } from '@/repositories/GoalRepository'
+import { UserService } from '@/services/userService'
+import { CreateGoalDTO } from '@/domain/goal'
 
 export class GoalService {
-  constructor(private readonly goalRepo: GoalRepository) {}
+  constructor(
+    private readonly goalRepo: GoalRepository,
+    private readonly userService?: UserService,
+  ) {}
 
   listGoals(email?: string) {
     return this.goalRepo.findMany(email)
@@ -9,5 +14,27 @@ export class GoalService {
 
   getGoal(id: string) {
     return this.goalRepo.findById(id)
+  }
+
+  async createGoal(goal: CreateGoalDTO, userEmail: string) {
+    if (!this.userService) {
+      throw new Error('UserService not provided')
+    }
+
+    const user = await this.userService.getUser(userEmail)
+
+    if (!user || !user.id) {
+      throw new Error('User not found')
+    }
+
+    const assignedId = goal.assignedTo ?? user.id
+
+    const payload: CreateGoalDTO = {
+      ...goal,
+      assignedTo: assignedId,
+      createdBy: user.id,
+    }
+
+    return this.goalRepo.create(payload)
   }
 }

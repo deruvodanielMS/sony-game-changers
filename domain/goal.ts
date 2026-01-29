@@ -80,3 +80,30 @@ export type GoalAAA = {
 }
 
 export type GoalDraft = Pick<Goal, 'title' | 'description' | 'goalType' | 'status'>
+
+export type CreateGoalAchievementDTO = {
+  title: string
+  body?: string
+  status?: string
+  progress?: AchievementProgressStatus
+}
+
+export type CreateGoalActionDTO = {
+  title: string
+  body?: string
+  status?: string
+}
+
+export type CreateGoalDTO = {
+  title: string
+  description?: string
+  goalType: GoalType
+  status: GoalStatus
+  parentId?: string
+  assignedTo: string
+  createdBy?: string
+  periodId: string
+  progress: number
+  goalAchievements: CreateGoalAchievementDTO[]
+  goalActions: CreateGoalActionDTO[]
+}

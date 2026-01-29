@@ -2,10 +2,15 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/auth'
 import { GoalService } from '@/services/goalService'
+import { CreateGoalDTO } from '@/domain/goal'
 import { createRepository } from '@/factories/createRepository'
 import { GoalRepository } from '@/repositories/GoalRepository'
 import { PrismaGoalRepository } from '@/repositories/prisma/PrismaGoalRepository'
 import { VendorGoalRepository } from '@/repositories/vendor/VendorGoalRepository'
+import { UserRepository } from '@/repositories/UserRepository'
+import { PrismaUserRepository } from '@/repositories/prisma/PrismaUserRepository'
+import { VendorUserRepository } from '@/repositories/vendor/VendorUserRepository'
+import { UserService } from '@/services/userService'
 
 const goalRepository = createRepository<GoalRepository>(
   {
@@ -17,8 +22,20 @@ const goalRepository = createRepository<GoalRepository>(
     defaultKey: 'prisma',
   },
 )
+const userRepository = createRepository<UserRepository>(
+  {
+    prisma: PrismaUserRepository,
+    vendor: VendorUserRepository,
+  },
+  {
+    envKey: 'GOALS_SOURCE',
+    defaultKey: 'prisma',
+  },
+)
 
-const goalService = new GoalService(goalRepository)
+const userService = new UserService(userRepository)
+
+const goalService = new GoalService(goalRepository, userService)
 
 export async function GET() {
   const session = await getServerSession(authOptions)
@@ -34,5 +51,24 @@ export async function GET() {
     console.error('[GET /goals]', error)
 
     return NextResponse.json({ error: 'Failed to fetch goals' }, { status: 500 })
+  }
+}
+
+export async function POST(request: Request) {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  try {
+    const payload = (await request.json()) as CreateGoalDTO
+
+    const created = await goalService.createGoal(payload, session.user?.email || '')
+
+    return NextResponse.json(created, { status: 201 })
+  } catch (error) {
+    console.error('[POST /goals]', error)
+    return NextResponse.json({ error: 'Failed to create goal' }, { status: 500 })
   }
 }
