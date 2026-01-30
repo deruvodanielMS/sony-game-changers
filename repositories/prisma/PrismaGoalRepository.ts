@@ -221,4 +221,91 @@ export class PrismaGoalRepository implements GoalRepository {
     })) as unknown as GoalAmbitionsResponse
     return goalMapper(createdGoal)
   }
+
+  async update(id: string, goal: CreateGoalDTO): Promise<GoalUI> {
+    const data: Prisma.goalsUpdateInput = {
+      title: goal.title,
+      body: goal.description ?? '',
+      type: goal.goalType as string,
+      status: goal.status as string,
+      progress: goal.progress ?? 0,
+      people_assignedTo: { connect: { id: goal.assignedTo } },
+      ...(!!goal.parentId
+        ? { parent: { connect: { id: goal.parentId } } }
+        : { parent: { disconnect: true } }),
+      ...(!!goal.periodId ? { performance_periods: { connect: { id: goal.periodId } } } : {}),
+      goal_achievements: {
+        deleteMany: {},
+        create: goal.goalAchievements.map((a) => ({
+          title: a.title,
+          body: a.body ?? '',
+          status: a.status ?? GOAL_STATUSES.DRAFT,
+          progress: a.progress ?? ACHIEVEMENT_PROGRESS_STATUSES.NOT_STARTED,
+        })),
+      },
+      goal_actions: {
+        deleteMany: {},
+        create: goal.goalActions.map((a) => ({
+          title: a.title,
+          body: a.body ?? '',
+          status: a.status ?? GOAL_STATUSES.DRAFT,
+        })),
+      },
+    }
+
+    const updatedGoal = (await prisma.goals.update({
+      where: { id },
+      data,
+      include: {
+        people_assignedTo: {
+          select: {
+            id: true,
+            name: true,
+            lastname: true,
+            profileImageUrl: true,
+          },
+        },
+        parent: {
+          select: { id: true, title: true },
+        },
+        goal_achievements: {
+          select: {
+            id: true,
+            title: true,
+            status: true,
+            progress: true,
+          },
+        },
+        goal_actions: {
+          select: {
+            id: true,
+            title: true,
+            status: true,
+          },
+        },
+        relations: {
+          include: {
+            people_assignedTo: {
+              select: {
+                id: true,
+                name: true,
+                lastname: true,
+                profileImageUrl: true,
+              },
+            },
+          },
+        },
+      },
+    })) as unknown as GoalAmbitionsResponse
+
+    return goalMapper(updatedGoal)
+  }
+
+  async delete(id: string): Promise<void> {
+    await prisma.$transaction([
+      prisma.goal_achievements.deleteMany({ where: { goalId: id } }),
+      prisma.goal_actions.deleteMany({ where: { goalId: id } }),
+      prisma.goals.delete({ where: { id } }),
+    ])
+  }
 }

@@ -4,4 +4,6 @@ export interface GoalRepository {
   findMany(email?: string): Promise<Goal[]>
   findById(id: string): Promise<Goal | null>
   create(goal: CreateGoalDTO): Promise<Goal>
+  update(id: string, goal: CreateGoalDTO): Promise<Goal>
+  delete(id: string): Promise<void>
 }

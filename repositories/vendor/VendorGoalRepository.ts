@@ -52,6 +52,36 @@ export class VendorGoalRepository implements GoalRepository {
     return this.toDomain(await res.json())
   }
 
+  async update(id: string, goal: CreateGoalDTO): Promise<Goal> {
+    const res = await fetch(`${this.baseUrl}/goals/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.VENDOR_API_TOKEN}`,
+      },
+      body: JSON.stringify(goal),
+    })
+
+    if (!res.ok) {
+      throw new Error('Failed to update goal')
+    }
+
+    return this.toDomain(await res.json())
+  }
+
+  async delete(id: string): Promise<void> {
+    const res = await fetch(`${this.baseUrl}/goals/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${process.env.VENDOR_API_TOKEN}`,
+      },
+    })
+
+    if (!res.ok) {
+      throw new Error('Failed to delete goal')
+    }
+  }
+
   /**
    * Adapts response from vendor API to Domain Goal Object
    * @param apiGoal Vendor apiGoal type must be aligned from vendro response

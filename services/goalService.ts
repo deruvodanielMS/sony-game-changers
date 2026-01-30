@@ -37,4 +37,30 @@ export class GoalService {
 
     return this.goalRepo.create(payload)
   }
+
+  async updateGoal(id: string, goal: CreateGoalDTO, userEmail: string) {
+    if (!this.userService) {
+      throw new Error('UserService not provided')
+    }
+
+    const user = await this.userService.getUser(userEmail)
+
+    if (!user || !user.id) {
+      throw new Error('User not found')
+    }
+
+    const assignedId = goal.assignedTo ?? user.id
+
+    const payload: CreateGoalDTO = {
+      ...goal,
+      assignedTo: assignedId,
+      createdBy: user.id,
+    }
+
+    return this.goalRepo.update(id, payload)
+  }
+
+  async deleteGoal(id: string) {
+    return this.goalRepo.delete(id)
+  }
 }

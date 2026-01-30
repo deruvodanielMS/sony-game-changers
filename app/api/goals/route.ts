@@ -72,3 +72,62 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to create goal' }, { status: 500 })
   }
 }
+
+export async function PUT(request: Request) {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  try {
+    const body = (await request.json()) as CreateGoalDTO & { id: string }
+    const id: string = body.id
+
+    if (!id) {
+      return NextResponse.json({ error: 'Missing id' }, { status: 400 })
+    }
+
+    const { id: _discard, ...payload } = body as CreateGoalDTO & { id: string }
+
+    const updated = await goalService.updateGoal(
+      id,
+      payload as CreateGoalDTO,
+      session.user?.email || '',
+    )
+
+    return NextResponse.json(updated, { status: 201 })
+  } catch (error) {
+    console.error('[PUT /goals]', error)
+    return NextResponse.json({ error: 'Failed to update goal' }, { status: 500 })
+  }
+}
+
+export async function DELETE(request: Request) {
+  const session = await getServerSession(authOptions)
+
+  if (!session) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  try {
+    const url = new URL(request.url)
+    let id = url.searchParams.get('id')
+
+    if (!id) {
+      const body = (await request.json()) as { id?: string }
+      id = body?.id || null
+    }
+
+    if (!id) {
+      return NextResponse.json({ error: 'Missing id' }, { status: 400 })
+    }
+
+    await goalService.deleteGoal(id)
+
+    return NextResponse.json({}, { status: 200 })
+  } catch (error) {
+    console.error('[DELETE /goals]', error)
+    return NextResponse.json({ error: 'Failed to delete goal' }, { status: 500 })
+  }
+}
