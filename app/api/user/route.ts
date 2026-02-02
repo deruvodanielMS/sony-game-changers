@@ -4,6 +4,7 @@ import { authOptions } from '@/auth'
 import { createRepository } from '@/factories/createRepository'
 import { PrismaUserRepository } from '@/repositories/prisma/PrismaUserRepository'
 import { VendorUserRepository } from '@/repositories/vendor/VendorUserRepository'
+import { MockRepository } from '@/repositories/mocks/MockRepository'
 import { UserRepository } from '@/repositories/UserRepository'
 import { UserService } from '@/services/userService'
 
@@ -11,9 +12,10 @@ const userRepository = createRepository<UserRepository>(
   {
     prisma: PrismaUserRepository,
     vendor: VendorUserRepository,
+    mock: MockRepository as unknown as new () => UserRepository,
   },
   {
-    envKey: 'GOALS_SOURCE',
+    envKey: 'USERS_SOURCE',
     defaultKey: 'prisma',
   },
 )

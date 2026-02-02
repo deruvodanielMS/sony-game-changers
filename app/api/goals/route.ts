@@ -7,6 +7,7 @@ import { createRepository } from '@/factories/createRepository'
 import { GoalRepository } from '@/repositories/GoalRepository'
 import { PrismaGoalRepository } from '@/repositories/prisma/PrismaGoalRepository'
 import { VendorGoalRepository } from '@/repositories/vendor/VendorGoalRepository'
+import { MockRepository } from '@/repositories/mocks/MockRepository'
 import { UserRepository } from '@/repositories/UserRepository'
 import { PrismaUserRepository } from '@/repositories/prisma/PrismaUserRepository'
 import { VendorUserRepository } from '@/repositories/vendor/VendorUserRepository'
@@ -16,6 +17,7 @@ const goalRepository = createRepository<GoalRepository>(
   {
     prisma: PrismaGoalRepository,
     vendor: VendorGoalRepository,
+    mock: MockRepository as unknown as new () => GoalRepository,
   },
   {
     envKey: 'GOALS_SOURCE',
@@ -26,9 +28,10 @@ const userRepository = createRepository<UserRepository>(
   {
     prisma: PrismaUserRepository,
     vendor: VendorUserRepository,
+    mock: MockRepository as unknown as new () => UserRepository,
   },
   {
-    envKey: 'GOALS_SOURCE',
+    envKey: 'USERS_SOURCE',
     defaultKey: 'prisma',
   },
 )

@@ -6,11 +6,13 @@ import { createRepository } from '@/factories/createRepository'
 import { GoalRepository } from '@/repositories/GoalRepository'
 import { PrismaGoalRepository } from '@/repositories/prisma/PrismaGoalRepository'
 import { VendorGoalRepository } from '@/repositories/vendor/VendorGoalRepository'
+import { MockRepository } from '@/repositories/mocks/MockRepository'
 
 const goalRepository = createRepository<GoalRepository>(
   {
     prisma: PrismaGoalRepository,
     vendor: VendorGoalRepository,
+    mock: MockRepository as unknown as new () => GoalRepository,
   },
   {
     envKey: 'GOALS_SOURCE',
