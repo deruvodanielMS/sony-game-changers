@@ -76,14 +76,12 @@ export function AvatarSelect({
       {!!collapsibleOptions.length && (
         <Collapsible.Root open={open} onOpenChange={setOpen} className="z-3">
           <Collapsible.Trigger ref={triggerRef} asChild>
-            <Button
-              variant="plain"
-              iconOnly
+            <button
               onClick={() => setOpen(!open)}
-              className="shrink-0 grow-0 basis-2 !w-2 !h-2 -ml-0_25 border z-2 border-dashed border-neutral-400 !bg-neutral-0 hover:!shadow-none hover:!bg-neutral-100"
+              className="flex items-center justify-center w-2 h-2 shrink-0 grow-0 -ml-0_25 z-2 rounded-full bg-neutral-0 border-2 border-feedback-info-500 hover:bg-extra-purple-100 transition-colors"
             >
-              <Plus width={16} className="text-neutral-400" />
-            </Button>
+              <Plus width={18} height={18} className="text-feedback-info-500" />
+            </button>
           </Collapsible.Trigger>
           <Collapsible.Content ref={contentRef} asChild className="absolute">
             <ul className={contentBaseClasses}>

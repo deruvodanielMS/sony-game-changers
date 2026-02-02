@@ -47,6 +47,8 @@
     "nonStarted": "Non commencé",
     "newGoal": "Nouvelle Ambition",
     "filtersButton": "Filtres",
+    "activeTab": "Actif",
+    "archivedTab": "Archivé",
     "status": {
       "completed": "Terminé",
       "draft": "Brouillon",
@@ -69,6 +71,11 @@
     "childrenGoalsLabel": "{goals} ambitions hiérarchisées au total",
     "addLadderedGoalLabel": "Ajouter une ambition hiérarchisée",
     "openLadderingModalLabel": "Ouvrir le modal de hiérarchisation"
+  },
+  "TypeIcon": {
+    "business": "Objectif d'entreprise",
+    "manager_effectiveness": "Efficacité du gestionnaire",
+    "personal_growth_and_development": "Croissance et développement personnel"
   },
   "LadderingModal": {
     "title": "Hiérarchisation des ambitions",
@@ -137,7 +144,10 @@
       "addButton": "Ajouter une ambition échelonnée",
       "totalAmbitions": "{count} ambitions au total",
       "previousPage": "Page précédente",
-      "nextPage": "Page suivante"
+      "nextPage": "Page suivante",
+      "viewSwitcherLabel": "Affichage des ambitions",
+      "viewGrid": "Affichage en grille",
+      "viewList": "Affichage en liste"
     },
     "activity": {
       "title": "Activité",

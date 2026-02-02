@@ -7,7 +7,7 @@ import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { Skeleton } from '@/components/ui/atoms/Skeleton'
 import { Card } from '@/components/ui/atoms/Card'
 import { Breadcrumb } from '@/components/ui/molecules/Breadcrumb'
-import { LadderGoal } from '@/components/ui/molecules/LadderGoal'
+import { HigherAmbition } from '@/components/ui/molecules/HigherAmbition'
 import { Button } from '@/components/ui/atoms/Button'
 import { AmbitionDetailHeader } from '@/components/game-changers/ambitions/AmbitionDetailHeader'
 import { AmbitionActions } from '@/components/game-changers/ambitions/AmbitionActions'
@@ -214,7 +214,7 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   ]
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full pt-2">
       {/* Top section: Breadcrumb, LadderGoal, Header with 24px spacing */}
       <div className="flex flex-col gap-1_5 w-full">
         <AnimatedSection delay={0}>
@@ -226,18 +226,28 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
 
             {/* Main Actions */}
             {showAnyActions && (
-              <div className={`flex gap-1 items-center ${isMobile ? 'h-auto' : 'h-2.5'}`}>
+              <div
+                className={`flex flex-wrap gap-0.5 items-center ${
+                  isMobile ? 'w-full h-auto' : 'h-2.5'
+                }`}
+              >
                 {/* Awaiting Approval: Send Back + Approve buttons */}
                 {showApprovalActions && (
                   <>
-                    <Button variant="secondary">{t('actions.sendBack')}</Button>
-                    <Button variant="primary">{t('actions.approve')}</Button>
+                    <Button variant="secondary" size="small">
+                      {t('actions.sendBack')}
+                    </Button>
+                    <Button variant="primary" size="small">
+                      {t('actions.approve')}
+                    </Button>
                   </>
                 )}
 
                 {/* Draft: Send for Approval button */}
                 {showSendForApproval && (
-                  <Button variant="primary">{t('actions.sendForApproval')}</Button>
+                  <Button variant="primary" size="small">
+                    {t('actions.sendForApproval')}
+                  </Button>
                 )}
 
                 {/* More Options Icon Button */}
@@ -252,10 +262,13 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
           </div>
         </AnimatedSection>
 
-        {/* Laddered Goal section */}
+        {/* Higher Ambition section - Shows parent goal */}
         {parentAmbition && (
           <AnimatedSection delay={0.05}>
-            <LadderGoal text={parentAmbition.title} />
+            <HigherAmbition
+              text={parentAmbition.title}
+              goalType={parentAmbition.goalType ?? (parentAmbition as { type?: string }).type}
+            />
           </AnimatedSection>
         )}
 

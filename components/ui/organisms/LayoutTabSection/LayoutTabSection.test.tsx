@@ -4,6 +4,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 vi.mock('next/navigation', () => {
   return {
     usePathname: vi.fn(),
+    useRouter: vi.fn(() => ({
+      push: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+    })),
   }
 })
 
@@ -79,8 +84,8 @@ describe('LayoutTabSection', () => {
       </LayoutTabSection>,
     )
 
-    const lists = screen.getAllByTestId('tabs-list')
-    expect(lists.length).toBe(2)
+    const tablists = screen.getAllByRole('tablist')
+    expect(tablists.length).toBe(2)
   })
 
   it('renders all section labels and icons', () => {
@@ -97,22 +102,20 @@ describe('LayoutTabSection', () => {
     expect(icons.length).toBe(4)
   })
 
-  it('preserves <a> as the interactive element so we can verify hrefs', () => {
+  it('renders tabs as buttons with proper roles', () => {
     render(
       <LayoutTabSection basePath="game-changers" sections={sectionsMock}>
         <div>Children</div>
       </LayoutTabSection>,
     )
 
-    const profileLinks = screen.getAllByText('Profile')
-    const profileLink = profileLinks[0].closest('a')
-    expect(profileLink).toBeTruthy()
-    expect(profileLink).toHaveAttribute('href', '/settings/profile')
+    const profileButtons = screen.getAllByRole('tab', { name: /Profile/i })
+    expect(profileButtons.length).toBe(2) // Desktop and mobile
+    expect(profileButtons[0]).toHaveAttribute('type', 'button')
 
-    const billingLinks = screen.getAllByText('Billing')
-    const billingLink = billingLinks[0].closest('a')
-    expect(billingLink).toBeTruthy()
-    expect(billingLink).toHaveAttribute('href', '/settings/billing')
+    const billingButtons = screen.getAllByRole('tab', { name: /Billing/i })
+    expect(billingButtons.length).toBe(2) // Desktop and mobile
+    expect(billingButtons[0]).toHaveAttribute('type', 'button')
   })
 
   it('marks the current tab value based on the pathname (last segment)', () => {
@@ -122,8 +125,11 @@ describe('LayoutTabSection', () => {
       </LayoutTabSection>,
     )
 
-    const root = screen.getByTestId('tabs-root')
-    expect(root.getAttribute('data-value')).toBe('profile')
+    const profileButtons = screen.getAllByRole('tab', { name: /Profile/i })
+    expect(profileButtons[0]).toHaveAttribute('aria-selected', 'true')
+
+    const billingButtons = screen.getAllByRole('tab', { name: /Billing/i })
+    expect(billingButtons[0]).toHaveAttribute('aria-selected', 'false')
   })
 
   it('renders the children section', () => {
@@ -145,8 +151,11 @@ describe('LayoutTabSection', () => {
       </LayoutTabSection>,
     )
 
-    const root = screen.getByTestId('tabs-root')
-    expect(root.getAttribute('data-value')).toBe('billing')
+    const billingButtons = screen.getAllByRole('tab', { name: /Billing/i })
+    expect(billingButtons[0]).toHaveAttribute('aria-selected', 'true')
+
+    const profileButtons = screen.getAllByRole('tab', { name: /Profile/i })
+    expect(profileButtons[0]).toHaveAttribute('aria-selected', 'false')
   })
 
   it('matches snapshot', () => {

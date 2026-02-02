@@ -1,14 +1,15 @@
+/* ============================================
+   DESIGN TOKENS - Sony Gamechangers
+   Light Theme Only (Dark theme TBD)
+   Based on Figma Color System
+   ============================================ */
+
 /* ---------- LIGHT THEME ---------- */
 :root[data-theme='light'] {
-  /* 🌈 Accent */
-  --accent-primary: #0c54b2;
-  --accent-primary-dark: #083979;
-  --accent-highlight-subtle: rgba(12, 84, 178, 0.1);
-  --accent-highlight-default: rgba(12, 84, 178, 0.3);
-  --accent-border-active: #030217;
-  --accent-overlay: rgba(3, 2, 23, 0.4);
+  /* ��� Primary Color */
+  --primary: #030217;
 
-  /* ⚪ Neutral */
+  /* ⚪ Neutral Scale */
   --neutral-0: #ffffff;
   --neutral-100: #f8f8fc;
   --neutral-200: #ebebf5;
@@ -16,189 +17,58 @@
   --neutral-400: #9498b8;
   --neutral-500: #64698b;
   --neutral-600: #474b69;
-  --neutral-700: #333455;
-  --neutral-800: #1e1f3b;
-  --neutral-900: #100f2a;
   --neutral-1000: #030217;
 
-  /* �� Dividers */
-  --divider-default: #474b69;
+  /* 🔔 Feedback Colors - 100, 500, 950 scale only */
+  --feedback-info-100: #dce4ff;
+  --feedback-info-500: #4b6efa;
+  --feedback-info-950: #2b45b3;
 
-  /* � Dividers */
-  --divider-default: #d9d9d9;
+  --feedback-success-100: #c2f5ee;
+  --feedback-success-500: #21d9be;
+  --feedback-success-950: #0b7567;
 
-  /* �💬 Feedback */
-  --feedback-info-100: #f0f9ff;
-  --feedback-info-200: #bae6fd;
-  --feedback-info-400: #38bdf8;
-  --feedback-info-600: #0284c7;
-  --feedback-info-800: #075985;
-  --feedback-info-950: #082f49;
+  --feedback-warning-100: #fff0dc;
+  --feedback-warning-500: #ff922b;
+  --feedback-warning-950: #9e4d00;
 
-  --feedback-success-100: #d9f3eb;
-  --feedback-success-200: #b2e7d7;
-  --feedback-success-400: #96d334;
-  --feedback-success-500: #15c691;
-  --feedback-success-600: #00b079;
-  --feedback-success-800: #3d5f06;
-  --feedback-success-950: #1c2c02;
+  --feedback-error-100: #ffd9d9;
+  --feedback-error-500: #f03e3e;
+  --feedback-error-950: #960e0e;
 
-  --feedback-warning-100: #fff4e5;
-  --feedback-warning-200: #fed7aa;
-  --feedback-warning-400: #fb923c;
-  --feedback-warning-600: #ea580c;
-  --feedback-warning-800: #9a3412;
-  --feedback-warning-950: #431407;
+  /* ��� Extra Colors */
+  --extra-yellow-100: #fff1c2;
+  --extra-yellow-500: #ffc43d;
+  --extra-yellow-950: #997200;
 
-  --feedback-danger-100: #fff0f1;
-  --feedback-danger-200: #fecdd3;
-  --feedback-danger-400: #fb7185;
-  --feedback-danger-600: #e81745;
-  --feedback-danger-800: #9f1239;
-  --feedback-danger-950: #4c0519;
+  --extra-pink-100: #ffe0eb;
+  --extra-pink-500: #ff4d91;
+  --extra-pink-600: #d14fdd;
+  --extra-pink-950: #a6134d;
 
-  /* 🌿 Extra palettes */
-  --extra-red-100: #fd659d;
-  --extra-red-200: #fd659d;
-  --extra-red-300: #fd659d;
-  --extra-red-600: #fd659d;
-  --extra-red-800: #fd659d;
-  --extra-red-950: #fd659d;
-
-  --extra-green-100: #d9f6f4;
-  --extra-green-200: #afe7e3;
-  --extra-green-300: #52d8cd;
-  --extra-green-600: #01a79a;
-  --extra-green-800: #01655d;
-  --extra-green-950: #01433d;
-
-  --extra-pink-100: #f9e9ff;
-  --extra-pink-200: #edc2ff;
-  --extra-pink-300: #dc8aff;
-  --extra-pink-600: #d061ff;
-  --extra-pink-800: #b914ff;
-  --extra-pink-950: #8f10c6;
-
-  --extra-blue-100: #dbe2ff;
-  --extra-blue-200: #b8c6f9;
-  --extra-blue-300: #7694ff;
-  --extra-blue-600: #5577f4;
-  --extra-blue-800: #0c32bb;
-  --extra-blue-950: #0d2c9c;
-
-  --extra-purple-100: #f3e8ff;
-  --extra-purple-200: #e9d5ff;
-  --extra-purple-300: #d8b4fe;
+  --extra-purple-100: #f5e3ff;
+  --extra-purple-500: #be4bff;
   --extra-purple-600: #9561ff;
-  --extra-purple-800: #7e22ce;
-  --extra-purple-950: #581c87;
+  --extra-purple-950: #671d96;
+
+  --extra-blue-100: #e0f0ff;
+  --extra-blue-200: #a8d5ff;
+  --extra-blue-300: #6bb3ff;
+  --extra-blue-600: #3b70ea;
+  --extra-blue-800: #1a4d9e;
+  --extra-blue-950: #0a2e6b;
+
+  --extra-green-100: #c2f5d1;
+  --extra-green-200: #8feca8;
+  --extra-green-300: #5ce380;
+  --extra-green-600: #1db845;
+  --extra-green-800: #107a2a;
+  --extra-green-950: #08501b;
 }
 
-/* ---------- DARK THEME ---------- */
-
-:root[data-theme='dark'] {
-  /* 🌈 Accent */
-  --accent-primary: #0c54b2;
-  --accent-primary-dark: #083979;
-  --accent-highlight-subtle: rgba(12, 84, 178, 0.24);
-  --accent-highlight-default: rgba(12, 84, 178, 0.4);
-  --accent-border-active: rgba(255, 255, 255, 0);
-  --accent-overlay: rgba(3, 2, 23, 0.4);
-
-  /* ⚫ Neutral */
-  --neutral-0: #030217;
-  --neutral-100: #100f2a;
-  --neutral-200: #1e1f3b;
-  --neutral-300: #333455;
-  --neutral-400: #474b69;
-  --neutral-500: #64698b;
-  --neutral-600: #9498b8;
-  --neutral-700: #cbcee1;
-  --neutral-800: #ebebf5;
-  --neutral-900: #f8f8fc;
-  --neutral-1000: #ffffff;
-
-  /* 💬 Feedback */
-  --feedback-info-100: #082f49;
-  --feedback-info-200: #075985;
-  --feedback-info-400: #0284c7;
-  --feedback-info-600: #38bdf8;
-  --feedback-info-800: #88d4fc;
-  --feedback-info-950: #e0f2fe;
-
-  --feedback-success-100: #1c2c02;
-  --feedback-success-200: #3d5f06;
-  --feedback-success-400: #5f9605;
-  --feedback-success-600: #00b079;
-  --feedback-success-800: #c0ed78;
-  --feedback-success-950: #f7fded;
-
-  --feedback-warning-100: #431407;
-  --feedback-warning-200: #9a3412;
-  --feedback-warning-400: #ea580c;
-  --feedback-warning-600: #fb923c;
-  --feedback-warning-800: #fdbf77;
-  --feedback-warning-950: #ffedd5;
-
-  --feedback-danger-100: #4c0519;
-  --feedback-danger-200: #9f1239;
-  --feedback-danger-400: #e11d48;
-  --feedback-danger-600: #fb7185;
-  --feedback-danger-800: #fd9ba7;
-  --feedback-danger-950: #ffe4e6;
-}
-
+/* ---------- SHARED TOKENS ---------- */
 :root {
-  /* 🌿 Extra palettes */
-  --extra-red-100: #fd659d;
-  --extra-red-200: #fd659d;
-  --extra-red-300: #fd659d;
-  --extra-red-600: #fd659d;
-  --extra-red-800: #fd659d;
-  --extra-red-950: #fd659d;
-
-  --extra-green-100: #d9f6f4;
-  --extra-green-200: #afe7e3;
-  --extra-green-300: #52d8cd;
-  --extra-green-600: #01a79a;
-  --extra-green-800: #01655d;
-  --extra-green-950: #01433d;
-
-  --extra-pink-100: #f9e9ff;
-  --extra-pink-200: #edc2ff;
-  --extra-pink-300: #dc8aff;
-  --extra-pink-600: #d061ff;
-  --extra-pink-800: #b914ff;
-  --extra-pink-950: #8f10c6;
-
-  --extra-blue-100: #dbe2ff;
-  --extra-blue-200: #b8c6f9;
-  --extra-blue-300: #7694ff;
-  --extra-blue-600: #5577f4;
-  --extra-blue-800: #0c32bb;
-  --extra-blue-950: #0d2c9c;
-  --feedback-danger-10: rgba(233, 26, 71, 0.1);
-  --feedback-danger-20: rgba(233, 26, 71, 0.2);
-
-  --feedback-info-10: rgba(2, 132, 199, 0.1);
-  --feedback-info-20: rgba(2, 132, 199, 0.2);
-
-  --feedback-success-10: rgba(94, 150, 5, 0.1);
-  --feedback-success-20: rgba(94, 150, 5, 0.2);
-
-  --feedback-warning-10: rgba(234, 88, 12, 0.1);
-  --feedback-warning-20: rgba(234, 88, 12, 0.2);
-
-  --black-10: rgba(22, 22, 155, 0.06);
-  --black-20: rgba(22, 13, 130, 0.12);
-
-  --goal-completed: #21b22f;
-  --goal-draft: #3b70ea;
-  --goal-awaiting-approval: #d14fdd;
-}
-
-:root {
-  /* 📏 Spacing */
+  /* ��� Spacing */
   --space-0_125: 2px;
   --space-0_25: 4px;
   --space-0_5: 8px;
@@ -215,7 +85,7 @@
   --space-6: 96px;
   --space-8: 128px;
 
-  /* 🔠 Typography – Size */
+  /* ��� Typography – Size */
   --font-size-h1: 64px;
   --font-size-h2: 48px;
   --font-size-h3: 40px;
@@ -226,7 +96,7 @@
   --font-size-body-small: 14px;
   --font-size-body-tiny: 12px;
 
-  /* 📏 Typography – Line Height */
+  /* ��� Typography – Line Height */
   --line-height-h1: 80px;
   --line-height-h2: 56px;
   --line-height-h3: 48px;
@@ -237,17 +107,100 @@
   --line-height-body-small: 20px;
   --line-height-body-tiny: 16px;
 
-  /* 💀 Skeleton Heights */
+  /* ��� Skeleton Heights */
   --skeleton-button-height: 40px;
 
-  /* 🔄 Spinner Sizes */
+  /* ��� Spinner Sizes */
   --spinner-small: 32px;
   --spinner-medium: 48px;
   --spinner-large: 64px;
   --spinner-duration: 2s;
   --spinner-stroke-width: 3;
+
+  /* ��� Border Radius */
+  --rounded-tiny: 4px;
+  --rounded-small: 8px;
+  --rounded-default: 16px;
+  --rounded-large: 24px;
+  --rounded-x-large: 48px;
+  --rounded-badge: 58px;
+
+  /* ��� Layout */
+  --form-control-width: 280px;
+  --icon-rounded-diameter: 20px;
+  --header-height: 64px;
+  --sidebar-width: 240px;
+  --sidebar-collapsed-width: 96px;
+  --sidebar-nav-item-max-width: 192px;
+  --mobile-drawer-offset: 50px;
+
+  /* ��� Modal & Drawer */
+  --modal-width-sm: 420px;
+  --modal-width-md: 547px;
+  --modal-width-lg: 720px;
+
+  --drawer-width-sm: 320px;
+  --drawer-width-md: 420px;
+  --drawer-width-lg: 560px;
+  --drawer-height-sm: 60vh;
+  --drawer-height-md: 70vh;
+  --drawer-height-lg: 80vh;
+
+  /* ⏱️ Transitions & Animations */
+  --transition-duration-fast: 150ms;
+  --transition-duration-base: 200ms;
+  --transition-duration-slow: 300ms;
+  --transition-duration-slower: 500ms;
+
+  --transition-ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --transition-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --transition-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --transition-opacity: opacity var(--transition-duration-slow) var(--transition-ease-default);
+  --transition-transform: transform var(--transition-duration-slow) var(--transition-ease-out);
+  --transition-all: all var(--transition-duration-slow) var(--transition-ease-out);
+  --transition-colors:
+    color var(--transition-duration-base) var(--transition-ease-default),
+    background-color var(--transition-duration-base) var(--transition-ease-default),
+    border-color var(--transition-duration-base) var(--transition-ease-default);
+
+  /* ��� Button */
+  --button-height-default: 44px;
+  --button-height-small: 32px;
+
+  --primary-from: oklch(58.5% 0.233 277.117);
+  --primary-to: oklch(66.7% 0.295 322.15);
+  --primary-hover-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.21);
+  --primary-compound-hover-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.21);
+
+  --secondary-shadow: inset 0 0 0 1px var(--neutral-1000);
+  --secondary-hover-shadow: inset 0 0 0 2px var(--neutral-1000);
+
+  --tertiary-hover-shadow: inset 0 0 0 2px var(--neutral-300);
+  --tertiary-danger-compound-hover-shadow: inset 0 0 0 2px var(--feedback-error-500);
+
+  --plain-hover-shadow: inset 0 0 0 2px var(--neutral-300);
+  --plain-danger-compound-hover-shadow: inset 0 0 0 2px var(--feedback-error-100);
+
+  /* ��� Gradients */
+  --gradient-100: linear-gradient(135deg, #dce4ff 0%, #f5e3ff 100%);
+  --gradient-500: linear-gradient(135deg, #4b6efa 0%, #be4bff 100%);
+  --gradient-950: linear-gradient(135deg, #2b45b3 0%, #671d96 100%);
+
+  /* ��� Semantic Tokens */
+  --text-primary: #030217;
+  --text-secondary: #64698b;
+
+  --background-primary: #ffffff;
+  --background-secondary: #f8f8fc;
+
+  --stroke-primary: #9498b8;
+  --stroke-secondary: #cbcee1;
 }
 
+/* Mobile Breakpoint Overrides */
 @media (max-width: 768px) {
   :root {
     /* Spacing */
@@ -286,114 +239,18 @@
     --line-height-body: 20px;
     --line-height-body-small: 16px;
     --line-height-body-tiny: 12px;
-  }
-}
 
-:root {
-  --rounded-tiny: 4px;
-  --rounded-small: 8px;
-  --rounded-default: 16px;
-  --rounded-large: 24px;
-  --rounded-x-large: 48px;
-  --rounded-badge: 58px;
-}
-
-@media (max-width: 768px) {
-  :root {
+    /* Border Radius */
     --rounded-tiny: 2px;
     --rounded-small: 6px;
     --rounded-default: 12px;
     --rounded-large: 16px;
     --rounded-x-large: 24px;
     --rounded-badge: 40px;
-  }
-}
 
-:root {
-  --form-control-width: 280px;
-  --icon-rounded-diameter: 20px;
-}
-
-/* Modal */
-
-:root {
-  --modal-width-sm: 420px;
-  --modal-width-md: 547px;
-  --modal-width-lg: 720px;
-}
-
-@media (max-width: 768px) {
-  :root {
+    /* Modal */
     --modal-width-sm: 288px;
     --modal-width-md: 288px;
     --modal-width-lg: 288px;
   }
-}
-
-/* Layout */
-
-:root {
-  --header-height: 64px;
-  --sidebar-width: 240px;
-  --sidebar-collapsed-width: 96px;
-  --sidebar-nav-item-max-width: 192px;
-  --mobile-drawer-offset: 50px;
-}
-
-/* Drawer */
-
-:root {
-  --drawer-width-sm: 320px;
-  --drawer-width-md: 420px;
-  --drawer-width-lg: 560px;
-  --drawer-height-sm: 60vh;
-  --drawer-height-md: 70vh;
-  --drawer-height-lg: 80vh;
-}
-
-/* Transitions & Animations */
-
-:root {
-  /* Duration */
-  --transition-duration-fast: 150ms;
-  --transition-duration-base: 200ms;
-  --transition-duration-slow: 300ms;
-  --transition-duration-slower: 500ms;
-
-  /* Timing functions */
-  --transition-ease-default: cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-ease-in: cubic-bezier(0.4, 0, 1, 1);
-  --transition-ease-out: cubic-bezier(0, 0, 0.2, 1);
-  --transition-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  /* Common presets */
-  --transition-opacity: opacity var(--transition-duration-slow) var(--transition-ease-default);
-  --transition-transform: transform var(--transition-duration-slow) var(--transition-ease-out);
-  --transition-all: all var(--transition-duration-slow) var(--transition-ease-out);
-  --transition-colors:
-    color var(--transition-duration-base) var(--transition-ease-default),
-    background-color var(--transition-duration-base) var(--transition-ease-default),
-    border-color var(--transition-duration-base) var(--transition-ease-default);
-}
-
-/* Buttons */
-
-:root {
-  --button-height-default: 44px;
-  --button-height-small: 32px;
-
-  --primary-from: oklch(58.5% 0.233 277.117);
-  --primary-to: oklch(66.7% 0.295 322.15);
-  --primary-hover-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.21);
-  --primary-compound-hover-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.21);
-
-  --secondary-shadow: inset 0 0 0 1px var(--neutral-1000);
-  --secondary-hover-shadow: inset 0 0 0 2px var(--neutral-1000);
-
-  --tertiary-hover-shadow: inset 0 0 0 2px var(--neutral-300);
-  --tertiary-danger-compound-hover-shadow: inset 0 0 0 2px var(--feedback-danger-400);
-
-  --plain-hover-shadow: inset 0 0 0 2px var(--neutral-300);
-  --plain-danger-compound-hover-shadow: inset 0 0 0 2px var(--feedback-danger-200);
 }

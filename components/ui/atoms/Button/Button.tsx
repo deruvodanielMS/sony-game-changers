@@ -2,99 +2,47 @@
 
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
-import { m } from 'framer-motion'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/utils/cn'
 
-const tapVariants = {
-  tap: { scale: 0.95 },
-  rest: { scale: 1 },
-}
-
 const buttonVariants = cva(
   [
-    'transition-hover',
     'inline-flex items-center justify-center',
     'font-semibold transition-all duration-200 outline-none cursor-pointer',
     'disabled:opacity-50 disabled:cursor-not-allowed',
     'focus-visible:ring-4 focus-visible:ring-accent-primary/20 focus-visible:outline-none',
     'whitespace-nowrap',
+    'rounded-full',
+    'gap-1',
+    'active:scale-95',
   ],
   {
     variants: {
       variant: {
         primary: [
-          'bg-gradient-to-l from-button-primary-from to-button-primary-to text-neutral-0',
-          'hover:shadow-button-primary',
-          'active:scale-[0.98]',
+          'bg-gradient-to-r from-feedback-info-500 to-extra-purple-500',
+          'text-neutral-0',
+          'hover:from-feedback-info-950 hover:to-extra-purple-950',
+          'disabled:from-neutral-500 disabled:to-neutral-500',
         ],
         secondary: [
-          'bg-neutral-0 text-neutral-1000',
-          'shadow-button-secondary',
-          'hover:shadow-button-secondary-hover',
-          'active:scale-[0.98]',
+          'bg-neutral-0',
+          'border-2 border-feedback-info-500',
+          'hover:bg-extra-purple-100',
+          'hover:border-feedback-info-950',
+          'disabled:border-neutral-500',
         ],
-        tertiary: [
-          'bg-neutral-100 text-neutral-1000',
-          'hover:bg-neutral-200 hover:shadow-button-tertiary-hover',
-          'active:scale-[0.98]',
-        ],
-        plain: [
-          'bg-transparent text-neutral-1000',
-          'hover:bg-neutral-200 hover:shadow-button-plain-hover',
-          'active:scale-[0.98]',
-        ],
-      },
-      mode: {
-        default: '',
-        danger: '',
+        link: ['bg-transparent', 'hover:bg-extra-purple-100', 'disabled:opacity-50'],
       },
       size: {
-        default: [
-          'h-button-height',
-          'px-0_75 py-1',
-          'gap-0_5',
-          'rounded-x-large',
-          'text-body-small leading-body-small',
-        ],
-        small: [
-          'h-button-height-small',
-          'px-0_5 py-0_75',
-          'gap-0_5',
-          'rounded-x-large',
-          'text-body-small leading-body-small',
-        ],
+        large: ['px-1 py-0_75', 'text-body leading-body'],
+        small: ['px-0_75 py-0_5', 'text-body-small leading-body-small'],
       },
     },
-    compoundVariants: [
-      {
-        variant: 'primary',
-        size: 'small',
-        className: 'hover:shadow-button-primary-compound',
-      },
-      {
-        variant: 'primary',
-        mode: 'danger',
-        className: 'bg-feedback-danger-600 bg-none hover:outline-0 hover:opacity-90',
-      },
-      {
-        variant: 'tertiary',
-        mode: 'danger',
-        className:
-          'bg-feedback-danger-10 text-feedback-danger-600 hover:bg-feedback-danger-20 hover:shadow-button-tertiary-danger-compound-hover',
-      },
-      {
-        variant: 'plain',
-        mode: 'danger',
-        className:
-          'bg-transparent text-feedback-danger-600 hover:bg-feedback-danger-10 hover:shadow-button-plain-danger-compound-hover',
-      },
-    ],
     defaultVariants: {
       variant: 'primary',
-      size: 'default',
-      mode: 'default',
+      size: 'large',
     },
   },
 )
@@ -105,7 +53,6 @@ export interface ButtonProps
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode
   iconOnly?: boolean
-  iconShape?: 'rounded' | 'squared'
   isLoading?: boolean
   asChild?: boolean
   className?: string
@@ -116,8 +63,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     {
       variant,
       size,
-      mode,
-      iconShape,
       children,
       leftIcon,
       rightIcon,
@@ -140,29 +85,52 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         type={!asChild ? type : undefined}
         disabled={!asChild ? isDisabled : undefined}
         className={cn(
-          buttonVariants({ variant, size, mode }),
-          iconOnly && '!w-12 !h-12 !p-0 flex items-center justify-center',
-          iconOnly && size === 'small' && '!w-11 !h-11',
-          iconOnly && iconShape === 'rounded' && 'rounded-[100px]',
-          iconOnly && iconShape === 'squared' && 'rounded-lg',
+          buttonVariants({ variant, size }),
+          iconOnly && 'aspect-square p-0_75',
+          iconOnly && size === 'small' && 'p-0_25',
+          // Ensure primary variant always has white text
+          variant === 'primary' && '[&>span]:text-neutral-0',
+          // Apply gradient text to secondary/link variants directly on the button
+          (variant === 'secondary' || variant === 'link') &&
+            !iconOnly &&
+            'bg-gradient-to-r from-feedback-info-500 to-extra-purple-500 bg-clip-text text-transparent',
+          (variant === 'secondary' || variant === 'link') &&
+            !iconOnly &&
+            'hover:from-feedback-info-950 hover:to-extra-purple-950',
+          (variant === 'secondary' || variant === 'link') &&
+            !iconOnly &&
+            'disabled:from-neutral-500 disabled:to-neutral-500',
+          // Icon colors for secondary/link variants (non icon-only)
+          (variant === 'secondary' || variant === 'link') &&
+            !iconOnly &&
+            '[&_svg]:text-feedback-info-500 [&_svg]:bg-transparent',
+          (variant === 'secondary' || variant === 'link') &&
+            !iconOnly &&
+            'hover:[&_svg]:text-feedback-info-950',
+          (variant === 'secondary' || variant === 'link') &&
+            !iconOnly &&
+            'disabled:[&_svg]:text-neutral-500',
+          // Icon-only mode icons
+          (variant === 'secondary' || variant === 'link') &&
+            iconOnly &&
+            '[&_svg]:text-feedback-info-500 [&_svg]:bg-transparent',
+          (variant === 'secondary' || variant === 'link') &&
+            iconOnly &&
+            'hover:[&_svg]:text-feedback-info-950',
+          (variant === 'secondary' || variant === 'link') &&
+            iconOnly &&
+            'disabled:[&_svg]:text-neutral-500',
           className,
         )}
         aria-busy={isLoading}
         aria-disabled={isDisabled}
         {...props}
       >
-        <m.span
-          className="inline-flex items-center justify-center w-full h-full gap-0.5"
-          variants={tapVariants}
-          initial="rest"
-          animate="rest"
-          whileTap="tap"
-          transition={{ duration: 0.1 }}
-        >
+        <span className="inline-flex items-center justify-center w-full h-full gap-1">
           {isLoading ? (
             <>
               <svg
-                className="animate-spin h-1 w-1"
+                className="animate-spin h-5 w-5"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -205,7 +173,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               )}
             </>
           )}
-        </m.span>
+        </span>
       </Comp>
     )
   },

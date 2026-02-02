@@ -104,82 +104,49 @@ export const AllColorTokens: Story = {
       { name: 'Neutral 400', variable: '--neutral-400' },
       { name: 'Neutral 500', variable: '--neutral-500' },
       { name: 'Neutral 600', variable: '--neutral-600' },
-      { name: 'Neutral 700', variable: '--neutral-700' },
-      { name: 'Neutral 800', variable: '--neutral-800' },
-      { name: 'Neutral 900', variable: '--neutral-900' },
       { name: 'Neutral 1000', variable: '--neutral-1000' },
     ]
 
     const feedbackInfoColors = [
       { name: 'Info 100', variable: '--feedback-info-100' },
-      { name: 'Info 200', variable: '--feedback-info-200' },
-      { name: 'Info 400', variable: '--feedback-info-400' },
-      { name: 'Info 600', variable: '--feedback-info-600' },
-      { name: 'Info 800', variable: '--feedback-info-800' },
+      { name: 'Info 500', variable: '--feedback-info-500' },
       { name: 'Info 950', variable: '--feedback-info-950' },
     ]
 
     const feedbackSuccessColors = [
       { name: 'Success 100', variable: '--feedback-success-100' },
-      { name: 'Success 200', variable: '--feedback-success-200' },
-      { name: 'Success 400', variable: '--feedback-success-400' },
-      { name: 'Success 600', variable: '--feedback-success-600' },
-      { name: 'Success 800', variable: '--feedback-success-800' },
+      { name: 'Success 500', variable: '--feedback-success-500' },
       { name: 'Success 950', variable: '--feedback-success-950' },
     ]
 
     const feedbackWarningColors = [
       { name: 'Warning 100', variable: '--feedback-warning-100' },
-      { name: 'Warning 200', variable: '--feedback-warning-200' },
-      { name: 'Warning 400', variable: '--feedback-warning-400' },
-      { name: 'Warning 600', variable: '--feedback-warning-600' },
-      { name: 'Warning 800', variable: '--feedback-warning-800' },
+      { name: 'Warning 500', variable: '--feedback-warning-500' },
       { name: 'Warning 950', variable: '--feedback-warning-950' },
     ]
 
-    const feedbackDangerColors = [
-      { name: 'Danger 100', variable: '--feedback-danger-100' },
-      { name: 'Danger 200', variable: '--feedback-danger-200' },
-      { name: 'Danger 400', variable: '--feedback-danger-400' },
-      { name: 'Danger 600', variable: '--feedback-danger-600' },
-      { name: 'Danger 800', variable: '--feedback-danger-800' },
-      { name: 'Danger 950', variable: '--feedback-danger-950' },
+    const feedbackErrorColors = [
+      { name: 'Error 100', variable: '--feedback-error-100' },
+      { name: 'Error 500', variable: '--feedback-error-500' },
+      { name: 'Error 950', variable: '--feedback-error-950' },
     ]
 
-    const extraRedColors = [
-      { name: 'Red 100', variable: '--extra-red-100' },
-      { name: 'Red 200', variable: '--extra-red-200' },
-      { name: 'Red 300', variable: '--extra-red-300' },
-      { name: 'Red 600', variable: '--extra-red-600' },
-      { name: 'Red 800', variable: '--extra-red-800' },
-      { name: 'Red 950', variable: '--extra-red-950' },
-    ]
-
-    const extraGreenColors = [
-      { name: 'Green 100', variable: '--extra-green-100' },
-      { name: 'Green 200', variable: '--extra-green-200' },
-      { name: 'Green 300', variable: '--extra-green-300' },
-      { name: 'Green 600', variable: '--extra-green-600' },
-      { name: 'Green 800', variable: '--extra-green-800' },
-      { name: 'Green 950', variable: '--extra-green-950' },
+    const extraYellowColors = [
+      { name: 'Yellow 100', variable: '--extra-yellow-100' },
+      { name: 'Yellow 500', variable: '--extra-yellow-500' },
+      { name: 'Yellow 950', variable: '--extra-yellow-950' },
     ]
 
     const extraPinkColors = [
       { name: 'Pink 100', variable: '--extra-pink-100' },
-      { name: 'Pink 200', variable: '--extra-pink-200' },
-      { name: 'Pink 300', variable: '--extra-pink-300' },
-      { name: 'Pink 600', variable: '--extra-pink-600' },
-      { name: 'Pink 800', variable: '--extra-pink-800' },
+      { name: 'Pink 500', variable: '--extra-pink-500' },
       { name: 'Pink 950', variable: '--extra-pink-950' },
     ]
 
-    const extraBlueColors = [
-      { name: 'Blue 100', variable: '--extra-blue-100' },
-      { name: 'Blue 200', variable: '--extra-blue-200' },
-      { name: 'Blue 300', variable: '--extra-blue-300' },
-      { name: 'Blue 600', variable: '--extra-blue-600' },
-      { name: 'Blue 800', variable: '--extra-blue-800' },
-      { name: 'Blue 950', variable: '--extra-blue-950' },
+    const extraPurpleColors = [
+      { name: 'Purple 100', variable: '--extra-purple-100' },
+      { name: 'Purple 500', variable: '--extra-purple-500' },
+      { name: 'Purple 950', variable: '--extra-purple-950' },
     ]
 
     return (
@@ -199,11 +166,10 @@ export const AllColorTokens: Story = {
         <ColorPalette title="💬 Feedback - Info" colors={feedbackInfoColors} />
         <ColorPalette title="💬 Feedback - Success" colors={feedbackSuccessColors} />
         <ColorPalette title="💬 Feedback - Warning" colors={feedbackWarningColors} />
-        <ColorPalette title="💬 Feedback - Danger" colors={feedbackDangerColors} />
-        <ColorPalette title="🌿 Extra - Red" colors={extraRedColors} />
-        <ColorPalette title="🌿 Extra - Green" colors={extraGreenColors} />
+        <ColorPalette title="💬 Feedback - Error" colors={feedbackErrorColors} />
+        <ColorPalette title="🌿 Extra - Yellow" colors={extraYellowColors} />
         <ColorPalette title="🌿 Extra - Pink" colors={extraPinkColors} />
-        <ColorPalette title="🌿 Extra - Blue" colors={extraBlueColors} />
+        <ColorPalette title="🌿 Extra - Purple" colors={extraPurpleColors} />
       </div>
     )
   },

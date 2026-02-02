@@ -149,7 +149,7 @@ export function CommentInput({
       {showActions && (
         <div className="flex gap-1 items-center justify-end">
           <Button
-            variant="plain"
+            variant="link"
             size="small"
             onClick={handleCancel}
             data-testid={dataTestId ? `${dataTestId}-cancel` : undefined}

@@ -55,15 +55,14 @@ export function AmbitionAchievements({
         title={t('title')}
         open={isOpen}
         onToggle={setIsOpen}
-        contentClassName="gap-1"
+        contentClassName="p-0_5 flex flex-col gap-0_5"
       >
         {achievements.map((achievement) => (
           <AchievementItem
             key={achievement.id}
             text={achievement.title}
             completed={isAchievementCompleted(achievement.status as GoalStatus)}
-            progress={achievement.progress}
-            onToggle={() => handleAchievementToggle(achievement.id)}
+            progress={achievement.progress || 'off-track'}
             onProgressChange={(progress) => handleProgressChange(achievement.id, progress)}
             size={isMobile ? 'sm' : 'md'}
           />

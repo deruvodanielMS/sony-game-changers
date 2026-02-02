@@ -4,7 +4,7 @@
 export const BUTTON_VARIANTS = {
   PRIMARY: 'primary',
   SECONDARY: 'secondary',
-  TERTIARY: 'tertiary',
+  LINK: 'link',
   PLAIN: 'plain',
 } as const
 
@@ -12,7 +12,7 @@ export const BUTTON_VARIANTS = {
  * Button size types
  */
 export const BUTTON_SIZES = {
-  DEFAULT: 'default',
+  LARGE: 'large',
   SMALL: 'small',
 } as const
 

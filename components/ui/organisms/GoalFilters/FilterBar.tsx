@@ -38,7 +38,12 @@ export function FilterBar({
         ))}
         {avatarSelector && <AvatarSelect {...avatarSelector} />}
         {clearFields && (
-          <Button className="max-sm:order-last" variant={'plain'} onClick={handleClearFields}>
+          <Button
+            className="max-sm:order-last"
+            variant={'link'}
+            size="small"
+            onClick={handleClearFields}
+          >
             {t('clearFieldsButton')}
           </Button>
         )}

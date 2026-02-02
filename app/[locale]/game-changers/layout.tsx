@@ -16,8 +16,12 @@ export default function GameChangersLayout({ children }: { children: React.React
   const t = useTranslations('Pages')
   const pathname = usePathname()
 
-  // Hide tabs on creation/edit pages
-  const shouldHideTabs = pathname.includes('/new') || pathname.includes('/edit')
+  // Hide tabs on creation/edit/detail pages
+  const shouldHideTabs =
+    pathname.includes('/new') ||
+    pathname.includes('/edit') ||
+    /\/game-changers\/[^\/]+\/[a-f0-9-]{36}$/i.test(pathname) || // Matches UUID detail pages like /ambitions/123e4567-e89b-12d3
+    /\/game-changers\/[^\/]+\/\d+$/.test(pathname) // Matches numeric ID detail pages like /ambitions/123
 
   const sections = [
     {

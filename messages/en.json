@@ -47,6 +47,8 @@
     "nonStarted": "Non Started",
     "newGoal": "New Ambition",
     "filtersButton": "Filters",
+    "activeTab": "Active",
+    "archivedTab": "Archived",
     "status": {
       "completed": "Completed",
       "draft": "Draft",
@@ -69,6 +71,11 @@
     "childrenGoalsLabel": "{goals} Laddered Ambitions total",
     "addLadderedGoalLabel": "Add laddered Ambition",
     "openLadderingModalLabel": "Open laddering modal"
+  },
+  "TypeIcon": {
+    "business": "Business Goal",
+    "manager_effectiveness": "Manager Effectiveness",
+    "personal_growth_and_development": "Personal Growth and Development"
   },
   "LadderingModal": {
     "title": "Ambition laddering",
@@ -137,7 +144,10 @@
       "addButton": "Add Laddered Ambition",
       "totalAmbitions": "{count} total Ambitions",
       "previousPage": "Previous page",
-      "nextPage": "Next page"
+      "nextPage": "Next page",
+      "viewSwitcherLabel": "Ambitions view",
+      "viewGrid": "Grid view",
+      "viewList": "List view"
     },
     "activity": {
       "title": "Activity",

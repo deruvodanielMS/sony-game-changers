@@ -17,24 +17,24 @@ const badgeVariants = cva(
     variants: {
       variant: {
         // Status Tag variants (NO background, only text color)
-        draft: 'text-extra-blue-600', // #3b70ea
-        'awaiting-approval': 'text-extra-pink-600', // #d14fdd
-        approved: 'text-feedback-success-600', // #21b22f
-        'in-progress': 'text-extra-purple-600', // #9561ff
-        'on-track': 'text-feedback-warning-600', // #d79c12
-        'off-track': 'text-feedback-danger-600', // #c7262c
-        completed: 'text-feedback-success-500', // #15c691 (turquoise)
-        archived: 'text-neutral-900', // #2a2a2a
-        'not-started': 'text-neutral-500', // #64698b
+        draft: 'text-feedback-info-500',
+        'awaiting-approval': 'text-extra-pink-500',
+        approved: 'text-feedback-success-500',
+        'in-progress': 'text-extra-purple-500',
+        'on-track': 'text-feedback-warning-500',
+        'off-track': 'text-feedback-error-500',
+        completed: 'text-feedback-success-500',
+        archived: 'text-neutral-500',
+        'not-started': 'text-neutral-500',
 
         // Generic Badge variants (for backward compatibility)
-        default: 'text-neutral-800',
-        success: 'text-feedback-success-600',
-        warning: 'text-feedback-warning-600',
-        error: 'text-feedback-danger-600',
-        info: 'text-extra-blue-600',
-        primary: 'text-extra-pink-600',
-        secondary: 'text-extra-green-600',
+        default: 'text-neutral-500',
+        success: 'text-feedback-success-500',
+        warning: 'text-feedback-warning-500',
+        error: 'text-feedback-error-500',
+        info: 'text-feedback-info-500',
+        primary: 'text-extra-pink-500',
+        secondary: 'text-feedback-success-500',
       },
       size: {
         sm: 'text-[length:var(--font-size-body-small)] leading-[var(--line-height-body-small)]',

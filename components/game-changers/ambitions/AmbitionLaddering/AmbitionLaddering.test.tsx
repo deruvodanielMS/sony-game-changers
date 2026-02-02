@@ -12,6 +12,9 @@ vi.mock('next-intl', () => ({
       searchPlaceholder: 'Search...',
       addButton: 'Add Laddered Ambition',
       totalAmbitions: '{count} total Ambitions',
+      viewSwitcherLabel: 'View switcher',
+      viewGrid: 'Grid view',
+      viewList: 'List view',
     }
     return translations[key] || key
   },
@@ -29,24 +32,26 @@ const mockAmbitions: LadderedAmbition[] = [
   {
     id: '1',
     title: 'Improve team collaboration',
-    assignee: {
-      name: 'John Doe',
-      avatar: '/profile-img/Avatar1.png',
-      uid: 'user-1',
-    },
+    uid: 'user-1',
+    userName: 'John Doe',
+    avatarUrl: '/profile-img/Avatar1.png',
     progress: 75,
     status: 'In Progress',
+    goalType: 'business',
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-01',
   },
   {
     id: '2',
     title: 'Complete project documentation',
-    assignee: {
-      name: 'Jane Smith',
-      avatar: '/profile-img/Avatar2.png',
-      uid: 'user-2',
-    },
+    uid: 'user-2',
+    userName: 'Jane Smith',
+    avatarUrl: '/profile-img/Avatar2.png',
     progress: 45,
     status: 'Draft',
+    goalType: 'business',
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-01',
   },
 ]
 
@@ -130,7 +135,7 @@ describe('AmbitionLaddering', () => {
     render(<AmbitionLaddering ambitions={mockAmbitions} onAddAmbition={vi.fn()} />)
 
     const gridButton = screen.getByLabelText('Grid view')
-    expect(gridButton).toHaveClass('bg-neutral-200')
+    expect(gridButton).toHaveAttribute('aria-selected', 'true')
   })
 
   it('should show active state on list button when in list view', async () => {
@@ -141,7 +146,7 @@ describe('AmbitionLaddering', () => {
     await user.click(listButton)
 
     await waitFor(() => {
-      expect(listButton).toHaveClass('bg-neutral-200')
+      expect(listButton).toHaveAttribute('aria-selected', 'true')
     })
   })
 })

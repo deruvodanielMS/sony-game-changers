@@ -96,7 +96,7 @@ export function FilterableContentLayout({
   const showStickyShadow = scrollY > SHADOW_THRESHOLD
 
   return (
-    <div className="flex flex-col gap-0 md:gap-3">
+    <div className="flex flex-col gap-0">
       {/* Header - hide on scroll only on desktop, always visible on mobile */}
       <div
         className="md:transition-[transform,opacity] md:duration-base md:ease-out mb-0"
@@ -111,7 +111,7 @@ export function FilterableContentLayout({
       {/* Desktop: Sticky FilterBar */}
       <div
         className={cn(
-          'hidden md:block sticky top-[var(--sticky-filters-desktop-offset)] z-[var(--z-sticky-filters)] bg-neutral-0 pb-1 transition-all duration-base',
+          'mt-3 mb-1 hidden md:block sticky top-[var(--sticky-filters-desktop-offset)] z-[var(--z-sticky-filters)] bg-neutral-0 transition-all duration-base',
           showStickyShadow && 'shadow-sticky-light',
         )}
       >
@@ -310,7 +310,7 @@ export function FilterableContentLayout({
         </AnimatedSection>
       </div>
 
-      <div className={cn('flex flex-col gap-1 md:gap-1_5 pt-1 md:pt-0', contentClassName)}>
+      <div className={cn('flex flex-col gap-1 md:gap-1 pt-1 md:pt-0', contentClassName)}>
         {children}
       </div>
     </div>

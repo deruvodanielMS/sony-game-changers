@@ -1,7 +1,19 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { Target } from 'lucide-react'
 import { TypeIcon } from './TypeIcon'
+
+// Mock next-intl
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      business: 'Business Goal',
+      manager_effectiveness: 'Manager Effectiveness',
+      personal_growth_and_development: 'Personal Growth and Development',
+    }
+    return translations[key] || key
+  },
+}))
 
 describe('TypeIcon', () => {
   it('renders with business type', () => {
@@ -31,7 +43,7 @@ describe('TypeIcon', () => {
 
     const icon = screen.getByTestId('type-icon')
     expect(icon).toHaveClass('size-1.5')
-    expect(icon).toHaveClass('bg-neutral-600')
+    expect(icon).not.toHaveClass('bg-neutral-600')
   })
 
   it('applies badge variant by default', () => {
@@ -78,6 +90,34 @@ describe('TypeIcon', () => {
 
     const icon = screen.getByTestId('type-icon')
     expect(icon).toBeInTheDocument()
+  })
+
+  it('displays tooltip with goal type description from i18n', () => {
+    render(<TypeIcon type="business" data-test-id="type-icon" />)
+
+    const icon = screen.getByTestId('type-icon')
+    expect(icon).toHaveAttribute('title', 'Business Goal')
+  })
+
+  it('displays tooltip for manager-effectiveness type', () => {
+    render(<TypeIcon type="manager-effectiveness" data-test-id="type-icon" />)
+
+    const icon = screen.getByTestId('type-icon')
+    expect(icon).toHaveAttribute('title', 'Manager Effectiveness')
+  })
+
+  it('displays tooltip for personal-growth-and-development type', () => {
+    render(<TypeIcon type="personal-growth-and-development" data-test-id="type-icon" />)
+
+    const icon = screen.getByTestId('type-icon')
+    expect(icon).toHaveAttribute('title', 'Personal Growth and Development')
+  })
+
+  it('uses custom tooltip when provided', () => {
+    render(<TypeIcon type="business" tooltip="Custom Tooltip" data-test-id="type-icon" />)
+
+    const icon = screen.getByTestId('type-icon')
+    expect(icon).toHaveAttribute('title', 'Custom Tooltip')
   })
 
   it('has correct accessibility role', () => {

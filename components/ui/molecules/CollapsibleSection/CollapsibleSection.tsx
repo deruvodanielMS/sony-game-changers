@@ -83,10 +83,9 @@ export function CollapsibleSection({
             'transition-all duration-300 ease-in-out',
             'data-[state=closed]:animate-collapse-up',
             'data-[state=open]:animate-collapse-down',
-            contentClassName,
           )}
         >
-          {children}
+          <div className={cn('rounded-default bg-neutral-0', contentClassName)}>{children}</div>
         </Collapsible.Content>
       </Collapsible.Root>
     </div>

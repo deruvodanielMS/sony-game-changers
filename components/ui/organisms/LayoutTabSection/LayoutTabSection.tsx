@@ -1,14 +1,14 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect, useTransition } from 'react'
-import * as Tabs from '@radix-ui/react-tabs'
-import { Link } from '@/i18n/navigation'
 import { cn } from '@/utils/cn'
+import { Switcher } from '@/components/ui/molecules/Switcher'
 import type { LayoutTabSectionProps, LayoutTabItem } from './LayoutTabSection.types'
 
 export function LayoutTabSection({ children, sections = [], basePath }: LayoutTabSectionProps) {
   const pathname = usePathname()
+  const router = useRouter()
   const [isNavDrawerOpen, setIsNavDrawerOpen] = useState(false)
   const [, startTransition] = useTransition()
 
@@ -39,49 +39,55 @@ export function LayoutTabSection({ children, sections = [], basePath }: LayoutTa
     return () => observer.disconnect()
   }, [])
 
-  const tabItemClasses =
-    'min-w-[200px] p-0_75 gap-0_5 text-body leading-body flex items-center bg-neutral-100 transition-hover hover:bg-neutral-200 data-[state=active]:bg-neutral-800 data-[state=active]:text-neutral-0 rounded-default font-bold'
-  const tabLabelClasses = 'line-clamp-1'
+  // Transform sections to switcher items
+  const switcherItems = sections.map(({ value, label, icon }: LayoutTabItem) => ({
+    id: value,
+    label,
+    icon,
+  }))
+
+  const handleNavigation = (value: string) => {
+    const section = sections.find((s) => s.value === value)
+    if (section) {
+      router.push(section.href)
+    }
+  }
 
   return (
     <div>
-      <Tabs.Root value={current}>
-        {/* Desktop: Sticky navigation */}
-        <div
-          className={cn(
-            'sticky top-16 md:top-0 z-[var(--z-tabs)] bg-neutral-0 px-1 md:px-3',
-            'transition-opacity duration-base',
-            isNavDrawerOpen && 'md:opacity-100 opacity-0 pointer-events-none',
-          )}
-        >
-          <Tabs.List className="hidden md:flex gap-1 py-1_5">
-            {sections.map(({ value, label, href, icon }: LayoutTabItem) => (
-              <Tabs.Trigger key={value} value={value} asChild>
-                <Link href={href} className={tabItemClasses}>
-                  {icon}
-                  <span className={tabLabelClasses}>{label}</span>
-                </Link>
-              </Tabs.Trigger>
-            ))}
-          </Tabs.List>
-
-          {/* Mobile: ScrollArea with horizontal scroll */}
-          <div className="md:hidden w-full overflow-x-auto overflow-y-hidden py-1 scrollbar-hide">
-            <Tabs.List className="flex gap-1">
-              {sections.map(({ value, label, href, icon }: LayoutTabItem) => (
-                <Tabs.Trigger key={value} value={value} asChild>
-                  <Link href={href} className={tabItemClasses}>
-                    {icon}
-                    <span className={tabLabelClasses}>{label}</span>
-                  </Link>
-                </Tabs.Trigger>
-              ))}
-            </Tabs.List>
-          </div>
+      {/* Desktop: Sticky navigation */}
+      <div
+        className={cn(
+          'sticky top-16 md:top-0 z-[var(--z-tabs)] bg-neutral-0 px-1 md:px-3',
+          'transition-opacity duration-base',
+          isNavDrawerOpen && 'md:opacity-100 opacity-0 pointer-events-none',
+        )}
+      >
+        <div className="hidden md:flex gap-1 py-1_5">
+          <Switcher
+            items={switcherItems}
+            value={current}
+            onChange={handleNavigation}
+            size="large"
+            variant="generic"
+            ariaLabel="Game Changers navigation"
+          />
         </div>
 
-        <div className="px-1 md:px-3 pt-0 md:pt-1_5 pb-1 md:pb-3">{children}</div>
-      </Tabs.Root>
+        {/* Mobile: ScrollArea with horizontal scroll */}
+        <div className="md:hidden w-full overflow-x-auto overflow-y-hidden py-1 scrollbar-hide">
+          <Switcher
+            items={switcherItems}
+            value={current}
+            onChange={handleNavigation}
+            size="large"
+            variant="generic"
+            ariaLabel="Game Changers navigation"
+          />
+        </div>
+      </div>
+
+      <div className="px-1 md:px-3 pt-0 md:pt-1_5 pb-1 md:pb-3">{children}</div>
     </div>
   )
 }

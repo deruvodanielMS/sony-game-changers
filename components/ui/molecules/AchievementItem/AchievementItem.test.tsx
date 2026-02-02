@@ -12,21 +12,24 @@ describe('AchievementItem', () => {
     })
   })
 
-  it('renders unchecked by default', async () => {
+  it('renders progress selector by default', async () => {
     render(<AchievementItem text="Task 1" />)
 
     await waitFor(() => {
-      const checkbox = screen.getByRole('checkbox')
-      expect(checkbox).not.toBeChecked()
+      const tablist = screen.getByRole('tablist')
+      expect(tablist).toBeInTheDocument()
     })
+
+    const tabs = screen.getAllByRole('tab')
+    expect(tabs).toHaveLength(3)
   })
 
-  it('renders checked when completed is true', async () => {
-    render(<AchievementItem text="Task 1" completed />)
+  it('renders with default progress as off-track', async () => {
+    render(<AchievementItem text="Task 1" />)
 
     await waitFor(() => {
-      const checkbox = screen.getByRole('checkbox')
-      expect(checkbox).toBeChecked()
+      const offTrackButton = screen.getByRole('tab', { name: /Off track/i })
+      expect(offTrackButton).toHaveAttribute('aria-selected', 'true')
     })
   })
 
@@ -39,50 +42,24 @@ describe('AchievementItem', () => {
     })
   })
 
-  it('calls onToggle when checkbox is clicked', async () => {
-    const handleToggle = vi.fn()
-    const user = userEvent.setup()
-
-    render(<AchievementItem text="Task 1" onToggle={handleToggle} />)
+  it('shows progress selector by default', async () => {
+    render(<AchievementItem text="Task 1" />)
 
     await waitFor(() => {
-      const checkbox = screen.getByRole('checkbox')
-      expect(checkbox).toBeInTheDocument()
+      const tablist = screen.getByRole('tablist')
+      expect(tablist).toBeInTheDocument()
     })
 
-    const checkbox = screen.getByRole('checkbox')
-    await user.click(checkbox)
-
-    expect(handleToggle).toHaveBeenCalledWith(true)
-  })
-
-  it('shows progress selector when not completed', async () => {
-    render(<AchievementItem text="Task 1" completed={false} />)
-
-    await waitFor(() => {
-      const radioGroup = screen.getByRole('radiogroup')
-      expect(radioGroup).toBeInTheDocument()
-    })
-
-    const radios = screen.getAllByRole('radio')
-    expect(radios).toHaveLength(3)
-  })
-
-  it('hides progress selector when completed', async () => {
-    render(<AchievementItem text="Task 1" completed />)
-
-    await waitFor(() => {
-      const radioGroup = screen.queryByRole('radiogroup')
-      expect(radioGroup).not.toBeInTheDocument()
-    })
+    const tabs = screen.getAllByRole('tab')
+    expect(tabs).toHaveLength(3)
   })
 
   it('hides progress selector when showProgressSelector is false', async () => {
     render(<AchievementItem text="Task 1" showProgressSelector={false} />)
 
     await waitFor(() => {
-      const radioGroup = screen.queryByRole('radiogroup')
-      expect(radioGroup).not.toBeInTheDocument()
+      const tablist = screen.queryByRole('tablist')
+      expect(tablist).not.toBeInTheDocument()
     })
   })
 
@@ -93,11 +70,11 @@ describe('AchievementItem', () => {
     render(<AchievementItem text="Task 1" onProgressChange={handleProgressChange} />)
 
     await waitFor(() => {
-      const radios = screen.getAllByRole('radio')
-      expect(radios.length).toBeGreaterThan(0)
+      const tabs = screen.getAllByRole('tab')
+      expect(tabs.length).toBeGreaterThan(0)
     })
 
-    const onTrackButton = screen.getByRole('radio', { name: /On Track/i })
+    const onTrackButton = screen.getByRole('tab', { name: /On Track/i })
     await user.click(onTrackButton)
 
     expect(handleProgressChange).toHaveBeenCalledWith('on-track')
@@ -107,31 +84,22 @@ describe('AchievementItem', () => {
     render(<AchievementItem text="Task 1" progress="on-track" />)
 
     await waitFor(() => {
-      const onTrackButton = screen.getByRole('radio', { name: /On Track/i })
-      expect(onTrackButton).toHaveAttribute('aria-checked', 'true')
+      const onTrackButton = screen.getByRole('tab', { name: /On Track/i })
+      expect(onTrackButton).toHaveAttribute('aria-selected', 'true')
     })
   })
 
-  it('applies small size variant', async () => {
+  it('applies small size variant with items-start', async () => {
     render(<AchievementItem text="Task 1" size="sm" data-test-id="achievement" />)
 
     await waitFor(() => {
       const container = screen.getByTestId('achievement')
-      expect(container).toHaveClass('flex-col', 'items-center')
+      expect(container).toHaveClass('flex-col', 'items-start')
     })
   })
 
-  it('applies completed background color (feedback-success)', async () => {
-    render(<AchievementItem text="Task 1" completed data-test-id="achievement" />)
-
-    await waitFor(() => {
-      const container = screen.getByTestId('achievement')
-      expect(container).toHaveClass('bg-feedback-success-100', 'border-feedback-success-200')
-    })
-  })
-
-  it('applies default background color when not completed', async () => {
-    render(<AchievementItem text="Task 1" completed={false} data-test-id="achievement" />)
+  it('applies default background color', async () => {
+    render(<AchievementItem text="Task 1" data-test-id="achievement" />)
 
     await waitFor(() => {
       const container = screen.getByTestId('achievement')

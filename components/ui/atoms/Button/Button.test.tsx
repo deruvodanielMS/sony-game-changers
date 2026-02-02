@@ -33,73 +33,39 @@ describe('Button', () => {
     it('renders primary variant', () => {
       const { container } = render(<Button variant="primary">Primary</Button>)
       const button = container.querySelector('button')
-      expect(button?.className).toContain('from-button-primary-from')
-      expect(button?.className).toContain('to-button-primary-to')
+      expect(button?.className).toContain('from-feedback-info-500')
+      expect(button?.className).toContain('to-extra-purple-500')
     })
 
     it('renders secondary variant', () => {
       const { container } = render(<Button variant="secondary">Secondary</Button>)
       const button = container.querySelector('button')
-      expect(button?.className).toContain('bg-neutral-0')
-      expect(button?.className).toContain('shadow-button-secondary')
+      expect(button?.className).toContain('border-2')
+      expect(button?.className).toContain('border-feedback-info-500')
+      expect(button?.className).toContain('hover:bg-extra-purple-100')
     })
 
-    it('renders tertiary variant', () => {
-      const { container } = render(<Button variant="tertiary">Tertiary</Button>)
-      const button = container.querySelector('button')
-      expect(button?.className).toContain('bg-neutral-100')
-    })
-
-    it('renders plain variant', () => {
-      const { container } = render(<Button variant="plain">Plain</Button>)
+    it('renders link variant', () => {
+      const { container } = render(<Button variant="link">Link</Button>)
       const button = container.querySelector('button')
       expect(button?.className).toContain('bg-transparent')
+      expect(button?.className).toContain('hover:bg-extra-purple-100')
     })
   })
 
   describe('Sizes', () => {
-    it('renders default size', () => {
-      const { container } = render(<Button size="default">Default</Button>)
+    it('renders large size', () => {
+      const { container } = render(<Button size="large">Large</Button>)
       const button = container.querySelector('button')
-      expect(button?.className).toContain('h-button-height')
+      expect(button?.className).toContain('px-1')
+      expect(button?.className).toContain('py-0_75')
     })
 
     it('renders small size', () => {
       const { container } = render(<Button size="small">Small</Button>)
       const button = container.querySelector('button')
-      expect(button?.className).toContain('h-button-height-small')
-    })
-  })
-
-  describe('Modes', () => {
-    it('renders danger mode with primary variant', () => {
-      const { container } = render(
-        <Button variant="primary" mode="danger">
-          Delete
-        </Button>,
-      )
-      const button = container.querySelector('button')
-      expect(button?.className).toContain('bg-feedback-danger-600')
-    })
-
-    it('renders danger mode with tertiary variant', () => {
-      const { container } = render(
-        <Button variant="tertiary" mode="danger">
-          Remove
-        </Button>,
-      )
-      const button = container.querySelector('button')
-      expect(button?.className).toContain('bg-feedback-danger-10')
-    })
-
-    it('renders danger mode with plain variant', () => {
-      const { container } = render(
-        <Button variant="plain" mode="danger">
-          Cancel
-        </Button>,
-      )
-      const button = container.querySelector('button')
-      expect(button?.className).toContain('text-feedback-danger-600')
+      expect(button?.className).toContain('px-0_75')
+      expect(button?.className).toContain('py-0_5')
     })
   })
 
@@ -131,35 +97,25 @@ describe('Button', () => {
   })
 
   describe('Icon-only mode', () => {
-    it('renders icon-only button with rounded shape', () => {
+    it('renders icon-only button', () => {
       const { container } = render(
-        <Button iconOnly iconShape="rounded" aria-label="Add">
+        <Button iconOnly aria-label="Add">
           <Plus />
         </Button>,
       )
       const button = container.querySelector('button')
-      expect(button?.className).toContain('rounded-[100px]')
-      expect(button?.className).toContain('!p-0')
-    })
-
-    it('renders icon-only button with squared shape', () => {
-      const { container } = render(
-        <Button iconOnly iconShape="squared" aria-label="Add">
-          <Plus />
-        </Button>,
-      )
-      const button = container.querySelector('button')
-      expect(button?.className).toContain('rounded-lg')
+      expect(button?.className).toContain('aspect-square')
+      expect(button?.className).toContain('p-0_75')
     })
 
     it('renders small icon-only button', () => {
       const { container } = render(
-        <Button iconOnly iconShape="rounded" size="small" aria-label="Add">
+        <Button iconOnly size="small" aria-label="Add">
           <Plus />
         </Button>,
       )
-      const iconWrapper = container.querySelector('.w-5')
-      expect(iconWrapper).toBeDefined()
+      const button = container.querySelector('button')
+      expect(button?.className).toContain('p-0_25')
     })
   })
 
@@ -192,7 +148,7 @@ describe('Button', () => {
 
     it('hides icons when loading in icon-only mode', () => {
       render(
-        <Button isLoading iconOnly iconShape="rounded" aria-label="Loading">
+        <Button isLoading iconOnly aria-label="Loading">
           <Plus data-testid="icon" />
         </Button>,
       )
@@ -235,7 +191,7 @@ describe('Button', () => {
 
     it('requires aria-label for icon-only buttons', () => {
       render(
-        <Button iconOnly iconShape="rounded" aria-label="Add item">
+        <Button iconOnly aria-label="Add item">
           <Plus />
         </Button>,
       )

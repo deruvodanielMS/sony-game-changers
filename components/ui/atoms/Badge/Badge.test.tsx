@@ -11,49 +11,49 @@ describe('Badge', () => {
   it('applies default variant and size', () => {
     render(<Badge data-test-id="badge">Default</Badge>)
     const badge = screen.getByTestId('badge')
-    expect(badge).toHaveClass('text-neutral-800')
+    expect(badge).toHaveClass('text-neutral-500')
     expect(badge).toHaveClass('px-0_5', 'py-0_125')
   })
 
   it('applies success variant (no background, only text color)', () => {
     render(<Badge variant="success">Success</Badge>)
     const badge = screen.getByText('Success')
-    expect(badge).toHaveClass('text-feedback-success-600')
+    expect(badge).toHaveClass('text-feedback-success-500')
     expect(badge).not.toHaveClass('bg-feedback-success-100')
   })
 
   it('applies warning variant (no background)', () => {
     render(<Badge variant="warning">Warning</Badge>)
     const badge = screen.getByText('Warning')
-    expect(badge).toHaveClass('text-feedback-warning-600')
+    expect(badge).toHaveClass('text-feedback-warning-500')
     expect(badge).not.toHaveClass('bg-feedback-warning-100')
   })
 
   it('applies error variant (no background)', () => {
     render(<Badge variant="error">Error</Badge>)
     const badge = screen.getByText('Error')
-    expect(badge).toHaveClass('text-feedback-danger-600')
+    expect(badge).toHaveClass('text-feedback-error-500')
     expect(badge).not.toHaveClass('bg-feedback-error-100')
   })
 
   it('applies info variant (no background)', () => {
     render(<Badge variant="info">Info</Badge>)
     const badge = screen.getByText('Info')
-    expect(badge).toHaveClass('text-extra-blue-600')
+    expect(badge).toHaveClass('text-feedback-info-500')
     expect(badge).not.toHaveClass('bg-extra-blue-100')
   })
 
   it('applies primary variant (no background)', () => {
     render(<Badge variant="primary">Primary</Badge>)
     const badge = screen.getByText('Primary')
-    expect(badge).toHaveClass('text-extra-pink-600')
+    expect(badge).toHaveClass('text-extra-pink-500')
     expect(badge).not.toHaveClass('bg-extra-pink-100')
   })
 
   it('applies secondary variant (no background)', () => {
     render(<Badge variant="secondary">Secondary</Badge>)
     const badge = screen.getByText('Secondary')
-    expect(badge).toHaveClass('text-extra-green-600')
+    expect(badge).toHaveClass('text-feedback-success-500')
     expect(badge).not.toHaveClass('bg-extra-green-100')
   })
 
@@ -88,7 +88,7 @@ describe('Badge', () => {
     render(<Badge className="custom-class">Custom</Badge>)
     const badge = screen.getByText('Custom')
     expect(badge).toHaveClass('custom-class')
-    expect(badge).toHaveClass('text-neutral-800') // default variant still applies
+    expect(badge).toHaveClass('text-neutral-500') // default variant still applies
   })
 
   it('applies data-test-id attribute', () => {

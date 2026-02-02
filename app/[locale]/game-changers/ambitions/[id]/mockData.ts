@@ -8,19 +8,19 @@ import type { ActivityItem } from '@/components/game-changers/ambitions/Ambition
 // Mock achievements data - TODO: Replace with real data from Prisma
 export const mockAchievements: Achievement[] = [
   {
-    id: 1,
+    id: '1',
     text: 'Lead a cross-functional project',
     completed: true,
     progress: null,
   },
   {
-    id: 2,
+    id: '2',
     text: 'Mentor a junior team member',
     completed: false,
     progress: null,
   },
   {
-    id: 3,
+    id: '3',
     text: 'Complete advanced leadership training',
     completed: false,
     progress: null,

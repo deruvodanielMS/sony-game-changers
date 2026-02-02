@@ -4,81 +4,108 @@ exports[`LayoutTabSection > matches snapshot 1`] = `
 <div>
   <div>
     <div
-      data-testid="tabs-root"
-      data-value="profile"
+      class="sticky top-16 md:top-0 z-[var(--z-tabs)] bg-neutral-0 px-1 md:px-3 transition-opacity duration-base"
     >
       <div
-        class="sticky top-16 md:top-0 z-[var(--z-tabs)] bg-neutral-0 px-1 md:px-3 transition-opacity duration-base"
+        class="hidden md:flex gap-1 py-1_5"
       >
         <div
-          class="hidden md:flex gap-1 py-1_5"
-          data-testid="tabs-list"
+          aria-label="Game Changers navigation"
+          class="inline-flex items-center p-0_5 gap-0_25 rounded-full"
+          role="tablist"
+          style="background-color: var(--neutral-100);"
         >
-          <a
-            href="/settings/profile"
+          <button
+            aria-selected="true"
+            class="flex items-center justify-center gap-0_5 font-semibold transition-all duration-200 rounded-full px-1 py-0_75 text-label-md whitespace-nowrap cursor-pointer"
+            role="tab"
+            style="background-color: var(--neutral-1000); color: var(--neutral-0);"
+            type="button"
           >
-            <svg
-              data-testid="mock-icon"
-            />
             <span
-              class="line-clamp-1"
+              class="flex-shrink-0 w-1_25 h-1_25"
             >
+              <svg
+                data-testid="mock-icon"
+              />
+            </span>
+            <span>
               Profile
             </span>
-          </a>
-          <a
-            href="/settings/billing"
+          </button>
+          <button
+            aria-selected="false"
+            class="flex items-center justify-center gap-0_5 font-semibold transition-all duration-200 rounded-full px-1 py-0_75 text-label-md whitespace-nowrap hover:opacity-60 active:scale-95 cursor-pointer"
+            role="tab"
+            style="color: var(--neutral-600); background-color: transparent;"
+            type="button"
           >
-            <svg
-              data-testid="mock-icon"
-            />
             <span
-              class="line-clamp-1"
+              class="flex-shrink-0 w-1_25 h-1_25"
             >
+              <svg
+                data-testid="mock-icon"
+              />
+            </span>
+            <span>
               Billing
             </span>
-          </a>
-        </div>
-        <div
-          class="md:hidden w-full overflow-x-auto overflow-y-hidden py-1 scrollbar-hide"
-        >
-          <div
-            class="flex gap-1"
-            data-testid="tabs-list"
-          >
-            <a
-              href="/settings/profile"
-            >
-              <svg
-                data-testid="mock-icon"
-              />
-              <span
-                class="line-clamp-1"
-              >
-                Profile
-              </span>
-            </a>
-            <a
-              href="/settings/billing"
-            >
-              <svg
-                data-testid="mock-icon"
-              />
-              <span
-                class="line-clamp-1"
-              >
-                Billing
-              </span>
-            </a>
-          </div>
+          </button>
         </div>
       </div>
       <div
-        class="px-1 md:px-3 pt-0 md:pt-1_5 pb-1 md:pb-3"
+        class="md:hidden w-full overflow-x-auto overflow-y-hidden py-1 scrollbar-hide"
       >
-        <div>
-          Snapshot child
+        <div
+          aria-label="Game Changers navigation"
+          class="inline-flex items-center p-0_5 gap-0_25 rounded-full"
+          role="tablist"
+          style="background-color: var(--neutral-100);"
+        >
+          <button
+            aria-selected="true"
+            class="flex items-center justify-center gap-0_5 font-semibold transition-all duration-200 rounded-full px-1 py-0_75 text-label-md whitespace-nowrap cursor-pointer"
+            role="tab"
+            style="background-color: var(--neutral-1000); color: var(--neutral-0);"
+            type="button"
+          >
+            <span
+              class="flex-shrink-0 w-1_25 h-1_25"
+            >
+              <svg
+                data-testid="mock-icon"
+              />
+            </span>
+            <span>
+              Profile
+            </span>
+          </button>
+          <button
+            aria-selected="false"
+            class="flex items-center justify-center gap-0_5 font-semibold transition-all duration-200 rounded-full px-1 py-0_75 text-label-md whitespace-nowrap hover:opacity-60 active:scale-95 cursor-pointer"
+            role="tab"
+            style="color: var(--neutral-600); background-color: transparent;"
+            type="button"
+          >
+            <span
+              class="flex-shrink-0 w-1_25 h-1_25"
+            >
+              <svg
+                data-testid="mock-icon"
+              />
+            </span>
+            <span>
+              Billing
+            </span>
+          </button>
         </div>
+      </div>
+    </div>
+    <div
+      class="px-1 md:px-3 pt-0 md:pt-1_5 pb-1 md:pb-3"
+    >
+      <div>
+        Snapshot child
       </div>
     </div>
   </div>

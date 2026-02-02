@@ -1,22 +1,23 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { Target, Sprout, BriefcaseBusiness, Shrub } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import type { TypeIconProps, AmbitionType } from './TypeIcon.types'
 import { GOAL_TYPES } from '@/domain/goal'
 
-type IconKey = 'business' | 'manager-effectiveness' | 'personal-growth-and-development'
+type IconKey = 'business' | 'manager_effectiveness' | 'personal_growth_and_development'
 
 const typeToIconKey: Record<AmbitionType, IconKey> = {
   [GOAL_TYPES.BUSINESS]: 'business',
-  [GOAL_TYPES.MANAGER_EFFECTIVENESS]: 'manager-effectiveness',
-  [GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT]: 'personal-growth-and-development',
+  [GOAL_TYPES.MANAGER_EFFECTIVENESS]: 'manager_effectiveness',
+  [GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT]: 'personal_growth_and_development',
 }
 
 const defaultIcons: Record<IconKey, typeof Sprout> = {
   business: BriefcaseBusiness,
-  'manager-effectiveness': Sprout,
-  'personal-growth-and-development': Shrub,
+  manager_effectiveness: Sprout,
+  personal_growth_and_development: Shrub,
 }
 
 const variantStyles = {
@@ -25,8 +26,12 @@ const variantStyles = {
     icon: 'size-1.5 text-neutral-1000',
   },
   metadata: {
-    container: 'size-1.5 bg-neutral-600',
-    icon: 'size-0.75 text-neutral-0',
+    container: 'size-1.5',
+    icon: 'size-1.125 text-neutral-500',
+  },
+  higher: {
+    container: 'size-2 p-0.25 bg-neutral-0 border-2 border-feedback-info-500',
+    icon: 'size-1.125 text-feedback-info-500',
   },
 }
 
@@ -50,12 +55,20 @@ export function TypeIcon({
   type,
   icon: CustomIcon,
   variant = 'badge',
+  tooltip,
   className,
   'data-test-id': dataTestId,
 }: TypeIconProps) {
-  const iconKey = (typeToIconKey[type as AmbitionType] as IconKey) || 'business'
+  const t = useTranslations('TypeIcon')
+
+  // Normalize type to use underscores (handles both formats)
+  const normalizedType = type.replace(/-/g, '_')
+  const iconKey = (typeToIconKey[normalizedType as AmbitionType] as IconKey) || 'business'
   const Icon = CustomIcon || defaultIcons[iconKey] || Target
   const styles = variantStyles[variant]
+
+  // Use custom tooltip or fallback to translation
+  const tooltipText = tooltip || t(iconKey)
 
   return (
     <div
@@ -67,6 +80,7 @@ export function TypeIcon({
       data-testid={dataTestId}
       role="img"
       aria-label={`${type} ambition`}
+      title={tooltipText}
     >
       <Icon className={styles.icon} />
     </div>

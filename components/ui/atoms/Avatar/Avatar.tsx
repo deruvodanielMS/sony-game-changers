@@ -70,6 +70,7 @@ export function Avatar({
       className={cn(avatarVariants({ size: sizeClass }), className)}
       style={typeof size === 'number' ? { width: size, height: size } : undefined}
       data-testid={dataTestId}
+      title={alt}
     >
       {imageSrc ? (
         <Image

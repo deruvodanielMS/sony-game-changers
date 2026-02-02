@@ -77,6 +77,12 @@ describe('Avatar', () => {
     expect(avatar).toHaveClass('size-4')
   })
 
+  it('displays tooltip with user name on hover', () => {
+    render(<Avatar alt="John Doe" src="/test.jpg" data-test-id="avatar" />)
+    const avatar = screen.getByTestId('avatar')
+    expect(avatar).toHaveAttribute('title', 'John Doe')
+  })
+
   it('applies custom pixel size', () => {
     render(<Avatar alt="User" size={100} data-test-id="avatar" />)
     const avatar = screen.getByTestId('avatar')

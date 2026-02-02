@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { Typography } from '@/components/ui/foundations/Typography'
-import { ProgressRing } from '@/components/ui/atoms/ProgressRing'
+import { ProgressBar } from '@/components/ui/atoms/ProgressBar'
 import { Avatar } from '@/components/ui/atoms/Avatar'
 import { TypeIcon } from '@/components/ui/molecules/TypeIcon'
 import { cn } from '@/utils/cn'
@@ -60,7 +60,7 @@ export function AmbitionDetailHeader({
         <div
           className={cn(
             'flex items-center w-full',
-            isMobile ? 'flex-col gap-1 items-start' : 'gap-1 h-1.5 pl-4',
+            isMobile ? 'flex-col gap-1 items-start' : 'gap-0.5 h-1.5 pl-4_5',
             isTablet && 'flex-wrap',
           )}
         >
@@ -68,30 +68,24 @@ export function AmbitionDetailHeader({
           {ambitionType && (
             <div className="flex gap-0.5 items-center shrink-0">
               <TypeIcon type={ambitionType} variant="metadata" />
-              <Typography variant="bodySmall" color="neutral600">
+              <Typography variant="bodySmall" color="neutral500">
                 {t('metadata.type')}: <span className="font-bold">{ambitionType}</span>
               </Typography>
             </div>
           )}
 
-          {/* Divider */}
-          {!isMobile && <div className="bg-divider-default h-1 w-px shrink-0" />}
-
           {/* Created by */}
           <div className="flex gap-0.5 items-center shrink-0">
             <Avatar src={avatarUrl} alt={userName} size="sm" />
-            <Typography variant="bodySmall" color="neutral600">
+            <Typography variant="bodySmall" color="neutral500">
               {t('metadata.createdBy')}: <span className="font-bold">{userName}</span>{' '}
               {t('metadata.on')} <span className="font-bold">{createdDate}</span>
             </Typography>
           </div>
 
-          {/* Divider */}
-          {!isMobile && <div className="bg-divider-default h-1 w-px shrink-0" />}
-
           {/* Last Update timestamp */}
           {updatedDate && (
-            <Typography variant="bodySmall" color="neutral600" className="shrink-0">
+            <Typography variant="bodySmall" color="neutral500" className="shrink-0">
               {t('metadata.lastUpdate')}: <span className="font-bold">{updatedDate}</span>
             </Typography>
           )}
@@ -99,16 +93,13 @@ export function AmbitionDetailHeader({
       </div>
 
       {/* Right section - Progress metrics */}
-      <div className={cn('flex items-center shrink-0', isMobile && 'justify-start')}>
-        {/* Progress Ring */}
-        <ProgressRing
+      <div className={cn('flex items-center shrink-0', isMobile ? 'w-full' : 'w-[150px]')}>
+        {/* Progress Bar */}
+        <ProgressBar
           progress={progress}
-          size={isMobile ? 48 : 96}
-          strokeWidth={isMobile ? 4 : 8}
+          size="L"
+          status={progress === 100 ? 'completed' : 'in-progress'}
           showPercentage={true}
-          percentageVariant={isMobile ? 'h6' : 'h5'}
-          color="var(--color-extra-green-600)"
-          backgroundColor="#E8E4FF"
         />
       </div>
     </div>

@@ -9,8 +9,9 @@ import { SearchField } from '@/components/ui/molecules/SearchField'
 import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { Button } from '@/components/ui/atoms/Button'
-import { ProgressRing } from '@/components/ui/atoms/ProgressRing'
+import { ProgressBar } from '@/components/ui/atoms/ProgressBar'
 import { Badge } from '@/components/ui/atoms/Badge'
+import { Switcher } from '@/components/ui/molecules/Switcher'
 import { cn } from '@/utils/cn'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
@@ -29,6 +30,24 @@ const listVariants = {
       staggerChildren: 0.05,
     },
   },
+}
+
+const statusToBadgeVariant = (status?: string) => {
+  const normalized = status?.toLowerCase().replace(/\s+/g, '_')
+  if (normalized === 'draft') return 'draft'
+  if (normalized === 'awaiting_approval') return 'awaiting-approval'
+  if (normalized === 'completed') return 'completed'
+  return 'default'
+}
+
+const formatStatusLabel = (status?: string) => {
+  if (!status) return 'Draft'
+  return status
+    .toLowerCase()
+    .replace(/_/g, ' ')
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
 }
 
 export function AmbitionLaddering({
@@ -104,30 +123,27 @@ export function AmbitionLaddering({
             />
           )}
 
-          {/* View Toggle Icons */}
+          {/* View Toggle Switcher */}
           {!isMobile && (
-            <div className="flex gap-0.5">
-              <button
-                aria-label="Grid view"
-                onClick={() => setViewMode('grid')}
-                className={cn(
-                  'flex items-center justify-center p-0.25 rounded-full transition-colors cursor-pointer',
-                  viewMode === 'grid' ? 'bg-neutral-200' : 'hover:bg-neutral-100',
-                )}
-              >
-                <Grid2x2 className="size-1.5 text-neutral-1000" />
-              </button>
-              <button
-                aria-label="List view"
-                onClick={() => setViewMode('list')}
-                className={cn(
-                  'flex items-center justify-center p-0.25 rounded-full transition-colors cursor-pointer',
-                  viewMode === 'list' ? 'bg-neutral-200' : 'hover:bg-neutral-100',
-                )}
-              >
-                <List className="size-1.5 text-neutral-1000" />
-              </button>
-            </div>
+            <Switcher
+              ariaLabel={t('viewSwitcherLabel')}
+              size="large"
+              variant="generic"
+              value={viewMode}
+              onChange={(value) => setViewMode(value as ViewMode)}
+              items={[
+                {
+                  id: 'grid',
+                  icon: <Grid2x2 className="size-full" />,
+                  ariaLabel: t('viewGrid'),
+                },
+                {
+                  id: 'list',
+                  icon: <List className="size-full" />,
+                  ariaLabel: t('viewList'),
+                },
+              ]}
+            />
           )}
         </div>
       </div>
@@ -188,32 +204,13 @@ export function AmbitionLaddering({
                     </Typography>
                   </div>
 
-                  {/* Progress - Desktop: Ring, Mobile: Bar */}
-                  {!isMobile ? (
-                    <ProgressRing
-                      progress={ambition.progress}
-                      size={40}
-                      strokeWidth={6}
-                      showPercentage
-                      layout="side"
-                      color="var(--color-extra-green-600)"
-                      className="shrink-0"
-                    />
-                  ) : (
-                    <div className="flex flex-col gap-0.125 items-start justify-center shrink-0">
-                      <Typography variant="bodySmall" fontWeight="bold" className="text-right w-25">
-                        {ambition.progress}%
-                      </Typography>
-                      <div className="relative w-25 h-0.5 rounded-full bg-neutral-200 overflow-hidden">
-                        <m.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${ambition.progress}%` }}
-                          transition={{ duration: 0.5, ease: 'easeOut' }}
-                          className="absolute top-0 left-0 h-full rounded-full bg-[#01a79a]"
-                        />
-                      </div>
-                    </div>
-                  )}
+                  {/* Progress - ProgressBar for all breakpoints */}
+                  <ProgressBar
+                    progress={ambition.progress}
+                    size="S"
+                    status={ambition.progress === 100 ? 'completed' : 'in-progress'}
+                    className="w-25 shrink-0"
+                  />
                 </div>
               </m.div>
             ))}
@@ -275,8 +272,8 @@ export function AmbitionLaddering({
 
                 {/* Status column */}
                 <div className="flex justify-start">
-                  <Badge variant="info" size="md">
-                    {ambition.status || 'Draft'}
+                  <Badge variant={statusToBadgeVariant(ambition.status)} size="md">
+                    {formatStatusLabel(ambition.status)}
                   </Badge>
                 </div>
               </m.div>
@@ -289,7 +286,7 @@ export function AmbitionLaddering({
       <div className={cn('flex items-center justify-between w-full')}>
         {/* Add Button */}
         <Button
-          variant="plain"
+          variant="link"
           size="small"
           onClick={onAddAmbition}
           leftIcon={<Plus className="size-1.5" />}

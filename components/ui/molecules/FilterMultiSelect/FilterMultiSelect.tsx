@@ -67,8 +67,9 @@ export function FilterMultiSelect({
       <div className="flex ">
         <Collapsible.Trigger ref={triggerRef} asChild>
           <Button
+            size="small"
             aria-label={label}
-            variant="plain"
+            variant="link"
             leftIcon={<ListFilter width={20} />}
             onClick={() => setOpen(!open)}
             title={selectedInfo}
