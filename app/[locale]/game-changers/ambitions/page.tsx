@@ -23,7 +23,6 @@ type TabValue = 'active' | 'archived'
 export default function GameChangersGoalsPage() {
   const t = useTranslations('Goals')
   const router = useRouter()
-  const i18nRouter = useRouter()
   const searchParams = useSearchParams()
   const [selectedAvatars, setSelectedAvatars] = useState<Array<string>>([])
   const [selectedFilterType, setSelectedFilterType] = useState<Array<string>>([])

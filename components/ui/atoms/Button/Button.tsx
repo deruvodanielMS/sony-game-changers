@@ -88,18 +88,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           buttonVariants({ variant, size }),
           iconOnly && 'aspect-square p-0_75',
           iconOnly && size === 'small' && 'p-0_25',
+          'group',
           // Ensure primary variant always has white text
           variant === 'primary' && '[&>span]:text-neutral-0',
-          // Apply gradient text to secondary/link variants directly on the button
-          (variant === 'secondary' || variant === 'link') &&
-            !iconOnly &&
-            'bg-gradient-to-r from-feedback-info-500 to-extra-purple-500 bg-clip-text text-transparent',
-          (variant === 'secondary' || variant === 'link') &&
-            !iconOnly &&
-            'hover:from-feedback-info-950 hover:to-extra-purple-950',
-          (variant === 'secondary' || variant === 'link') &&
-            !iconOnly &&
-            'disabled:from-neutral-500 disabled:to-neutral-500',
           // Icon colors for secondary/link variants (non icon-only)
           (variant === 'secondary' || variant === 'link') &&
             !iconOnly &&
@@ -126,7 +117,23 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         aria-disabled={isDisabled}
         {...props}
       >
-        <span className="inline-flex items-center justify-center w-full h-full gap-1">
+        <span
+          className={cn(
+            'inline-flex items-center justify-center w-full h-full gap-1',
+            // Apply gradient text to secondary/link variants on the text span
+            (variant === 'secondary' || variant === 'link') &&
+              !iconOnly &&
+              'bg-gradient-to-r from-feedback-info-500 to-extra-purple-500 bg-clip-text text-transparent',
+            // Hover: darker gradient
+            (variant === 'secondary' || variant === 'link') &&
+              !iconOnly &&
+              'group-hover:from-feedback-info-950 group-hover:to-extra-purple-950',
+            // Disabled: gray gradient
+            (variant === 'secondary' || variant === 'link') &&
+              !iconOnly &&
+              'group-disabled:from-neutral-500 group-disabled:to-neutral-500',
+          )}
+        >
           {isLoading ? (
             <>
               <svg
