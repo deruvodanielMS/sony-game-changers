@@ -53,7 +53,7 @@ const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
 }
 
 export class PrismaGoalRepository implements GoalRepository {
-  async findMany(email?: string): Promise<GoalUI[]> {
+  async findGoals(email?: string): Promise<GoalUI[]> {
     const list = (await prisma.goals.findMany({
       where: email
         ? {
@@ -93,7 +93,7 @@ export class PrismaGoalRepository implements GoalRepository {
     return list.map(goalMapper)
   }
 
-  async findById(id: string): Promise<GoalUI | null> {
+  async findGoalById(id: string): Promise<GoalUI | null> {
     const goal = (await prisma.goals.findUnique({
       where: { id },
       include: {
@@ -140,7 +140,7 @@ export class PrismaGoalRepository implements GoalRepository {
     return goal ? goalMapper(goal) : null
   }
 
-  async create(goal: CreateGoalDTO): Promise<GoalUI> {
+  async createGoal(goal: CreateGoalDTO): Promise<GoalUI> {
     const data: Prisma.goalsCreateInput = {
       title: goal.title,
       body: goal.description ?? '',
@@ -222,7 +222,7 @@ export class PrismaGoalRepository implements GoalRepository {
     return goalMapper(createdGoal)
   }
 
-  async update(id: string, goal: CreateGoalDTO): Promise<GoalUI> {
+  async updateGoal(id: string, goal: CreateGoalDTO): Promise<GoalUI> {
     const data: Prisma.goalsUpdateInput = {
       title: goal.title,
       body: goal.description ?? '',
@@ -301,7 +301,7 @@ export class PrismaGoalRepository implements GoalRepository {
     return goalMapper(updatedGoal)
   }
 
-  async delete(id: string): Promise<void> {
+  async deleteGoal(id: string): Promise<void> {
     await prisma.$transaction([
       prisma.goal_achievements.deleteMany({ where: { goalId: id } }),
       prisma.goal_actions.deleteMany({ where: { goalId: id } }),

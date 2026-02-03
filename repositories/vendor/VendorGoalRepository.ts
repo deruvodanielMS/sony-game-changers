@@ -4,7 +4,7 @@ import { GoalRepository } from '../GoalRepository'
 export class VendorGoalRepository implements GoalRepository {
   private readonly baseUrl = process.env.VENDOR_API_URL!
 
-  async findMany(email?: string): Promise<Goal[]> {
+  async findGoals(email?: string): Promise<Goal[]> {
     const res = await fetch(`${this.baseUrl}/goals${email ? `?email=${email}` : ''}`, {
       headers: {
         Authorization: `Bearer ${process.env.VENDOR_API_TOKEN}`,
@@ -19,7 +19,7 @@ export class VendorGoalRepository implements GoalRepository {
     return data.map(this.toDomain)
   }
 
-  async create(goal: CreateGoalDTO): Promise<Goal> {
+  async createGoal(goal: CreateGoalDTO): Promise<Goal> {
     const res = await fetch(`${this.baseUrl}/goals`, {
       method: 'POST',
       headers: {
@@ -37,7 +37,7 @@ export class VendorGoalRepository implements GoalRepository {
     return this.toDomain(data)
   }
 
-  async findById(id: string): Promise<Goal | null> {
+  async findGoalById(id: string): Promise<Goal | null> {
     const res = await fetch(`${this.baseUrl}/goals/${id}`, {
       headers: {
         Authorization: `Bearer ${process.env.VENDOR_API_TOKEN}`,
@@ -52,7 +52,7 @@ export class VendorGoalRepository implements GoalRepository {
     return this.toDomain(await res.json())
   }
 
-  async update(id: string, goal: CreateGoalDTO): Promise<Goal> {
+  async updateGoal(id: string, goal: CreateGoalDTO): Promise<Goal> {
     const res = await fetch(`${this.baseUrl}/goals/${id}`, {
       method: 'PUT',
       headers: {
@@ -69,7 +69,7 @@ export class VendorGoalRepository implements GoalRepository {
     return this.toDomain(await res.json())
   }
 
-  async delete(id: string): Promise<void> {
+  async deleteGoal(id: string): Promise<void> {
     const res = await fetch(`${this.baseUrl}/goals/${id}`, {
       method: 'DELETE',
       headers: {

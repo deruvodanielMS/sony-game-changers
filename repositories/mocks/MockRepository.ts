@@ -20,17 +20,17 @@ export class MockRepository implements GoalRepository, UserRepository {
   }
 
   // GoalRepository
-  async findMany(email?: string): Promise<GoalUI[]> {
-    console.log('MockRepository.findMany called with email:', email)
+  async findGoals(email?: string): Promise<GoalUI[]> {
+    console.log('MockRepository.findGoals called with email:', email)
     return this.goals
   }
 
-  async findById(id: string): Promise<GoalUI | null> {
+  async findGoalById(id: string): Promise<GoalUI | null> {
     const found = this.goals.find((g) => g.id === id)
     return found || null
   }
 
-  async create(goal: CreateGoalDTO): Promise<GoalUI> {
+  async createGoal(goal: CreateGoalDTO): Promise<GoalUI> {
     const id = `mock-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
     const assigned = this.users.find((u) => u.id === goal.assignedTo)
 
@@ -54,7 +54,7 @@ export class MockRepository implements GoalRepository, UserRepository {
     return created
   }
 
-  async update(id: string, goal: CreateGoalDTO): Promise<GoalUI> {
+  async updateGoal(id: string, goal: CreateGoalDTO): Promise<GoalUI> {
     const idx = this.goals.findIndex((g) => g.id === id)
     if (idx === -1) {
       throw new Error('Not found')
@@ -80,7 +80,7 @@ export class MockRepository implements GoalRepository, UserRepository {
     return updated
   }
 
-  async delete(id: string): Promise<void> {
+  async deleteGoal(id: string): Promise<void> {
     this.goals = this.goals.filter((g) => g.id !== id)
   }
 }

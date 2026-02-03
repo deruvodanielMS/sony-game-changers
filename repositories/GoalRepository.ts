@@ -1,9 +1,9 @@
 import { CreateGoalDTO, Goal } from '@/domain/goal'
 
 export interface GoalRepository {
-  findMany(email?: string): Promise<Goal[]>
-  findById(id: string): Promise<Goal | null>
-  create(goal: CreateGoalDTO): Promise<Goal>
-  update(id: string, goal: CreateGoalDTO): Promise<Goal>
-  delete(id: string): Promise<void>
+  findGoals(email?: string): Promise<Goal[]>
+  findGoalById(id: string): Promise<Goal | null>
+  createGoal(goal: CreateGoalDTO): Promise<Goal>
+  updateGoal(id: string, goal: CreateGoalDTO): Promise<Goal>
+  deleteGoal(id: string): Promise<void>
 }

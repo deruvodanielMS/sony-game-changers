@@ -9,11 +9,11 @@ export class GoalService {
   ) {}
 
   listGoals(email?: string) {
-    return this.goalRepo.findMany(email)
+    return this.goalRepo.findGoals(email)
   }
 
   getGoal(id: string) {
-    return this.goalRepo.findById(id)
+    return this.goalRepo.findGoalById(id)
   }
 
   async createGoal(goal: CreateGoalDTO, userEmail: string) {
@@ -35,7 +35,7 @@ export class GoalService {
       createdBy: user.id,
     }
 
-    return this.goalRepo.create(payload)
+    return this.goalRepo.createGoal(payload)
   }
 
   async updateGoal(id: string, goal: CreateGoalDTO, userEmail: string) {
@@ -57,10 +57,10 @@ export class GoalService {
       createdBy: user.id,
     }
 
-    return this.goalRepo.update(id, payload)
+    return this.goalRepo.updateGoal(id, payload)
   }
 
   async deleteGoal(id: string) {
-    return this.goalRepo.delete(id)
+    return this.goalRepo.deleteGoal(id)
   }
 }
