@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    ports:
+      - '3000:3000'
+    volumes:
+      - db-data:/data
+    environment:
+      DATABASE_URL: 'file:/data/dev.db'
+      NEXTAUTH_URL: 'http://localhost:3000'
+      NEXTAUTH_SECRET: 'super-secret'
+      NEXT_PUBLIC_AUTH_ENABLED: false
+      REPOSITORY_SOURCE: 'prisma'
+
+volumes:
+  db-data:

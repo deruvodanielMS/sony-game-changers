@@ -16,9 +16,9 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "prepare": "husky",
-    "postinstall": "prisma generate",
     "dev:setup": "yarn install --frozen-lockfile && prisma generate && prisma migrate dev --name init",
     "db:reset": "prisma migrate reset --force",
+    "seed": "prisma db seed",
     "chromatic": "npx chromatic --project-token=chpt_e76bbf9a400351f"
   },
   "dependencies": {
@@ -83,6 +83,6 @@
     ]
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "node prisma/seed.js"
   }
 }

@@ -3,23 +3,23 @@ import { PrismaClient } from '@prisma/client'
 const EMPLOYEE_EMAIL_BY_ROLE = {
   MANAGER: 'manager@employee.test',
   IC: 'ic@employee.test',
-} as const
+}
 
 const GOAL_STATUSES = {
   COMPLETED: 'completed',
   DRAFT: 'draft',
   AWAITING_APPROVAL: 'awaiting_approval',
-} as const
+}
 
 const GOAL_TYPES = {
   BUSINESS: 'business',
   PERSONAL_GROWTH_AND_DEVELOPMENT: 'personal_growth_and_development',
   MANAGER_EFFECTIVENESS: 'manager_effectiveness',
-} as const
+}
 
 const prisma = new PrismaClient()
 
-async function seedBase(prisma: PrismaClient) {
+async function seedBase(prisma) {
   // Organization
   const org = await prisma.organization.create({
     data: {
@@ -96,13 +96,7 @@ async function seedBase(prisma: PrismaClient) {
   }
 }
 
-type SeedContext = {
-  ciId: string[]
-  managerId: string
-  periodId: string
-}
-
-async function seedDemo(prisma: PrismaClient, ctx: SeedContext) {
+async function seedDemo(prisma, ctx) {
   // parent Goal For Manager, allowed to ladder
   const managerGoal = await prisma.goals.create({
     data: {

@@ -36,6 +36,19 @@ yarn dev:setup
 yarn dev
 ```
 
+### Dockerfile
+
+```bash
+docker compose build --no-cache
+docker compose up
+```
+
+#### Down the image
+
+```bash
+docker compose down -v
+```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
