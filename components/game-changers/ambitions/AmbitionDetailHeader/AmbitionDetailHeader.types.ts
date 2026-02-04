@@ -1,10 +1,10 @@
-import type { AmbitionType } from '@/domain/ambition'
+import type { GoalType } from '@/domain/goal'
 
 export interface AmbitionDetailHeaderProps {
   title: string
   userName: string
   avatarUrl?: string
-  ambitionType?: AmbitionType | string
+  ambitionType?: GoalType | string
   progress: number
   createdDate?: string
   updatedDate?: string

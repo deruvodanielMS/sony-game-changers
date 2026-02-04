@@ -36,10 +36,10 @@ export const Default: Story = {
     ),
     actions: (
       <>
-        <Button variant="secondary" size="default">
+        <Button variant="secondary" size="small">
           Cancel
         </Button>
-        <Button size="default">Save</Button>
+        <Button size="small">Save</Button>
       </>
     ),
   },
@@ -120,7 +120,7 @@ export const WithScrollableContent: Story = {
       </>
     ),
     actions: (
-      <Button variant="secondary" size="default">
+      <Button variant="secondary" size="small">
         Close
       </Button>
     ),

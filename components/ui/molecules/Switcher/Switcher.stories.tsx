@@ -46,6 +46,16 @@ type Story = StoryObj<typeof meta>
  * Default switcher with text labels only
  */
 export const Default: Story = {
+  args: {
+    items: [
+      { id: 'option1', label: 'Option 1' },
+      { id: 'option2', label: 'Option 2' },
+      { id: 'option3', label: 'Option 3' },
+    ],
+    value: 'option1',
+    onChange: () => {},
+    ariaLabel: 'Default switcher',
+  },
   render: () => {
     const [value, setValue] = useState('option1')
     return (
@@ -67,6 +77,18 @@ export const Default: Story = {
  * Small size variant (48px height)
  */
 export const SmallSize: Story = {
+  args: {
+    items: [
+      { id: 'off-track', label: 'Off track' },
+      { id: 'on-track', label: 'On track' },
+      { id: 'done', label: 'Done' },
+    ],
+    value: 'on-track',
+    onChange: () => {},
+    size: 'small',
+    variant: 'generic',
+    ariaLabel: 'Progress status',
+  },
   render: () => {
     const [value, setValue] = useState('on-track')
     return (
@@ -90,6 +112,18 @@ export const SmallSize: Story = {
  * Large size variant with icons
  */
 export const LargeSize: Story = {
+  args: {
+    items: [
+      { id: 'ambitions', label: 'Ambitions', icon: <RadarIcon /> },
+      { id: 'check-ins', label: 'Check-ins', icon: <CalendarIcon /> },
+      { id: 'feedback', label: 'Feedback', icon: <ChatIcon /> },
+    ],
+    value: 'ambitions',
+    onChange: () => {},
+    size: 'large',
+    variant: 'generic',
+    ariaLabel: 'Navigation',
+  },
   render: () => {
     const [value, setValue] = useState('ambitions')
     return (
@@ -113,6 +147,18 @@ export const LargeSize: Story = {
  * Success variant (green)
  */
 export const SuccessVariant: Story = {
+  args: {
+    items: [
+      { id: 'off-track', label: 'Off track' },
+      { id: 'on-track', label: 'On track' },
+      { id: 'done', label: 'Done' },
+    ],
+    value: 'done',
+    onChange: () => {},
+    size: 'small',
+    variant: 'success',
+    ariaLabel: 'Success status',
+  },
   render: () => {
     const [value, setValue] = useState('done')
     return (
@@ -136,6 +182,18 @@ export const SuccessVariant: Story = {
  * Info variant (blue)
  */
 export const InfoVariant: Story = {
+  args: {
+    items: [
+      { id: 'off-track', label: 'Off track' },
+      { id: 'on-track', label: 'On track' },
+      { id: 'done', label: 'Done' },
+    ],
+    value: 'on-track',
+    onChange: () => {},
+    size: 'small',
+    variant: 'info',
+    ariaLabel: 'Info status',
+  },
   render: () => {
     const [value, setValue] = useState('on-track')
     return (
@@ -159,6 +217,18 @@ export const InfoVariant: Story = {
  * Error variant (red) - same as danger
  */
 export const ErrorVariant: Story = {
+  args: {
+    items: [
+      { id: 'off-track', label: 'Off track' },
+      { id: 'on-track', label: 'On track' },
+      { id: 'done', label: 'Done' },
+    ],
+    value: 'off-track',
+    onChange: () => {},
+    size: 'small',
+    variant: 'error',
+    ariaLabel: 'Error status',
+  },
   render: () => {
     const [value, setValue] = useState('off-track')
     return (
@@ -182,6 +252,18 @@ export const ErrorVariant: Story = {
  * Generic variant (neutral gray)
  */
 export const GenericVariant: Story = {
+  args: {
+    items: [
+      { id: 'option1', label: 'Option 1' },
+      { id: 'option2', label: 'Option 2' },
+      { id: 'option3', label: 'Option 3' },
+    ],
+    value: 'option2',
+    onChange: () => {},
+    size: 'small',
+    variant: 'generic',
+    ariaLabel: 'Generic options',
+  },
   render: () => {
     const [value, setValue] = useState('option2')
     return (
@@ -205,6 +287,18 @@ export const GenericVariant: Story = {
  * Icons only (no labels)
  */
 export const IconsOnly: Story = {
+  args: {
+    items: [
+      { id: 'ambitions', icon: <RadarIcon /> },
+      { id: 'check-ins', icon: <CalendarIcon /> },
+      { id: 'feedback', icon: <ChatIcon /> },
+    ],
+    value: 'ambitions',
+    onChange: () => {},
+    size: 'large',
+    variant: 'generic',
+    ariaLabel: 'Icon navigation',
+  },
   render: () => {
     const [value, setValue] = useState('ambitions')
     return (
@@ -228,6 +322,18 @@ export const IconsOnly: Story = {
  * With disabled items
  */
 export const WithDisabled: Story = {
+  args: {
+    items: [
+      { id: 'option1', label: 'Active' },
+      { id: 'option2', label: 'Disabled', disabled: true },
+      { id: 'option3', label: 'Active' },
+    ],
+    value: 'option1',
+    onChange: () => {},
+    size: 'small',
+    variant: 'generic',
+    ariaLabel: 'Options with disabled',
+  },
   render: () => {
     const [value, setValue] = useState('option1')
     return (
@@ -251,6 +357,16 @@ export const WithDisabled: Story = {
  * All variants comparison
  */
 export const AllVariants: Story = {
+  args: {
+    items: [
+      { id: 'option1', label: 'Option 1' },
+      { id: 'option2', label: 'Option 2' },
+      { id: 'option3', label: 'Option 3' },
+    ],
+    value: 'option1',
+    onChange: () => {},
+    ariaLabel: 'All variants',
+  },
   render: () => {
     const [genericValue, setGenericValue] = useState('option2')
     const [successValue, setSuccessValue] = useState('done')

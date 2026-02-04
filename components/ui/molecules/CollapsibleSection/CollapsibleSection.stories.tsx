@@ -56,7 +56,7 @@ export const WithRichContent: Story = {
           <Button variant="secondary" size="small">
             Cancel
           </Button>
-          <Button variant="tertiary" size="small">
+          <Button variant="secondary" size="small">
             Reset
           </Button>
         </div>

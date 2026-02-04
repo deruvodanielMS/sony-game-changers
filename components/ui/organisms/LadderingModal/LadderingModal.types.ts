@@ -1,9 +1,9 @@
-import type { Ambition } from '@/domain/ambition'
+import type { Goal } from '@/domain/goal'
 
 export interface LadderingModalProps {
   open: boolean
   onClose: () => void
-  selectedGoal: Ambition
+  selectedGoal: Goal
   'data-testid'?: string
 }
 
@@ -16,6 +16,6 @@ export interface AmbitionCardProps {
 }
 
 export interface GoalPreviewCardProps {
-  goal: Ambition
+  goal: Goal
   'data-testid'?: string
 }

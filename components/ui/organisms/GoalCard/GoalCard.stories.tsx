@@ -21,28 +21,40 @@ type Story = StoryObj<typeof GoalCard>
 // --------------------------------------------------
 const baseGoal: Goal = {
   id: 'g1',
+  uid: 'user-1',
   userName: 'John Doe',
   title: 'Improve Leadership Skills',
   description: 'Become a better team leader',
   avatarUrl: '',
   status: 'draft',
   goalType: GOAL_TYPES.BUSINESS,
+  progress: 0,
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-01T00:00:00Z',
 }
 
 const ladderGoals: Array<Goal> = [
   {
     id: 'lg1',
+    uid: 'user-2',
     userName: 'Jane Smith',
     title: 'Complete leadership course',
     avatarUrl: '',
     status: 'completed',
+    progress: 100,
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
   },
   {
     id: 'lg2',
+    uid: 'user-3',
     userName: 'Mike Johnson',
     title: 'Hold monthly feedback sessions',
     avatarUrl: '',
     status: 'draft',
+    progress: 50,
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
   },
 ]
 

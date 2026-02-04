@@ -30,6 +30,7 @@ export const Default: Story = {
             variant="primary"
             onClick={() =>
               enqueueToast({
+                id: 'success-toast',
                 content: (
                   <div className="flex items-center gap-2">
                     <CheckCircle className="text-feedback-success-600" size={20} />
@@ -47,6 +48,7 @@ export const Default: Story = {
             variant="secondary"
             onClick={() =>
               enqueueToast({
+                id: 'error-toast',
                 content: (
                   <div className="flex items-center gap-2">
                     <XCircle className="text-feedback-danger-600" size={20} />
@@ -61,9 +63,10 @@ export const Default: Story = {
           </Button>
 
           <Button
-            variant="tertiary"
+            variant="secondary"
             onClick={() =>
               enqueueToast({
+                id: 'info-toast',
                 content: (
                   <div className="flex items-center gap-2">
                     <Info className="text-feedback-info-600" size={20} />
@@ -78,9 +81,10 @@ export const Default: Story = {
           </Button>
 
           <Button
-            variant="plain"
+            variant="link"
             onClick={() =>
               enqueueToast({
+                id: 'simple-toast',
                 content: 'Simple text toast',
                 duration: 2000,
               })
@@ -102,14 +106,17 @@ export const QueueDemo: Story = {
 
     const showMultipleToasts = () => {
       enqueueToast({
+        id: 'queue-toast-1',
         content: 'Toast 1: First in queue',
         duration: 2000,
       })
       enqueueToast({
+        id: 'queue-toast-2',
         content: 'Toast 2: Second in queue',
         duration: 2000,
       })
       enqueueToast({
+        id: 'queue-toast-3',
         content: 'Toast 3: Third in queue',
         duration: 2000,
       })

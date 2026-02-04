@@ -18,14 +18,14 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const mockAvatars = [
-  { uid: '1', name: 'John Doe' },
-  { uid: '2', name: 'Jane Smith' },
-  { uid: '3', name: 'Bob Johnson' },
-  { uid: '4', name: 'Alice Williams' },
-  { uid: '5', name: 'Charlie Brown' },
-  { uid: '6', name: 'Diana Prince' },
-  { uid: '7', name: 'Eve Adams' },
-  { uid: '8', name: 'Frank Castle' },
+  { uid: '1', name: 'John Doe', url: '/profile-img/john-doe.png' },
+  { uid: '2', name: 'Jane Smith', url: '/profile-img/jane-smith.png' },
+  { uid: '3', name: 'Bob Johnson', url: '/profile-img/bob-johnson.png' },
+  { uid: '4', name: 'Alice Williams', url: '/profile-img/alice-williams.png' },
+  { uid: '5', name: 'Charlie Brown', url: '/profile-img/charlie-brown.png' },
+  { uid: '6', name: 'Diana Prince', url: '/profile-img/diana-prince.png' },
+  { uid: '7', name: 'Eve Adams', url: '/profile-img/eve-adams.png' },
+  { uid: '8', name: 'Frank Castle', url: '/profile-img/frank-castle.png' },
 ]
 
 export const Default: Story = {

@@ -58,6 +58,10 @@ export const Clickable: Story = {
  * Long text that gets truncated with ellipsis
  */
 export const LongText: Story = {
+  args: {
+    text: 'This is a very long higher ambition description',
+    goalType: 'personal-growth-and-development',
+  },
   render: () => (
     <div style={{ maxWidth: '400px' }}>
       <HigherAmbition
@@ -72,6 +76,10 @@ export const LongText: Story = {
  * In a card context showing usage with ambition detail header
  */
 export const InCardContext: Story = {
+  args: {
+    text: 'Foster a high-performing engineering culture',
+    goalType: 'business',
+  },
   render: () => (
     <div className="rounded-large bg-neutral-100 p-2">
       <HigherAmbition
@@ -95,6 +103,10 @@ export const InCardContext: Story = {
  * Multiple higher ambitions showing navigation path
  */
 export const NavigationPath: Story = {
+  args: {
+    text: 'Strategic company vision for 2026',
+    goalType: 'business',
+  },
   render: () => (
     <div className="flex flex-col gap-1.5">
       <HigherAmbition
@@ -122,6 +134,10 @@ export const NavigationPath: Story = {
  * All goal types with gradient icons
  */
 export const AllGoalTypes: Story = {
+  args: {
+    text: 'Business strategic initiative',
+    goalType: 'business',
+  },
   render: () => (
     <div className="flex flex-col gap-1.5">
       <HigherAmbition

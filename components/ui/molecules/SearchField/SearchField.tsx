@@ -59,7 +59,7 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
       {clearable && !!searchValue && (
         <Button
           onClick={handleOnClear}
-          variant={'plain'}
+          variant={'link'}
           iconOnly
           className="!w-2 !h-full absolute flex items-center right-2 top-0 hover:!bg-neutral-0 hover:!border-none hover:!shadow-none hover:!bg-transparent"
         >
@@ -69,7 +69,7 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
       {buttonSearch && (
         <Button
           onClick={handleOnSearchClick}
-          variant={'plain'}
+          variant={'link'}
           iconOnly
           className="!w-2 !h-full absolute flex items-center right-0_5 top-0 hover:!bg-neutral-0 hover:!border-none hover:!shadow-none hover:!bg-transparent"
         >

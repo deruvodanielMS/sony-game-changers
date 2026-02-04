@@ -95,6 +95,7 @@ export class VendorGoalRepository implements GoalRepository {
     return {
       ...hasParent,
       id: apiGoal.id,
+      uid: apiGoal.people_assignedTo?.id || 'unassigned',
       title: apiGoal.title,
       status: apiGoal.status,
       userName:
@@ -103,6 +104,9 @@ export class VendorGoalRepository implements GoalRepository {
       goalType: apiGoal.type,
       description: apiGoal.body,
       avatarUrl: apiGoal.people_assignedTo?.profileImageUrl,
+      progress: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     }
   }
 }

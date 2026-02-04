@@ -85,4 +85,39 @@ export class MockRepository implements GoalRepository, UserRepository {
   }
 }
 
+export const mockAvatarOptions = [
+  { uid: '1', name: 'Sarah Miller', url: '/profile-img/sarah-miller.png' },
+  { uid: '2', name: 'Lars van der Zee', url: '/profile-img/lars-van-der-zee.png' },
+  { uid: '3', name: 'Nia Washington', url: '/profile-img/nia-washington.png' },
+  { uid: '4', name: 'Kylie Davies', url: '/profile-img/kylie-davies.png' },
+  { uid: '5', name: 'Profile User', url: '/profile-img/profile.png' },
+]
+
+export const mockActivityFeed = [
+  {
+    id: '1',
+    user: { name: 'Sarah Miller', avatar: '/profile-img/sarah-miller.png' },
+    action: 'created' as const,
+    date: new Date(Date.now() - 86400000).toISOString(),
+  },
+  {
+    id: '2',
+    user: { name: 'Lars van der Zee', avatar: '/profile-img/lars-van-der-zee.png' },
+    action: 'statusChange' as const,
+    date: new Date(Date.now() - 172800000).toISOString(),
+  },
+  {
+    id: '3',
+    user: { name: 'Nia Washington', avatar: '/profile-img/nia-washington.png' },
+    action: 'approved' as const,
+    date: new Date(Date.now() - 259200000).toISOString(),
+  },
+  {
+    id: '4',
+    user: { name: 'Kylie Davies', avatar: '/profile-img/kylie-davies.png' },
+    action: 'completed' as const,
+    date: new Date(Date.now() - 345600000).toISOString(),
+  },
+]
+
 export default MockRepository

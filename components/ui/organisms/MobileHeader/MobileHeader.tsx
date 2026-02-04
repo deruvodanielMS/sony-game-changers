@@ -37,10 +37,9 @@ export function MobileHeader({
       {/* Navigation Menu Button */}
       <Button
         onClick={onMenuClick}
-        variant={menuOpen ? 'tertiary' : 'plain'}
+        variant={menuOpen ? 'link' : 'link'}
         size="small"
         iconOnly
-        iconShape="rounded"
         aria-label={menuOpen ? t('closeNavigationMenu') : t('openNavigationMenu')}
         aria-expanded={menuOpen}
         aria-controls="mobile-navigation-drawer"

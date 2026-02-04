@@ -86,6 +86,9 @@ export const FullProgress: Story = {
 }
 
 export const AllSizes: Story = {
+  args: {
+    progress: 75,
+  },
   render: () => (
     <div className="flex flex-col gap-1_5 w-[300px]">
       <div className="flex flex-col gap-0_5">
@@ -101,6 +104,9 @@ export const AllSizes: Story = {
 }
 
 export const AllStatuses: Story = {
+  args: {
+    progress: 50,
+  },
   render: () => (
     <div className="flex flex-col gap-1_5 w-[300px]">
       <div className="flex flex-col gap-0_5">
@@ -120,6 +126,9 @@ export const AllStatuses: Story = {
 }
 
 export const ProgressStages: Story = {
+  args: {
+    progress: 50,
+  },
   render: () => (
     <div className="flex flex-col gap-1_5 w-[300px]">
       {[0, 25, 50, 75, 100].map((value) => (
@@ -133,6 +142,9 @@ export const ProgressStages: Story = {
 }
 
 export const InCard: Story = {
+  args: {
+    progress: 75,
+  },
   render: () => (
     <div className="bg-neutral-0 rounded-large p-1_5 shadow-sm w-[400px]">
       <div className="flex flex-col gap-1">

@@ -18,7 +18,8 @@ import type {
   GoalPreviewCardProps,
 } from './LadderingModal.types'
 import { useUIStore } from '@/stores/ui.store'
-import { AmbitionStatus } from '@/domain/ambition'
+import type { GoalStatus as GoalStatusType } from '@/domain/goal'
+import { GOAL_STATUSES } from '@/domain/goal'
 
 // Sub-component: Ambition Card (drop zone for linking ambitions)
 function AmbitionCard({
@@ -99,7 +100,7 @@ function GoalPreviewCard({ goal, 'data-testid': dataTestId }: GoalPreviewCardPro
             {userName}
           </Typography>
         </div>
-        <GoalStatus status={status as AmbitionStatus} className="shrink-0" />
+        <GoalStatus status={status as GoalStatusType} className="shrink-0" />
       </div>
     </div>
   )

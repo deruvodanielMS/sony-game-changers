@@ -268,7 +268,7 @@ export function GoalCard({
             )}
           >
             {allowAddChildrenGoals && (
-              <Button variant={'plain'} leftIcon={<Plus width={20} />}>
+              <Button variant={'link'} leftIcon={<Plus width={20} />}>
                 {t('addLadderedGoalLabel')}
               </Button>
             )}

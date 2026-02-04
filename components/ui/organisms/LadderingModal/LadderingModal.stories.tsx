@@ -33,28 +33,40 @@ type Story = StoryObj<typeof meta>
 
 const mockGoal: Goal = {
   id: '1',
+  uid: 'user-1',
   title:
     'Ensure core title features meet established quality bars to achieve a strong critical reception score.',
   status: 'draft',
   userName: 'Adam Reynolds',
   avatarUrl: '',
+  progress: 0,
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-01T00:00:00Z',
 }
 
 const mockCompletedGoal: Goal = {
   id: '2',
+  uid: 'user-2',
   title: 'Implement comprehensive testing strategy across all game systems.',
   status: 'completed',
   userName: 'Sarah Johnson',
   avatarUrl: '',
+  progress: 100,
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-01T00:00:00Z',
 }
 
 const mockAwaitingApprovalGoal: Goal = {
   id: '3',
+  uid: 'user-3',
   title: 'Optimize rendering pipeline for improved performance on all platforms.',
   status: 'awaiting_approval',
   userName: 'Michael Chen',
   avatarUrl: '',
   description: 'Focus on PS5 and PC optimization',
+  progress: 75,
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-01T00:00:00Z',
 }
 
 export const Default: Story = {

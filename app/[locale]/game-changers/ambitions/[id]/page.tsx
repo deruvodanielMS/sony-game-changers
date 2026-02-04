@@ -18,14 +18,7 @@ import { useGoalsStore } from '@/stores/goals.store'
 import { ROUTES } from '@/common/routes'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
-import {
-  /* Just for Mocking Data
-  mockActions,
-  mockAchievements,
-  mockLadderedAmbitions, */
-  mockAvatarOptions,
-  mockActivityFeed,
-} from './mockData'
+import { mockAvatarOptions, mockActivityFeed } from '@/repositories/mocks/MockRepository'
 import { GOAL_STATUSES } from '@/domain/goal'
 import { useDateFormat } from '@/hooks/useDateFormat'
 

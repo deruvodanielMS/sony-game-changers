@@ -20,7 +20,7 @@ export function LanguageSwitcher({
   const router = useRouter()
 
   const handleLanguageChange = () => {
-    const newLocale = locale === LANGUAGES.EN ? LANGUAGES.ES : LANGUAGES.EN
+    const newLocale = locale === LANGUAGES.EN ? LANGUAGES.FR : LANGUAGES.EN
     router.replace(pathname, { locale: newLocale })
   }
 

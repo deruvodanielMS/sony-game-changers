@@ -1,7 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
-import type { AmbitionType as DomainAmbitionType } from '@/domain/ambition'
+import type { GoalType as DomainGoalType } from '@/domain/goal'
 
-export type AmbitionType = DomainAmbitionType
+export type AmbitionType = DomainGoalType
 
 export interface TypeIconProps {
   /**

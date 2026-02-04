@@ -1,4 +1,4 @@
-import type { AmbitionType } from '@/domain/ambition'
+import type { GoalType } from '@/domain/goal'
 
 export interface HigherAmbitionProps {
   /**
@@ -9,7 +9,7 @@ export interface HigherAmbitionProps {
   /**
    * The type of the parent goal (business, manager-effectiveness, personal-growth-and-development)
    */
-  goalType?: AmbitionType | string
+  goalType?: GoalType | string
 
   /**
    * Optional click handler for navigation to parent goal

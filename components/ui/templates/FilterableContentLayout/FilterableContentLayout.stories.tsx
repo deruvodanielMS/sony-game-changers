@@ -30,11 +30,15 @@ type Story = StoryObj<typeof FilterableContentLayout>
 const mockGoal = {
   goal: {
     id: 'goal-1',
+    uid: 'user-1',
     userName: 'Alice Williams',
     title: 'Improve team collaboration and communication',
     status: GOAL_STATUSES.AWAITING_APPROVAL,
     goalType: GOAL_TYPES.BUSINESS,
     avatarUrl: '/profile-img/profile.png',
+    progress: 50,
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
   },
   ladderGoals: [],
   'data-testid': 'goal-1',

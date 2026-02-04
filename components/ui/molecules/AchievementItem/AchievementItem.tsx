@@ -13,7 +13,7 @@ const progressVariants = {
 }
 
 const progressOptions: {
-  id: ProgressStatus
+  id: Exclude<ProgressStatus, null>
   label: string
   variant: SwitcherVariant
 }[] = [
@@ -89,7 +89,7 @@ export function AchievementItem({
       {showProgressSelector && (
         <Switcher
           items={progressOptions}
-          value={progress}
+          value={progress || 'off-track'}
           onChange={(value) => onProgressChange?.(value as ProgressStatus)}
           size="small"
           variant={progressOptions.find((opt) => opt.id === progress)?.variant || 'generic'}

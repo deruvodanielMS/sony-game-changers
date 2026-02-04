@@ -8,7 +8,7 @@ const variants = {
   visible: { opacity: 1, y: 0 },
 }
 
-export function AnimatedSection({ children, delay = 0 }: AnimatedSectionProps) {
+export function AnimatedSection({ children, delay = 0, className }: AnimatedSectionProps) {
   return (
     <m.div
       variants={variants}
@@ -19,6 +19,7 @@ export function AnimatedSection({ children, delay = 0 }: AnimatedSectionProps) {
         delay,
         ease: 'easeOut',
       }}
+      className={className}
     >
       {children}
     </m.div>
