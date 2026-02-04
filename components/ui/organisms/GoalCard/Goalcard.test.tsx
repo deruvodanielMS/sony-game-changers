@@ -17,6 +17,8 @@ vi.mock('next-intl', () => ({
   useTranslations: () => (key: string, vars?: any) => {
     if (key === 'childrenGoalsLabel') return `${vars.goals} goals`
     if (key === 'addLadderedGoalLabel') return 'Add child goal'
+    if (key === 'viewLadderedGoalsLabel') return 'View laddered Ambitions'
+    if (key === 'hideLadderedGoalsLabel') return 'Hide laddered Ambitions'
     return key
   },
 }))
@@ -31,20 +33,28 @@ vi.mock('@/i18n/navigation', () => ({
 
 const baseGoal: Goal = {
   id: '1',
+  uid: 'user-1',
   title: 'Main Goal',
   description: '',
   userName: 'John Doe',
   goalType: GOAL_TYPES.BUSINESS,
   status: GOAL_STATUSES.AWAITING_APPROVAL,
+  progress: 40,
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-02T00:00:00Z',
   parent: { id: '0', title: 'Improve performance' },
 }
 
 const ladderGoals: Array<Goal> = [
   {
     id: '2',
+    uid: 'user-2',
     title: 'Sub Goal A',
     userName: 'Jane Smith',
     status: GOAL_STATUSES.COMPLETED,
+    progress: 100,
+    createdAt: '2024-01-03T00:00:00Z',
+    updatedAt: '2024-01-04T00:00:00Z',
   },
 ]
 
@@ -75,23 +85,24 @@ describe('GoalCard', () => {
   it('renders ladder goals and allows collapsing content', async () => {
     render(<GoalCard goal={baseGoal} ladderGoals={ladderGoals} allowAddChildrenGoals={false} />)
 
-    // The Collapsible.Trigger now wraps the entire title div
-    // Find the trigger by looking for the div with cursor-pointer class
-    const triggerDiv = screen.getByText('Main Goal').closest('div[class*="cursor-pointer"]')
-    expect(triggerDiv).toBeInTheDocument()
+    // Find the toggle button using the translation key
+    const toggleButton = screen.getByRole('button', { name: 'View laddered Ambitions' })
+    expect(toggleButton).toBeInTheDocument()
 
     // Start closed: ladder goal not visible
     expect(screen.queryByText('Sub Goal A')).toBeNull()
 
-    // Expand by clicking the trigger div
-    if (!triggerDiv) throw new Error('Toggle trigger not found')
-    fireEvent.click(triggerDiv)
+    // Expand by clicking the toggle button
+    fireEvent.click(toggleButton)
 
     // Wait for animation to complete
     await waitFor(() => {
       expect(screen.getByText('Sub Goal A')).toBeInTheDocument()
     })
     expect(screen.getByAltText('Jane Smith')).toBeInTheDocument()
+
+    // Button text should change to "Hide laddered Ambitions"
+    expect(screen.getByRole('button', { name: 'Hide laddered Ambitions' })).toBeInTheDocument()
   })
 
   it('shows add-child-goal button when allowed', () => {

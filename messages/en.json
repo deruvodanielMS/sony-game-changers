@@ -70,6 +70,8 @@
   "GoalCard": {
     "childrenGoalsLabel": "{goals} Laddered Ambitions total",
     "addLadderedGoalLabel": "Add laddered Ambition",
+    "viewLadderedGoalsLabel": "View laddered Ambitions",
+    "hideLadderedGoalsLabel": "Hide laddered Ambitions",
     "openLadderingModalLabel": "Open laddering modal"
   },
   "TypeIcon": {

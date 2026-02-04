@@ -70,6 +70,8 @@
   "GoalCard": {
     "childrenGoalsLabel": "{goals} ambitions hiérarchisées au total",
     "addLadderedGoalLabel": "Ajouter une ambition hiérarchisée",
+    "viewLadderedGoalsLabel": "Voir les ambitions hiérarchisées",
+    "hideLadderedGoalsLabel": "Masquer les ambitions hiérarchisées",
     "openLadderingModalLabel": "Ouvrir le modal de hiérarchisation"
   },
   "TypeIcon": {

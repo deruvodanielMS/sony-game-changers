@@ -70,7 +70,7 @@ vi.mock('@/utils/generateInitialsAvatar', () => ({
 }))
 
 // useMediaQuery (we control behavior per-test)
-const useMediaQueryMock = vi.fn<boolean, any[]>()
+const useMediaQueryMock = vi.fn()
 vi.mock('@/hooks/useMediaQuery', () => ({
   useMediaQuery: (...args: any[]) => useMediaQueryMock(...args),
 }))
