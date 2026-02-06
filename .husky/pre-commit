@@ -1,5 +1,17 @@
 echo "Running lint-staged..."
 npx lint-staged || exit 1
 
+echo "Running i18n validation..."
+node scripts/validate-i18n.js || exit 1
+
+echo "Running component structure validation..."
+node scripts/validate-component-structure.js || exit 1
+
+echo "Running TypeScript type check..."
+npx tsc --noEmit || exit 1
+
 echo "Running unit tests..."
 npm test --silent -- --run || exit 1
+
+echo "Running build validation..."
+npm run build || exit 1

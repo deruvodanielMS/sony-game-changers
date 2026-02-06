@@ -19,7 +19,10 @@
     "dev:setup": "yarn install --frozen-lockfile && prisma generate && prisma migrate dev --name init",
     "db:reset": "prisma migrate reset --force",
     "seed": "prisma db seed",
-    "chromatic": "npx chromatic --project-token=chpt_e76bbf9a400351f"
+    "chromatic": "npx chromatic --project-token=chpt_e76bbf9a400351f",
+    "validate:i18n": "node scripts/validate-i18n.js",
+    "validate:components": "node scripts/validate-component-structure.js",
+    "validate": "npm run validate:i18n && npm run validate:components"
   },
   "dependencies": {
     "@conform-to/react": "^1.13.2",
@@ -46,6 +49,8 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.2",
+    "@commitlint/cli": "^20.4.1",
+    "@commitlint/config-conventional": "^20.4.1",
     "@storybook/addon-a11y": "10.0.6",
     "@storybook/addon-docs": "^10.0.6",
     "@storybook/addon-onboarding": "^10.0.6",
@@ -63,6 +68,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-storybook": "^10.0.6",
     "husky": "^9.1.7",
