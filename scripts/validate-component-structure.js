@@ -28,7 +28,7 @@ function getStagedFiles() {
 
 function validateComponentStructure() {
   const stagedFiles = getStagedFiles()
-  const componentFiles = stagedFiles.filter(f => f.startsWith('components/ui/'))
+  const componentFiles = stagedFiles.filter((f) => f.startsWith('components/ui/'))
 
   if (componentFiles.length === 0) {
     console.log('✅ No staged component files - skipping structure validation')
@@ -40,7 +40,7 @@ function validateComponentStructure() {
 
   // Extract unique component folders from staged files
   const componentFolders = new Set()
-  componentFiles.forEach(file => {
+  componentFiles.forEach((file) => {
     const parts = file.split('/')
     if (parts.length >= 4) {
       // components/ui/[type]/[component]
@@ -48,7 +48,7 @@ function validateComponentStructure() {
     }
   })
 
-  componentFolders.forEach(folderPath => {
+  componentFolders.forEach((folderPath) => {
     const fullPath = path.join(process.cwd(), folderPath)
     const componentName = path.basename(folderPath)
     const parentDir = path.basename(path.dirname(folderPath))
@@ -58,24 +58,26 @@ function validateComponentStructure() {
     if (!fs.existsSync(fullPath)) return
 
     const files = fs.readdirSync(fullPath)
-    const hasMainFile = files.some(f => f === `${componentName}.tsx`)
-    const hasTestFile = files.some(f => f === `${componentName}.test.tsx`)
-    const hasStoryFile = files.some(f => f === `${componentName}.stories.tsx`)
-    const hasIndexFile = files.some(f => f === 'index.tsx')
+    const hasMainFile = files.some((f) => f === `${componentName}.tsx`)
+    const hasTestFile = files.some((f) => f === `${componentName}.test.tsx`)
+    const hasStoryFile = files.some((f) => f === `${componentName}.stories.tsx`)
+    const hasIndexFile = files.some((f) => f === 'index.tsx')
 
     // Only error if the main component file is being added/modified but missing test/story
-    const isStagedMainFile = componentFiles.some(f => f.includes(`${componentName}.tsx`) && !f.includes('.test') && !f.includes('.stories'))
+    const isStagedMainFile = componentFiles.some(
+      (f) => f.includes(`${componentName}.tsx`) && !f.includes('.test') && !f.includes('.stories'),
+    )
 
     if (isStagedMainFile && !hasTestFile) {
       console.error(
-        `❌ ${folderPath}/${componentName}.test.tsx is missing. Tests are required for new UI components.`
+        `❌ ${folderPath}/${componentName}.test.tsx is missing. Tests are required for new UI components.`,
       )
       hasErrors = true
     }
 
     if (isStagedMainFile && !hasStoryFile) {
       console.error(
-        `❌ ${folderPath}/${componentName}.stories.tsx is missing. Stories are required for new UI components.`
+        `❌ ${folderPath}/${componentName}.stories.tsx is missing. Stories are required for new UI components.`,
       )
       hasErrors = true
     }

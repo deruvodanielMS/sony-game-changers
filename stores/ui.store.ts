@@ -68,6 +68,11 @@ type UIState = {
    */
   closeDrawer: (animationDuration?: number) => void
 
+  /**
+   * Closes all open modals and drawers
+   */
+  closeAll: () => void
+
   // Toast
   enqueueToast: (content: Toast) => void
   dequeueToast: () => void
@@ -139,6 +144,11 @@ export const useUIStore = create<UIState>((set, get) => ({
         },
       })
     }, animationDuration)
+  },
+
+  closeAll: () => {
+    get().closeModal()
+    get().closeDrawer()
   },
 
   // Toast

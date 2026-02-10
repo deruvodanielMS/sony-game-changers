@@ -11,13 +11,13 @@ exports[`LayoutTabSection > matches snapshot 1`] = `
       >
         <div
           aria-label="Game Changers navigation"
-          class="inline-flex items-center p-0_5 gap-0_25 rounded-full"
+          class="flex items-center p-0_5 gap-0_25 rounded-full"
           role="tablist"
           style="background-color: var(--neutral-100);"
         >
           <button
             aria-selected="true"
-            class="flex items-center justify-center gap-0_5 font-semibold transition-all duration-200 rounded-full px-1 py-0_75 text-label-md whitespace-nowrap cursor-pointer"
+            class="flex items-center justify-center gap-0_5 font-semibold transition-all duration-200 rounded-full px-1 py-0_75 text-label-md whitespace-nowrap [&_svg]:!text-current cursor-pointer"
             role="tab"
             style="background-color: var(--neutral-1000); color: var(--neutral-0);"
             type="button"
@@ -58,13 +58,13 @@ exports[`LayoutTabSection > matches snapshot 1`] = `
       >
         <div
           aria-label="Game Changers navigation"
-          class="inline-flex items-center p-0_5 gap-0_25 rounded-full"
+          class="flex items-center p-0_5 gap-0_25 rounded-full"
           role="tablist"
           style="background-color: var(--neutral-100);"
         >
           <button
             aria-selected="true"
-            class="flex items-center justify-center gap-0_5 font-semibold transition-all duration-200 rounded-full px-1 py-0_75 text-label-md whitespace-nowrap cursor-pointer"
+            class="flex items-center justify-center gap-0_5 font-semibold transition-all duration-200 rounded-full px-1 py-0_75 text-label-md whitespace-nowrap [&_svg]:!text-current cursor-pointer"
             role="tab"
             style="background-color: var(--neutral-1000); color: var(--neutral-0);"
             type="button"

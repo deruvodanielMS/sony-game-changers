@@ -34,7 +34,8 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
     return () => {
       selectGoal(null)
     }
-  }, [id, fetchGoal, selectGoal])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id])
 
   if (!selected) {
     return (

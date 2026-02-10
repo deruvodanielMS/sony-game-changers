@@ -89,7 +89,73 @@
   "CreateGoal": {
     "title": "New Ambition",
     "description": "Create a new ambition for your team",
-    "back": "Back"
+    "back": "Back",
+    "setupTitle": "Ambition setup",
+    "setupDescription": "Define the type, assignee, and privacy level for this Ambition.",
+    "contentTitle": "Ambition content & Framework (AAA)",
+    "contentDescription": "Use the AAA framework (Ambition, actions, and achievements) to set goals and measure impact.",
+    "type": {
+      "label": "Type",
+      "business": "Business",
+      "growth": "Growth and Development",
+      "manager": "Manager Effectiveness"
+    },
+    "owner": {
+      "label": "Owner",
+      "placeholder": "Select option",
+      "error": "This field is required.",
+      "roles": {
+        "manager": "Manager",
+        "lead": "Lead",
+        "coordinator": "Coordinator",
+        "member": "Team Member"
+      }
+    },
+    "privacy": {
+      "label": "Privacy",
+      "public": "Public",
+      "private": "Private",
+      "helperPrivate": "Private Ambitions are only visible to the owner, their manager, and anyone you've granted permission to below."
+    },
+    "shareWith": {
+      "label": "Share with",
+      "placeholder": "Add team members"
+    },
+    "ladderedFrom": {
+      "label": "Laddered from:",
+      "placeholder": "Select option",
+      "error": "Please select a parent ambition"
+    },
+    "ambitionName": {
+      "label": "Ambition name:",
+      "placeholder": "Define ambition name",
+      "error": "Ambition name is required"
+    },
+    "planActions": {
+      "label": "Actions:",
+      "description": "Define the steps, resources, and timeline needed to achieve your Ambition.",
+      "subDescription": "This list of activities and values drives your work toward a successful completion.",
+      "placeholder": "Enter one plan of action...",
+      "addAction": "Add action",
+      "error": "At least one action is required"
+    },
+    "achievements": {
+      "label": "Achievements:",
+      "description": "Define the measurable outcomes that confirm your Ambition has been met.",
+      "subDescription": "These quantifiable results serve as direct evidence that you've successfully fulfilled your goals.",
+      "placeholder": "Describe one Key achievement...",
+      "addAchievement": "Add achievement",
+      "error": "At least one achievement is required"
+    },
+    "actions": {
+      "saveDraft": "Save as Draft",
+      "next": "Next",
+      "submitForApproval": "Submit for approval",
+      "back": "Back"
+    },
+    "toast": {
+      "successMessage": "Ambition created successfully!"
+    }
   },
   "Common": {
     "confirm": "Confirm",

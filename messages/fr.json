@@ -89,7 +89,73 @@
   "CreateGoal": {
     "title": "Nouvelle ambition",
     "description": "Créer une nouvelle ambition pour votre équipe",
-    "back": "Retour"
+    "back": "Retour",
+    "setupTitle": "Configuration de l'ambition",
+    "setupDescription": "Définissez le type, le responsable et le niveau de confidentialité de cette ambition.",
+    "contentTitle": "Contenu de l'ambition & Framework (AAA)",
+    "contentDescription": "Utilisez le framework AAA (Ambition, actions et achievements) pour définir des objectifs et mesurer l'impact.",
+    "type": {
+      "label": "Type",
+      "business": "Business",
+      "growth": "Croissance et développement",
+      "manager": "Efficacité du gestionnaire"
+    },
+    "owner": {
+      "label": "Responsable",
+      "placeholder": "Sélectionner une option",
+      "error": "Ce champ est obligatoire.",
+      "roles": {
+        "manager": "Manager",
+        "lead": "Lead",
+        "coordinator": "Coordinator",
+        "member": "Membre de l'équipe"
+      }
+    },
+    "privacy": {
+      "label": "Confidentialité",
+      "public": "Public",
+      "private": "Privé",
+      "helperPrivate": "Les ambitions privées ne sont visibles que par le responsable, son manager et toute personne à qui vous avez accordé l'accès ci-dessous."
+    },
+    "shareWith": {
+      "label": "Partager avec",
+      "placeholder": "Ajouter des membres de l'équipe"
+    },
+    "ladderedFrom": {
+      "label": "Dérivé de :",
+      "placeholder": "Sélectionner une option",
+      "error": "Veuillez sélectionner une ambition parent"
+    },
+    "ambitionName": {
+      "label": "Nom de l'ambition :",
+      "placeholder": "Définir le nom de l'ambition",
+      "error": "Le nom de l'ambition est obligatoire"
+    },
+    "planActions": {
+      "label": "Actions :",
+      "description": "Définir les étapes, les ressources et le calendrier nécessaires pour atteindre votre ambition.",
+      "subDescription": "Cette liste d'activités et de valeurs guide votre travail vers une réalisation réussie.",
+      "placeholder": "Entrez un plan d'action...",
+      "addAction": "Ajouter une action",
+      "error": "Au moins une action est requise"
+    },
+    "achievements": {
+      "label": "Réalisations :",
+      "description": "Définissez les résultats mesurables qui confirment que votre ambition a été atteinte.",
+      "subDescription": "Ces résultats quantifiables servent de preuve directe que vous avez atteint vos objectifs avec succès.",
+      "placeholder": "Décrire une réalisation clé...",
+      "addAchievement": "Ajouter une réalisation",
+      "error": "Au moins une réalisation est requise"
+    },
+    "actions": {
+      "saveDraft": "Enregistrer comme brouillon",
+      "next": "Suivant",
+      "submitForApproval": "Soumettre pour approbation",
+      "back": "Retour"
+    },
+    "toast": {
+      "successMessage": "Ambition créée avec succès !"
+    }
   },
   "Common": {
     "confirm": "Confirmer",

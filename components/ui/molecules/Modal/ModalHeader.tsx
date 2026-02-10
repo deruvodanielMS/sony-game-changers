@@ -2,6 +2,8 @@
 
 import { cn } from '@/utils/cn'
 import { X } from 'lucide-react'
+import { Button } from '@/components/ui/atoms/Button'
+import { Typography } from '@/components/ui/foundations/Typography'
 
 import type { ModalHeaderProps } from './Modal.types'
 
@@ -13,26 +15,24 @@ export function ModalHeader({
   className,
 }: ModalHeaderProps) {
   return (
-    <header className={cn('flex flex-col gap-1', className)}>
-      {showClose && (
-        <button
-          aria-label="Close"
-          type="button"
-          onClick={onClose}
-          className=" w-[24px] h-[24px] absolute right-1 top-1 inline-flex items-center justify-center rounded-md text-muted-foreground hover:bg-muted cursor-pointer"
-        >
-          <X width={20} />
-        </button>
-      )}
+    <header className={cn('flex flex-col gap-1 pt-2_5 pr-4 pb-1_5 pl-4', className)}>
       {beforeTitle && beforeTitle}
       {children && (
-        <div
-          role="heading"
-          aria-level={5}
-          tabIndex={0}
-          className="text-h5 leading-h5 font-semibold"
-        >
-          {children}
+        <div className="flex items-start justify-between gap-1">
+          <Typography variant="h3" tabIndex={0}>
+            {children}
+          </Typography>
+          {showClose && (
+            <Button
+              variant="link"
+              iconOnly
+              onClick={onClose}
+              aria-label="Close"
+              className="w-3 h-3 shrink-0"
+            >
+              <X width={32} />
+            </Button>
+          )}
         </div>
       )}
     </header>

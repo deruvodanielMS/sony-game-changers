@@ -4,7 +4,6 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 import nextVitals from 'eslint-config-next/core-web-vitals'
 import nextTs from 'eslint-config-next/typescript'
 import prettierPlugin from 'eslint-plugin-prettier'
-import jsxA11yPlugin from 'eslint-plugin-jsx-a11y'
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -12,7 +11,6 @@ const eslintConfig = defineConfig([
   {
     plugins: {
       prettier: prettierPlugin,
-      'jsx-a11y': jsxA11yPlugin,
     },
     rules: {
       'prettier/prettier': 'error',

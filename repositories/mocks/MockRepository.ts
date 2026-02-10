@@ -9,9 +9,27 @@ function nowIso() {
   return new Date().toISOString()
 }
 
+// Singleton pattern: shared data across all instances
+let sharedGoals: GoalUI[] | null = null
+let sharedUsers: User[] | null = null
+
+function getSharedGoals(): GoalUI[] {
+  if (!sharedGoals) {
+    sharedGoals = JSON.parse(JSON.stringify(initialGoals))
+  }
+  return sharedGoals!
+}
+
+function getSharedUsers(): User[] {
+  if (!sharedUsers) {
+    sharedUsers = JSON.parse(JSON.stringify(initialUsers))
+  }
+  return sharedUsers!
+}
+
 export class MockRepository implements GoalRepository, UserRepository {
-  private goals: GoalUI[] = JSON.parse(JSON.stringify(initialGoals))
-  private users: User[] = JSON.parse(JSON.stringify(initialUsers))
+  private goals: GoalUI[] = getSharedGoals()
+  private users: User[] = getSharedUsers()
 
   // UserRepository
   async getUser(email: string): Promise<User | null> {
@@ -21,7 +39,6 @@ export class MockRepository implements GoalRepository, UserRepository {
 
   // GoalRepository
   async findGoals(email?: string): Promise<GoalUI[]> {
-    console.log('MockRepository.findGoals called with email:', email)
     return this.goals
   }
 
@@ -47,9 +64,45 @@ export class MockRepository implements GoalRepository, UserRepository {
       createdAt: nowIso(),
       updatedAt: nowIso(),
       ladderedGoals: [],
+      goalAchievements:
+        goal.goalAchievements?.map((achievement, index) => ({
+          id: `ach-${id}-${index}`,
+          title: achievement.title,
+          status: achievement.status ?? 'pending',
+          progress: null,
+        })) ?? [],
+      goalActions:
+        goal.goalActions?.map((action, index) => ({
+          id: `act-${id}-${index}`,
+          title: action.title,
+          status: action.status ?? 'pending',
+        })) ?? [],
     }
 
     this.goals.push(created)
+
+    // If this goal has a parent, add it to parent's ladderedGoals
+    if (goal.parentId) {
+      const parentIdx = this.goals.findIndex((g) => g.id === goal.parentId)
+      if (parentIdx !== -1) {
+        const ladderedChild = {
+          id: created.id,
+          title: created.title,
+          status: created.status,
+          progress: created.progress,
+          createdAt: created.createdAt,
+          updatedAt: created.updatedAt,
+          uid: created.uid,
+          userName: created.userName,
+          avatarUrl: created.avatarUrl,
+        }
+
+        if (!this.goals[parentIdx].ladderedGoals) {
+          this.goals[parentIdx].ladderedGoals = []
+        }
+        this.goals[parentIdx].ladderedGoals.push(ladderedChild)
+      }
+    }
 
     return created
   }

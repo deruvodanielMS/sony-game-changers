@@ -98,7 +98,7 @@ export function FormControl({
           <div className="text-body leading-body text-neutral-1000 font-bold flex gap-0_25 items-center">
             {beforeLabel}
             {label}
-            {mandatory && <span className="text-feedback-danger-600">*</span>}
+            {mandatory && <span className="text-feedback-error-500">*</span>}
             {afterLabel}
           </div>
         )}

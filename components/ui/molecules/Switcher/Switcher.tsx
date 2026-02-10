@@ -79,7 +79,7 @@ export function Switcher({
 }: SwitcherProps) {
   const variantConfig = variantStyles[variant]
   const containerClasses = cn(
-    'inline-flex items-center',
+    'flex items-center',
     sizeStyles[size].container,
     variantConfig.container,
     className,
@@ -99,6 +99,7 @@ export function Switcher({
         const buttonClasses = cn(
           'flex items-center justify-center gap-0_5 font-semibold transition-all duration-200 rounded-full',
           sizeStyles[size].button,
+          isActive && '[&_svg]:!text-current',
           !isActive && !isDisabled && variantConfig.inactive,
           !isActive && !isDisabled && 'hover:opacity-60 active:scale-95',
           isDisabled && 'opacity-30 cursor-not-allowed',

@@ -8,6 +8,7 @@ import { MobileHeader } from '@/components/ui/organisms/MobileHeader'
 import { Sidebar } from '@/components/ui/organisms/Sidebar'
 import { useUIStore } from '@/stores/ui.store'
 import { Modal } from '@/components/ui/molecules/Modal'
+import { ToastManager } from '@/components/ui/organisms/ToastManager/ToastManager'
 import { useWindowSize } from '@/hooks/useMediaQuery'
 
 export interface AppLayoutProps {
@@ -173,6 +174,9 @@ export function AppLayout({ children, className }: AppLayoutProps) {
       <Drawer key={drawerKey} {...drawerProps}>
         {drawerContent}
       </Drawer>
+
+      {/* Toast Notifications */}
+      <ToastManager />
     </LazyMotion>
   )
 }

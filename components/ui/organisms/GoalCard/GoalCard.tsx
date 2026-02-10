@@ -153,7 +153,7 @@ export function GoalCard({
       const modalContent = (
         <>
           <ModalHeader showClose onClose={closeModal}>
-            <Typography variant="h5">{tLaddering('title')}</Typography>
+            {tLaddering('title')}
           </ModalHeader>
           <ModalBody className="flex flex-col gap-1_5">{content}</ModalBody>
         </>
@@ -177,7 +177,10 @@ export function GoalCard({
       <Card data-testid={dataTestId} className="flex flex-col gap-1_5 items-stretch relative">
         {/* Higher Ambition Section */}
         {parent && (
-          <div className="flex flex-col items-start w-full">
+          <div
+            className="flex flex-col items-start w-full cursor-pointer"
+            onClick={handleOpenLadderingModal}
+          >
             <HigherAmbition
               text={parent.title}
               goalType={goal.goalType}

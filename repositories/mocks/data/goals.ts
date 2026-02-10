@@ -1,6 +1,100 @@
 import { GoalUI } from '@/domain/goal'
 
+export type NewAmbitionOwnerOption = {
+  value: string
+  name: string
+  roleKey: 'manager' | 'lead' | 'coordinator'
+  avatarUrl: string
+}
+
+export type NewAmbitionShareMember = {
+  value: string
+  name: string
+}
+
+export const newAmbitionOwnerOptions: NewAmbitionOwnerOption[] = [
+  {
+    value: 'james-miller',
+    name: 'James Miller',
+    roleKey: 'manager',
+    avatarUrl: '/profile-img/profile.png',
+  },
+  {
+    value: 'nia-washington',
+    name: 'Nia Washington',
+    roleKey: 'lead',
+    avatarUrl: '/profile-img/nia-washington.png',
+  },
+  {
+    value: 'sarah-miller',
+    name: 'Sarah Miller',
+    roleKey: 'coordinator',
+    avatarUrl: '/profile-img/sarah-miller.png',
+  },
+]
+
+export const newAmbitionShareWithOptions: NewAmbitionShareMember[] = [
+  { value: 'anne-hayes', name: 'Anne Hayes' },
+  { value: 'kenji-tanaka', name: 'Kenji Tanaka' },
+  { value: 'maria-garcia', name: 'Maria Garcia' },
+  { value: 'john-smith', name: 'John Smith' },
+  { value: 'sarah-chen', name: 'Sarah Chen' },
+  { value: 'david-kim', name: 'David Kim' },
+  { value: 'emma-wilson', name: 'Emma Wilson' },
+  { value: 'lucas-brown', name: 'Lucas Brown' },
+]
+
 export const goals: GoalUI[] = [
+  // Division-level ambitions (parents)
+  {
+    id: 'division-ambition-1',
+    title: 'Accelerate platform innovation',
+    status: 'awaiting_approval',
+    uid: 'cmkwz0wd50008n7km99rzndfe',
+    progress: 65,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    userName: 'Division Lead',
+    goalType: 'business',
+    description: 'Drive innovation across the platform to stay competitive',
+    avatarUrl: '/profile-img/profile.png',
+    ladderedGoals: [],
+    goalAchievements: [],
+    goalActions: [],
+  },
+  {
+    id: 'division-ambition-2',
+    title: 'Improve customer satisfaction',
+    status: 'awaiting_approval',
+    uid: 'cmkwz0wd50008n7km99rzndfe',
+    progress: 45,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    userName: 'Division Lead',
+    goalType: 'business',
+    description: 'Enhance customer experience and satisfaction metrics',
+    avatarUrl: '/profile-img/profile.png',
+    ladderedGoals: [],
+    goalAchievements: [],
+    goalActions: [],
+  },
+  {
+    id: 'team-ambition-1',
+    title: 'Increase team productivity',
+    status: 'awaiting_approval',
+    uid: 'cmkwz0wcz0006n7kmkgrisysw',
+    progress: 70,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    userName: 'Team Lead',
+    goalType: 'business',
+    description: 'Optimize team processes to boost overall productivity',
+    avatarUrl: '/profile-img/lars-van-der-zee.png',
+    ladderedGoals: [],
+    goalAchievements: [],
+    goalActions: [],
+  },
+  // Regular goals
   {
     id: 'cmkwz0wde000bn7km5qc9wwoh',
     title: 'Improve team performance',
@@ -13,6 +107,10 @@ export const goals: GoalUI[] = [
     goalType: 'manager_effectiveness',
     description: 'Increase efficiency and quality of delivery',
     avatarUrl: '/profile-img/profile.png',
+    parent: {
+      id: 'division-ambition-1',
+      title: 'Accelerate platform innovation',
+    },
     goalAchievements: [
       {
         id: 'cmkwz0wdz0013n7km1m866688',
@@ -88,6 +186,10 @@ export const goals: GoalUI[] = [
     description:
       'Ensure the team consistently meets commitments by improving planning and estimation',
     avatarUrl: '/profile-img/profile.png',
+    parent: {
+      id: 'division-ambition-2',
+      title: 'Improve customer satisfaction',
+    },
     ladderedGoals: [],
     goalAchievements: [
       {

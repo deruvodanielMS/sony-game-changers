@@ -6,13 +6,13 @@ import { useSearchParams } from 'next/navigation'
 import { useRouter } from '@/i18n/navigation'
 import { CirclePlus } from 'lucide-react'
 import { GoalsHeader } from '@/components/game-changers/goals/GoalsHeader'
+import { NewAmbitionModal } from '@/components/game-changers/ambitions/NewAmbitionModal'
 import { Button } from '@/components/ui/atoms/Button'
 import { GoalCard } from '@/components/ui/organisms/GoalCard'
 import { FilterableContentLayout } from '@/components/ui/templates/FilterableContentLayout'
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { Tabs } from '@/components/ui/molecules/Tabs'
 import type { TabItem } from '@/components/ui/molecules/Tabs'
-import { ROUTES } from '@/common/routes'
 import { filterBarMocks } from './mocks'
 import { useGoalsStore } from '@/stores/goals.store'
 import { AmbitionsLoading } from '@/components/ui/molecules/Loadings'
@@ -28,14 +28,18 @@ export default function GameChangersGoalsPage() {
   const [selectedFilterType, setSelectedFilterType] = useState<Array<string>>([])
   const [selectedFilterStatus, setSelectedFilterStatus] = useState<Array<string>>([])
   const [selectedSearchValue, setSelectedSearchValue] = useState('')
+  const [isNewAmbitionOpen, setIsNewAmbitionOpen] = useState(false)
   const { list, fetchList } = useGoalsStore()
 
   // Get current tab from URL or default to 'active'
   const currentTab = (searchParams.get('tab') as TabValue) || 'active'
 
+  // Fetch goals only once on mount
   useEffect(() => {
     fetchList()
-  }, [fetchList])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const { filters, avatarSelector } = filterBarMocks
 
@@ -93,63 +97,66 @@ export default function GameChangersGoalsPage() {
   }
 
   return (
-    <FilterableContentLayout
-      header={
-        <AnimatedSection delay={0}>
-          <GoalsHeader />
+    <>
+      <FilterableContentLayout
+        header={
+          <AnimatedSection delay={0}>
+            <GoalsHeader />
+          </AnimatedSection>
+        }
+        filters={_filters}
+        avatarSelector={_avatarSelector}
+        searchField={{
+          value: selectedSearchValue,
+          onChange: setSelectedSearchValue,
+          placeholder: t('filterDrawer.searchPlaceholder'),
+          label: t('filterDrawer.searchLabel'),
+          clearable: true,
+        }}
+        onClearFilters={handleClearFilters}
+        drawerTitle={t('filterDrawer.title')}
+        translations={{
+          filtersButton: t('filtersButton'),
+          searchLabel: t('filterDrawer.searchLabel'),
+          filterByLabel: t('filterDrawer.filterByLabel'),
+          teamMembersLabel: t('filterDrawer.teamMembersLabel'),
+          clearAll: t('filterDrawer.clearAll'),
+          showResults: t('filterDrawer.showResults'),
+        }}
+        contentClassName="gap-1 md:gap-1"
+        activeFiltersCount={activeFiltersCount}
+        primaryAction={
+          <Button
+            variant="primary"
+            className="text-neutral-0"
+            leftIcon={<CirclePlus width={24} />}
+            onClick={() => setIsNewAmbitionOpen(true)}
+          >
+            {t('newGoal')}
+          </Button>
+        }
+      >
+        <AnimatedSection delay={0.05} className="mt-1">
+          <Tabs
+            items={tabItems}
+            value={currentTab}
+            onChange={handleTabChange}
+            className="bg-neutral-0"
+          />
         </AnimatedSection>
-      }
-      filters={_filters}
-      avatarSelector={_avatarSelector}
-      searchField={{
-        value: selectedSearchValue,
-        onChange: setSelectedSearchValue,
-        placeholder: t('filterDrawer.searchPlaceholder'),
-        label: t('filterDrawer.searchLabel'),
-        clearable: true,
-      }}
-      onClearFilters={handleClearFilters}
-      drawerTitle={t('filterDrawer.title')}
-      translations={{
-        filtersButton: t('filtersButton'),
-        searchLabel: t('filterDrawer.searchLabel'),
-        filterByLabel: t('filterDrawer.filterByLabel'),
-        teamMembersLabel: t('filterDrawer.teamMembersLabel'),
-        clearAll: t('filterDrawer.clearAll'),
-        showResults: t('filterDrawer.showResults'),
-      }}
-      contentClassName="gap-1 md:gap-1"
-      activeFiltersCount={activeFiltersCount}
-      primaryAction={
-        <Button
-          variant="primary"
-          className="text-neutral-0"
-          leftIcon={<CirclePlus width={24} />}
-          onClick={() => router.push(ROUTES.GAME_CHANGERS_AMBITIONS_NEW)}
-        >
-          {t('newGoal')}
-        </Button>
-      }
-    >
-      <AnimatedSection delay={0.05} className="mt-1">
-        <Tabs
-          items={tabItems}
-          value={currentTab}
-          onChange={handleTabChange}
-          className="bg-neutral-0"
-        />
-      </AnimatedSection>
-      <div className="flex flex-col gap-1">
-        {filteredList.map((goalData, index) => {
-          const { ladderedGoals, ...goal } = goalData
-          const delay = Math.min(0.1 + index * 0.05, 0.4)
-          return (
-            <AnimatedSection key={goal.id} delay={delay}>
-              <GoalCard ladderGoals={ladderedGoals} goal={goal} />
-            </AnimatedSection>
-          )
-        })}
-      </div>
-    </FilterableContentLayout>
+        <div className="flex flex-col gap-1">
+          {filteredList.map((goalData, index) => {
+            const { ladderedGoals, ...goal } = goalData
+            const delay = Math.min(0.1 + index * 0.05, 0.4)
+            return (
+              <AnimatedSection key={goal.id} delay={delay}>
+                <GoalCard ladderGoals={ladderedGoals} goal={goal} />
+              </AnimatedSection>
+            )
+          })}
+        </div>
+      </FilterableContentLayout>
+      <NewAmbitionModal open={isNewAmbitionOpen} onClose={() => setIsNewAmbitionOpen(false)} />
+    </>
   )
 }

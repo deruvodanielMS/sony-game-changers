@@ -109,7 +109,7 @@ describe('Modal (wrapper + parts)', () => {
         <ModalHeader>Title</ModalHeader>
       </Modal>,
     )
-    expect(container.className).toContain('w-full')
+    expect(container.className).toContain('w-[calc(100vw-2rem)]')
   })
 
   it('calls onClose when header close button is clicked', async () => {

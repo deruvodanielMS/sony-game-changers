@@ -1,7 +1,7 @@
 'use client'
 
 import { create } from 'zustand'
-import { GoalDraft, GoalUI } from '@/domain/goal'
+import { GoalDraft, GoalUI, CreateGoalDTO } from '@/domain/goal'
 import { API_ROUTES } from '@/common/routes'
 
 type GoalsState = {
@@ -25,6 +25,10 @@ type GoalsState = {
   // Sync con backend
   applyUpdate: (goal: GoalUI) => void
   removeGoal: (id: string) => void
+  createGoal: (
+    goalData: CreateGoalDTO,
+    userData?: { name: string; avatarUrl: string | null },
+  ) => Promise<GoalUI | null>
 
   fetchList: () => void
 
@@ -104,6 +108,95 @@ export const useGoalsStore = create<GoalsState>((set) => {
         draft: null,
         editingGoalId: null,
       })),
+
+    createGoal: async (goalData, userData) => {
+      try {
+        const res = await fetch(API_ROUTES.GOALS, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(goalData),
+        })
+
+        if (!res.ok) {
+          const errorData = await res.json()
+          throw new Error(errorData.error || 'Failed to create goal')
+        }
+
+        const newGoal = await res.json()
+
+        set((state) => ({
+          list: state.list ? [...state.list, newGoal] : [newGoal],
+        }))
+
+        return newGoal
+      } catch (error) {
+        // Create mock goal locally
+        const id = `mock-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
+        const newGoal: GoalUI = {
+          id,
+          title: goalData.title,
+          status: goalData.status as string,
+          goalType: goalData.goalType as string,
+          description: goalData.description ?? '',
+          uid: goalData.assignedTo,
+          userName: userData?.name ?? 'Current User',
+          avatarUrl: userData?.avatarUrl ?? null,
+          progress: goalData.progress ?? 0,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          ladderedGoals: [],
+          goalAchievements:
+            goalData.goalAchievements?.map((achievement, index) => ({
+              id: `ach-${id}-${index}`,
+              title: achievement.title,
+              status: achievement.status ?? 'pending',
+              progress: null,
+            })) ?? [],
+          goalActions:
+            goalData.goalActions?.map((action, index) => ({
+              id: `act-${id}-${index}`,
+              title: action.title,
+              status: action.status ?? 'pending',
+            })) ?? [],
+        }
+
+        set((state) => {
+          let updatedList = state.list ? [...state.list, newGoal] : [newGoal]
+
+          // If this goal has a parent, add it to parent's ladderedGoals
+          if (goalData.parentId) {
+            updatedList = updatedList.map((goal) => {
+              if (goal.id === goalData.parentId) {
+                const ladderedChild = {
+                  id: newGoal.id,
+                  title: newGoal.title,
+                  status: newGoal.status,
+                  progress: newGoal.progress,
+                  createdAt: newGoal.createdAt,
+                  updatedAt: newGoal.updatedAt,
+                  uid: newGoal.uid,
+                  userName: newGoal.userName,
+                  avatarUrl: newGoal.avatarUrl,
+                }
+
+                return {
+                  ...goal,
+                  ladderedGoals: [...(goal.ladderedGoals || []), ladderedChild],
+                }
+              }
+              return goal
+            })
+          }
+
+          return { list: updatedList }
+        })
+
+        return newGoal
+      }
+    },
+
     fetchList: async () => {
       try {
         const res = await fetch(API_ROUTES.GOALS)
@@ -113,7 +206,8 @@ export const useGoalsStore = create<GoalsState>((set) => {
         }
         const goals = await res.json()
         set({ list: goals })
-      } catch {
+      } catch (error) {
+        console.error('[fetchList] Error:', error)
         // Handle error as needed
       }
     },
@@ -130,7 +224,14 @@ export const useGoalsStore = create<GoalsState>((set) => {
           selected: state.selected?.id === goal.id ? { ...state.selected, ...goal } : goal,
         }))
       } catch {
-        // Handle error as needed
+        // Fallback: Search in local list if API call fails
+        set((state) => {
+          const localGoal = state.list?.find((g) => g.id === id)
+          if (localGoal) {
+            return { selected: localGoal }
+          }
+          return state
+        })
       }
     },
   }

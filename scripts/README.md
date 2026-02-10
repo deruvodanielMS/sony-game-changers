@@ -5,18 +5,22 @@ Este directorio contiene scripts que se ejecutan automáticamente en el pre-comm
 ## Scripts
 
 ### `validate-i18n.js`
+
 Valida que los componentes NO tengan strings hardcoded en contenido visible al usuario.
 
 **Que revisa:**
+
 - ✅ Texto dentro de componentes (`<Button>Save</Button>`)
 - ✅ Placeholders (`placeholder="...">`)
 
 **Que ignora:**
+
 - aria-labels (son atributos técnicos)
 - Archivos `.test.tsx` y `.stories.tsx`
 - Líneas que ya usan `t('...')`
 
 **Ejecución manual:**
+
 ```bash
 npm run validate:i18n
 ```
@@ -24,9 +28,11 @@ npm run validate:i18n
 ---
 
 ### `validate-component-structure.js`
+
 Valida que los NUEVOS componentes sigan la estructura Atomic Design correctamente.
 
 **Que revisa (solo para nuevos componentes):**
+
 - ✅ `[Component].tsx` debe tener `[Component].test.tsx`
 - ✅ `[Component].tsx` debe tener `[Component].stories.tsx`
 - ⚠️ Recomendado tener `index.tsx`
@@ -34,6 +40,7 @@ Valida que los NUEVOS componentes sigan la estructura Atomic Design correctament
 **Nota:** Solo valida archivos que están siendo "staged" en Git, así que el pre-commit no falla con componentes viejos.
 
 **Ejecución manual:**
+
 ```bash
 npm run validate:components
 ```

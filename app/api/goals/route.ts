@@ -66,12 +66,11 @@ export async function POST(request: Request) {
 
   try {
     const payload = (await request.json()) as CreateGoalDTO
-
     const created = await goalService.createGoal(payload, session.user?.email || '')
 
     return NextResponse.json(created, { status: 201 })
   } catch (error) {
-    console.error('[POST /goals]', error)
+    console.error('[POST /goals] Error:', error)
     return NextResponse.json({ error: 'Failed to create goal' }, { status: 500 })
   }
 }

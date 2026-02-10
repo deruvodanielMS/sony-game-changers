@@ -6,15 +6,15 @@ import { cn } from '@/utils/cn'
 import type { TextFieldProps } from './TextField.types'
 
 const rootStyles = cva(
-  'inline-flex items-center bg-transparent rounded-small transition-colors border rounded-small h-2_75 border-box',
+  'inline-flex items-center bg-transparent rounded-small transition-colors border rounded-small h-2_75 border-box border-neutral-300 hover:border-neutral-1000',
   {
     variants: {
       disabled: {
-        true: 'border-black-20 bg-black-10 text-neutral-600 cursor-not-allowed',
+        true: 'border-black-20 bg-black-10 text-neutral-600 cursor-not-allowed hover:border-black-20',
         false: '',
       },
       hasError: {
-        true: 'border-feedback-danger-600',
+        true: 'border-feedback-error-500 hover:border-feedback-error-500',
         false: '',
       },
       fullWidth: {
@@ -61,7 +61,7 @@ function TextFieldImpl(props: TextFieldProps, ref: React.ForwardedRef<HTMLInputE
     >
       {leftIcon ? (
         <span
-          className="w-3 h-3 basis-3 grow-0 shrink-0  flex items-center justify-center text-neutral-400 mr-0_25 select-none"
+          className="w-3 h-3 basis-3 grow-0 shrink-0 flex items-center justify-center text-neutral-400 mr-0_25 select-none"
           aria-hidden
         >
           {leftIcon}
@@ -80,7 +80,7 @@ function TextFieldImpl(props: TextFieldProps, ref: React.ForwardedRef<HTMLInputE
 
       {rightIcon ? (
         <span
-          className="w-3 h-3 basis-3 grow-0 shrink-0 flex items-center justify-center text-neutral-400 ml-0_25 select-none shirink-0"
+          className="w-3 h-3 basis-3 grow-0 shrink-0 flex items-center justify-center text-neutral-400 ml-0_25 select-none shrink-0"
           aria-hidden
         >
           {rightIcon}

@@ -18,7 +18,13 @@ function getStagedComponentFiles() {
     return output
       .trim()
       .split('\n')
-      .filter(f => f.startsWith('components/') && f.endsWith('.tsx') && !f.includes('.test.') && !f.includes('.stories.'))
+      .filter(
+        (f) =>
+          f.startsWith('components/') &&
+          f.endsWith('.tsx') &&
+          !f.includes('.test.') &&
+          !f.includes('.stories.'),
+      )
   } catch {
     return []
   }
@@ -43,7 +49,9 @@ function validateFile(filePath) {
 
     // Check for hardcoded button/label text content in JSX
     // <Button>Save</Button> pattern
-    const jsxContentMatch = line.match(/<(Button|Label|Heading|Title|h[1-6])[^>]*>([A-Z][a-zA-Z\s]+)<\//)
+    const jsxContentMatch = line.match(
+      /<(Button|Label|Heading|Title|h[1-6])[^>]*>([A-Z][a-zA-Z\s]+)<\//,
+    )
     if (jsxContentMatch && !line.includes('{')) {
       const text = jsxContentMatch[2]
       if (text.length > 2 && !['Yes', 'No', 'OK', 'Cancel', 'Close'].includes(text)) {
@@ -82,7 +90,7 @@ function main() {
   let totalIssues = 0
   const allIssues = []
 
-  stagedFiles.forEach(file => {
+  stagedFiles.forEach((file) => {
     const fullPath = path.resolve(file)
     const issues = validateFile(fullPath)
     allIssues.push(...issues)
@@ -91,7 +99,7 @@ function main() {
 
   if (totalIssues > 0) {
     console.error('\n❌ i18n Validation Failed\n')
-    allIssues.forEach(issue => {
+    allIssues.forEach((issue) => {
       console.error(`  ${issue.file}:${issue.line}`)
       console.error(`     ${issue.message}\n`)
     })
