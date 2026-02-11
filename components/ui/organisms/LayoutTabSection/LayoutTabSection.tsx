@@ -63,7 +63,7 @@ export function LayoutTabSection({ children, sections = [], basePath }: LayoutTa
           isNavDrawerOpen && 'md:opacity-100 opacity-0 pointer-events-none',
         )}
       >
-        <div className="hidden md:flex gap-1 py-1_5">
+        <div className="hidden md:flex gap-1 pt-1_5">
           <Switcher
             items={switcherItems}
             value={current}

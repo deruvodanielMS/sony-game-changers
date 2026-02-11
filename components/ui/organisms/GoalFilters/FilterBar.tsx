@@ -31,7 +31,7 @@ export function FilterBar({
     }
   }
   return (
-    <section className="w-full h-3 flex gap-1 justify-between max-sm:flex-col max-lg:h-auto">
+    <section className="w-full h-3 flex gap-1 justify-between max-sm:flex-col max-lg:h-auto my-1">
       <form className="flex gap-1 items-center max-sm:flex-wrap max-sm:mb-1 md:max-lg:flex-wrap">
         {filters.map((props) => (
           <FilterMultiSelect key={props.label} className="shrink-0" {...props} />

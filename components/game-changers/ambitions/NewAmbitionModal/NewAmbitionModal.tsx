@@ -144,14 +144,11 @@ export function NewAmbitionModal({
   const actions = useMemo(
     () => (
       <div className="flex w-full items-center justify-between gap-1">
-        <Button variant="secondary" size="small">
-          {t('actions.saveDraft')}
-        </Button>
+        <Button variant="secondary">{t('actions.saveDraft')}</Button>
         <div className="flex items-center gap-0_75">
           {currentStep === 2 && (
             <Button
-              variant="link"
-              size="small"
+              variant="secondary"
               onClick={handleBack}
               className="w-2_5! h-2_5! p-0! rounded-full border border-neutral-300 hover:bg-neutral-100"
               aria-label={t('actions.back')}
@@ -161,7 +158,6 @@ export function NewAmbitionModal({
           )}
           <Button
             variant="primary"
-            size="small"
             rightIcon={currentStep === 1 ? <ArrowRight width={18} /> : undefined}
             onClick={handleNext}
             disabled={isSubmitting}

@@ -158,9 +158,10 @@ export function AmbitionLaddering({
             exit="hidden"
             variants={listVariants}
             className={cn(
-              'flex w-full',
-              isMobile ? 'flex-col gap-1' : 'gap-1',
-              isTablet && 'flex-wrap',
+              'grid w-full gap-1',
+              isMobile && 'grid-cols-1',
+              isTablet && 'grid-cols-2',
+              !isMobile && !isTablet && 'grid-cols-3',
             )}
           >
             {filteredAmbitions.map((ambition) => (
@@ -168,11 +169,7 @@ export function AmbitionLaddering({
                 key={ambition.id}
                 variants={cardVariants}
                 transition={{ duration: 0.3 }}
-                className={cn(
-                  'flex flex-col gap-1 bg-neutral-0 border border-neutral-300 rounded-large p-1.5 cursor-pointer hover:border-neutral-400 transition-colors',
-                  !isMobile && !isTablet && 'flex-1',
-                  isTablet && 'flex-[0_0_calc(50%-0.5rem)]',
-                )}
+                className="flex flex-col gap-1 bg-neutral-0 border border-neutral-300 rounded-large p-1.5 cursor-pointer hover:hover:border-neutral-400 transition-colors"
               >
                 {/* Title */}
                 <Typography

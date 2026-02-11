@@ -47,3 +47,5 @@ next-env.d.ts
 storybook-static
 
 /lib/generated/prisma
+.vscode/settings.json
+.vscode/tailwind.json

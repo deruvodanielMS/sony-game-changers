@@ -82,6 +82,7 @@ export function FilterableContentLayout({
   translations,
   activeFiltersCount = 0,
   contentClassName,
+  tabs,
 }: FilterableContentLayoutProps) {
   const { openDrawer, closeDrawer } = useUIStore()
   const { scrollDirection, scrollY } = useScrollDirection()
@@ -108,10 +109,12 @@ export function FilterableContentLayout({
         {header}
       </div>
 
-      {/* Desktop: Sticky FilterBar */}
+      {/* Desktop: Sticky FilterBar (below subnav, above content) */}
       <div
         className={cn(
-          'mt-3 mb-1 hidden md:block sticky top-[var(--sticky-filters-desktop-offset)] z-[var(--z-sticky-filters)] bg-neutral-0 transition-all duration-base',
+          'hidden md:block sticky',
+          'top-[5rem]', // subnav height (64px, ajusta si es necesario)
+          'z-[950] bg-neutral-0 transition-all duration-base',
           showStickyShadow && 'shadow-sticky-light',
         )}
       >
@@ -136,10 +139,37 @@ export function FilterableContentLayout({
         </AnimatedSection>
       </div>
 
+      {/* Sticky Tabs below FilterBar (desktop only) */}
+      {tabs && (
+        <div
+          className={cn(
+            'hidden md:block sticky z-[1000] bg-neutral-0',
+            'top-[9rem]',
+            'shadow-[--shadow-sticky-light]',
+            'mb-0',
+            'max-h-[3.5rem] h-[3.5rem] overflow-hidden',
+          )}
+        >
+          {tabs}
+        </div>
+      )}
+
+      {/* Mobile: Tabs sticky below header (mobile only) */}
+      {tabs && (
+        <div
+          className={cn(
+            'md:hidden sticky z-[--z-tabs] bg-neutral-0',
+            'top-[--sticky-filters-mobile-offset]',
+            'shadow-[--shadow-sticky-light]',
+          )}
+        >
+          {tabs}
+        </div>
+      )}
       {/* Mobile: Filter Button that opens drawer - sticky below tabs */}
       <div
         className={cn(
-          'md:hidden sticky top-[var(--sticky-filters-mobile-offset)] z-[var(--z-sticky-filters)] bg-neutral-0 py-1 px-1 -mb-1',
+          'md:hidden sticky top-[--sticky-filters-mobile-offset] z-[--z-sticky-filters] bg-neutral-0 py-1 px-1 -mb-1',
           showStickyShadow && '[box-shadow:var(--shadow-sticky-light)]',
         )}
       >
@@ -153,15 +183,15 @@ export function FilterableContentLayout({
                 const drawerContent = (
                   <div className="flex flex-col h-full">
                     {/* Scrollable content */}
-                    <div className="flex-1 overflow-y-auto px-1_5 pb-1_5">
+                    <div className="flex-1 overflow-y-auto px-1.5 pb-1.5">
                       {/* Search First - Most used action */}
                       {searchField && (
-                        <div className="mb-1_5">
+                        <div className="mb-1.5">
                           {translations.searchLabel && (
                             <Typography
                               variant="bodySmall"
                               fontWeight="semibold"
-                              className="mb-0_5"
+                              className="mb-0.5"
                               color="neutral800"
                             >
                               {translations.searchLabel}
@@ -177,39 +207,39 @@ export function FilterableContentLayout({
 
                       {/* Filters Section */}
                       {filters.length > 0 && (
-                        <div className="mb-1_5">
+                        <div className="mb-1.5">
                           {translations.filterByLabel && (
                             <Typography
                               variant="bodySmall"
                               fontWeight="semibold"
-                              className="mb-0_75"
+                              className="mb-0.75"
                               color="neutral800"
                             >
                               {translations.filterByLabel}
                             </Typography>
                           )}
-                          <div className="flex flex-col gap-1_5">
+                          <div className="flex flex-col gap-1.5">
                             {filters.map((filter) => (
                               <div
                                 key={filter.label}
-                                className="border-b border-neutral-200 pb-1_5"
+                                className="border-b border-neutral-200 pb-1.5"
                               >
                                 <Typography
                                   variant="body"
                                   fontWeight="semibold"
-                                  className="mb-0_75"
+                                  className="mb-0.75"
                                   color="neutral800"
                                 >
                                   {filter.label}
                                 </Typography>
-                                <div className="flex flex-col gap-0_5">
+                                <div className="flex flex-col gap-0.5">
                                   {filter.options.map((option) => {
                                     const isSelected =
                                       filter.selected?.includes(option.value) ?? false
                                     return (
                                       <label
                                         key={option.value}
-                                        className="flex items-center gap-0_75 cursor-pointer py-0_5"
+                                        className="flex items-center gap-0.75 cursor-pointer py-0.5"
                                       >
                                         <input
                                           type="checkbox"
@@ -238,12 +268,12 @@ export function FilterableContentLayout({
 
                       {/* Avatar Selector */}
                       {avatarSelector && (
-                        <div className="mb-1_5">
+                        <div className="mb-1.5">
                           {translations.teamMembersLabel && (
                             <Typography
                               variant="bodySmall"
                               fontWeight="semibold"
-                              className="mb-0_75"
+                              className="mb-0.75"
                               color="neutral800"
                             >
                               {translations.teamMembersLabel}
@@ -255,7 +285,7 @@ export function FilterableContentLayout({
                     </div>
 
                     {/* Sticky Footer with actions */}
-                    <div className="sticky bottom-0 bg-neutral-0 border-t border-neutral-300 px-1_5 py-1 flex gap-0_75">
+                    <div className="sticky bottom-0 bg-neutral-0 border-t border-neutral-300 px-1.5 py-1 flex gap-0.75">
                       <Button
                         variant="secondary"
                         onClick={() => {
@@ -280,7 +310,7 @@ export function FilterableContentLayout({
                         {translations.showResults}
                         <FilterBadge
                           count={activeFiltersCount}
-                          className="ml-0_5 bg-neutral-0 text-accent-primary"
+                          className="ml-0.5 bg-neutral-0 text-accent-primary"
                         />
                       </Button>
                     </div>
@@ -302,17 +332,15 @@ export function FilterableContentLayout({
               {translations.filtersButton}
               <FilterBadge
                 count={activeFiltersCount}
-                className="absolute -top-0_25 -right-0_25 bg-accent-primary text-neutral-0"
+                className="absolute -top-0.25 -right-0.25 bg-accent-primary text-neutral-0"
               />
             </Button>
             {primaryAction && <div className="shrink-0">{primaryAction}</div>}
           </div>
         </AnimatedSection>
       </div>
-
-      <div className={cn('flex flex-col gap-1 md:gap-1 pt-1 md:pt-0', contentClassName)}>
-        {children}
-      </div>
+      {/* Padding top para compensar sticky en desktop */}
+      <div className={cn('flex flex-col gap-1 md:gap-1 pt-1', contentClassName)}>{children}</div>
     </div>
   )
 }

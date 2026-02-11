@@ -151,10 +151,12 @@
   --container-modal-sm: var(--modal-width-sm);
   --container-modal-md: var(--modal-width-md);
   --container-modal-lg: var(--modal-width-lg);
+  --container-modal-xl: var(--modal-width-xl);
 
   --spacing-modal-sm: var(--modal-width-sm);
   --spacing-modal-md: var(--modal-width-md);
   --spacing-modal-lg: var(--modal-width-lg);
+  --spacing-modal-xl: var(--modal-width-xl);
 
   /* Navigation */
   --nav-item-max-width: var(--sidebar-nav-item-max-width);

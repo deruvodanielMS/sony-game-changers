@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { m } from 'framer-motion'
 import Image from 'next/image'
-import { Plus, Link as LinkIcon } from 'lucide-react'
+import { Plus, Link as LinkIcon, X } from 'lucide-react'
 import { Card } from '@/components/ui/atoms/Card/Card'
 import { GoalCardProps } from './GoalCard.types'
 import { Typography } from '@/components/ui/foundations/Typography'
@@ -12,7 +12,7 @@ import { Arrow } from '@/components/ui/atoms/Arrow'
 import { GoalStatus } from '@/components/ui/molecules/GoalStatus'
 import { Button } from '../../atoms/Button'
 import { useTranslations } from 'next-intl'
-import { GoalStatus as GoalStatusType } from '@/domain/goal'
+import { GoalStatus as GoalStatusType, GOAL_TYPES } from '@/domain/goal'
 import { ROUTES } from '@/common/routes'
 import { useUIStore } from '@/stores/ui.store'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -45,15 +45,16 @@ export function GoalCard({
   allowAddChildrenGoals,
   'data-testid': dataTestId,
 }: GoalCardProps) {
-  const [open, setOpen] = useState(false)
+  const { id, title, avatarUrl, goalType, status, userName, parent } = goal
+  const hasChildrenGoals = ladderGoals.length
+
+  // Business ambitions should be expanded by default when they have laddered goals
+  const [open, setOpen] = useState(goalType === GOAL_TYPES.BUSINESS && hasChildrenGoals > 0)
   const t = useTranslations('GoalCard')
   const tGoals = useTranslations('Goals')
   const tLaddering = useTranslations('LadderingModal')
   const { openModal, openDrawer, closeModal, closeDrawer } = useUIStore()
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
-
-  const { id, title, avatarUrl, goalType, status, userName, parent } = goal
-  const hasChildrenGoals = ladderGoals.length
 
   const handleOpenLadderingModal = () => {
     // Mock data - in real implementation, these would come from props or API
@@ -85,7 +86,7 @@ export function GoalCard({
           {ambitions.map((ambition) => (
             <div
               key={ambition.id}
-              className="flex-1 min-w-0 w-full sm:w-auto bg-neutral-100 border-2 border-neutral-200 rounded-3xl p-1_5 flex flex-col gap-1 items-start justify-center"
+              className="flex-1 min-w-0 w-full sm:w-auto bg-neutral-100 border-neutral-200 rounded-3xl p-1_5 flex flex-col gap-1 items-start justify-center"
             >
               <div className="flex gap-1 items-start w-full">
                 <Image
@@ -152,14 +153,27 @@ export function GoalCard({
     } else {
       const modalContent = (
         <>
-          <ModalHeader showClose onClose={closeModal}>
-            {tLaddering('title')}
-          </ModalHeader>
+          <header className="flex flex-col gap-1 pt-2_5 pr-4 pb-1_5 pl-4">
+            <div className="flex items-start justify-between gap-1">
+              <Typography variant="h5" tabIndex={0}>
+                {tLaddering('title')}
+              </Typography>
+              <Button
+                variant="link"
+                iconOnly
+                onClick={() => closeModal()}
+                aria-label="Close"
+                className="w-3 h-3 shrink-0"
+              >
+                <X width={32} />
+              </Button>
+            </div>
+          </header>
           <ModalBody className="flex flex-col gap-1_5">{content}</ModalBody>
         </>
       )
       openModal(modalContent, {
-        size: 'lg',
+        size: 'xl',
         overlayClose: true,
         onClose: closeModal,
       })
@@ -174,7 +188,10 @@ export function GoalCard({
       transition={{ duration: 0.2 }}
       className="isolate"
     >
-      <Card data-testid={dataTestId} className="flex flex-col gap-1_5 items-stretch relative">
+      <Card
+        data-testid={dataTestId}
+        className="flex flex-col gap-1_5 items-stretch relative hover:hover:border-neutral-400 transition-colors"
+      >
         {/* Higher Ambition Section */}
         {parent && (
           <div

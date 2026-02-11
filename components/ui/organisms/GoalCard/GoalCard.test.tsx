@@ -85,24 +85,22 @@ describe('GoalCard', () => {
   it('renders ladder goals and allows collapsing content', async () => {
     render(<GoalCard goal={baseGoal} ladderGoals={ladderGoals} allowAddChildrenGoals={false} />)
 
-    // Find the toggle button using the translation key
-    const toggleButton = screen.getByRole('button', { name: 'View laddered Ambitions' })
-    expect(toggleButton).toBeInTheDocument()
+    // Initially open: should show ladder goal and "Hide laddered Ambitions" button
+    expect(screen.getByText('Sub Goal A')).toBeInTheDocument()
+    expect(screen.getByAltText('Jane Smith')).toBeInTheDocument()
+    const hideButton = screen.getByRole('button', { name: 'Hide laddered Ambitions' })
+    expect(hideButton).toBeInTheDocument()
 
-    // Start closed: ladder goal not visible
-    expect(screen.queryByText('Sub Goal A')).toBeNull()
-
-    // Expand by clicking the toggle button
-    fireEvent.click(toggleButton)
+    // Collapse by clicking the toggle button
+    fireEvent.click(hideButton)
 
     // Wait for animation to complete
     await waitFor(() => {
-      expect(screen.getByText('Sub Goal A')).toBeInTheDocument()
+      expect(screen.queryByText('Sub Goal A')).toBeNull()
     })
-    expect(screen.getByAltText('Jane Smith')).toBeInTheDocument()
 
-    // Button text should change to "Hide laddered Ambitions"
-    expect(screen.getByRole('button', { name: 'Hide laddered Ambitions' })).toBeInTheDocument()
+    // Button text should change to "View laddered Ambitions"
+    expect(screen.getByRole('button', { name: 'View laddered Ambitions' })).toBeInTheDocument()
   })
 
   it('shows add-child-goal button when allowed', () => {

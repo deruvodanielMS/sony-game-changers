@@ -127,7 +127,7 @@ export const useGoalsStore = create<GoalsState>((set) => {
         const newGoal = await res.json()
 
         set((state) => ({
-          list: state.list ? [...state.list, newGoal] : [newGoal],
+          list: state.list ? [newGoal, ...state.list] : [newGoal],
         }))
 
         return newGoal
@@ -163,7 +163,7 @@ export const useGoalsStore = create<GoalsState>((set) => {
         }
 
         set((state) => {
-          let updatedList = state.list ? [...state.list, newGoal] : [newGoal]
+          let updatedList = state.list ? [newGoal, ...state.list] : [newGoal]
 
           // If this goal has a parent, add it to parent's ladderedGoals
           if (goalData.parentId) {

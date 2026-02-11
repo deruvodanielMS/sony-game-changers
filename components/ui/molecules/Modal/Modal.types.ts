@@ -1,4 +1,4 @@
-export type ModalSize = 'sm' | 'md' | 'lg' | 'full'
+export type ModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full'
 
 export interface ModalProps {
   open: boolean

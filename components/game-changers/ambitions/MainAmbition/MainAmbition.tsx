@@ -35,12 +35,12 @@ export function MainAmbition({
           </div>
         )}
 
-        <div className="flex items-end pr-0_5 shrink-0">
-          <div className="mr-[-0_5] shrink-0 size-3">
+        <div className="flex items-end pr-0_5 shrink-0 gap-0_25">
+          <div className="shrink-0 size-3">
             <Avatar src={avatarUrl ?? undefined} alt={userName} size="lg" />
           </div>
           {goalType && (
-            <div className="mr-[-0_5] shrink-0">
+            <div className="shrink-0">
               <TypeIcon type={goalType} variant="badge" />
             </div>
           )}

@@ -403,58 +403,6 @@ export function NewAmbitionForm({
             )}
           </FormControl>
         </AnimatedSection>
-
-        {privacy === 'private' && (
-          <AnimatedSection delay={0.5}>
-            <div className="flex flex-col gap-0_75">
-              <div className="flex items-center gap-0_5 text-neutral-600">
-                <Info width={16} className="text-feedback-info-500 shrink-0" />
-                <Typography variant="bodySmall">{t('privacy.helperPrivate')}</Typography>
-              </div>
-
-              <FormControl label={t('shareWith.label')} fullWidth>
-                <div className="relative w-full">
-                  <TextField
-                    leftIcon={<Users width={18} />}
-                    placeholder={t('shareWith.placeholder')}
-                    value={shareWithSearch}
-                    onChange={(e) => handleShareWithChange(e.target.value)}
-                    onFocus={() => shareWithSearch && setShowShareWithDropdown(true)}
-                    onBlur={() => setTimeout(() => setShowShareWithDropdown(false), 200)}
-                  />
-                  {showShareWithDropdown && availableShareOptions.length > 0 && (
-                    <div className="absolute z-10 w-full mt-0_25 bg-neutral-0 border border-neutral-300 rounded-small shadow-select max-h-[200px] overflow-auto">
-                      {availableShareOptions.map((option) => (
-                        <button
-                          key={option.value}
-                          type="button"
-                          onClick={() => handleAddShareMember(option)}
-                          className="w-full text-left px-1 py-0_75 text-body hover:bg-neutral-100 transition-colors"
-                        >
-                          {option.name}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </FormControl>
-
-              {sharedMembers.length > 0 && (
-                <div className="flex flex-wrap gap-0_5">
-                  {sharedMembers.map((member) => (
-                    <ShareWithPill
-                      key={member.value}
-                      member={member}
-                      onRemove={(value) =>
-                        setSharedMembers((prev) => prev.filter((item) => item.value !== value))
-                      }
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          </AnimatedSection>
-        )}
       </div>
     )
   }

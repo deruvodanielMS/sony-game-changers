@@ -284,12 +284,12 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
       <div className="flex flex-col gap-4 w-full mt-4">
         {/* Actions Section */}
         <AnimatedSection delay={0.15}>
-          <AmbitionActions actions={goalActions || []} />
+          <AmbitionActions actions={goalActions || []} defaultOpen={true} />
         </AnimatedSection>
 
         {/* Achievements Section */}
         <AnimatedSection delay={0.2}>
-          <AmbitionAchievements achievements={goalAchievements || []} />
+          <AmbitionAchievements achievements={goalAchievements || []} defaultOpen={true} />
         </AnimatedSection>
 
         {/* Laddered Ambitions Section */}

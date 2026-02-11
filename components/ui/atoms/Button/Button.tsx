@@ -15,7 +15,6 @@ const buttonVariants = cva(
     'whitespace-nowrap',
     'rounded-full',
     'gap-1',
-    'active:scale-95',
   ],
   {
     variants: {

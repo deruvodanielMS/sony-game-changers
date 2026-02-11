@@ -88,7 +88,11 @@ export function AvatarSelect({
               {collapsibleOptions.map(({ url, uid, name }: AvatarSelectOption) => {
                 const _isSelected = selected?.includes(uid)
                 return (
-                  <li key={uid} className={optionClasses} onClick={() => handleAvatarSelect(uid)}>
+                  <li
+                    key={uid}
+                    className={cn(optionClasses, 'cursor-pointer')}
+                    onClick={() => handleAvatarSelect(uid)}
+                  >
                     <div className={cn('rounded-full', _isSelected && avatarSelectionGradient)}>
                       <Image src={url} alt={name} width={32} height={32} className="rounded-full" />
                     </div>

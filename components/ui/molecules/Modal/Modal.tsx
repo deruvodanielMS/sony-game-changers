@@ -11,6 +11,7 @@ const SIZE_CLASS_MAP: Record<ModalSize, string> = {
   sm: 'max-w-modal-sm',
   md: 'max-w-modal-md',
   lg: 'max-w-modal-lg',
+  xl: 'max-w-modal-xl',
   full: 'w-[calc(100vw-2rem)] h-[calc(100vh-2rem)] max-w-none',
 }
 

@@ -55,7 +55,7 @@
       "awaiting_approval": "En attente d'approbation"
     },
     "filters": {
-      "clearFieldsButton": "Effacer les champs"
+      "clearFieldsButton": "Effacer les filtres"
     },
     "filterDrawer": {
       "title": "Filtrer et trier",
@@ -77,7 +77,7 @@
   "TypeIcon": {
     "business": "Objectif d'entreprise",
     "manager_effectiveness": "Efficacité du gestionnaire",
-    "personal_growth_and_development": "Croissance et développement personnel"
+    "personal_growth_and_development": "Croissance et développement"
   },
   "LadderingModal": {
     "title": "Hiérarchisation des ambitions",

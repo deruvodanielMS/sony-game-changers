@@ -7,7 +7,7 @@ exports[`LayoutTabSection > matches snapshot 1`] = `
       class="sticky top-16 md:top-0 z-[var(--z-tabs)] bg-neutral-0 px-1 md:px-3 transition-opacity duration-base"
     >
       <div
-        class="hidden md:flex gap-1 py-1_5"
+        class="hidden md:flex gap-1 pt-1_5"
       >
         <div
           aria-label="Game Changers navigation"

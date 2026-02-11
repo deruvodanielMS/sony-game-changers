@@ -35,8 +35,8 @@ export function LadderedAmbition({
           <div className="mr-[-0_5] shrink-0 size-3">
             <Arrow type={arrowType} className="size-3 overflow-hidden" />
           </div>
-          <div className="mr-[-0_5] flex items-center justify-center shrink-0 size-3">
-            <Avatar src={avatarUrl ?? undefined} alt={userName} size="sm" />
+          <div className="mr-[-0_5] flex items-center justify-center shrink-0 size-2">
+            <Avatar src={avatarUrl ?? undefined} alt={userName} size="md" />
           </div>
         </div>
 

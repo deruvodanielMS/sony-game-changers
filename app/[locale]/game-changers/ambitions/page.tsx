@@ -135,15 +135,17 @@ export default function GameChangersGoalsPage() {
             {t('newGoal')}
           </Button>
         }
+        tabs={
+          <AnimatedSection delay={0.05} className="mt-1">
+            <Tabs
+              items={tabItems}
+              value={currentTab}
+              onChange={handleTabChange}
+              className="bg-neutral-0"
+            />
+          </AnimatedSection>
+        }
       >
-        <AnimatedSection delay={0.05} className="mt-1">
-          <Tabs
-            items={tabItems}
-            value={currentTab}
-            onChange={handleTabChange}
-            className="bg-neutral-0"
-          />
-        </AnimatedSection>
         <div className="flex flex-col gap-1">
           {filteredList.map((goalData, index) => {
             const { ladderedGoals, ...goal } = goalData
