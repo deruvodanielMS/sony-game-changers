@@ -1,9 +1,11 @@
 'use client'
 
 import Image from 'next/image'
+import { Link } from '@/i18n/navigation'
 import { Menu, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/atoms/Button'
+import { ROUTES } from '@/common/routes'
 import type { MobileHeaderProps } from './MobileHeader.types'
 
 /**
@@ -24,7 +26,7 @@ export function MobileHeader({
       data-test-id={dataTestId}
     >
       {/* Logo */}
-      <div className="flex items-center">
+      <Link href={ROUTES.GAME_CHANGERS_AMBITIONS} className="flex items-center">
         <Image
           src="/playstation-logo.svg"
           alt={t('playStationHome')}
@@ -32,7 +34,7 @@ export function MobileHeader({
           height={15}
           priority
         />
-      </div>
+      </Link>
 
       {/* Navigation Menu Button */}
       <Button
