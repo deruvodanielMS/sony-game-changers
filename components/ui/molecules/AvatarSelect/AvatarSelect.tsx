@@ -4,7 +4,6 @@ import { useRef, useState } from 'react'
 import Image from 'next/image'
 import { Collapsible } from 'radix-ui'
 import { Plus } from 'lucide-react'
-import { Button } from '@/components/ui/atoms/Button'
 import { AvatarSelectOption, AvatarSelectProps } from './AvatarSelect.types'
 import { cn } from '@/utils/cn'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
@@ -48,7 +47,7 @@ export function AvatarSelect({
   }
 
   return (
-    <div className={cn('flex gap-0 items-center', className)} data-testid={dataTestid}>
+    <div className={cn('flex gap-0 items-center ml-0.5', className)} data-testid={dataTestid}>
       {optionsShown.map(({ url, uid, name }: AvatarSelectOption) => {
         const isSelected = selected?.includes(uid)
         return (

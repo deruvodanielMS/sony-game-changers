@@ -3,7 +3,6 @@
 import * as RadixCheckbox from '@radix-ui/react-checkbox'
 import { Check } from 'lucide-react'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { m } from 'framer-motion'
 import { cn } from '@/utils/cn'
 import type { CheckboxProps } from './Checkbox.types'
 
@@ -44,7 +43,7 @@ export type CheckboxVariants = VariantProps<typeof checkboxVariants>
 /**
  * Checkbox - Allow users to select one or more options
  *
- * A fully accessible checkbox built on Radix UI with Framer Motion animations.
+ * A fully accessible checkbox built on Radix UI.
  *
  * @example
  * ```tsx
@@ -78,16 +77,8 @@ export function Checkbox({
       data-testid={dataTestId}
       className={cn(checkboxVariants({ size }), className)}
     >
-      <RadixCheckbox.Indicator asChild>
-        <m.div
-          initial={{ scale: 0, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0, opacity: 0 }}
-          transition={{ duration: 0.2, ease: 'easeOut' }}
-          className="flex items-center justify-center"
-        >
-          <Check className={cn('text-neutral-0', iconSizeMap[size])} strokeWidth={3} />
-        </m.div>
+      <RadixCheckbox.Indicator className="flex items-center justify-center">
+        <Check className={cn('text-neutral-0', iconSizeMap[size])} strokeWidth={3} />
       </RadixCheckbox.Indicator>
     </RadixCheckbox.Root>
   )
