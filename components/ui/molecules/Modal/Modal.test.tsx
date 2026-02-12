@@ -102,7 +102,7 @@ describe('Modal (wrapper + parts)', () => {
       </Modal>,
     )
     const container = screen.getByTestId('modal-container')
-    expect(container.className).toContain('max-w-modal-sm')
+    expect(container.className).toContain('w-modal-sm')
 
     rerender(
       <Modal open={true} onClose={() => {}} size="full">
