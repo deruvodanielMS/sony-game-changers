@@ -1,13 +1,28 @@
 'use client'
 
 import { create } from 'zustand'
-import { GoalDraft, GoalUI, CreateGoalDTO } from '@/domain/goal'
+import {
+  GoalDraft,
+  GoalUI,
+  CreateGoalDTO,
+  ManagerAmbitionsData,
+  GoalFiltersData,
+} from '@/domain/goal'
 import { API_ROUTES } from '@/common/routes'
 
 type GoalsState = {
   // Estado visible
   list: GoalUI[] | null
   selected: GoalUI | null
+  listError: string | null
+
+  // Manager ambitions
+  managerAmbitions: ManagerAmbitionsData | null
+  managerAmbitionsError: string | null
+
+  // Goal filters
+  goalFilters: GoalFiltersData | null
+  goalFiltersError: string | null
 
   // Estado de edición
   draft: GoalDraft | null
@@ -16,6 +31,7 @@ type GoalsState = {
   // List / selection
   setList: (goals: GoalUI[]) => void
   selectGoal: (goal: GoalUI | null) => void
+  clearListError: () => void
 
   // Edit flow
   startEdit: (goal: GoalUI) => void
@@ -31,8 +47,9 @@ type GoalsState = {
   ) => Promise<GoalUI | null>
 
   fetchList: () => void
-
   fetchGoal: (id: string) => void
+  fetchManagerAmbitions: () => void
+  fetchGoalFilters: () => void
 }
 
 export const useGoalsStore = create<GoalsState>((set) => {
@@ -53,6 +70,13 @@ export const useGoalsStore = create<GoalsState>((set) => {
   return {
     list: null,
     selected: null,
+    listError: null,
+
+    managerAmbitions: null,
+    managerAmbitionsError: null,
+
+    goalFilters: null,
+    goalFiltersError: null,
 
     draft: null,
     editingGoalId: null,
@@ -61,6 +85,8 @@ export const useGoalsStore = create<GoalsState>((set) => {
     setList: (goals) => set({ list: goals }),
 
     selectGoal: (goal) => set({ selected: goal }),
+
+    clearListError: () => set({ listError: null }),
 
     // Edit flow
     startEdit: (goal) =>
@@ -202,13 +228,15 @@ export const useGoalsStore = create<GoalsState>((set) => {
         const res = await fetch(API_ROUTES.GOALS)
 
         if (!res.ok) {
-          throw new Error('Failed to fetch goals')
+          const errorData = await res.json().catch(() => ({}))
+          throw new Error(errorData.error || 'Failed to fetch goals')
         }
         const goals = await res.json()
-        set({ list: goals })
+        set({ list: goals, listError: null })
       } catch (error) {
         console.error('[fetchList] Error:', error)
-        // Handle error as needed
+        const errorMessage = error instanceof Error ? error.message : 'Failed to fetch goals'
+        set({ list: [], listError: errorMessage })
       }
     },
     fetchGoal: async (id: string) => {
@@ -232,6 +260,41 @@ export const useGoalsStore = create<GoalsState>((set) => {
           }
           return state
         })
+      }
+    },
+
+    fetchManagerAmbitions: async () => {
+      try {
+        const res = await fetch(API_ROUTES.GOALS_MANAGER_AMBITIONS)
+
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}))
+          throw new Error(errorData.error || 'Failed to fetch manager ambitions')
+        }
+        const data = await res.json()
+        set({ managerAmbitions: data, managerAmbitionsError: null })
+      } catch (error) {
+        console.error('[fetchManagerAmbitions] Error:', error)
+        const errorMessage =
+          error instanceof Error ? error.message : 'Failed to fetch manager ambitions'
+        set({ managerAmbitions: null, managerAmbitionsError: errorMessage })
+      }
+    },
+
+    fetchGoalFilters: async () => {
+      try {
+        const res = await fetch(API_ROUTES.GOALS_FILTERS)
+
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}))
+          throw new Error(errorData.error || 'Failed to fetch goal filters')
+        }
+        const data = await res.json()
+        set({ goalFilters: data, goalFiltersError: null })
+      } catch (error) {
+        console.error('[fetchGoalFilters] Error:', error)
+        const errorMessage = error instanceof Error ? error.message : 'Failed to fetch goal filters'
+        set({ goalFilters: null, goalFiltersError: errorMessage })
       }
     },
   }

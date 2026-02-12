@@ -107,3 +107,42 @@ export type CreateGoalDTO = {
   goalAchievements: CreateGoalAchievementDTO[]
   goalActions: CreateGoalActionDTO[]
 }
+
+// Manager Ambitions - ambitions created by manager that may interest the user
+export type ManagerAmbition = {
+  id: string
+  title: string
+}
+
+export type ManagerAmbitionsData = {
+  title: string
+  ambitions: ManagerAmbition[]
+}
+
+// Filter options for the ambitions list
+export type AvatarFilterOption = {
+  uid: string
+  name: string
+  url: string
+  role?: string
+}
+
+export type FilterOption = {
+  label: string
+  value: string
+}
+
+export type GoalFilter = {
+  label: string
+  options: FilterOption[]
+  single?: boolean
+  'data-testid'?: string
+}
+
+export type GoalFiltersData = {
+  avatarSelector: {
+    options: AvatarFilterOption[]
+    showItems: number
+  }
+  filters: GoalFilter[]
+}

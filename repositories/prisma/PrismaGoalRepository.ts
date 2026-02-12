@@ -5,8 +5,11 @@ import {
   ACHIEVEMENT_PROGRESS_STATUSES,
   CreateGoalDTO,
   GOAL_STATUSES,
+  GOAL_TYPES,
   GoalAmbitionsResponse,
   GoalUI,
+  ManagerAmbitionsData,
+  GoalFiltersData,
 } from '@/domain/goal'
 
 const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
@@ -307,5 +310,47 @@ export class PrismaGoalRepository implements GoalRepository {
       prisma.goal_actions.deleteMany({ where: { goalId: id } }),
       prisma.goals.delete({ where: { id } }),
     ])
+  }
+
+  async getManagerAmbitions(_email?: string): Promise<ManagerAmbitionsData | null> {
+    // TODO: Implement real logic to fetch manager's ambitions
+    // This would query goals created by the user's manager
+    return null
+  }
+
+  async getGoalFilters(): Promise<GoalFiltersData> {
+    // TODO: Implement real logic to fetch filter options from database
+    // For now, return static filter configuration
+    return {
+      avatarSelector: {
+        options: [],
+        showItems: 4,
+      },
+      filters: [
+        {
+          label: 'Status',
+          'data-testid': 'filter-status',
+          options: [
+            { label: 'Awaiting Approval', value: GOAL_STATUSES.AWAITING_APPROVAL },
+            { label: 'Completed', value: GOAL_STATUSES.COMPLETED },
+            { label: 'Draft', value: GOAL_STATUSES.DRAFT },
+          ],
+          single: true,
+        },
+        {
+          label: 'Type',
+          'data-testid': 'filter-category',
+          options: [
+            { label: 'Business', value: GOAL_TYPES.BUSINESS },
+            { label: 'Manager effectiveness', value: GOAL_TYPES.MANAGER_EFFECTIVENESS },
+            {
+              label: 'Personal growth and development',
+              value: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
+            },
+          ],
+          single: true,
+        },
+      ],
+    }
   }
 }
