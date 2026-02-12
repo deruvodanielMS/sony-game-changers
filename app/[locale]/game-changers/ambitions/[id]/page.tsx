@@ -1,20 +1,29 @@
 'use client'
 
-import { use, useEffect } from 'react'
+import { use, useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { MoreHorizontal } from 'lucide-react'
+import { MoreHorizontal, Pencil, Archive, ArchiveRestore } from 'lucide-react'
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { Skeleton } from '@/components/ui/atoms/Skeleton'
 import { Card } from '@/components/ui/atoms/Card'
 import { Breadcrumb } from '@/components/ui/molecules/Breadcrumb'
 import { HigherAmbition } from '@/components/ui/molecules/HigherAmbition'
 import { Button } from '@/components/ui/atoms/Button'
+import { DropdownMenu } from '@/components/ui/atoms/DropdownMenu'
 import { AmbitionDetailHeader } from '@/components/game-changers/ambitions/AmbitionDetailHeader'
 import { AmbitionActions } from '@/components/game-changers/ambitions/AmbitionActions'
 import { AmbitionAchievements } from '@/components/game-changers/ambitions/AmbitionAchievements'
 import { AmbitionLaddering } from '@/components/game-changers/ambitions/AmbitionLaddering'
 import { AmbitionActivityFeed } from '@/components/game-changers/ambitions/AmbitionActivityFeed'
+import { NewAmbitionModal } from '@/components/game-changers/ambitions/NewAmbitionModal'
+import {
+  SendForApprovalModal,
+  ArchiveAmbitionModal,
+  SendBackModal,
+  ApproveAmbitionModal,
+} from '@/components/game-changers/ambitions/AmbitionActionModals'
 import { useGoalsStore } from '@/stores/goals.store'
+import { useUIStore } from '@/stores/ui.store'
 import { ROUTES } from '@/common/routes'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
@@ -24,10 +33,20 @@ import { useDateFormat } from '@/hooks/useDateFormat'
 
 export default function AmbitionDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const t = useTranslations('AmbitionDetail')
+  const tModals = useTranslations('AmbitionModals')
   const { id } = use(params)
   const { fetchGoal, selected, selectGoal } = useGoalsStore()
+  const { enqueueToast } = useUIStore()
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
   const { formatDate, formatDateTime } = useDateFormat()
+  const [isNewAmbitionOpen, setIsNewAmbitionOpen] = useState(false)
+
+  // Modal states
+  const [isSendForApprovalOpen, setIsSendForApprovalOpen] = useState(false)
+  const [isArchiveOpen, setIsArchiveOpen] = useState(false)
+  const [isSendBackOpen, setIsSendBackOpen] = useState(false)
+  const [isApproveOpen, setIsApproveOpen] = useState(false)
+  const [isActionLoading, setIsActionLoading] = useState(false)
 
   useEffect(() => {
     fetchGoal(id)
@@ -36,6 +55,75 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id])
+
+  // Action handlers
+  const handleSendForApproval = async (comment?: string) => {
+    setIsActionLoading(true)
+    try {
+      // TODO: Implement API call to send for approval
+      console.log('Send for approval with comment:', comment)
+      enqueueToast({
+        id: `send-approval-${Date.now()}`,
+        title: tModals('sendForApproval.successMessage'),
+        variant: 'success',
+        duration: 3000,
+      })
+      setIsSendForApprovalOpen(false)
+    } finally {
+      setIsActionLoading(false)
+    }
+  }
+
+  const handleArchive = async () => {
+    setIsActionLoading(true)
+    try {
+      // TODO: Implement API call to archive
+      console.log('Archive ambition')
+      enqueueToast({
+        id: `archive-${Date.now()}`,
+        title: tModals('archive.successMessage'),
+        variant: 'success',
+        duration: 3000,
+      })
+      setIsArchiveOpen(false)
+    } finally {
+      setIsActionLoading(false)
+    }
+  }
+
+  const handleSendBack = async (comment?: string) => {
+    setIsActionLoading(true)
+    try {
+      // TODO: Implement API call to send back
+      console.log('Send back with comment:', comment)
+      enqueueToast({
+        id: `send-back-${Date.now()}`,
+        title: tModals('sendBack.successMessage'),
+        variant: 'success',
+        duration: 3000,
+      })
+      setIsSendBackOpen(false)
+    } finally {
+      setIsActionLoading(false)
+    }
+  }
+
+  const handleApprove = async (comment?: string) => {
+    setIsActionLoading(true)
+    try {
+      // TODO: Implement API call to approve
+      console.log('Approve with comment:', comment)
+      enqueueToast({
+        id: `approve-${Date.now()}`,
+        title: tModals('approve.successMessage'),
+        variant: 'success',
+        duration: 3000,
+      })
+      setIsApproveOpen(false)
+    } finally {
+      setIsActionLoading(false)
+    }
+  }
 
   if (!selected) {
     return (
@@ -201,6 +289,34 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   const showApprovalActions = status === GOAL_STATUSES.AWAITING_APPROVAL
   const showSendForApproval = status === GOAL_STATUSES.DRAFT
   const showAnyActions = showApprovalActions || showSendForApproval
+  const isArchived = status === 'archived'
+
+  // Dropdown menu items
+  const dropdownItems = [
+    {
+      label: t('actions.edit'),
+      icon: <Pencil />,
+      onClick: () => {
+        // TODO: Handle edit action
+      },
+    },
+    isArchived
+      ? {
+          label: t('actions.unarchive'),
+          icon: <ArchiveRestore />,
+          onClick: () => {
+            // TODO: Handle unarchive action
+          },
+        }
+      : {
+          label: t('actions.archive'),
+          icon: <Archive />,
+          variant: 'danger' as const,
+          onClick: () => {
+            setIsArchiveOpen(true)
+          },
+        },
+  ]
 
   const breadcrumbItems = [
     { label: t('breadcrumb.ambitions'), href: ROUTES.GAME_CHANGERS_AMBITIONS },
@@ -208,7 +324,7 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   ]
 
   return (
-    <div className="flex flex-col w-full pt-2">
+    <div className="flex flex-col w-full">
       {/* Top section: Breadcrumb, LadderGoal, Header with 24px spacing */}
       <div className="flex flex-col gap-1_5 w-full">
         <AnimatedSection delay={0}>
@@ -228,10 +344,14 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
                 {/* Awaiting Approval: Send Back + Approve buttons */}
                 {showApprovalActions && (
                   <>
-                    <Button variant="secondary" size="small">
+                    <Button
+                      variant="secondary"
+                      size="small"
+                      onClick={() => setIsSendBackOpen(true)}
+                    >
                       {t('actions.sendBack')}
                     </Button>
-                    <Button variant="primary" size="small">
+                    <Button variant="primary" size="small" onClick={() => setIsApproveOpen(true)}>
                       {t('actions.approve')}
                     </Button>
                   </>
@@ -239,18 +359,27 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
 
                 {/* Draft: Send for Approval button */}
                 {showSendForApproval && (
-                  <Button variant="primary" size="small">
+                  <Button
+                    variant="primary"
+                    size="small"
+                    onClick={() => setIsSendForApprovalOpen(true)}
+                  >
                     {t('actions.sendForApproval')}
                   </Button>
                 )}
 
-                {/* More Options Icon Button */}
-                <button
-                  className="flex items-center justify-center p-0.25 rounded-full hover:bg-neutral-100 transition-colors"
-                  aria-label={t('actions.moreOptions')}
-                >
-                  <MoreHorizontal className="size-1.5 text-neutral-1000" />
-                </button>
+                {/* More Options Dropdown */}
+                <DropdownMenu
+                  trigger={
+                    <button
+                      className="flex items-center justify-center p-0.25 rounded-full hover:bg-neutral-100 transition-colors cursor-pointer"
+                      aria-label={t('actions.moreOptions')}
+                    >
+                      <MoreHorizontal className="size-1.5 text-neutral-1000" />
+                    </button>
+                  }
+                  items={dropdownItems}
+                />
               </div>
             )}
           </div>
@@ -284,17 +413,21 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
       <div className="flex flex-col gap-4 w-full mt-4">
         {/* Actions Section */}
         <AnimatedSection delay={0.15}>
-          <AmbitionActions actions={goalActions || []} />
+          <AmbitionActions actions={goalActions || []} defaultOpen={true} />
         </AnimatedSection>
 
         {/* Achievements Section */}
         <AnimatedSection delay={0.2}>
-          <AmbitionAchievements achievements={goalAchievements || []} />
+          <AmbitionAchievements achievements={goalAchievements || []} defaultOpen={true} />
         </AnimatedSection>
 
         {/* Laddered Ambitions Section */}
         <AnimatedSection delay={0.25}>
-          <AmbitionLaddering ambitions={ladderedGoals} avatarOptions={mockAvatarOptions} />
+          <AmbitionLaddering
+            ambitions={ladderedGoals}
+            avatarOptions={mockAvatarOptions}
+            onAddAmbition={() => setIsNewAmbitionOpen(true)}
+          />
         </AnimatedSection>
 
         {/* Activity Feed Section */}
@@ -302,6 +435,34 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
           <AmbitionActivityFeed activities={mockActivityFeed} />
         </AnimatedSection>
       </div>
+
+      <NewAmbitionModal open={isNewAmbitionOpen} onClose={() => setIsNewAmbitionOpen(false)} />
+
+      {/* Action Modals */}
+      <SendForApprovalModal
+        open={isSendForApprovalOpen}
+        onClose={() => setIsSendForApprovalOpen(false)}
+        onConfirm={handleSendForApproval}
+        isLoading={isActionLoading}
+      />
+      <ArchiveAmbitionModal
+        open={isArchiveOpen}
+        onClose={() => setIsArchiveOpen(false)}
+        onConfirm={handleArchive}
+        isLoading={isActionLoading}
+      />
+      <SendBackModal
+        open={isSendBackOpen}
+        onClose={() => setIsSendBackOpen(false)}
+        onConfirm={handleSendBack}
+        isLoading={isActionLoading}
+      />
+      <ApproveAmbitionModal
+        open={isApproveOpen}
+        onClose={() => setIsApproveOpen(false)}
+        onConfirm={handleApprove}
+        isLoading={isActionLoading}
+      />
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { GoalRepository } from '@/repositories/GoalRepository'
 import { UserService } from '@/services/userService'
-import { CreateGoalDTO } from '@/domain/goal'
+import { CreateGoalDTO, ManagerAmbitionsData, GoalFiltersData } from '@/domain/goal'
 
 export class GoalService {
   constructor(
@@ -62,5 +62,13 @@ export class GoalService {
 
   async deleteGoal(id: string) {
     return this.goalRepo.deleteGoal(id)
+  }
+
+  async getManagerAmbitions(email?: string): Promise<ManagerAmbitionsData | null> {
+    return this.goalRepo.getManagerAmbitions(email)
+  }
+
+  async getGoalFilters(): Promise<GoalFiltersData> {
+    return this.goalRepo.getGoalFilters()
   }
 }

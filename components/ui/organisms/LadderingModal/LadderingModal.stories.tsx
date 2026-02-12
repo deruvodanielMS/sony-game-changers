@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { LadderingModal } from './LadderingModal'
 import type { Goal } from '@/domain/goal'
+import type { ParentAmbition } from './LadderingModal.types'
 
 const meta: Meta<typeof LadderingModal> = {
   title: 'Organisms/LadderingModal',
@@ -69,10 +70,26 @@ const mockAwaitingApprovalGoal: Goal = {
   updatedAt: '2024-01-01T00:00:00Z',
 }
 
+const mockParentAmbitions: ParentAmbition[] = [
+  {
+    id: 'division',
+    title: 'AAA Division Ambition',
+    userName: 'James Miller',
+    avatarUrl: '',
+  },
+  {
+    id: 'team',
+    title: 'AAA Team Ambition',
+    userName: 'Jürgen Schneider',
+    avatarUrl: '',
+  },
+]
+
 export const Default: Story = {
   args: {
     open: true,
     selectedGoal: mockGoal,
+    parentAmbitions: mockParentAmbitions,
     onClose: () => {},
   },
 }
@@ -80,6 +97,8 @@ export const Default: Story = {
 export const WithCompletedGoal: Story = {
   args: {
     open: true,
+    selectedGoal: mockCompletedGoal,
+    parentAmbitions: mockParentAmbitions,
     onClose: () => {},
   },
 }
@@ -88,6 +107,15 @@ export const WithAwaitingApprovalGoal: Story = {
   args: {
     open: true,
     selectedGoal: mockAwaitingApprovalGoal,
+    parentAmbitions: mockParentAmbitions,
+    onClose: () => {},
+  },
+}
+
+export const WithoutParentAmbitions: Story = {
+  args: {
+    open: true,
+    selectedGoal: mockGoal,
     onClose: () => {},
   },
 }
@@ -96,6 +124,7 @@ export const Closed: Story = {
   args: {
     open: false,
     selectedGoal: mockGoal,
+    parentAmbitions: mockParentAmbitions,
     onClose: () => {},
   },
 }
@@ -108,6 +137,7 @@ export const WithLongTitle: Story = {
       title:
         'This is an extremely long goal title that should demonstrate how the component handles text overflow and wrapping in various screen sizes and container widths to ensure proper display and readability.',
     },
+    parentAmbitions: mockParentAmbitions,
     onClose: () => {},
   },
 }
@@ -116,6 +146,7 @@ export const MobileBottomSheet: Story = {
   args: {
     open: true,
     selectedGoal: mockGoal,
+    parentAmbitions: mockParentAmbitions,
     onClose: () => {},
   },
   parameters: {
@@ -132,6 +163,7 @@ export const WithShortTitle: Story = {
       ...mockGoal,
       title: 'Quick win goal',
     },
+    parentAmbitions: mockParentAmbitions,
     onClose: () => {},
   },
 }

@@ -8,10 +8,11 @@ import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { MODAL_ANIMATION_DURATION } from '@/common/constants'
 
 const SIZE_CLASS_MAP: Record<ModalSize, string> = {
-  sm: 'max-w-modal-sm',
-  md: 'max-w-modal-md',
-  lg: 'max-w-modal-lg',
-  full: 'w-[calc(100vw-2rem)] h-[calc(100vh-2rem)] max-w-none',
+  sm: 'w-modal-sm',
+  md: 'w-modal-md',
+  lg: 'w-modal-lg',
+  xl: 'w-modal-xl',
+  full: 'w-[calc(100vw-2rem)] h-[calc(100vh-2rem)]',
 }
 
 export function Modal({
@@ -88,8 +89,15 @@ export function Modal({
   if (!isVisible) return null
 
   const containerClasses = cn(
-    'w-full bg-neutral-0 rounded-default relative box-border',
-    'shadow-[0px_25px_66px_-20px_rgba(0,16,53,0.24)] shadow-[inset_0px_0px_1px_0px_rgba(0,16,53,0.16)]',
+    // Base styles
+    'flex flex-col',
+    size === 'full' ? 'items-stretch' : 'items-start',
+    'p-1_5',
+    'gap-1_5',
+    'rounded-large',
+    'bg-neutral-0',
+    'shadow-[inset_0_0_1px_0_rgba(0,16,53,0.16),0_25px_66px_-20px_rgba(0,16,53,0.24)]',
+    // Size
     SIZE_CLASS_MAP[size],
     className,
   )
@@ -100,7 +108,7 @@ export function Modal({
       ref={overlayRef}
       className={cn(
         'fixed inset-0 flex items-center justify-center transition-opacity duration-300 ease-out',
-        'z-[700]',
+        'z-[var(--z-modal)]',
         animateIn ? 'opacity-100' : 'opacity-0',
       )}
       onMouseDown={(e) => {
@@ -118,8 +126,8 @@ export function Modal({
         ref={containerRef}
         tabIndex={-1}
         className={cn(
-          'relative overflow-hidden flex flex-col pointer-events-auto',
-          'z-[701]',
+          'relative overflow-hidden pointer-events-auto',
+          'z-[var(--z-modal-content)]',
           'transition-all duration-300 ease-out transform',
           animateIn ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
           containerClasses,

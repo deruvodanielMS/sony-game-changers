@@ -2,6 +2,7 @@
 
 import { Bell, ArrowLeft, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
+import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/utils/cn'
 import { SidebarNav } from '@/components/ui/molecules/SidebarNav'
@@ -46,7 +47,7 @@ export function Sidebar({
       <div className="flex flex-col items-center gap-3 pt-1_5 pb-0">
         {/* Logo */}
         {!hideLogo && (
-          <div className="flex items-center justify-center">
+          <Link href={ROUTES.GAME_CHANGERS_AMBITIONS} className="flex items-center justify-center">
             <Image
               src="/playstation-logo.svg"
               alt="PlayStation"
@@ -55,7 +56,7 @@ export function Sidebar({
               className="text-neutral-1000 flex-shrink-0"
               priority
             />
-          </div>
+          </Link>
         )}
 
         {/* Toggle Button */}
@@ -69,7 +70,7 @@ export function Sidebar({
                 'flex items-center',
                 'h-3',
                 'transition-colors duration-fast',
-                'rounded-default',
+                'rounded-x-large',
                 'text-neutral-1000',
                 'transition-hover',
                 'hover:bg-neutral-200',
@@ -99,13 +100,6 @@ export function Sidebar({
         className={cn('flex-1 overflow-y-visible overflow-x-hidden', !noPadding && 'px-1_5 py-1_5')}
       >
         <SidebarNav isCollapsed={isCollapsed}>
-          {/* <SidebarNavItem
-            icon={<DashboardIcon className="w-5 h-5" />}
-            label={t('home')}
-            isCollapsed={isCollapsed}
-            href={ROUTES.ROOT}
-            onClick={onNavigate}
-          /> */}
           <SidebarNavItem
             icon={<GameChangersIcon className="w-5 h-5" />}
             label={t('gameChangers')}

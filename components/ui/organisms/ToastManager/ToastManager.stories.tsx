@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { CheckCircle, XCircle, Info } from 'lucide-react'
 import { ToastManager } from './ToastManager'
 import { Button } from '@/components/ui/atoms/Button'
 import { useUIStore } from '@/stores/ui.store'
@@ -31,12 +30,9 @@ export const Default: Story = {
             onClick={() =>
               enqueueToast({
                 id: 'success-toast',
-                content: (
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="text-feedback-success-600" size={20} />
-                    <span>Success! Changes saved.</span>
-                  </div>
-                ),
+                title: 'Success!',
+                description: 'Changes saved successfully.',
+                variant: 'success',
                 duration: 3000,
               })
             }
@@ -49,12 +45,9 @@ export const Default: Story = {
             onClick={() =>
               enqueueToast({
                 id: 'error-toast',
-                content: (
-                  <div className="flex items-center gap-2">
-                    <XCircle className="text-feedback-danger-600" size={20} />
-                    <span>Error! Something went wrong.</span>
-                  </div>
-                ),
+                title: 'Error!',
+                description: 'Something went wrong.',
+                variant: 'error',
                 duration: 4000,
               })
             }
@@ -67,12 +60,9 @@ export const Default: Story = {
             onClick={() =>
               enqueueToast({
                 id: 'info-toast',
-                content: (
-                  <div className="flex items-center gap-2">
-                    <Info className="text-feedback-info-600" size={20} />
-                    <span>Info: Update available</span>
-                  </div>
-                ),
+                title: 'Info',
+                description: 'Update available.',
+                variant: 'info',
                 duration: 5000,
               })
             }
@@ -85,7 +75,8 @@ export const Default: Story = {
             onClick={() =>
               enqueueToast({
                 id: 'simple-toast',
-                content: 'Simple text toast',
+                title: 'Simple toast',
+                variant: 'success',
                 duration: 2000,
               })
             }
@@ -107,17 +98,23 @@ export const QueueDemo: Story = {
     const showMultipleToasts = () => {
       enqueueToast({
         id: 'queue-toast-1',
-        content: 'Toast 1: First in queue',
+        title: 'Toast 1',
+        description: 'First in queue',
+        variant: 'info',
         duration: 2000,
       })
       enqueueToast({
         id: 'queue-toast-2',
-        content: 'Toast 2: Second in queue',
+        title: 'Toast 2',
+        description: 'Second in queue',
+        variant: 'error',
         duration: 2000,
       })
       enqueueToast({
         id: 'queue-toast-3',
-        content: 'Toast 3: Third in queue',
+        title: 'Toast 3',
+        description: 'Third in queue',
+        variant: 'success',
         duration: 2000,
       })
     }

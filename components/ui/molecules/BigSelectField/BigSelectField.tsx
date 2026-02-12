@@ -3,10 +3,23 @@
 import * as React from 'react'
 import * as Select from '@radix-ui/react-select'
 import { ChevronDown, Check, UserCircle, XCircle } from 'lucide-react'
+import { m, AnimatePresence } from 'framer-motion'
 import { cn } from '@/utils/cn'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { Avatar } from '@/components/ui/atoms/Avatar'
 import type { BigSelectFieldProps } from './BigSelectField.types'
+
+// Animation variants
+const contentVariants = {
+  initial: { opacity: 0, scale: 0.95 },
+  animate: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.95 },
+}
+
+const backgroundVariants = {
+  unselected: { opacity: 0 },
+  selected: { opacity: 1 },
+}
 
 export const BigSelectField = React.forwardRef<HTMLButtonElement, BigSelectFieldProps>(
   (
@@ -24,6 +37,7 @@ export const BigSelectField = React.forwardRef<HTMLButtonElement, BigSelectField
       triggerClassName,
       placeholderIcon,
       hidePlaceholderIcon = false,
+      hideDescriptionInDropdown = false,
       'data-test-id': dataTestId,
       ...rootProps
     },
@@ -52,10 +66,11 @@ export const BigSelectField = React.forwardRef<HTMLButtonElement, BigSelectField
             ref={ref}
             className={cn(
               'group inline-flex w-full items-center justify-between gap-1_5',
-              'rounded-large border p-1_5',
-              'text-neutral-1000 outline-none transition-colors',
+              'rounded-large border p-1_5 min-h-[96px]',
+              'text-neutral-1000 outline-none',
               'focus-visible:ring-2 focus-visible:ring-accent-primary/20',
               'cursor-pointer disabled:cursor-not-allowed disabled:opacity-50',
+              'relative overflow-hidden',
               hasError
                 ? 'border-feedback-error-500 bg-neutral-0'
                 : selectedOption
@@ -63,52 +78,77 @@ export const BigSelectField = React.forwardRef<HTMLButtonElement, BigSelectField
                   : 'border-neutral-200 bg-neutral-100',
               triggerClassName,
             )}
-            style={
-              selectedOption && !hasError && !disabled
-                ? { background: 'var(--gradient-100)' }
-                : undefined
-            }
             aria-invalid={hasError}
             aria-describedby={hasError ? `${dataTestId}-error` : undefined}
           >
-            {selectedOption ? (
-              <div className="flex items-center gap-1_5">
-                {selectedOption.avatar ? (
-                  <Avatar src={selectedOption.avatar} alt={selectedOption.label} size="lg" />
-                ) : selectedOption.icon ? (
-                  <div className="flex items-center justify-center w-2_5 h-2_5 rounded-full shrink-0">
-                    {selectedOption.icon}
-                  </div>
-                ) : null}
-                <div className="flex flex-col items-start">
-                  <Typography variant="body" fontWeight="semibold">
-                    {selectedOption.label}
-                  </Typography>
-                  {selectedOption.description && (
-                    <Typography variant="bodySmall" className="text-neutral-600">
-                      {selectedOption.description}
+            {/* Animated gradient background */}
+            <m.div
+              className="absolute inset-0 rounded-large"
+              style={{ background: 'var(--gradient-100)' }}
+              initial="unselected"
+              animate={selectedOption && !hasError && !disabled ? 'selected' : 'unselected'}
+              variants={backgroundVariants}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+            />
+
+            {/* Content */}
+            <AnimatePresence mode="wait">
+              {selectedOption ? (
+                <m.div
+                  key="selected"
+                  className="flex items-center gap-1_5 relative z-10"
+                  variants={contentVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                >
+                  {selectedOption.avatar ? (
+                    <Avatar src={selectedOption.avatar} alt={selectedOption.label} size="lg" />
+                  ) : selectedOption.icon ? (
+                    <div className="flex items-center justify-center w-2_5 h-2_5 rounded-full shrink-0">
+                      {selectedOption.icon}
+                    </div>
+                  ) : null}
+                  <div className="flex flex-col items-start">
+                    <Typography variant="body" fontWeight="semibold">
+                      {selectedOption.label}
                     </Typography>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center gap-1_5">
-                {!hidePlaceholderIcon &&
-                  (placeholderIcon ? (
-                    <div className="flex items-center justify-center w-2_5 h-2_5 rounded-full bg-neutral-0 shrink-0">
-                      {placeholderIcon}
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center w-2_5 h-2_5 rounded-full bg-neutral-0 shrink-0">
-                      <UserCircle width={40} height={40} className="text-neutral-500" />
-                    </div>
-                  ))}
-                <Typography variant="body" className="text-neutral-500">
-                  {placeholder}
-                </Typography>
-              </div>
-            )}
-            <Select.Icon className="text-neutral-700 shrink-0 transition-transform group-data-[state=open]:rotate-180">
+                    {selectedOption.description && (
+                      <Typography variant="bodySmall" className="text-neutral-600">
+                        {selectedOption.description}
+                      </Typography>
+                    )}
+                  </div>
+                </m.div>
+              ) : (
+                <m.div
+                  key="placeholder"
+                  className="flex items-center gap-1_5 relative z-10"
+                  variants={contentVariants}
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  transition={{ duration: 0.2, ease: 'easeOut' }}
+                >
+                  {!hidePlaceholderIcon &&
+                    (placeholderIcon ? (
+                      <div className="flex items-center justify-center w-2_5 h-2_5 rounded-full bg-neutral-0 shrink-0">
+                        {placeholderIcon}
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center w-2_5 h-2_5 rounded-full bg-neutral-0 shrink-0">
+                        <UserCircle width={40} height={40} className="text-neutral-500" />
+                      </div>
+                    ))}
+                  <Typography variant="body" className="text-neutral-500">
+                    {placeholder}
+                  </Typography>
+                </m.div>
+              )}
+            </AnimatePresence>
+
+            <Select.Icon className="text-neutral-700 shrink-0 transition-transform group-data-[state=open]:rotate-180 relative z-10">
               <ChevronDown width={20} />
             </Select.Icon>
           </Select.Trigger>
@@ -151,7 +191,7 @@ export const BigSelectField = React.forwardRef<HTMLButtonElement, BigSelectField
                           <Typography variant="body" fontWeight="semibold">
                             {option.label}
                           </Typography>
-                          {option.description && (
+                          {!hideDescriptionInDropdown && option.description && (
                             <Typography variant="bodySmall" className="text-neutral-600">
                               {option.description}
                             </Typography>

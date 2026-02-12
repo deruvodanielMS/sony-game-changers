@@ -51,7 +51,7 @@ describe('TypeIcon', () => {
 
     const icon = screen.getByTestId('type-icon')
     expect(icon).toHaveClass('size-3')
-    expect(icon).toHaveClass('bg-neutral-100')
+    expect(icon).toHaveClass('bg-neutral-200')
   })
 
   it('applies badge variant explicitly', () => {
@@ -59,7 +59,7 @@ describe('TypeIcon', () => {
 
     const icon = screen.getByTestId('type-icon')
     expect(icon).toHaveClass('size-3')
-    expect(icon).toHaveClass('bg-neutral-100')
+    expect(icon).toHaveClass('bg-neutral-200')
   })
 
   it('renders correct icon for business type', () => {
@@ -73,7 +73,7 @@ describe('TypeIcon', () => {
     render(<TypeIcon type="business" data-test-id="type-icon" />)
 
     const iconElement = screen.getByTestId('type-icon')
-    expect(iconElement).toHaveClass('bg-neutral-100')
+    expect(iconElement).toHaveClass('bg-neutral-200')
     // Should not have inline background-image style (gradients removed)
     expect(iconElement).not.toHaveAttribute('style', expect.stringContaining('background'))
   })

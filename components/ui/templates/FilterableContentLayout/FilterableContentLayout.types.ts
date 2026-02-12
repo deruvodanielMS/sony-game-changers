@@ -70,4 +70,8 @@ export interface FilterableContentLayoutProps {
    * Custom class name for content wrapper
    */
   contentClassName?: string
+  /**
+   * Optional tabs to render sticky below filters
+   */
+  tabs?: ReactNode
 }

@@ -55,7 +55,7 @@
       "awaiting_approval": "En attente d'approbation"
     },
     "filters": {
-      "clearFieldsButton": "Effacer les champs"
+      "clearFieldsButton": "Effacer les filtres"
     },
     "filterDrawer": {
       "title": "Filtrer et trier",
@@ -65,6 +65,16 @@
       "teamMembersLabel": "Membres de l'équipe",
       "clearAll": "Tout effacer",
       "showResults": "Afficher les résultats"
+    },
+    "emptyState": {
+      "active": {
+        "title": "Pas encore d'ambitions.",
+        "description": "Créez une ambition pour commencer à suivre vos progrès."
+      },
+      "archived": {
+        "title": "Aucune ambition archivée.",
+        "description": "Toutes les ambitions que vous archivez apparaîtront ici."
+      }
     }
   },
   "GoalCard": {
@@ -72,12 +82,14 @@
     "addLadderedGoalLabel": "Ajouter une ambition hiérarchisée",
     "viewLadderedGoalsLabel": "Voir les ambitions hiérarchisées",
     "hideLadderedGoalsLabel": "Masquer les ambitions hiérarchisées",
+    "viewLabel": "Voir",
+    "hideLabel": "Masquer",
     "openLadderingModalLabel": "Ouvrir le modal de hiérarchisation"
   },
   "TypeIcon": {
     "business": "Objectif d'entreprise",
     "manager_effectiveness": "Efficacité du gestionnaire",
-    "personal_growth_and_development": "Croissance et développement personnel"
+    "personal_growth_and_development": "Croissance et développement"
   },
   "LadderingModal": {
     "title": "Hiérarchisation des ambitions",
@@ -159,7 +171,8 @@
   },
   "Common": {
     "confirm": "Confirmer",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "close": "Fermer"
   },
   "NotFound": {
     "title": "Page non trouvée",
@@ -181,9 +194,16 @@
       "sendBack": "Renvoyer",
       "approve": "Approuver",
       "moreOptions": "Plus d'options",
+      "edit": "Modifier",
+      "archive": "Archiver",
+      "unarchive": "Désarchiver",
       "title": "Actions",
       "collapse": "Réduire les actions",
-      "expand": "Développer les actions"
+      "expand": "Développer les actions",
+      "emptyState": {
+        "title": "Aucune action définie.",
+        "description": "Définissez les étapes spécifiques que vous prendrez pour atteindre cette Ambition. Modifiez les détails pour les ajouter."
+      }
     },
     "metadata": {
       "type": "Type",
@@ -204,6 +224,10 @@
         "notStarted": "Non commencé",
         "onTrack": "Sur la bonne voie",
         "offTrack": "Hors piste"
+      },
+      "emptyState": {
+        "title": "Aucune réalisation pour le moment.",
+        "description": "Listez les résultats attendus ou les jalons pour cette Ambition. Modifiez les détails pour les ajouter."
       }
     },
     "ladderedAmbitions": {
@@ -215,7 +239,11 @@
       "nextPage": "Page suivante",
       "viewSwitcherLabel": "Affichage des ambitions",
       "viewGrid": "Affichage en grille",
-      "viewList": "Affichage en liste"
+      "viewList": "Affichage en liste",
+      "emptyState": {
+        "title": "Pas encore d'ambitions échelonnées",
+        "description": "Connectez les ambitions des membres de votre équipe pour suivre leur alignement avec cette ambition."
+      }
     },
     "activity": {
       "title": "Activité",
@@ -232,5 +260,8 @@
     "submitHint": "Appuyez sur Ctrl+Entrée pour soumettre",
     "cancel": "Annuler",
     "save": "Enregistrer"
+  },
+  "Toast": {
+    "closeNotification": "Fermer la notification"
   }
 }

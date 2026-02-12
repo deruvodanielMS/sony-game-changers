@@ -64,6 +64,7 @@
   /* Extra - Purple */
   --color-extra-purple-100: var(--extra-purple-100);
   --color-extra-purple-500: var(--extra-purple-500);
+  --color-extra-purple-600: var(--extra-purple-600);
   --color-extra-purple-950: var(--extra-purple-950);
 
   /* Semantic */
@@ -151,10 +152,19 @@
   --container-modal-sm: var(--modal-width-sm);
   --container-modal-md: var(--modal-width-md);
   --container-modal-lg: var(--modal-width-lg);
+  --container-modal-xl: var(--modal-width-xl);
 
   --spacing-modal-sm: var(--modal-width-sm);
   --spacing-modal-md: var(--modal-width-md);
   --spacing-modal-lg: var(--modal-width-lg);
+  --spacing-modal-xl: var(--modal-width-xl);
+
+  /* Toast */
+  --spacing-toast-width: var(--toast-width);
+
+  /* Progress Bar */
+  --height-progress-bar-lg: var(--progress-bar-height-lg);
+  --height-progress-bar-sm: var(--progress-bar-height-sm);
 
   /* Navigation */
   --nav-item-max-width: var(--sidebar-nav-item-max-width);
@@ -201,9 +211,20 @@
   /* Z-index
    * ⚠️ IMPORTANT: Keep synchronized with Z_INDEX constants in common/constants.ts
    * These values are used in Tailwind classes via z-[var(--z-*)]
+   * 
+   * Layering order (lowest to highest):
+   * 1. Tabs (400) - Tab navigation that sticks on scroll
+   * 2. Sticky filters (450) - Filter bars that stick on scroll
+   * 3. Dropdowns/Popovers (600) - Floating UI elements
+   * 4. Modal (700) - Modal dialogs
+   * 5. Modal content (701) - Content inside modals
+   * 6. Overlay/Drawer/Header (800) - Full-screen overlays
    */
+  --z-tabs: 400;
   --z-sticky-filters: 450;
-  --z-tabs: 500;
+  --z-dropdown: 600;
+  --z-modal: 700; /* Matches Z_INDEX.MODAL */
+  --z-modal-content: 701;
   --z-drawer-overlay: 800; /* Matches Z_INDEX.OVERLAY */
   --z-mobile-header: 800; /* Matches Z_INDEX.OVERLAY */
 

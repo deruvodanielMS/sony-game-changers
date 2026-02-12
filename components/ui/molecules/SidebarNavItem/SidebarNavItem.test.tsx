@@ -54,7 +54,7 @@ describe('SidebarNavItem', () => {
     it('applies active styles when isActive is true', () => {
       render(<SidebarNavItem {...defaultProps} isActive />)
       const button = screen.getByRole('button')
-      expect(button).toHaveClass('bg-neutral-800')
+      expect(button).toHaveClass('bg-neutral-1000')
       expect(button).toHaveClass('text-neutral-0')
     })
 

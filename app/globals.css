@@ -40,6 +40,57 @@ body {
   color: var(--foreground);
 }
 
+/* ============================================
+   Base Typography Styles
+   Syncs native HTML tags with Typography component
+   Uses design tokens from tokens.css
+   Wrapped in @layer base so Tailwind classes can override
+   ============================================ */
+
+@layer base {
+  h1 {
+    font-size: var(--font-size-h1);
+    line-height: var(--line-height-h1);
+    font-weight: 600;
+  }
+
+  h2 {
+    font-size: var(--font-size-h2);
+    line-height: var(--line-height-h2);
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: var(--font-size-h3);
+    line-height: var(--line-height-h3);
+    font-weight: 600;
+  }
+
+  h4 {
+    font-size: var(--font-size-h4);
+    line-height: var(--line-height-h4);
+    font-weight: 600;
+  }
+
+  h5 {
+    font-size: var(--font-size-h5);
+    line-height: var(--line-height-h5);
+    font-weight: 600;
+  }
+
+  h6 {
+    font-size: var(--font-size-h6);
+    line-height: var(--line-height-h6);
+    font-weight: 600;
+  }
+
+  p {
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-body);
+    font-weight: 400;
+  }
+}
+
 /* Hide scrollbar but maintain scroll functionality */
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE and Edge */

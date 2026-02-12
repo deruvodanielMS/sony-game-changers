@@ -10,19 +10,6 @@ vi.mock('@/hooks/useScrollDirection', () => ({
   useScrollDirection: () => ({ scrollDirection: 'up', scrollY: 0 }),
 }))
 
-// Mock UI store
-const mockOpenDrawer = vi.fn()
-const mockCloseDrawer = vi.fn()
-
-vi.mock('@/stores/ui.store', () => ({
-  useUIStore: () => ({
-    openDrawer: mockOpenDrawer,
-    closeDrawer: mockCloseDrawer,
-    drawer: { open: false, content: null },
-    drawerKey: 0,
-  }),
-}))
-
 const messages = {
   Goals: {
     filters: {
@@ -120,16 +107,12 @@ describe('FilterableContentLayout', () => {
     const filterButton = screen.getByRole('button', { name: /filters/i })
     await user.click(filterButton)
 
-    // Verify drawer was opened with correct config
-    expect(mockOpenDrawer).toHaveBeenCalledTimes(1)
-    expect(mockOpenDrawer).toHaveBeenCalledWith(
-      expect.anything(), // content
-      expect.objectContaining({
-        title: 'Filter Options',
-        position: 'bottom',
-        size: 'lg',
-      }),
-    )
+    // Verify drawer content is visible (drawer renders directly in the component)
+    await waitFor(() => {
+      expect(screen.getByText('Filter Options')).toBeInTheDocument()
+      expect(screen.getByText('Show Results')).toBeInTheDocument()
+      expect(screen.getByText('Clear All')).toBeInTheDocument()
+    })
   })
 
   it('displays active filter count badge when filters are active', () => {
@@ -142,19 +125,43 @@ describe('FilterableContentLayout', () => {
     const user = userEvent.setup()
     const onClearFilters = vi.fn()
 
+    // Need to have active filters to enable the clear button
+    const filtersWithSelection = [
+      {
+        label: 'Status',
+        options: [
+          { label: 'Active', value: 'active' },
+          { label: 'Completed', value: 'completed' },
+        ],
+        selected: ['active'], // Pre-select a filter
+        onSelect: vi.fn(),
+      },
+    ]
+
     renderWithIntl(
       <FilterableContentLayout
         {...defaultProps}
+        filters={filtersWithSelection}
         onClearFilters={onClearFilters}
-        activeFiltersCount={2}
+        activeFiltersCount={1}
       />,
     )
 
+    // Open the drawer
     const filterButton = screen.getByRole('button', { name: /filters/i })
     await user.click(filterButton)
 
-    // Verify drawer was opened with clear filters callback
-    expect(mockOpenDrawer).toHaveBeenCalled()
+    // Wait for drawer to open and find the clear button
+    await waitFor(() => {
+      expect(screen.getByText('Clear All')).toBeInTheDocument()
+    })
+
+    // Click clear button
+    const clearButton = screen.getByRole('button', { name: /clear all/i })
+    await user.click(clearButton)
+
+    // Verify onClearFilters was called
+    expect(onClearFilters).toHaveBeenCalled()
   })
 
   it('renders search field when provided', () => {
@@ -185,22 +192,39 @@ describe('FilterableContentLayout', () => {
 
   it('closes drawer when show results button is clicked', async () => {
     const user = userEvent.setup()
+    const mockOnSelect = vi.fn()
 
-    renderWithIntl(<FilterableContentLayout {...defaultProps} />)
+    const filtersWithCallback = [
+      {
+        label: 'Status',
+        options: [
+          { label: 'Active', value: 'active' },
+          { label: 'Completed', value: 'completed' },
+        ],
+        selected: [],
+        onSelect: mockOnSelect,
+      },
+    ]
 
+    renderWithIntl(<FilterableContentLayout {...defaultProps} filters={filtersWithCallback} />)
+
+    // Open the drawer
     const filterButton = screen.getByRole('button', { name: /filters/i })
     await user.click(filterButton)
 
-    // Verify drawer was opened
-    expect(mockOpenDrawer).toHaveBeenCalledTimes(1)
-    expect(mockOpenDrawer).toHaveBeenCalledWith(
-      expect.anything(), // content
-      expect.objectContaining({
-        title: 'Filter Options',
-        position: 'bottom',
-        size: 'lg',
-      }),
-    )
+    // Wait for drawer to open
+    await waitFor(() => {
+      expect(screen.getByText('Filter Options')).toBeInTheDocument()
+    })
+
+    // Click show results button
+    const showResultsButton = screen.getByRole('button', { name: /show results/i })
+    await user.click(showResultsButton)
+
+    // Verify drawer is closed (title should not be visible)
+    await waitFor(() => {
+      expect(screen.queryByText('Filter Options')).not.toBeInTheDocument()
+    })
   })
 
   it('disables clear button when no filters are active', async () => {

@@ -10,6 +10,14 @@ vi.mock('next-intl', () => ({
   },
 }))
 
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ children, href, ...props }: { children: React.ReactNode; href: string }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
+}))
+
 describe('MobileHeader', () => {
   describe('Rendering', () => {
     it('renders logo and hamburger button', () => {
@@ -71,6 +79,8 @@ describe('MobileHeader', () => {
       render(<MobileHeader onMenuClick={onMenuClick} menuOpen={false} />)
 
       const button = screen.getByRole('button')
+      // Tab twice: first tab focuses logo link, second tab focuses the menu button
+      await user.tab()
       await user.tab()
 
       expect(button).toHaveFocus()

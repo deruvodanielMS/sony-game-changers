@@ -15,7 +15,6 @@ const buttonVariants = cva(
     'whitespace-nowrap',
     'rounded-full',
     'gap-1',
-    'active:scale-95',
   ],
   {
     variants: {
@@ -166,13 +165,25 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               ) : (
                 <>
                   {leftIcon && (
-                    <span className="inline-flex shrink-0" aria-hidden="true">
+                    <span
+                      className={cn(
+                        'inline-flex shrink-0 [&_svg]:size-1_5',
+                        size === 'small' && '[&_svg]:size-1',
+                      )}
+                      aria-hidden="true"
+                    >
                       {leftIcon}
                     </span>
                   )}
                   <span className="truncate">{children}</span>
                   {rightIcon && (
-                    <span className="inline-flex shrink-0" aria-hidden="true">
+                    <span
+                      className={cn(
+                        'inline-flex shrink-0 [&_svg]:size-1_5',
+                        size === 'small' && '[&_svg]:size-1',
+                      )}
+                      aria-hidden="true"
+                    >
                       {rightIcon}
                     </span>
                   )}

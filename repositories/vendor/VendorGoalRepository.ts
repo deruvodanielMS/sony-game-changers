@@ -1,4 +1,12 @@
-import { Goal, GoalAmbitionsResponse, CreateGoalDTO } from '@/domain/goal'
+import {
+  Goal,
+  GoalAmbitionsResponse,
+  CreateGoalDTO,
+  ManagerAmbitionsData,
+  GoalFiltersData,
+  GOAL_STATUSES,
+  GOAL_TYPES,
+} from '@/domain/goal'
 import { GoalRepository } from '../GoalRepository'
 
 export class VendorGoalRepository implements GoalRepository {
@@ -79,6 +87,46 @@ export class VendorGoalRepository implements GoalRepository {
 
     if (!res.ok) {
       throw new Error('Failed to delete goal')
+    }
+  }
+
+  async getManagerAmbitions(_email?: string): Promise<ManagerAmbitionsData | null> {
+    // TODO: Implement vendor API call for manager ambitions
+    return null
+  }
+
+  async getGoalFilters(): Promise<GoalFiltersData> {
+    // TODO: Implement vendor API call for filter options
+    return {
+      avatarSelector: {
+        options: [],
+        showItems: 4,
+      },
+      filters: [
+        {
+          label: 'Status',
+          'data-testid': 'filter-status',
+          options: [
+            { label: 'Awaiting Approval', value: GOAL_STATUSES.AWAITING_APPROVAL },
+            { label: 'Completed', value: GOAL_STATUSES.COMPLETED },
+            { label: 'Draft', value: GOAL_STATUSES.DRAFT },
+          ],
+          single: true,
+        },
+        {
+          label: 'Type',
+          'data-testid': 'filter-category',
+          options: [
+            { label: 'Business', value: GOAL_TYPES.BUSINESS },
+            { label: 'Manager effectiveness', value: GOAL_TYPES.MANAGER_EFFECTIVENESS },
+            {
+              label: 'Personal growth and development',
+              value: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
+            },
+          ],
+          single: true,
+        },
+      ],
     }
   }
 

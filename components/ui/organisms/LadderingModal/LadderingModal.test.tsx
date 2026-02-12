@@ -56,8 +56,8 @@ vi.mock('@/components/ui/foundations/Typography', () => ({
   Typography: ({ children }: any) => <span>{children}</span>,
 }))
 
-vi.mock('@/components/ui/molecules/GoalStatus', () => ({
-  GoalStatus: ({ status }: any) => <span data-testid="goal-status">{String(status)}</span>,
+vi.mock('@/components/ui/atoms/Badge', () => ({
+  Badge: ({ children }: any) => <span data-testid="badge">{children}</span>,
 }))
 
 vi.mock('@/utils/cn', () => ({
@@ -95,11 +95,31 @@ vi.mock('@/stores/ui.store', () => ({
 // Test data
 // --------------------
 const selectedGoal = {
+  id: '1',
+  uid: 'user-1',
   title: 'Improve onboarding flow',
   userName: 'Ada Lovelace',
   avatarUrl: '',
-  status: 'active',
+  status: 'awaiting_approval',
+  progress: 50,
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-01T00:00:00Z',
 } as any
+
+const parentAmbitions = [
+  {
+    id: 'division',
+    title: 'Division Ambition',
+    userName: 'James Miller',
+    avatarUrl: '',
+  },
+  {
+    id: 'team',
+    title: 'Team Ambition',
+    userName: 'Sarah Johnson',
+    avatarUrl: '',
+  },
+]
 
 describe('<LadderingModal />', () => {
   beforeEach(() => {
@@ -148,7 +168,15 @@ describe('<LadderingModal />', () => {
     // useMediaQuery(BREAKPOINTS.md) === false => isMobile = !false => true
     useMediaQueryMock.mockReturnValue(false)
 
-    render(<LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} data-testid="sut" />)
+    render(
+      <LadderingModal
+        open
+        onClose={vi.fn()}
+        selectedGoal={selectedGoal}
+        parentAmbitions={parentAmbitions}
+        data-testid="sut"
+      />,
+    )
 
     // Drawer should render in-tree for mobile
     const drawer = screen.getByTestId('drawer')
@@ -173,7 +201,7 @@ describe('<LadderingModal />', () => {
     expect(screen.getByTestId('goal-preview-card')).toBeInTheDocument()
     expect(screen.getByText('Improve onboarding flow')).toBeInTheDocument()
     expect(screen.getByText('Ada Lovelace')).toBeInTheDocument()
-    expect(screen.getByTestId('goal-status')).toHaveTextContent('active')
+    expect(screen.getByTestId('ambition-status')).toBeInTheDocument()
   })
 
   it('closes desktop modal when switching from desktop to mobile while open=true', () => {

@@ -9,7 +9,7 @@ import { cn } from '@/utils/cn'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 
 const contentBaseClasses =
-  'absolute z-50 overflow-auto rounded-small ' +
+  'absolute z-[var(--z-dropdown)] overflow-auto rounded-small ' +
   'max-h-[232px] p-0_25 border border-neutral-300 bg-neutral-0 shadow-select mt-0_25 ' +
   'animate-in fade-in-0 zoom-in-95'
 

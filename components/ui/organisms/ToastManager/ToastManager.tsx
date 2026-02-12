@@ -23,5 +23,5 @@ export function ToastManager() {
 
   const { id, ...toastProps } = currentToast
 
-  return <Toast key={id} {...toastProps} />
+  return <Toast key={id} {...toastProps} onClose={dequeueToast} />
 }

@@ -22,16 +22,16 @@ const defaultIcons: Record<IconKey, typeof Sprout> = {
 
 const variantStyles = {
   badge: {
-    container: 'size-3 p-0.625 bg-neutral-100',
-    icon: 'size-1.5 text-neutral-1000',
+    container: 'size-3 p-0.625 bg-neutral-200',
+    icon: 'size-1.5 text-neutral-500',
   },
   metadata: {
     container: 'size-1.5',
     icon: 'size-1.125 text-neutral-500',
   },
   higher: {
-    container: 'size-2 p-0.25 bg-neutral-0 border-2 border-feedback-info-500',
-    icon: 'size-1.125 text-feedback-info-500',
+    container: '',
+    icon: 'size-1 text-neutral-1000',
   },
 }
 

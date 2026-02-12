@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 import { m } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Typography } from '@/components/ui/foundations/Typography'
-import { Badge } from '@/components/ui/atoms/Badge'
+import { AmbitionStatus } from '@/components/ui/atoms/AmbitionStatus'
 import { CommentInput } from '@/components/ui/molecules/CommentInput'
 import { ActivityItem } from '@/components/ui/molecules/ActivityItem'
 import { cn } from '@/utils/cn'
@@ -30,15 +30,9 @@ function StatusBadge({
   variant = 'draft',
 }: {
   status: string
-  variant?: 'draft' | 'awaiting-approval' | 'completed'
+  variant?: 'draft' | 'awaiting-approval' | 'done'
 }) {
-  const badgeVariantMap = {
-    draft: 'info' as const,
-    'awaiting-approval': 'primary' as const,
-    completed: 'success' as const,
-  }
-
-  return <Badge variant={badgeVariantMap[variant]}>{status}</Badge>
+  return <AmbitionStatus variant={variant}>{status}</AmbitionStatus>
 }
 
 function ActivityContent({ activity }: { activity: ActivityItemType }) {
@@ -103,7 +97,7 @@ export function AmbitionActivityFeed({
         <div className="flex flex-col w-full items-end gap-1">
           <CommentInput
             avatarSrc={currentUserAvatar}
-            avatarAlt="Current user"
+            avatarAlt={t('currentUserAlt')}
             avatarSize="md"
             size={isMobile ? 'sm' : 'md'}
             placeholder={t('addCommentPlaceholder')}

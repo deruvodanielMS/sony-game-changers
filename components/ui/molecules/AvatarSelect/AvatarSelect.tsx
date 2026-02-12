@@ -4,7 +4,6 @@ import { useRef, useState } from 'react'
 import Image from 'next/image'
 import { Collapsible } from 'radix-ui'
 import { Plus } from 'lucide-react'
-import { Button } from '@/components/ui/atoms/Button'
 import { AvatarSelectOption, AvatarSelectProps } from './AvatarSelect.types'
 import { cn } from '@/utils/cn'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
@@ -48,16 +47,17 @@ export function AvatarSelect({
   }
 
   return (
-    <div className={cn('flex gap-0 items-center', className)} data-testid={dataTestid}>
+    <div className={cn('flex gap-0 items-center ml-0.5', className)} data-testid={dataTestid}>
       {optionsShown.map(({ url, uid, name }: AvatarSelectOption) => {
         const isSelected = selected?.includes(uid)
         return (
           <button
+            type="button"
             key={uid}
             title={name}
             onClick={() => handleAvatarSelect(uid)}
             className={cn(
-              'w-2 h-2 shrink-0 grow-0 -ml-0_25 z-1 hover:z-2 rounded-full transition-transform hover:scale-105',
+              'w-2 h-2 shrink-0 grow-0 -ml-0_25 z-1 hover:z-2 rounded-full transition-transform hover:scale-105 cursor-pointer',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2',
               isSelected && avatarSelectionGradient,
             )}
@@ -77,6 +77,7 @@ export function AvatarSelect({
         <Collapsible.Root open={open} onOpenChange={setOpen} className="z-3">
           <Collapsible.Trigger ref={triggerRef} asChild>
             <button
+              type="button"
               onClick={() => setOpen(!open)}
               className="flex items-center justify-center w-2 h-2 shrink-0 grow-0 -ml-0_25 z-2 rounded-full bg-neutral-0 border-2 border-feedback-info-500 hover:bg-extra-purple-100 transition-colors"
             >
@@ -88,7 +89,11 @@ export function AvatarSelect({
               {collapsibleOptions.map(({ url, uid, name }: AvatarSelectOption) => {
                 const _isSelected = selected?.includes(uid)
                 return (
-                  <li key={uid} className={optionClasses} onClick={() => handleAvatarSelect(uid)}>
+                  <li
+                    key={uid}
+                    className={cn(optionClasses, 'cursor-pointer')}
+                    onClick={() => handleAvatarSelect(uid)}
+                  >
                     <div className={cn('rounded-full', _isSelected && avatarSelectionGradient)}>
                       <Image src={url} alt={name} width={32} height={32} className="rounded-full" />
                     </div>

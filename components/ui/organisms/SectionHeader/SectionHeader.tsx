@@ -19,7 +19,7 @@ export function SectionHeader({
   return (
     <header
       className={cn(
-        'flex flex-col md:flex-row md:flex-wrap md:items-center gap-1_5 bg-neutral-0 w-full pt-6 md:pt-0',
+        'flex flex-col md:flex-row md:flex-wrap md:items-center gap-1_5 bg-neutral-0 w-full pt-6 md:pt-0 md:pb-2_5',
         className,
       )}
       data-test-id={dataTestId}
@@ -30,7 +30,7 @@ export function SectionHeader({
           {title}
         </Typography>
         {description && (
-          <Typography variant="body" color="neutral800">
+          <Typography variant="bodySmall" color="textSecondary">
             {description}
           </Typography>
         )}

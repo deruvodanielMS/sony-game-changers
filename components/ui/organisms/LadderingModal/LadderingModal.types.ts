@@ -1,14 +1,22 @@
-import type { Goal } from '@/domain/goal'
+import type { Goal, GoalStatus } from '@/domain/goal'
+
+export interface ParentAmbition {
+  id: string
+  title: string
+  userName: string
+  avatarUrl?: string
+}
 
 export interface LadderingModalProps {
   open: boolean
   onClose: () => void
   selectedGoal: Goal
+  parentAmbitions?: ParentAmbition[]
   'data-testid'?: string
 }
 
 export interface AmbitionCardProps {
-  avatarUrl: string
+  avatarUrl?: string
   title: string
   userName: string
   onLink?: () => void

@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useEffectEvent, useState, useRef, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSession } from 'next-auth/react'
-import { ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react'
+import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
 import { useUIStore } from '@/stores/ui.store'
@@ -15,7 +15,6 @@ import { Button } from '@/components/ui/atoms/Button'
 import { NewAmbitionForm } from '../NewAmbitionForm'
 import type { NewAmbitionFormProps } from '../NewAmbitionForm'
 import type { NewAmbitionModalProps } from './NewAmbitionModal.types'
-import { filterBarMocks } from '@/app/[locale]/game-changers/ambitions/mocks'
 
 export function NewAmbitionModal({
   open,
@@ -25,7 +24,7 @@ export function NewAmbitionModal({
   const t = useTranslations('CreateGoal')
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
   const { openModal, closeAll, enqueueToast } = useUIStore()
-  const { createGoal } = useGoalsStore()
+  const { createGoal, goalFilters } = useGoalsStore()
   const [currentStep, setCurrentStep] = useState(1)
   const [isFormValid, setIsFormValid] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -77,9 +76,8 @@ export function NewAmbitionModal({
         const formData = formDataRef.current
 
         // Find user data for avatar and name
-        const selectedUser = filterBarMocks.avatarSelector.options.find(
-          (option) => option.uid === formData.owner,
-        )
+        const avatarOptions = goalFilters?.avatarSelector?.options ?? []
+        const selectedUser = avatarOptions.find((option) => option.uid === formData.owner)
 
         // Transform form data to CreateGoalDTO
         const goalData = {
@@ -114,12 +112,7 @@ export function NewAmbitionModal({
           // Show success toast
           enqueueToast({
             id: `goal-created-${newGoal.id}`,
-            content: (
-              <div className="flex items-center gap-2">
-                <CheckCircle className="text-feedback-success-600" size={20} />
-                <span>{t('toast.successMessage')}</span>
-              </div>
-            ),
+            title: t('toast.successMessage'),
             variant: 'success',
             duration: 3000,
           })
@@ -144,24 +137,21 @@ export function NewAmbitionModal({
   const actions = useMemo(
     () => (
       <div className="flex w-full items-center justify-between gap-1">
-        <Button variant="secondary" size="small">
-          {t('actions.saveDraft')}
-        </Button>
+        <Button variant="secondary">{t('actions.saveDraft')}</Button>
         <div className="flex items-center gap-0_75">
           {currentStep === 2 && (
             <Button
-              variant="link"
+              variant="secondary"
               size="small"
+              iconOnly
               onClick={handleBack}
-              className="w-2_5! h-2_5! p-0! rounded-full border border-neutral-300 hover:bg-neutral-100"
               aria-label={t('actions.back')}
             >
-              <ArrowLeft width={18} />
+              <ArrowLeft />
             </Button>
           )}
           <Button
             variant="primary"
-            size="small"
             rightIcon={currentStep === 1 ? <ArrowRight width={18} /> : undefined}
             onClick={handleNext}
             disabled={isSubmitting}
@@ -190,7 +180,7 @@ export function NewAmbitionModal({
           {t('title')}
         </ModalHeader>
         <ModalBody className="flex flex-col">{content}</ModalBody>
-        <div className="flex items-center justify-between gap-1 border-t border-neutral-200 px-1_5 py-1 bg-neutral-50">
+        <div className="-mx-1_5 -mb-1_5 mt-auto flex w-[calc(100%+3rem)] items-center justify-between gap-1 rounded-b-large border-t border-neutral-200 px-1_5 py-1 bg-neutral-50">
           {actions}
         </div>
       </>

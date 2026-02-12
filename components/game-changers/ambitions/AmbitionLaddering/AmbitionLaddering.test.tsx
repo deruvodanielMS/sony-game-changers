@@ -20,6 +20,15 @@ vi.mock('next-intl', () => ({
   },
 }))
 
+// Mock i18n navigation
+vi.mock('@/i18n/navigation', () => ({
+  Link: ({ children, href, ...props }: { children: React.ReactNode; href: string }) => (
+    <a href={href} {...props}>
+      {children}
+    </a>
+  ),
+}))
+
 // Mock useMediaQuery
 vi.mock('@/hooks/useMediaQuery', () => ({
   useMediaQuery: (breakpoint: string) => {

@@ -50,7 +50,7 @@ export function SidebarNavItem({
         className={cn(
           'flex items-center h-3',
           'transition-all duration-fast',
-          'rounded-default',
+          'rounded-x-large',
           'text-body-small leading-body-small font-semibold',
           'focus-visible:outline-none',
           'border-0 outline-none ring-0',
@@ -58,7 +58,7 @@ export function SidebarNavItem({
             ? 'justify-center p-0_75 overflow-hidden w-full'
             : 'px-1 py-0_75 gap-0_5 w-full max-w-[var(--nav-item-max-width)]',
           isActive
-            ? ['bg-neutral-800', 'text-neutral-0']
+            ? ['bg-neutral-1000', 'text-neutral-0']
             : [
                 'transition-hover',
                 'text-neutral-1000',

@@ -17,11 +17,11 @@ export default function GameChangersLayout({ children }: { children: React.React
   const pathname = usePathname()
 
   // Hide tabs on creation/edit/detail pages
+  // Matches patterns like /game-changers/ambitions/[id] where [id] is any non-empty string
   const shouldHideTabs =
     pathname.includes('/new') ||
     pathname.includes('/edit') ||
-    /\/game-changers\/[^\/]+\/[a-f0-9-]{36}$/i.test(pathname) || // Matches UUID detail pages like /ambitions/123e4567-e89b-12d3
-    /\/game-changers\/[^\/]+\/\d+$/.test(pathname) // Matches numeric ID detail pages like /ambitions/123
+    /\/game-changers\/[^/]+\/[^/]+$/.test(pathname) // Matches detail pages like /ambitions/123 or /ambitions/uuid
 
   const sections = [
     {
@@ -57,7 +57,7 @@ export default function GameChangersLayout({ children }: { children: React.React
   ]
 
   if (shouldHideTabs) {
-    return <div className="px-3 pt-20 md:pt-1_5">{children}</div>
+    return <div className="px-3 py-3 md:pt-2">{children}</div>
   }
 
   return (

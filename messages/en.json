@@ -55,7 +55,7 @@
       "awaiting_approval": "Awaiting Approval"
     },
     "filters": {
-      "clearFieldsButton": "Clear Fields"
+      "clearFieldsButton": "Clear Filters"
     },
     "filterDrawer": {
       "title": "Filter & Sort",
@@ -65,6 +65,16 @@
       "teamMembersLabel": "Team Members",
       "clearAll": "Clear All",
       "showResults": "Show Results"
+    },
+    "emptyState": {
+      "active": {
+        "title": "No Ambitions yet.",
+        "description": "Create an Ambition to begin tracking your progress."
+      },
+      "archived": {
+        "title": "No archived Ambitions.",
+        "description": "Any Ambitions you archive will appear here."
+      }
     }
   },
   "GoalCard": {
@@ -72,12 +82,14 @@
     "addLadderedGoalLabel": "Add laddered Ambition",
     "viewLadderedGoalsLabel": "View laddered Ambitions",
     "hideLadderedGoalsLabel": "Hide laddered Ambitions",
+    "viewLabel": "View",
+    "hideLabel": "Hide",
     "openLadderingModalLabel": "Open laddering modal"
   },
   "TypeIcon": {
     "business": "Business Goal",
     "manager_effectiveness": "Manager Effectiveness",
-    "personal_growth_and_development": "Personal Growth and Development"
+    "personal_growth_and_development": "Growth and Development"
   },
   "LadderingModal": {
     "title": "Ambition laddering",
@@ -137,6 +149,7 @@
       "subDescription": "This list of activities and values drives your work toward a successful completion.",
       "placeholder": "Enter one plan of action...",
       "addAction": "Add action",
+      "removeAction": "Remove action",
       "error": "At least one action is required"
     },
     "achievements": {
@@ -145,6 +158,7 @@
       "subDescription": "These quantifiable results serve as direct evidence that you've successfully fulfilled your goals.",
       "placeholder": "Describe one Key achievement...",
       "addAchievement": "Add achievement",
+      "removeAchievement": "Remove achievement",
       "error": "At least one achievement is required"
     },
     "actions": {
@@ -159,7 +173,8 @@
   },
   "Common": {
     "confirm": "Confirm",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "close": "Close"
   },
   "NotFound": {
     "title": "Page Not Found",
@@ -181,9 +196,16 @@
       "sendBack": "Send Back",
       "approve": "Approve",
       "moreOptions": "More options",
+      "edit": "Edit",
+      "archive": "Archive",
+      "unarchive": "Unarchive",
       "title": "Actions",
       "collapse": "Collapse actions",
-      "expand": "Expand actions"
+      "expand": "Expand actions",
+      "emptyState": {
+        "title": "No Actions defined.",
+        "description": "Define the specific steps you'll take to achieve this Ambition. Edit the details to add them."
+      }
     },
     "metadata": {
       "type": "Type",
@@ -204,6 +226,10 @@
         "notStarted": "Not started",
         "onTrack": "On Track",
         "offTrack": "Off Track"
+      },
+      "emptyState": {
+        "title": "No Achievements yet.",
+        "description": "List the expected results or milestones for this Ambition. Edit the details to add them."
       }
     },
     "ladderedAmbitions": {
@@ -215,11 +241,16 @@
       "nextPage": "Next page",
       "viewSwitcherLabel": "Ambitions view",
       "viewGrid": "Grid view",
-      "viewList": "List view"
+      "viewList": "List view",
+      "emptyState": {
+        "title": "No laddered ambitions yet",
+        "description": "Connect ambitions from your team members to track their alignment with this ambition."
+      }
     },
     "activity": {
       "title": "Activity",
       "addCommentPlaceholder": "Add a comment...",
+      "currentUserAlt": "Current user",
       "completed": "Completed",
       "approved": "approved the Ambition",
       "changedStatus": "changed the status",
@@ -232,5 +263,49 @@
     "submitHint": "Press Ctrl+Enter to submit",
     "cancel": "Cancel",
     "save": "Save"
+  },
+  "AmbitionModals": {
+    "sendForApproval": {
+      "title": "Send for Approval Ambition",
+      "description": "You can add an optional comment to provide more context about your Ambition.",
+      "commentLabel": "Comment",
+      "commentPlaceholder": "Enter a comment",
+      "submitButton": "Send for approval",
+      "cancelButton": "Cancel",
+      "successMessage": "Ambition sent for approval successfully."
+    },
+    "archive": {
+      "title": "Archive Ambition?",
+      "description": "If you archive this Ambition, all associated laddered Ambitions will also be archived. You can find them in your archive and restore them to Draft status at any time.",
+      "submitButton": "Yes, Archive",
+      "cancelButton": "Cancel",
+      "successMessage": "Ambition archived successfully."
+    },
+    "sendBack": {
+      "title": "Send back Ambition",
+      "description": "You can share what needs to be adjusted. Your Feedback helps the employee refine their Ambition.",
+      "commentLabel": "Comment",
+      "commentPlaceholder": "Enter a comment",
+      "submitButton": "Send back",
+      "cancelButton": "Cancel",
+      "successMessage": "Ambition sent back successfully."
+    },
+    "approve": {
+      "title": "Approve Ambition",
+      "description": "You can leave a comment for the employee to provide more context about this approval.",
+      "commentLabel": "Comment",
+      "commentPlaceholder": "Enter a comment",
+      "submitButton": "Approve",
+      "cancelButton": "Cancel",
+      "successMessage": "Ambition approved successfully."
+    },
+    "characterCount": "{count}/150"
+  },
+  "Toast": {
+    "closeNotification": "Close notification"
+  },
+  "ManagerAmbitions": {
+    "addLadderedAmbition": "Add laddered Ambition",
+    "dismiss": "Dismiss"
   }
 }

@@ -44,7 +44,7 @@ exports[`ProgressRing > snapshots > matches snapshot at 0% progress 1`] = `
       stroke-dashoffset="131.94689145077132"
       stroke-linecap="round"
       stroke-width="6"
-      style="transition: stroke-dashoffset 0.3s ease;"
+      style="transition: stroke-dashoffset 0.7s ease-out;"
     />
   </svg>
 </div>
@@ -91,10 +91,10 @@ exports[`ProgressRing > snapshots > matches snapshot at 50% progress 1`] = `
       r="21"
       stroke="url(#progress-gradient-_r_b_)"
       stroke-dasharray="131.94689145077132"
-      stroke-dashoffset="65.97344572538566"
+      stroke-dashoffset="131.94689145077132"
       stroke-linecap="round"
       stroke-width="6"
-      style="transition: stroke-dashoffset 0.3s ease;"
+      style="transition: stroke-dashoffset 0.7s ease-out;"
     />
   </svg>
 </div>
@@ -141,10 +141,10 @@ exports[`ProgressRing > snapshots > matches snapshot at 100% progress 1`] = `
       r="21"
       stroke="url(#progress-gradient-_r_c_)"
       stroke-dasharray="131.94689145077132"
-      stroke-dashoffset="0"
+      stroke-dashoffset="131.94689145077132"
       stroke-linecap="round"
       stroke-width="6"
-      style="transition: stroke-dashoffset 0.3s ease;"
+      style="transition: stroke-dashoffset 0.7s ease-out;"
     />
   </svg>
 </div>
@@ -191,10 +191,10 @@ exports[`ProgressRing > snapshots > matches snapshot with custom size and stroke
       r="28"
       stroke="url(#progress-gradient-_r_d_)"
       stroke-dasharray="175.92918860102841"
-      stroke-dashoffset="43.9822971502571"
+      stroke-dashoffset="175.92918860102841"
       stroke-linecap="round"
       stroke-width="8"
-      style="transition: stroke-dashoffset 0.3s ease;"
+      style="transition: stroke-dashoffset 0.7s ease-out;"
     />
   </svg>
 </div>

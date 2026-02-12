@@ -31,29 +31,28 @@ export function FilterBar({
     }
   }
   return (
-    <section className="w-full h-3 flex gap-1 justify-between max-sm:flex-col max-lg:h-auto">
-      <form className="flex gap-1 items-center max-sm:flex-wrap max-sm:mb-1 md:max-lg:flex-wrap">
+    <section className="w-full flex flex-col gap-1 my-1 lg:flex-row lg:h-3 lg:justify-between">
+      {/* Row 1: Filters + Avatar + Clear (on tablet: full width row) */}
+      <form className="flex gap-1 items-center flex-wrap">
         {filters.map((props) => (
           <FilterMultiSelect key={props.label} className="shrink-0" {...props} />
         ))}
         {avatarSelector && <AvatarSelect {...avatarSelector} />}
         {clearFields && (
-          <Button
-            className="max-sm:order-last"
-            variant={'link'}
-            size="small"
-            onClick={handleClearFields}
-          >
+          <Button variant={'link'} size="small" onClick={handleClearFields}>
             {t('clearFieldsButton')}
           </Button>
         )}
+      </form>
+      {/* Row 2: Search + Primary Action (on tablet: full width row) */}
+      <div className="flex gap-1 items-center justify-between lg:justify-end">
         {searchField && (
-          <FormControl className="" label={''}>
+          <FormControl className="flex-1 lg:flex-none" label={''}>
             <SearchField {...searchField} />
           </FormControl>
         )}
-      </form>
-      {children}
+        {children && <div className="shrink-0 self-center">{children}</div>}
+      </div>
     </section>
   )
 }

@@ -34,3 +34,16 @@ export const WithoutLadderedIndicator: Story = {
     progress: 80,
   },
 }
+
+export const TwoLineTitle: Story = {
+  args: {
+    title:
+      'Create comprehensive documentation and testing suite for the new feature implementation',
+    userName: 'James Miller',
+    avatarUrl: '/profile-img/james-miller.png',
+    goalType: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
+    progress: 60,
+    href: '/en/ambitions/1',
+    showLadderedIndicator: false,
+  },
+}

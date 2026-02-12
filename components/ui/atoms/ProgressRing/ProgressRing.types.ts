@@ -49,6 +49,12 @@ export interface ProgressRingProps {
   layout?: 'default' | 'side'
 
   /**
+   * Whether to animate from 0 to target value on mount
+   * @default true
+   */
+  animate?: boolean
+
+  /**
    * Additional CSS classes
    */
   className?: string

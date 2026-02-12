@@ -3,6 +3,7 @@
 import { useId } from 'react'
 import { cn } from '@/utils/cn'
 import { Typography } from '@/components/ui/foundations/Typography'
+import { useAnimatedProgress } from '@/hooks/useAnimatedProgress'
 import type { ProgressRingProps } from './ProgressRing.types'
 
 /**
@@ -19,13 +20,18 @@ export function ProgressRing({
   showPercentage = false,
   percentageVariant = 'h5',
   layout = 'default',
+  animate = true,
   className,
   'data-test-id': dataTestId,
 }: ProgressRingProps) {
   const normalizedProgress = Math.min(Math.max(progress, 0), 100)
+
+  // Animate from 0 to target value on mount
+  const animatedProgress = useAnimatedProgress(normalizedProgress, animate)
+
   const radius = (size - strokeWidth) / 2
   const circumference = radius * 2 * Math.PI
-  const strokeDashoffset = circumference - (normalizedProgress / 100) * circumference
+  const strokeDashoffset = circumference - (animatedProgress / 100) * circumference
   const gradientId = `progress-gradient-${useId()}`
 
   // Use solid color if provided, otherwise use gradient
@@ -74,7 +80,7 @@ export function ProgressRing({
         strokeDashoffset={strokeDashoffset}
         strokeLinecap="round"
         style={{
-          transition: 'stroke-dashoffset 0.3s ease',
+          transition: animate ? 'stroke-dashoffset 0.7s ease-out' : 'stroke-dashoffset 0.3s ease',
           ...(color && { stroke: color }),
         }}
       />

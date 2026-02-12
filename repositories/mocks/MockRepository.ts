@@ -1,9 +1,10 @@
 import { GoalRepository } from '@/repositories/GoalRepository'
 import { UserRepository } from '@/repositories/UserRepository'
-import { CreateGoalDTO, GoalUI } from '@/domain/goal'
+import { CreateGoalDTO, GoalUI, ManagerAmbitionsData, GoalFiltersData } from '@/domain/goal'
 import { User } from '@/domain/user'
 import { goals as initialGoals } from '@/repositories/mocks/data/goals'
 import { users as initialUsers } from '@/repositories/mocks/data/users'
+import { managerAmbitions, goalFilters } from '@/repositories/mocks/data/filters'
 
 function nowIso() {
   return new Date().toISOString()
@@ -136,6 +137,15 @@ export class MockRepository implements GoalRepository, UserRepository {
   async deleteGoal(id: string): Promise<void> {
     this.goals = this.goals.filter((g) => g.id !== id)
   }
+
+  async getManagerAmbitions(_email?: string): Promise<ManagerAmbitionsData | null> {
+    // In a real implementation, this would filter by user's manager
+    return managerAmbitions
+  }
+
+  async getGoalFilters(): Promise<GoalFiltersData> {
+    return goalFilters
+  }
 }
 
 export const mockAvatarOptions = [
@@ -151,12 +161,15 @@ export const mockActivityFeed = [
     id: '1',
     user: { name: 'Sarah Miller', avatar: '/profile-img/sarah-miller.png' },
     action: 'created' as const,
+    status: 'Draft',
     date: new Date(Date.now() - 86400000).toISOString(),
   },
   {
     id: '2',
     user: { name: 'Lars van der Zee', avatar: '/profile-img/lars-van-der-zee.png' },
     action: 'statusChange' as const,
+    from: 'Draft',
+    to: 'Awaiting Approval',
     date: new Date(Date.now() - 172800000).toISOString(),
   },
   {
@@ -169,6 +182,7 @@ export const mockActivityFeed = [
     id: '4',
     user: { name: 'Kylie Davies', avatar: '/profile-img/kylie-davies.png' },
     action: 'completed' as const,
+    target: 'Q4 Sales Target',
     date: new Date(Date.now() - 345600000).toISOString(),
   },
 ]
