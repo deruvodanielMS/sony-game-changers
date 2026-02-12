@@ -12,7 +12,6 @@ export interface ModalProps {
 }
 
 export interface ModalHeaderProps {
-  beforeTitle?: React.ReactNode
   children?: React.ReactNode
   showClose?: boolean
   onClose?: () => void
@@ -25,7 +24,6 @@ export interface ModalBodyProps {
 }
 
 export interface ModalFooterProps {
-  onConfirm?: (e: React.MouseEvent<HTMLButtonElement>) => void
-  onCancel?: (e: React.MouseEvent<HTMLButtonElement>) => void
+  children?: React.ReactNode
   className?: string
 }

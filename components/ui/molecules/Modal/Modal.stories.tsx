@@ -4,6 +4,7 @@ import { Modal } from './Modal'
 import { ModalHeader } from './ModalHeader'
 import { ModalBody } from './ModalBody'
 import { ModalFooter } from './ModalFooter'
+import { Button } from '@/components/ui/atoms/Button'
 
 const meta: Meta<typeof Modal> = {
   title: 'Molecules/Modal',
@@ -19,17 +20,38 @@ export const Default: Story = {
     onClose: () => {},
     children: (
       <>
-        <ModalHeader>Modal title</ModalHeader>
+        <ModalHeader onClose={() => {}}>Modal title</ModalHeader>
         <ModalBody>
           <p>
             Nulla vitae elit libero, a pharetra augue. Duis mollis, est non commodo luctus, nisi
             erat porttitor ligula, eget lacinia odio sem nec elit.
           </p>
         </ModalBody>
-        <ModalFooter
-          onConfirm={() => alert('You have confirmed this modal')}
-          onCancel={() => alert('You have cancelled this modal')}
-        />
+        <ModalFooter>
+          <Button variant="link">Button</Button>
+          <div className="flex items-center gap-0_75">
+            <Button variant="secondary">Button</Button>
+            <Button variant="primary">Button</Button>
+          </div>
+        </ModalFooter>
+      </>
+    ),
+  },
+}
+
+export const WithoutFooter: Story = {
+  args: {
+    open: true,
+    onClose: () => {},
+    children: (
+      <>
+        <ModalHeader onClose={() => {}}>Modal title</ModalHeader>
+        <ModalBody>
+          <p>
+            Nulla vitae elit libero, a pharetra augue. Duis mollis, est non commodo luctus, nisi
+            erat porttitor ligula, eget lacinia odio sem nec elit.
+          </p>
+        </ModalBody>
       </>
     ),
   },
@@ -42,17 +64,20 @@ export const FocusTrap: Story = {
     onClose: () => {},
     children: (
       <>
-        <ModalHeader>Modal title</ModalHeader>
+        <ModalHeader onClose={() => {}}>Modal title</ModalHeader>
         <ModalBody>
           <p>
             Nulla vitae elit libero, a pharetra augue. Duis mollis, est non commodo luctus, nisi
             erat porttitor ligula, eget lacinia odio sem nec elit.
           </p>
         </ModalBody>
-        <ModalFooter
-          onConfirm={() => alert('You have confirmed this modal')}
-          onCancel={() => alert('You have cancelled this modal')}
-        />
+        <ModalFooter>
+          <Button variant="link">Cancel</Button>
+          <div className="flex items-center gap-0_75">
+            <Button variant="secondary">Secondary</Button>
+            <Button variant="primary">Confirm</Button>
+          </div>
+        </ModalFooter>
       </>
     ),
   },
@@ -65,14 +90,19 @@ export const FullScreen: Story = {
     onClose: () => {},
     children: (
       <>
-        <ModalHeader showClose>Full Screen Modal</ModalHeader>
+        <ModalHeader showClose onClose={() => {}}>
+          Full Screen Modal
+        </ModalHeader>
         <ModalBody>
           <p>
             This is a full screen modal. Nulla vitae elit libero, a pharetra augue. Duis mollis, est
             non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.
           </p>
         </ModalBody>
-        <ModalFooter onConfirm={() => alert('Confirmed')} onCancel={() => alert('Cancelled')} />
+        <ModalFooter>
+          <Button variant="link">Cancel</Button>
+          <Button variant="primary">Confirm</Button>
+        </ModalFooter>
       </>
     ),
   },
@@ -85,9 +115,11 @@ export const ModalSizeSm: Story = {
     onClose: () => {},
     children: (
       <>
-        <ModalHeader showClose>Small Modal</ModalHeader>
+        <ModalHeader showClose onClose={() => {}}>
+          Small Modal (547px)
+        </ModalHeader>
         <ModalBody>
-          <p>Small modal content</p>
+          <p>Small modal content - default for simple confirmations</p>
         </ModalBody>
       </>
     ),
@@ -101,9 +133,11 @@ export const ModalSizeMd: Story = {
     onClose: () => {},
     children: (
       <>
-        <ModalHeader showClose>Medium Modal</ModalHeader>
+        <ModalHeader showClose onClose={() => {}}>
+          Medium Modal (607px)
+        </ModalHeader>
         <ModalBody>
-          <p>Medium modal content</p>
+          <p>Medium modal content - for forms with inputs</p>
         </ModalBody>
       </>
     ),
@@ -117,7 +151,9 @@ export const ModalSizeLg: Story = {
     onClose: () => {},
     children: (
       <>
-        <ModalHeader showClose>Large Modal</ModalHeader>
+        <ModalHeader showClose onClose={() => {}}>
+          Large Modal
+        </ModalHeader>
         <ModalBody>
           <p>Large modal content</p>
         </ModalBody>
@@ -129,19 +165,17 @@ export const ModalSizeLg: Story = {
 export const OverlayCloseToggle: Story = {
   args: {
     open: true,
+    overlayClose: false,
     onClose: () => {},
     children: (
       <>
         <ModalHeader showClose onClose={() => {}}>
-          Overlay Close Toggle
+          Overlay Close Disabled
         </ModalHeader>
         <ModalBody>
-          <p>Clicking on overlay may or may not close depending on prop.</p>
+          <p>Clicking on the overlay will not close this modal. Use the X button instead.</p>
         </ModalBody>
       </>
     ),
-  },
-  parameters: {
-    controls: { exclude: ['size', 'overlayClose', 'aria-label'] },
   },
 }

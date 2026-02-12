@@ -171,7 +171,8 @@
   },
   "Common": {
     "confirm": "Confirm",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "close": "Close"
   },
   "NotFound": {
     "title": "Page Not Found",
