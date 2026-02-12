@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from '@/i18n/navigation'
-import { CirclePlus } from 'lucide-react'
+import { CirclePlus, AlertCircle } from 'lucide-react'
 import { GoalsHeader } from '@/components/game-changers/goals/GoalsHeader'
 import { NewAmbitionModal } from '@/components/game-changers/ambitions/NewAmbitionModal'
+import { ManagerAmbitions } from '@/components/game-changers/ambitions/ManagerAmbitions'
 import { Button } from '@/components/ui/atoms/Button'
 import { GoalCard } from '@/components/ui/organisms/GoalCard'
 import { EmptyState } from '@/components/ui/molecules/EmptyState'
@@ -14,7 +15,6 @@ import { FilterableContentLayout } from '@/components/ui/templates/FilterableCon
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { Tabs } from '@/components/ui/molecules/Tabs'
 import type { TabItem } from '@/components/ui/molecules/Tabs'
-import { filterBarMocks } from './mocks'
 import { useGoalsStore } from '@/stores/goals.store'
 import { AmbitionsLoading } from '@/components/ui/molecules/Loadings'
 import { GOAL_STATUSES } from '@/domain/goal'
@@ -30,24 +30,37 @@ export default function GameChangersGoalsPage() {
   const [selectedFilterStatus, setSelectedFilterStatus] = useState<Array<string>>([])
   const [selectedSearchValue, setSelectedSearchValue] = useState('')
   const [isNewAmbitionOpen, setIsNewAmbitionOpen] = useState(false)
-  const { list, fetchList } = useGoalsStore()
+  const [isManagerAmbitionsVisible, setIsManagerAmbitionsVisible] = useState(true)
+  const [selectedParentAmbitionId, setSelectedParentAmbitionId] = useState<string | null>(null)
+  const {
+    list,
+    listError,
+    fetchList,
+    managerAmbitions,
+    fetchManagerAmbitions,
+    goalFilters,
+    fetchGoalFilters,
+  } = useGoalsStore()
 
   // Get current tab from URL or default to 'active'
   const currentTab = (searchParams.get('tab') as TabValue) || 'active'
 
-  // Fetch goals only once on mount
+  // Fetch goals, manager ambitions and filters on mount
   useEffect(() => {
     fetchList()
+    fetchManagerAmbitions()
+    fetchGoalFilters()
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const { filters, avatarSelector } = filterBarMocks
+  const filters = goalFilters?.filters ?? []
+  const avatarSelector = goalFilters?.avatarSelector ?? { options: [], showItems: 4 }
 
   const _filters = [
     { onSelect: setSelectedFilterStatus, selected: selectedFilterStatus, ...filters[0] },
     { onSelect: setSelectedFilterType, selected: selectedFilterType, ...filters[1] },
-  ]
+  ].filter((f) => f.label) // Filter out undefined filters
 
   const _avatarSelector = {
     onAvatarSelect: setSelectedAvatars,
@@ -75,15 +88,41 @@ export default function GameChangersGoalsPage() {
     { value: 'archived', label: t('archivedTab') },
   ]
 
-  // Filter goals based on current tab
+  // Filter goals based on current tab and active filters
   const filteredList =
     list?.filter((goalData) => {
+      // Tab filter: archived vs active
       if (currentTab === 'archived') {
-        // Archived tab: show completed goals
-        return goalData.status === GOAL_STATUSES.COMPLETED
+        if (goalData.status !== GOAL_STATUSES.COMPLETED) return false
+      } else {
+        if (goalData.status === GOAL_STATUSES.COMPLETED) return false
       }
-      // Active tab: show non-completed goals
-      return goalData.status !== GOAL_STATUSES.COMPLETED
+
+      // Avatar filter: filter by assigned user uid
+      if (selectedAvatars.length > 0) {
+        if (!selectedAvatars.includes(goalData.uid)) return false
+      }
+
+      // Status filter
+      if (selectedFilterStatus.length > 0) {
+        if (!selectedFilterStatus.includes(goalData.status)) return false
+      }
+
+      // Type filter
+      if (selectedFilterType.length > 0) {
+        if (!goalData.goalType || !selectedFilterType.includes(goalData.goalType)) return false
+      }
+
+      // Search filter: search in title and description
+      if (selectedSearchValue.trim()) {
+        const searchLower = selectedSearchValue.toLowerCase().trim()
+        const titleMatch = goalData.title.toLowerCase().includes(searchLower)
+        const descriptionMatch = goalData.description?.toLowerCase().includes(searchLower) || false
+        const userNameMatch = goalData.userName.toLowerCase().includes(searchLower)
+        if (!titleMatch && !descriptionMatch && !userNameMatch) return false
+      }
+
+      return true
     }) || []
 
   // Count active filters for badge
@@ -95,6 +134,20 @@ export default function GameChangersGoalsPage() {
 
   if (list === null) {
     return <AmbitionsLoading />
+  }
+
+  // Show error state if there was an error fetching goals
+  if (listError) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] gap-2 p-2">
+        <AlertCircle className="w-4 h-4 text-feedback-error-500" />
+        <h2 className="text-h5 font-semibold text-neutral-1000">Unable to load ambitions</h2>
+        <p className="text-body text-neutral-700 text-center max-w-md">{listError}</p>
+        <Button variant="secondary" onClick={() => fetchList()}>
+          Try again
+        </Button>
+      </div>
+    )
   }
 
   return (
@@ -147,6 +200,21 @@ export default function GameChangersGoalsPage() {
           </AnimatedSection>
         }
       >
+        {/* Manager Ambitions Card */}
+        {isManagerAmbitionsVisible && currentTab === 'active' && managerAmbitions && (
+          <AnimatedSection delay={0.1} className="mb-1">
+            <ManagerAmbitions
+              title={managerAmbitions.title}
+              ambitions={managerAmbitions.ambitions}
+              onAddLaddered={(ambitionId) => {
+                setSelectedParentAmbitionId(ambitionId)
+                setIsNewAmbitionOpen(true)
+              }}
+              onDismiss={() => setIsManagerAmbitionsVisible(false)}
+            />
+          </AnimatedSection>
+        )}
+
         {filteredList.length === 0 ? (
           <AnimatedSection delay={0.1} className="flex-1 flex flex-col">
             {currentTab === 'active' ? (

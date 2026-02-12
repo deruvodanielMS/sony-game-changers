@@ -24,13 +24,12 @@ export function AmbitionDetailHeader({
   const tTypeIcon = useTranslations('TypeIcon')
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
   const isDesktop = useMediaQuery(BREAKPOINTS.lg)
-  const isTablet = !isMobile && !isDesktop
 
   return (
     <div
       className={cn(
-        'bg-neutral-100 flex items-center rounded-large w-full',
-        isMobile ? 'flex-col gap-2 p-1.5' : 'gap-3 p-1.5',
+        'bg-neutral-100 flex rounded-large w-full',
+        isMobile ? 'flex-col gap-1.5 p-1.5' : 'flex-row items-center gap-3 p-1.5',
         className,
       )}
     >
@@ -38,13 +37,13 @@ export function AmbitionDetailHeader({
       <div
         className={cn(
           'flex flex-1 flex-col items-start min-h-px min-w-px',
-          isMobile ? 'gap-1.5' : 'gap-2',
+          isMobile ? 'gap-1' : 'gap-0.5',
         )}
       >
-        {/* Title and Icon */}
-        <div className={cn('flex items-center w-full', isMobile ? 'gap-1 h-auto' : 'gap-1 h-4')}>
+        {/* Title and Avatar row */}
+        <div className="flex items-center w-full gap-1">
           {/* Avatar */}
-          <div className="flex items-end shrink-0">
+          <div className="flex items-center shrink-0">
             <Avatar src={avatarUrl} alt={userName} size={isMobile ? 'md' : 'lg'} />
           </div>
 
@@ -52,18 +51,19 @@ export function AmbitionDetailHeader({
           <Typography
             variant={isMobile ? 'h6' : 'h5'}
             as="h1"
-            className={cn('flex-1 min-w-0', isMobile && 'line-clamp-3')}
+            className={cn('flex-1 min-w-0', isMobile && 'line-clamp-2')}
           >
             {title}
           </Typography>
         </div>
 
-        {/* Metadata row */}
+        {/* Metadata row - aligned left */}
         <div
           className={cn(
-            'flex items-center w-full',
-            isMobile ? 'flex-col gap-1 items-start' : 'gap-0.5 h-1.5 pl-4_5',
-            isTablet && 'flex-wrap',
+            'flex w-full',
+            isMobile
+              ? 'flex-col gap-0.5 items-start'
+              : 'flex-wrap gap-x-1 gap-y-0.5 items-center pl-4_5',
           )}
         >
           {/* Type Display with Icon */}
@@ -102,12 +102,11 @@ export function AmbitionDetailHeader({
         </div>
       </div>
 
-      {/* Right section - Progress metrics */}
+      {/* Right section - Progress Bar (Large on desktop, Small on tablet/mobile) */}
       <div className={cn('flex items-center shrink-0', isMobile ? 'w-full' : 'w-[150px]')}>
-        {/* Progress Bar */}
         <ProgressBar
           progress={progress}
-          size="L"
+          size={isDesktop ? 'L' : 'S'}
           status={progress === 100 ? 'completed' : 'in-progress'}
           showPercentage={true}
         />

@@ -2,6 +2,7 @@
 
 import { Bell, ArrowLeft, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
+import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/utils/cn'
 import { SidebarNav } from '@/components/ui/molecules/SidebarNav'
@@ -46,7 +47,7 @@ export function Sidebar({
       <div className="flex flex-col items-center gap-3 pt-1_5 pb-0">
         {/* Logo */}
         {!hideLogo && (
-          <div className="flex items-center justify-center">
+          <Link href={ROUTES.GAME_CHANGERS_AMBITIONS} className="flex items-center justify-center">
             <Image
               src="/playstation-logo.svg"
               alt="PlayStation"
@@ -55,7 +56,7 @@ export function Sidebar({
               className="text-neutral-1000 flex-shrink-0"
               priority
             />
-          </div>
+          </Link>
         )}
 
         {/* Toggle Button */}

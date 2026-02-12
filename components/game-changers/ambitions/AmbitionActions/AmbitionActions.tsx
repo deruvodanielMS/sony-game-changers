@@ -28,7 +28,10 @@ export function AmbitionActions({ actions, defaultOpen = false, className }: Amb
         />
       ) : (
         actions.map((action, index) => (
-          <div key={index} className="flex items-start gap-1 w-full last:border-b-0 py-1 pl-0_5">
+          <div
+            key={index}
+            className={`flex items-start gap-1 w-full py-1 pl-0_5 ${index > 0 ? 'border-t border-stroke-secondary' : ''}`}
+          >
             {/* Bullet point */}
             <div
               className="rounded-full bg-neutral-800 shrink-0"

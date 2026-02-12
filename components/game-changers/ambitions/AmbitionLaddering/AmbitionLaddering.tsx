@@ -8,6 +8,7 @@ import { m, AnimatePresence } from 'framer-motion'
 import { Plus, Grid2x2, List } from 'lucide-react'
 import { SearchField } from '@/components/ui/molecules/SearchField'
 import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
+import { EmptyState } from '@/components/ui/molecules/EmptyState'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { Button } from '@/components/ui/atoms/Button'
 import { ProgressBar } from '@/components/ui/atoms/ProgressBar'
@@ -88,28 +89,18 @@ export function AmbitionLaddering({
       {/* Title + Filters */}
       <div
         className={cn(
-          'flex items-center justify-end w-full',
-          isMobile ? 'flex-col gap-1 items-stretch' : 'gap-1.5 h-3',
+          'flex w-full gap-1.5',
+          isMobile ? 'flex-col items-stretch' : 'flex-row items-center justify-between',
         )}
       >
-        <Typography
-          variant="h6"
-          fontWeight="semibold"
-          className={cn(isMobile ? 'mb-0.5' : 'flex-1')}
-        >
+        <Typography variant="h6" fontWeight="semibold" className="shrink-0">
           {t('title')}
         </Typography>
 
-        <div
-          className={cn(
-            'flex items-center',
-            isMobile ? 'flex-col gap-1 w-full' : 'gap-1.5',
-            isTablet && 'flex-wrap',
-          )}
-        >
+        <div className={cn('flex items-center gap-1.5', isMobile && 'flex-col gap-1 w-full')}>
           {/* Search Field */}
           <SearchField
-            className={isMobile ? 'w-full' : 'w-70'}
+            className={cn(isMobile ? 'w-full' : isTablet ? 'w-50' : 'w-70')}
             placeholder={t('searchPlaceholder')}
             value={searchQuery}
             onChange={setSearchQuery}
@@ -121,7 +112,7 @@ export function AmbitionLaddering({
               options={avatarOptions}
               selected={selectedAvatars}
               onAvatarSelect={setSelectedAvatars}
-              showItems={isMobile ? 3 : 5}
+              showItems={isMobile ? 3 : isTablet ? 3 : 5}
             />
           )}
 
@@ -151,44 +142,121 @@ export function AmbitionLaddering({
       </div>
 
       {/* Laddered Ambitions - Grid or List View */}
-      <AnimatePresence mode="wait">
-        {(viewMode === 'grid' || isMobile) && (
-          <m.div
-            key="grid-view"
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            variants={listVariants}
-            className={cn(
-              'grid w-full gap-1',
-              isMobile && 'grid-cols-1',
-              isTablet && 'grid-cols-2',
-              !isMobile && !isTablet && 'grid-cols-3',
-            )}
-          >
-            {filteredAmbitions.map((ambition) => (
-              <Link
-                key={ambition.id}
-                href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(ambition.id)}
-                className="block"
-              >
-                <m.div
-                  variants={cardVariants}
-                  transition={{ duration: 0.3 }}
-                  className="flex flex-col gap-1 bg-neutral-0 border border-neutral-300 rounded-large p-1.5 cursor-pointer hover:border-neutral-400 transition-colors h-full"
+      {filteredAmbitions.length === 0 ? (
+        <EmptyState
+          variant="compact"
+          title={t('emptyState.title')}
+          description={t('emptyState.description')}
+        />
+      ) : (
+        <AnimatePresence mode="wait">
+          {(viewMode === 'grid' || isMobile) && (
+            <m.div
+              key="grid-view"
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={listVariants}
+              className={cn(
+                'grid w-full gap-1',
+                isMobile && 'grid-cols-1',
+                isTablet && 'grid-cols-2',
+                !isMobile && !isTablet && 'grid-cols-3',
+              )}
+            >
+              {filteredAmbitions.map((ambition) => (
+                <Link
+                  key={ambition.id}
+                  href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(ambition.id)}
+                  className="block"
                 >
-                  {/* Title */}
-                  <Typography
-                    variant="body"
-                    className="h-3 overflow-hidden text-ellipsis line-clamp-2"
+                  <m.div
+                    variants={cardVariants}
+                    transition={{ duration: 0.3 }}
+                    className="flex flex-col gap-1 bg-neutral-0 border border-neutral-300 rounded-large p-1.5 cursor-pointer hover:border-neutral-400 transition-colors h-full"
                   >
-                    {ambition.title}
-                  </Typography>
+                    {/* Title */}
+                    <Typography
+                      variant="body"
+                      className="h-3 overflow-hidden text-ellipsis line-clamp-2"
+                    >
+                      {ambition.title}
+                    </Typography>
 
-                  {/* Employee + Progress */}
-                  <div className="flex gap-1 items-center w-full">
-                    {/* Employee Info */}
-                    <div className="flex-1 flex gap-1 items-center min-w-0">
+                    {/* Employee + Progress */}
+                    <div className="flex gap-1 items-center w-full">
+                      {/* Employee Info */}
+                      <div className="flex-1 flex gap-1 items-center min-w-0">
+                        <div className="relative size-3 rounded-full shrink-0 overflow-hidden">
+                          <Image
+                            src={ambition.avatarUrl || '/profile-img/default.png'}
+                            alt={ambition.userName}
+                            width={48}
+                            height={48}
+                            className="object-cover"
+                          />
+                        </div>
+                        <Typography
+                          variant="body"
+                          fontWeight="bold"
+                          className="overflow-hidden text-ellipsis whitespace-nowrap"
+                        >
+                          {ambition.userName}
+                        </Typography>
+                      </div>
+
+                      {/* Progress - ProgressBar for all breakpoints */}
+                      <ProgressBar
+                        progress={ambition.progress}
+                        size="S"
+                        status={ambition.progress === 100 ? 'completed' : 'in-progress'}
+                        className="w-25 shrink-0"
+                      />
+                    </div>
+                  </m.div>
+                </Link>
+              ))}
+            </m.div>
+          )}
+
+          {viewMode === 'list' && !isMobile && (
+            <m.div
+              key="list-view"
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={listVariants}
+              className="flex flex-col w-full bg-neutral-0 border border-neutral-300 rounded-large overflow-hidden"
+            >
+              {/* Table Header */}
+              <div className="grid grid-cols-[200px_1fr_140px] gap-1.5 px-1.5 py-1 bg-neutral-100 border-b border-neutral-300">
+                <Typography variant="bodySmall" fontWeight="bold" className="uppercase">
+                  NAME
+                </Typography>
+                <Typography variant="bodySmall" fontWeight="bold" className="uppercase">
+                  AMBITION
+                </Typography>
+                <Typography variant="bodySmall" fontWeight="bold" className="uppercase">
+                  STATUS
+                </Typography>
+              </div>
+
+              {/* Table Rows */}
+              {filteredAmbitions.map((ambition, index) => (
+                <Link
+                  key={ambition.id}
+                  href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(ambition.id)}
+                  className="block"
+                >
+                  <m.div
+                    variants={cardVariants}
+                    className={cn(
+                      'grid grid-cols-[200px_1fr_140px] gap-1.5 px-1.5 py-1 items-center cursor-pointer hover:bg-neutral-100 transition-colors',
+                      index !== filteredAmbitions.length - 1 && 'border-b border-neutral-300',
+                    )}
+                  >
+                    {/* Name column with avatar */}
+                    <div className="flex gap-1 items-center">
                       <div className="relative size-3 rounded-full shrink-0 overflow-hidden">
                         <Image
                           src={ambition.avatarUrl || '/profile-img/default.png'}
@@ -198,98 +266,29 @@ export function AmbitionLaddering({
                           className="object-cover"
                         />
                       </div>
-                      <Typography
-                        variant="body"
-                        fontWeight="bold"
-                        className="overflow-hidden text-ellipsis whitespace-nowrap"
-                      >
+                      <Typography variant="body" fontWeight="bold" className="truncate">
                         {ambition.userName}
                       </Typography>
                     </div>
 
-                    {/* Progress - ProgressBar for all breakpoints */}
-                    <ProgressBar
-                      progress={ambition.progress}
-                      size="S"
-                      status={ambition.progress === 100 ? 'completed' : 'in-progress'}
-                      className="w-25 shrink-0"
-                    />
-                  </div>
-                </m.div>
-              </Link>
-            ))}
-          </m.div>
-        )}
-
-        {viewMode === 'list' && !isMobile && (
-          <m.div
-            key="list-view"
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
-            variants={listVariants}
-            className="flex flex-col w-full bg-neutral-0 border border-neutral-300 rounded-large overflow-hidden"
-          >
-            {/* Table Header */}
-            <div className="grid grid-cols-[200px_1fr_140px] gap-1.5 px-1.5 py-1 bg-neutral-100 border-b border-neutral-300">
-              <Typography variant="bodySmall" fontWeight="bold" className="uppercase">
-                NAME
-              </Typography>
-              <Typography variant="bodySmall" fontWeight="bold" className="uppercase">
-                AMBITION
-              </Typography>
-              <Typography variant="bodySmall" fontWeight="bold" className="uppercase">
-                STATUS
-              </Typography>
-            </div>
-
-            {/* Table Rows */}
-            {filteredAmbitions.map((ambition, index) => (
-              <Link
-                key={ambition.id}
-                href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(ambition.id)}
-                className="block"
-              >
-                <m.div
-                  variants={cardVariants}
-                  className={cn(
-                    'grid grid-cols-[200px_1fr_140px] gap-1.5 px-1.5 py-1 items-center cursor-pointer hover:bg-neutral-100 transition-colors',
-                    index !== filteredAmbitions.length - 1 && 'border-b border-neutral-300',
-                  )}
-                >
-                  {/* Name column with avatar */}
-                  <div className="flex gap-1 items-center">
-                    <div className="relative size-3 rounded-full shrink-0 overflow-hidden">
-                      <Image
-                        src={ambition.avatarUrl || '/profile-img/default.png'}
-                        alt={ambition.userName}
-                        width={48}
-                        height={48}
-                        className="object-cover"
-                      />
-                    </div>
-                    <Typography variant="body" fontWeight="bold" className="truncate">
-                      {ambition.userName}
+                    {/* Ambition column */}
+                    <Typography variant="body" className="line-clamp-2">
+                      {ambition.title}
                     </Typography>
-                  </div>
 
-                  {/* Ambition column */}
-                  <Typography variant="body" className="line-clamp-2">
-                    {ambition.title}
-                  </Typography>
-
-                  {/* Status column */}
-                  <div className="flex justify-start">
-                    <Badge variant={statusToBadgeVariant(ambition.status)} size="md">
-                      {formatStatusLabel(ambition.status)}
-                    </Badge>
-                  </div>
-                </m.div>
-              </Link>
-            ))}
-          </m.div>
-        )}
-      </AnimatePresence>
+                    {/* Status column */}
+                    <div className="flex justify-start">
+                      <Badge variant={statusToBadgeVariant(ambition.status)} size="md">
+                        {formatStatusLabel(ambition.status)}
+                      </Badge>
+                    </div>
+                  </m.div>
+                </Link>
+              ))}
+            </m.div>
+          )}
+        </AnimatePresence>
+      )}
 
       {/* Actions Row */}
       <div className={cn('flex items-center justify-between w-full')}>

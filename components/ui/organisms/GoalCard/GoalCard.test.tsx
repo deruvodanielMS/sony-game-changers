@@ -19,8 +19,21 @@ vi.mock('next-intl', () => ({
     if (key === 'addLadderedGoalLabel') return 'Add child goal'
     if (key === 'viewLadderedGoalsLabel') return 'View laddered Ambitions'
     if (key === 'hideLadderedGoalsLabel') return 'Hide laddered Ambitions'
+    if (key === 'hideLabel') return 'Hide'
+    if (key === 'viewLabel') return 'View'
     return key
   },
+}))
+
+vi.mock('@/stores/ui.store', () => ({
+  useUIStore: () => ({
+    openModal: vi.fn(),
+    closeModal: vi.fn(),
+  }),
+}))
+
+vi.mock('@/hooks/useMediaQuery', () => ({
+  useMediaQuery: vi.fn(() => true), // Default to desktop
 }))
 
 vi.mock('@/i18n/navigation', () => ({
@@ -88,7 +101,8 @@ describe('GoalCard', () => {
     // Initially open: should show ladder goal and "Hide laddered Ambitions" button
     expect(screen.getByText('Sub Goal A')).toBeInTheDocument()
     expect(screen.getByAltText('Jane Smith')).toBeInTheDocument()
-    const hideButton = screen.getByRole('button', { name: 'Hide laddered Ambitions' })
+    // Button contains both desktop ("Hide laddered Ambitions") and mobile ("Hide") text
+    const hideButton = screen.getByRole('button', { name: /Hide laddered Ambitions/i })
     expect(hideButton).toBeInTheDocument()
 
     // Collapse by clicking the toggle button
@@ -100,7 +114,7 @@ describe('GoalCard', () => {
     })
 
     // Button text should change to "View laddered Ambitions"
-    expect(screen.getByRole('button', { name: 'View laddered Ambitions' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /View laddered Ambitions/i })).toBeInTheDocument()
   })
 
   it('shows add-child-goal button when allowed', () => {

@@ -57,7 +57,7 @@ export default function GameChangersLayout({ children }: { children: React.React
   ]
 
   if (shouldHideTabs) {
-    return <div className="px-3 pt-20 md:pt-2">{children}</div>
+    return <div className="px-3 py-3 md:pt-2">{children}</div>
   }
 
   return (

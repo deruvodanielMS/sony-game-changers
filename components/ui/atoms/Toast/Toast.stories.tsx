@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react'
-import { CheckCircle, XCircle, Info as InfoIcon, AlertTriangle } from 'lucide-react'
 import { Toast } from './Toast'
 
 const meta: Meta<typeof Toast> = {
@@ -23,106 +22,71 @@ type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    content: 'This is a toast notification',
+    title: 'Title',
+    description: 'Description',
   },
 }
 
 export const Success: Story = {
   args: {
     variant: 'success',
-    content: (
-      <div className="flex items-center gap-2">
-        <CheckCircle className="text-feedback-success-600" size={20} />
-        <span>Changes saved successfully</span>
-      </div>
-    ),
+    title: 'Title',
+    description: 'Description',
   },
 }
 
 export const Error: Story = {
   args: {
     variant: 'error',
-    content: (
-      <div className="flex items-center gap-2">
-        <XCircle className="text-feedback-danger-600" size={20} />
-        <span>Error: Could not save changes</span>
-      </div>
-    ),
+    title: 'Title',
+    description: 'Description',
   },
 }
 
 export const Info: Story = {
   args: {
     variant: 'info',
-    content: (
-      <div className="flex items-center gap-2">
-        <InfoIcon className="text-feedback-info-600" size={20} />
-        <span>New updates available</span>
-      </div>
-    ),
+    title: 'Title',
+    description: 'Description',
   },
 }
 
-export const Warning: Story = {
+export const TitleOnly: Story = {
   args: {
-    content: (
-      <div className="flex items-center gap-2">
-        <AlertTriangle className="text-feedback-warning-600" size={20} />
-        <span>Warning: This action cannot be undone</span>
-      </div>
-    ),
+    variant: 'success',
+    title: 'Changes saved successfully',
+  },
+}
+
+export const DescriptionOnly: Story = {
+  args: {
+    variant: 'info',
+    description: 'New updates are available for your application.',
   },
 }
 
 export const LongContent: Story = {
   args: {
-    content: (
-      <div className="flex flex-col gap-1 max-w-xs">
-        <strong>Update Available</strong>
-        <p className="text-sm text-neutral-600">
-          A new version of the application is available. Please save your work and refresh to
-          update.
-        </p>
-      </div>
-    ),
+    variant: 'info',
+    title: 'Update Available',
+    description:
+      'A new version of the application is available. Please save your work and refresh to update.',
+  },
+}
+
+export const WithMessageProp: Story = {
+  args: {
+    variant: 'success',
+    message: 'Simple message using the message prop',
   },
 }
 
 export const AllVariants: Story = {
   render: () => (
     <div className="space-y-4">
-      <Toast
-        content={
-          <div className="flex items-center gap-2">
-            <CheckCircle className="text-feedback-success-600" size={20} />
-            <span>Success notification</span>
-          </div>
-        }
-      />
-      <Toast
-        content={
-          <div className="flex items-center gap-2">
-            <XCircle className="text-feedback-danger-600" size={20} />
-            <span>Error notification</span>
-          </div>
-        }
-      />
-      <Toast
-        content={
-          <div className="flex items-center gap-2">
-            <InfoIcon className="text-feedback-info-600" size={20} />
-            <span>Info notification</span>
-          </div>
-        }
-      />
-      <Toast
-        content={
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="text-feedback-warning-600" size={20} />
-            <span>Warning notification</span>
-          </div>
-        }
-      />
+      <Toast variant="info" title="Title" description="Description" />
+      <Toast variant="error" title="Title" description="Description" />
+      <Toast variant="success" title="Title" description="Description" />
     </div>
   ),
 }

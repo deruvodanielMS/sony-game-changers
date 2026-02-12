@@ -2,25 +2,20 @@
 
 import { useState } from 'react'
 import { m } from 'framer-motion'
-import Image from 'next/image'
-import { Plus, Link as LinkIcon, X } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import { Card } from '@/components/ui/atoms/Card/Card'
 import { GoalCardProps } from './GoalCard.types'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { HigherAmbition } from '@/components/ui/molecules/HigherAmbition'
 import { Arrow } from '@/components/ui/atoms/Arrow'
-import { GoalStatus } from '@/components/ui/molecules/GoalStatus'
 import { Button } from '../../atoms/Button'
 import { useTranslations } from 'next-intl'
 import { GoalStatus as GoalStatusType } from '@/domain/goal'
 import { ROUTES } from '@/common/routes'
-import { useUIStore } from '@/stores/ui.store'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { BREAKPOINTS } from '@/common/breakpoints'
-import { ModalHeader, ModalBody } from '@/components/ui/molecules/Modal'
-import { generateInitialsAvatarSrc } from '@/utils/generateInitialsAvatar'
 import { MainAmbition } from '@/components/game-changers/ambitions/MainAmbition'
 import { LadderedAmbition } from '@/components/game-changers/ambitions/LadderedAmbition'
+import { LadderingModal } from '@/components/ui/organisms/LadderingModal'
+import type { ParentAmbition } from '@/components/ui/organisms/LadderingModal'
 
 const cardHoverVariants = {
   rest: {},
@@ -44,6 +39,7 @@ export function GoalCard({
   ladderGoals,
   allowAddChildrenGoals,
   onAddLadderedGoal,
+  parentAmbitions,
   'data-testid': dataTestId,
 }: GoalCardProps) {
   const { id, title, avatarUrl, goalType, status, userName, parent } = goal
@@ -51,134 +47,16 @@ export function GoalCard({
 
   // Goals with laddered ambitions should be expanded by default
   const [open, setOpen] = useState(hasChildrenGoals > 0)
+  const [isLadderingModalOpen, setIsLadderingModalOpen] = useState(false)
   const t = useTranslations('GoalCard')
   const tGoals = useTranslations('Goals')
-  const tLaddering = useTranslations('LadderingModal')
-  const { openModal, openDrawer, closeModal, closeDrawer } = useUIStore()
-  const isMobile = !useMediaQuery(BREAKPOINTS.md)
 
   const handleOpenLadderingModal = () => {
-    // Mock data - in real implementation, these would come from props or API
-    const ambitions = [
-      {
-        id: 'division',
-        avatarUrl: '',
-        userName: 'James Miller',
-        title: tLaddering('divisionAmbitionLabel'),
-      },
-      {
-        id: 'team',
-        avatarUrl: '',
-        userName: 'Jürgen Schneider',
-        title: tLaddering('teamAmbitionLabel'),
-      },
-    ]
+    setIsLadderingModalOpen(true)
+  }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const handleLink = (ambitionId: string) => {
-      // TODO: Implement link logic with API call
-    }
-
-    // Shared content
-    const content = (
-      <div className="flex flex-col gap-1_5">
-        {/* Ambition Cards */}
-        <div className="flex flex-col sm:flex-row gap-1_5 items-stretch w-full">
-          {ambitions.map((ambition) => (
-            <div
-              key={ambition.id}
-              className="flex-1 min-w-0 w-full sm:w-auto bg-neutral-100 border-neutral-200 rounded-3xl p-1_5 flex flex-col gap-1 items-start justify-center"
-            >
-              <div className="flex gap-1 items-start w-full">
-                <Image
-                  src={
-                    ambition.avatarUrl || generateInitialsAvatarSrc(ambition.userName, { size: 48 })
-                  }
-                  alt={ambition.userName}
-                  width={48}
-                  height={48}
-                  className="rounded-full shrink-0"
-                />
-                <button
-                  onClick={() => handleLink(ambition.id)}
-                  aria-label={tLaddering('linkButtonAriaLabel')}
-                  className="shrink-0 w-3 h-3 flex items-center justify-center bg-neutral-200 rounded-full p-0_75 hover:bg-neutral-300 transition-colors"
-                >
-                  <LinkIcon className="w-1_5 h-1_5" />
-                </button>
-              </div>
-              <Typography variant="body" className="font-bold text-neutral-800 w-full">
-                {ambition.title}
-              </Typography>
-            </div>
-          ))}
-        </div>
-
-        {/* Goal Preview */}
-        <div className="w-full bg-neutral-0 border border-neutral-300 rounded-3xl p-1_5 flex flex-col gap-1">
-          <Typography variant="body" className="text-neutral-1000 w-full">
-            {title}
-          </Typography>
-          <div className="flex gap-0_5 items-center w-full h-3">
-            <div className="flex-1 min-w-0 flex gap-1 items-center h-2_5">
-              <Image
-                src={avatarUrl || generateInitialsAvatarSrc(userName, { size: 40 })}
-                alt={userName}
-                width={40}
-                height={40}
-                className="rounded-full shrink-0"
-              />
-              <Typography
-                variant="body"
-                className="font-bold text-neutral-1000 truncate flex-1 min-w-0"
-              >
-                {userName}
-              </Typography>
-            </div>
-            <GoalStatus status={status as GoalStatusType} className="shrink-0" />
-          </div>
-        </div>
-      </div>
-    )
-
-    if (isMobile) {
-      openDrawer(content, {
-        title: tLaddering('title'),
-        position: 'bottom',
-        size: 'lg',
-        overlayClose: true,
-        showClose: true,
-        hideCloseOnMobile: true,
-        onClose: closeDrawer,
-      })
-    } else {
-      const modalContent = (
-        <>
-          <header className="flex flex-col gap-1 pt-2_5 pr-4 pb-1_5 pl-4">
-            <div className="flex items-start justify-between gap-1">
-              <Typography variant="h5" tabIndex={0}>
-                {tLaddering('title')}
-              </Typography>
-              <Button
-                variant="link"
-                iconOnly
-                onClick={() => closeModal()}
-                aria-label="Close"
-                className="w-3 h-3 shrink-0"
-              >
-                <X width={32} />
-              </Button>
-            </div>
-          </header>
-          <ModalBody className="flex flex-col gap-1_5">{content}</ModalBody>
-        </>
-      )
-      openModal(modalContent, {
-        size: 'xl',
-        overlayClose: true,
-        onClose: closeModal,
-      })
-    }
+  const handleCloseLadderingModal = () => {
+    setIsLadderingModalOpen(false)
   }
 
   return (
@@ -208,8 +86,8 @@ export function GoalCard({
               />
             </div>
             {/* Arrow connection: dot + curve in one continuous flow */}
-            <div className="flex items-stretch">
-              <div className="flex flex-col items-center w-2">
+            <div className="flex items-stretch w-full">
+              <div className="flex flex-col items-center w-2 shrink-0">
                 <Arrow type="Higher top" className="w-2 h-1 shrink-0" />
                 <Arrow type="Higher bottom" className="w-2 h-2 shrink-0 -mt-[2px]" />
               </div>
@@ -272,35 +150,70 @@ export function GoalCard({
 
         {/* Bottom Section */}
         {(allowAddChildrenGoals || !!hasChildrenGoals) && (
-          <div className="flex items-center justify-between w-full">
+          <div className="flex items-center justify-between w-full gap-0_5">
             {/* Left side */}
-            <div className="flex gap-1 items-center">
+            <div className="flex gap-0_5 sm:gap-1 items-center min-w-0">
+              {(allowAddChildrenGoals || !!hasChildrenGoals) && (
+                <Button
+                  variant={'link'}
+                  size="small"
+                  iconOnly
+                  className="sm:hidden shrink-0 !h-auto"
+                  onClick={onAddLadderedGoal}
+                  aria-label={t('addLadderedGoalLabel')}
+                >
+                  <Plus width={20} />
+                </Button>
+              )}
               {(allowAddChildrenGoals || !!hasChildrenGoals) && (
                 <Button
                   variant={'link'}
                   size="small"
                   leftIcon={<Plus width={20} />}
                   onClick={onAddLadderedGoal}
+                  className="hidden sm:flex shrink-0 !h-auto"
                 >
                   {t('addLadderedGoalLabel')}
                 </Button>
               )}
               {!!hasChildrenGoals && (
-                <Typography variant="bodySmall" color="textSecondary">
+                <Typography variant="bodySmall" color="textSecondary" className="hidden sm:block">
                   {t('childrenGoalsLabel', { goals: hasChildrenGoals })}
+                </Typography>
+              )}
+              {!!hasChildrenGoals && (
+                <Typography variant="bodySmall" color="textSecondary" className="sm:hidden">
+                  {hasChildrenGoals}
                 </Typography>
               )}
             </div>
 
             {/* Right side: Toggle button */}
             {!!hasChildrenGoals && (
-              <Button variant="link" size="small" onClick={() => setOpen(!open)}>
-                {open ? t('hideLadderedGoalsLabel') : t('viewLadderedGoalsLabel')}
+              <Button
+                variant="link"
+                size="small"
+                onClick={() => setOpen(!open)}
+                className="shrink-0 !h-auto"
+              >
+                <span className="hidden sm:inline">
+                  {open ? t('hideLadderedGoalsLabel') : t('viewLadderedGoalsLabel')}
+                </span>
+                <span className="sm:hidden">{open ? t('hideLabel') : t('viewLabel')}</span>
               </Button>
             )}
           </div>
         )}
       </Card>
+
+      {/* Laddering Modal */}
+      <LadderingModal
+        open={isLadderingModalOpen}
+        onClose={handleCloseLadderingModal}
+        selectedGoal={goal}
+        parentAmbitions={parentAmbitions}
+        data-testid="laddering-modal"
+      />
     </m.div>
   )
 }

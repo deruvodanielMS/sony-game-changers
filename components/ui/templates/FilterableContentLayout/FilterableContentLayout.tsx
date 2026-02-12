@@ -174,10 +174,10 @@ export function FilterableContentLayout({
         )}
       >
         <AnimatedSection delay={0.05}>
-          <div className="flex gap-1 justify-between">
+          <div className="flex gap-1 justify-between items-center">
             <Button
               variant="secondary"
-              className="flex-1 relative"
+              className="relative"
               leftIcon={<SlidersHorizontal width={20} />}
               onClick={() => {
                 const drawerContent = (

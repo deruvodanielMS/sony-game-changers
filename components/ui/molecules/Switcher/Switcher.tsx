@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useLayoutEffect } from 'react'
 import { m } from 'framer-motion'
 import { cn } from '@/utils/cn'
 import type { SwitcherProps } from './Switcher.types'
@@ -70,6 +70,9 @@ const variantStyles = {
   },
 }
 
+// Use useLayoutEffect on client, useEffect on server
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect
+
 export function Switcher({
   items,
   value,
@@ -85,19 +88,25 @@ export function Switcher({
   const [activeRect, setActiveRect] = useState<{ left: number; width: number } | null>(null)
 
   // Update active indicator position
-  useEffect(() => {
-    const activeButton = buttonRefs.current.get(value)
-    const container = containerRef.current
+  useIsomorphicLayoutEffect(() => {
+    const updatePosition = () => {
+      const activeButton = buttonRefs.current.get(value)
+      const container = containerRef.current
 
-    if (activeButton && container) {
-      const containerRect = container.getBoundingClientRect()
-      const buttonRect = activeButton.getBoundingClientRect()
-
-      setActiveRect({
-        left: buttonRect.left - containerRect.left,
-        width: buttonRect.width,
-      })
+      if (activeButton && container) {
+        // Use offsetLeft and offsetWidth for more reliable positioning
+        setActiveRect({
+          left: activeButton.offsetLeft,
+          width: activeButton.offsetWidth,
+        })
+      }
     }
+
+    updatePosition()
+
+    // Also update on resize
+    window.addEventListener('resize', updatePosition)
+    return () => window.removeEventListener('resize', updatePosition)
   }, [value, items])
 
   const containerClasses = cn(

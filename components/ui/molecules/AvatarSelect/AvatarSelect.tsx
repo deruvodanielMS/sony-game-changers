@@ -53,6 +53,7 @@ export function AvatarSelect({
         const isSelected = selected?.includes(uid)
         return (
           <button
+            type="button"
             key={uid}
             title={name}
             onClick={() => handleAvatarSelect(uid)}
@@ -77,6 +78,7 @@ export function AvatarSelect({
         <Collapsible.Root open={open} onOpenChange={setOpen} className="z-3">
           <Collapsible.Trigger ref={triggerRef} asChild>
             <button
+              type="button"
               onClick={() => setOpen(!open)}
               className="flex items-center justify-center w-2 h-2 shrink-0 grow-0 -ml-0_25 z-2 rounded-full bg-neutral-0 border-2 border-feedback-info-500 hover:bg-extra-purple-100 transition-colors"
             >

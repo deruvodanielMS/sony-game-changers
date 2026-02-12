@@ -33,7 +33,7 @@ export function MainAmbition({
             <Avatar src={avatarUrl ?? undefined} alt={userName} size="lg" />
           </div>
           {goalType && (
-            <div className="shrink-0 -ml-0_5">
+            <div className="shrink-0 -ml-0_5 z-10">
               <TypeIcon type={goalType} variant="badge" />
             </div>
           )}

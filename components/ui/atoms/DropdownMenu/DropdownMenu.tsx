@@ -38,7 +38,7 @@ export function DropdownMenu({
           side={side}
           sideOffset={8}
           className={cn(
-            'z-50 min-w-[160px] overflow-hidden rounded-small',
+            'z-[var(--z-dropdown)] min-w-[160px] overflow-hidden rounded-small',
             'border border-neutral-300 bg-neutral-0 shadow-select',
             'animate-in fade-in-0 zoom-in-95',
             'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
