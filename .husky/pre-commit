@@ -10,8 +10,15 @@ node scripts/validate-component-structure.js || exit 1
 echo "Running TypeScript type check..."
 npx tsc --noEmit || exit 1
 
-echo "Running unit tests..."
-npm test --silent -- --run || exit 1
+echo "Running unit tests and updating snapshots..."
+npm test --silent -- --run --update || exit 1
+
+# Add any updated snapshots to the commit (cross-platform compatible)
+SNAPSHOT_FILES=$(git diff --name-only --diff-filter=M | grep "__snapshots__" || true)
+if [ -n "$SNAPSHOT_FILES" ]; then
+  echo "Auto-staging updated snapshots..."
+  echo "$SNAPSHOT_FILES" | xargs git add
+fi
 
 echo "Running build validation..."
 npm run build || exit 1
