@@ -82,6 +82,8 @@
     "addLadderedGoalLabel": "Add laddered Ambition",
     "viewLadderedGoalsLabel": "View laddered Ambitions",
     "hideLadderedGoalsLabel": "Hide laddered Ambitions",
+    "viewLabel": "View",
+    "hideLabel": "Hide",
     "openLadderingModalLabel": "Open laddering modal"
   },
   "TypeIcon": {
@@ -236,7 +238,11 @@
       "nextPage": "Next page",
       "viewSwitcherLabel": "Ambitions view",
       "viewGrid": "Grid view",
-      "viewList": "List view"
+      "viewList": "List view",
+      "emptyState": {
+        "title": "No laddered ambitions yet",
+        "description": "Connect ambitions from your team members to track their alignment with this ambition."
+      }
     },
     "activity": {
       "title": "Activity",
@@ -253,5 +259,45 @@
     "submitHint": "Press Ctrl+Enter to submit",
     "cancel": "Cancel",
     "save": "Save"
+  },
+  "AmbitionModals": {
+    "sendForApproval": {
+      "title": "Send for Approval Ambition",
+      "description": "You can add an optional comment to provide more context about your Ambition.",
+      "commentLabel": "Comment",
+      "commentPlaceholder": "Enter a comment",
+      "submitButton": "Send for approval",
+      "cancelButton": "Cancel",
+      "successMessage": "Ambition sent for approval successfully."
+    },
+    "archive": {
+      "title": "Archive Ambition?",
+      "description": "If you archive this Ambition, all associated laddered Ambitions will also be archived. You can find them in your archive and restore them to Draft status at any time.",
+      "submitButton": "Yes, Archive",
+      "cancelButton": "Cancel",
+      "successMessage": "Ambition archived successfully."
+    },
+    "sendBack": {
+      "title": "Send back Ambition",
+      "description": "You can share what needs to be adjusted. Your Feedback helps the employee refine their Ambition.",
+      "commentLabel": "Comment",
+      "commentPlaceholder": "Enter a comment",
+      "submitButton": "Send back",
+      "cancelButton": "Cancel",
+      "successMessage": "Ambition sent back successfully."
+    },
+    "approve": {
+      "title": "Approve Ambition",
+      "description": "You can leave a comment for the employee to provide more context about this approval.",
+      "commentLabel": "Comment",
+      "commentPlaceholder": "Enter a comment",
+      "submitButton": "Approve",
+      "cancelButton": "Cancel",
+      "successMessage": "Ambition approved successfully."
+    },
+    "characterCount": "{count}/150"
+  },
+  "Toast": {
+    "closeNotification": "Close notification"
   }
 }

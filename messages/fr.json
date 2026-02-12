@@ -82,6 +82,8 @@
     "addLadderedGoalLabel": "Ajouter une ambition hiérarchisée",
     "viewLadderedGoalsLabel": "Voir les ambitions hiérarchisées",
     "hideLadderedGoalsLabel": "Masquer les ambitions hiérarchisées",
+    "viewLabel": "Voir",
+    "hideLabel": "Masquer",
     "openLadderingModalLabel": "Ouvrir le modal de hiérarchisation"
   },
   "TypeIcon": {
@@ -236,7 +238,11 @@
       "nextPage": "Page suivante",
       "viewSwitcherLabel": "Affichage des ambitions",
       "viewGrid": "Affichage en grille",
-      "viewList": "Affichage en liste"
+      "viewList": "Affichage en liste",
+      "emptyState": {
+        "title": "Pas encore d'ambitions échelonnées",
+        "description": "Connectez les ambitions des membres de votre équipe pour suivre leur alignement avec cette ambition."
+      }
     },
     "activity": {
       "title": "Activité",
@@ -253,5 +259,8 @@
     "submitHint": "Appuyez sur Ctrl+Entrée pour soumettre",
     "cancel": "Annuler",
     "save": "Enregistrer"
+  },
+  "Toast": {
+    "closeNotification": "Fermer la notification"
   }
 }
