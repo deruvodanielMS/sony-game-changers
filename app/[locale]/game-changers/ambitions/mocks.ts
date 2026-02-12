@@ -99,12 +99,42 @@ export const goalMocks = [
 export const filterBarMocks = {
   avatarSelector: {
     options: [
-      { uid: 'nn0098', name: 'Nia Washington', url: '/profile-img/nia-washington.png' },
-      { uid: 'nn0099', name: 'Sarah Miller', url: '/profile-img/sarah-miller.png' },
-      { uid: 'nn0100', name: 'Kylie Davies', url: '/profile-img/kylie-davies.png' },
-      { uid: 'nn0101', name: 'Lars van der Zee', url: '/profile-img/lars-van-der-zee.png' },
-      { uid: 'nn01201', name: 'Other Lars', url: '/profile-img/lars-van-der-zee.png' },
-      { uid: 'nn0102', name: 'Miguel Santos', url: '/profile-img/profile.png' },
+      {
+        uid: 'nn0098',
+        name: 'Nia Washington',
+        url: '/profile-img/nia-washington.png',
+        role: 'Senior Software Engineer',
+      },
+      {
+        uid: 'nn0099',
+        name: 'Sarah Miller',
+        url: '/profile-img/sarah-miller.png',
+        role: 'Tech Lead',
+      },
+      {
+        uid: 'nn0100',
+        name: 'Kylie Davies',
+        url: '/profile-img/kylie-davies.png',
+        role: 'Product Manager',
+      },
+      {
+        uid: 'nn0101',
+        name: 'Lars van der Zee',
+        url: '/profile-img/lars-van-der-zee.png',
+        role: 'DevOps Engineer',
+      },
+      {
+        uid: 'nn01201',
+        name: 'Other Lars',
+        url: '/profile-img/lars-van-der-zee.png',
+        role: 'QA Engineer',
+      },
+      {
+        uid: 'nn0102',
+        name: 'Miguel Santos',
+        url: '/profile-img/profile.png',
+        role: 'UX Designer',
+      },
     ],
     showItems: 4,
   },

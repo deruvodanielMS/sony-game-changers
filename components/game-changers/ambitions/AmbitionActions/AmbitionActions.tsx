@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { CollapsibleSection } from '@/components/ui/molecules/CollapsibleSection'
+import { EmptyState } from '@/components/ui/molecules/EmptyState'
 import { Typography } from '@/components/ui/foundations/Typography'
 import type { AmbitionActionsProps } from './AmbitionActions.types'
 
@@ -19,20 +20,28 @@ export function AmbitionActions({ actions, defaultOpen = false, className }: Amb
       className={className}
       contentClassName="p-0_5"
     >
-      {actions.map((action, index) => (
-        <div key={index} className="flex items-start gap-1 w-full last:border-b-0 py-1 pl-0_5">
-          {/* Bullet point */}
-          <div
-            className="rounded-full bg-neutral-800 shrink-0"
-            style={{ width: BULLET_SIZE, height: BULLET_SIZE, marginTop: BULLET_VERTICAL_OFFSET }}
-          />
+      {actions.length === 0 ? (
+        <EmptyState
+          variant="compact"
+          title={t('emptyState.title')}
+          description={t('emptyState.description')}
+        />
+      ) : (
+        actions.map((action, index) => (
+          <div key={index} className="flex items-start gap-1 w-full last:border-b-0 py-1 pl-0_5">
+            {/* Bullet point */}
+            <div
+              className="rounded-full bg-neutral-800 shrink-0"
+              style={{ width: BULLET_SIZE, height: BULLET_SIZE, marginTop: BULLET_VERTICAL_OFFSET }}
+            />
 
-          {/* Action text */}
-          <Typography variant="body" color="default" className="flex-1">
-            {action.title}
-          </Typography>
-        </div>
-      ))}
+            {/* Action text */}
+            <Typography variant="body" color="default" className="flex-1">
+              {action.title}
+            </Typography>
+          </div>
+        ))
+      )}
     </CollapsibleSection>
   )
 }

@@ -16,9 +16,13 @@ export const DEBOUNCE_DELAY = 300
 /**
  * Z-index layering constants
  * ⚠️ IMPORTANT: Keep synchronized with CSS custom properties in app/styles/theme.css
+ *
+ * Layering order (lowest to highest):
  * - --z-sticky-filters: 450
  * - --z-tabs: 500
- * - --z-drawer-overlay: 750
+ * - --z-modal: 700
+ * - --z-modal-content: 701
+ * - --z-drawer-overlay: 800
  * - --z-mobile-header: 800
  */
 export const Z_INDEX = {

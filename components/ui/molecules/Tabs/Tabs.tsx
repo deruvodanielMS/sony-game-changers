@@ -27,7 +27,7 @@ export function Tabs({ items, value, onChange, className, 'data-test-id': dataTe
     <div
       className={cn(
         // Sticky below filters, high z-index, white bg, shadow
-        'flex gap-0.5 items-center border-b border-neutral-300 h-2.5',
+        'flex gap-0.5 items-center h-2.5',
         'sticky top-0 z-[--z-tabs] bg-neutral-0 shadow-[--shadow-sticky-light]',
         'transition-shadow',
         'relative',

@@ -101,7 +101,7 @@ export function Modal({
       ref={overlayRef}
       className={cn(
         'fixed inset-0 flex items-center justify-center transition-opacity duration-300 ease-out',
-        'z-[700]',
+        'z-[var(--z-modal)]',
         animateIn ? 'opacity-100' : 'opacity-0',
       )}
       onMouseDown={(e) => {
@@ -120,7 +120,7 @@ export function Modal({
         tabIndex={-1}
         className={cn(
           'relative overflow-hidden flex flex-col pointer-events-auto',
-          'z-[701]',
+          'z-[var(--z-modal-content)]',
           'transition-all duration-300 ease-out transform',
           animateIn ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
           containerClasses,

@@ -12,7 +12,7 @@ import { Arrow } from '@/components/ui/atoms/Arrow'
 import { GoalStatus } from '@/components/ui/molecules/GoalStatus'
 import { Button } from '../../atoms/Button'
 import { useTranslations } from 'next-intl'
-import { GoalStatus as GoalStatusType, GOAL_TYPES } from '@/domain/goal'
+import { GoalStatus as GoalStatusType } from '@/domain/goal'
 import { ROUTES } from '@/common/routes'
 import { useUIStore } from '@/stores/ui.store'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -43,13 +43,14 @@ export function GoalCard({
   goal,
   ladderGoals,
   allowAddChildrenGoals,
+  onAddLadderedGoal,
   'data-testid': dataTestId,
 }: GoalCardProps) {
   const { id, title, avatarUrl, goalType, status, userName, parent } = goal
   const hasChildrenGoals = ladderGoals.length
 
-  // Business ambitions should be expanded by default when they have laddered goals
-  const [open, setOpen] = useState(goalType === GOAL_TYPES.BUSINESS && hasChildrenGoals > 0)
+  // Goals with laddered ambitions should be expanded by default
+  const [open, setOpen] = useState(hasChildrenGoals > 0)
   const t = useTranslations('GoalCard')
   const tGoals = useTranslations('Goals')
   const tLaddering = useTranslations('LadderingModal')
@@ -190,37 +191,63 @@ export function GoalCard({
     >
       <Card
         data-testid={dataTestId}
-        className="flex flex-col gap-1_5 items-stretch relative hover:hover:border-neutral-400 transition-colors"
+        className="flex flex-col gap-0_25 items-stretch relative hover:hover:border-neutral-400 transition-colors"
       >
-        {/* Higher Ambition Section */}
+        {/* Higher Ambition Section with Arrow Connection */}
         {parent && (
-          <div
-            className="flex flex-col items-start w-full cursor-pointer"
-            onClick={handleOpenLadderingModal}
-          >
-            <HigherAmbition
-              text={parent.title}
-              goalType={goal.goalType}
+          <div className="flex flex-col items-start w-full">
+            {/* Parent ambition row */}
+            <div
+              className="flex items-start w-full cursor-pointer"
               onClick={handleOpenLadderingModal}
-            />
-            <Arrow type="Higher top" className="h-1 w-2 overflow-hidden shrink-0" />
+            >
+              <HigherAmbition
+                text={parent.title}
+                goalType={goal.goalType}
+                onClick={handleOpenLadderingModal}
+              />
+            </div>
+            {/* Arrow connection: dot + curve in one continuous flow */}
+            <div className="flex items-stretch">
+              <div className="flex flex-col items-center w-2">
+                <Arrow type="Higher top" className="w-2 h-1 shrink-0" />
+                <Arrow type="Higher bottom" className="w-2 h-2 shrink-0 -mt-[2px]" />
+              </div>
+              <div className="flex-1 min-w-0 flex items-end pb-0_5 mt-1 ml-0_5">
+                <MainAmbition
+                  title={title}
+                  userName={userName}
+                  avatarUrl={avatarUrl}
+                  goalType={goalType}
+                  progress={goal.progress}
+                  href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
+                  showLadderedIndicator={!!hasChildrenGoals}
+                />
+              </div>
+            </div>
           </div>
         )}
 
-        {/* Main Ambition Section */}
-        <MainAmbition
-          title={title}
-          userName={userName}
-          avatarUrl={avatarUrl}
-          goalType={goalType}
-          progress={goal.progress}
-          href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
-          showLadderedIndicator={!!hasChildrenGoals}
-        />
+        {/* Main Ambition Section (without parent) */}
+        {!parent && (
+          <MainAmbition
+            title={title}
+            userName={userName}
+            avatarUrl={avatarUrl}
+            goalType={goalType}
+            progress={goal.progress}
+            href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
+            showLadderedIndicator={!!hasChildrenGoals}
+          />
+        )}
 
         {/* Laddered Goals Section */}
         {open && hasChildrenGoals && (
           <div className="flex flex-col items-start w-full">
+            {/* Laddered top arrow with dot - connects MainAmbition to first LadderedAmbition */}
+            <div className="flex items-start w-full pl-2_5">
+              <Arrow type="Higher top" className="shrink-0 w-3" />
+            </div>
             {ladderGoals.map((ladderGoal, index) => {
               const isLast = index === ladderGoals.length - 1
               const arrowType = isLast ? 'Laddered bottom' : 'Laddered middle'
@@ -248,13 +275,18 @@ export function GoalCard({
           <div className="flex items-center justify-between w-full">
             {/* Left side */}
             <div className="flex gap-1 items-center">
-              {allowAddChildrenGoals && (
-                <Button variant={'link'} leftIcon={<Plus width={20} />}>
+              {(allowAddChildrenGoals || !!hasChildrenGoals) && (
+                <Button
+                  variant={'link'}
+                  size="small"
+                  leftIcon={<Plus width={20} />}
+                  onClick={onAddLadderedGoal}
+                >
                   {t('addLadderedGoalLabel')}
                 </Button>
               )}
               {!!hasChildrenGoals && (
-                <Typography variant="bodySmall" color="neutral600">
+                <Typography variant="bodySmall" color="textSecondary">
                   {t('childrenGoalsLabel', { goals: hasChildrenGoals })}
                 </Typography>
               )}
@@ -262,7 +294,7 @@ export function GoalCard({
 
             {/* Right side: Toggle button */}
             {!!hasChildrenGoals && (
-              <Button variant="link" onClick={() => setOpen(!open)}>
+              <Button variant="link" size="small" onClick={() => setOpen(!open)}>
                 {open ? t('hideLadderedGoalsLabel') : t('viewLadderedGoalsLabel')}
               </Button>
             )}

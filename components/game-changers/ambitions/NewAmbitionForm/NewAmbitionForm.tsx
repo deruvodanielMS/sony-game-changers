@@ -304,10 +304,10 @@ export function NewAmbitionForm({
     return filterBarMocks.avatarSelector.options.map((option) => ({
       value: option.uid,
       label: option.name,
-      description: t('owner.roles.member'), // Generic role for all users
+      description: option.role,
       avatar: option.url,
     }))
-  }, [t])
+  }, [])
 
   // Laddered from options (mock data for now)
   const ladderedFromOptions = useMemo<BigSelectOption[]>(
@@ -338,7 +338,7 @@ export function NewAmbitionForm({
         <AnimatedSection delay={0.1}>
           <div className="flex flex-col gap-0_25">
             <Typography variant="h5">{t('setupTitle')}</Typography>
-            <Typography variant="body" style={{ color: 'var(--text-secondary)' }}>
+            <Typography variant="body" color="textSecondary">
               {t('setupDescription')}
             </Typography>
           </div>
@@ -376,6 +376,7 @@ export function NewAmbitionForm({
             onValueChange={handleOwnerChange}
             placeholder={t('owner.placeholder')}
             required
+            hideDescriptionInDropdown
             error={ownerError ? t('owner.error') : undefined}
           />
         </AnimatedSection>
@@ -413,7 +414,7 @@ export function NewAmbitionForm({
       <AnimatedSection delay={0.1}>
         <div className="flex flex-col gap-0_25">
           <Typography variant="h5">{t('contentTitle')}</Typography>
-          <Typography variant="body" style={{ color: 'var(--text-secondary)' }}>
+          <Typography variant="body" color="textSecondary">
             {t('contentDescription')}
           </Typography>
         </div>
@@ -467,10 +468,10 @@ export function NewAmbitionForm({
                 {t('planActions.label')}
                 <span className="text-feedback-error-500 ml-0_25">*</span>
               </Typography>
-              <Typography variant="body" style={{ color: 'var(--text-secondary)' }}>
+              <Typography variant="body" color="textSecondary">
                 {t('planActions.description')}
               </Typography>
-              <Typography variant="body" style={{ color: 'var(--text-secondary)' }}>
+              <Typography variant="body" color="textSecondary">
                 {t('planActions.subDescription')}
               </Typography>
             </Card>
@@ -538,10 +539,10 @@ export function NewAmbitionForm({
                 {t('achievements.label')}
                 <span className="text-feedback-error-500 ml-0_25">*</span>
               </Typography>
-              <Typography variant="body" style={{ color: 'var(--text-secondary)' }}>
+              <Typography variant="body" color="textSecondary">
                 {t('achievements.description')}
               </Typography>
-              <Typography variant="body" style={{ color: 'var(--text-secondary)' }}>
+              <Typography variant="body" color="textSecondary">
                 {t('achievements.subDescription')}
               </Typography>
             </Card>

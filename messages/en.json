@@ -65,6 +65,16 @@
       "teamMembersLabel": "Team Members",
       "clearAll": "Clear All",
       "showResults": "Show Results"
+    },
+    "emptyState": {
+      "active": {
+        "title": "No Ambitions yet.",
+        "description": "Create an Ambition to begin tracking your progress."
+      },
+      "archived": {
+        "title": "No archived Ambitions.",
+        "description": "Any Ambitions you archive will appear here."
+      }
     }
   },
   "GoalCard": {
@@ -181,9 +191,16 @@
       "sendBack": "Send Back",
       "approve": "Approve",
       "moreOptions": "More options",
+      "edit": "Edit",
+      "archive": "Archive",
+      "unarchive": "Unarchive",
       "title": "Actions",
       "collapse": "Collapse actions",
-      "expand": "Expand actions"
+      "expand": "Expand actions",
+      "emptyState": {
+        "title": "No Actions defined.",
+        "description": "Define the specific steps you'll take to achieve this Ambition. Edit the details to add them."
+      }
     },
     "metadata": {
       "type": "Type",
@@ -204,6 +221,10 @@
         "notStarted": "Not started",
         "onTrack": "On Track",
         "offTrack": "Off Track"
+      },
+      "emptyState": {
+        "title": "No Achievements yet.",
+        "description": "List the expected results or milestones for this Ambition. Edit the details to add them."
       }
     },
     "ladderedAmbitions": {

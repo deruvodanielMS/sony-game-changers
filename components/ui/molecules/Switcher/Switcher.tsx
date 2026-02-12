@@ -1,17 +1,19 @@
 'use client'
 
+import { useRef, useState, useEffect } from 'react'
+import { m } from 'framer-motion'
 import { cn } from '@/utils/cn'
 import type { SwitcherProps } from './Switcher.types'
 
 const sizeStyles = {
   small: {
     container: 'h-3 gap-0_25 p-0_25',
-    button: 'px-0_75 py-0_5 text-label-sm',
+    button: 'px-0_75 py-0_5 text-label-sm max-h-40px',
     icon: 'w-1 h-1',
   },
   large: {
     container: 'p-0_5 gap-0_25',
-    button: 'px-1 py-0_75 text-label-md whitespace-nowrap',
+    button: 'px-1 py-0_5 text-label-md max-h-40px whitespace-nowrap',
     icon: 'w-1_25 h-1_25',
   },
 }
@@ -78,8 +80,28 @@ export function Switcher({
   ariaLabel,
 }: SwitcherProps) {
   const variantConfig = variantStyles[variant]
+  const containerRef = useRef<HTMLDivElement>(null)
+  const buttonRefs = useRef<Map<string, HTMLButtonElement>>(new Map())
+  const [activeRect, setActiveRect] = useState<{ left: number; width: number } | null>(null)
+
+  // Update active indicator position
+  useEffect(() => {
+    const activeButton = buttonRefs.current.get(value)
+    const container = containerRef.current
+
+    if (activeButton && container) {
+      const containerRect = container.getBoundingClientRect()
+      const buttonRect = activeButton.getBoundingClientRect()
+
+      setActiveRect({
+        left: buttonRect.left - containerRect.left,
+        width: buttonRect.width,
+      })
+    }
+  }, [value, items])
+
   const containerClasses = cn(
-    'flex items-center',
+    'flex items-center relative',
     sizeStyles[size].container,
     variantConfig.container,
     className,
@@ -87,27 +109,50 @@ export function Switcher({
 
   return (
     <div
+      ref={containerRef}
       className={containerClasses}
       style={variantConfig.containerStyle}
       role="tablist"
       aria-label={ariaLabel}
     >
+      {/* Animated background indicator */}
+      {activeRect && (
+        <m.div
+          className="absolute rounded-full"
+          style={{
+            backgroundColor: variantConfig.activeStyle.backgroundColor,
+            height: 'calc(100% - 8px)',
+            top: '4px',
+          }}
+          initial={false}
+          animate={{
+            left: activeRect.left,
+            width: activeRect.width,
+          }}
+          transition={{
+            type: 'tween',
+            duration: 0.25,
+            ease: 'easeOut',
+          }}
+        />
+      )}
+
       {items.map((item) => {
         const isActive = value === item.id
         const isDisabled = item.disabled
 
         const buttonClasses = cn(
-          'flex items-center justify-center gap-0_5 font-semibold transition-all duration-200 rounded-full',
+          'flex items-center justify-center gap-0_5 font-semibold rounded-full relative z-10',
+          'transition-colors duration-200',
           sizeStyles[size].button,
           isActive && '[&_svg]:!text-current',
-          !isActive && !isDisabled && variantConfig.inactive,
-          !isActive && !isDisabled && 'hover:opacity-60 active:scale-95',
+          !isActive && !isDisabled && 'hover:opacity-60',
           isDisabled && 'opacity-30 cursor-not-allowed',
           !isDisabled && 'cursor-pointer',
         )
 
         const buttonStyle = isActive
-          ? { ...variantConfig.activeStyle }
+          ? { color: variantConfig.activeStyle.color, backgroundColor: 'transparent' }
           : { ...variantConfig.inactiveStyle, backgroundColor: 'transparent' }
 
         const iconClasses = cn('flex-shrink-0', sizeStyles[size].icon)
@@ -115,6 +160,9 @@ export function Switcher({
         return (
           <button
             key={item.id}
+            ref={(el) => {
+              if (el) buttonRefs.current.set(item.id, el)
+            }}
             type="button"
             role="tab"
             aria-selected={isActive}

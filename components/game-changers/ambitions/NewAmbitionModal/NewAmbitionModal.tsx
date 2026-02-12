@@ -149,11 +149,12 @@ export function NewAmbitionModal({
           {currentStep === 2 && (
             <Button
               variant="secondary"
+              size="small"
+              iconOnly
               onClick={handleBack}
-              className="w-2_5! h-2_5! p-0! rounded-full border border-neutral-300 hover:bg-neutral-100"
               aria-label={t('actions.back')}
             >
-              <ArrowLeft width={18} />
+              <ArrowLeft />
             </Button>
           )}
           <Button

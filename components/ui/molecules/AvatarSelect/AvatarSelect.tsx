@@ -57,7 +57,7 @@ export function AvatarSelect({
             title={name}
             onClick={() => handleAvatarSelect(uid)}
             className={cn(
-              'w-2 h-2 shrink-0 grow-0 -ml-0_25 z-1 hover:z-2 rounded-full transition-transform hover:scale-105',
+              'w-2 h-2 shrink-0 grow-0 -ml-0_25 z-1 hover:z-2 rounded-full transition-transform hover:scale-105 cursor-pointer',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2',
               isSelected && avatarSelectionGradient,
             )}

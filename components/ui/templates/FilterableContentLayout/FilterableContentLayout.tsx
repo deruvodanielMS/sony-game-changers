@@ -39,11 +39,11 @@ function FilterBadge({ count, className }: { count: number; className?: string }
  *
  * Features:
  * - Scroll-aware header (hides on scroll down, shows on scroll up) - desktop only
- * - Sticky FilterBar on desktop (z-index: 800)
+ * - Sticky FilterBar on desktop
  * - Mobile filter drawer with bottom sheet pattern
  * - Navigation drawer detection (hides filters when nav drawer is open)
  * - Active filter count badges
- * - Responsive layout with proper z-index hierarchy (MobileHeader: 1000, Tabs: 900, Filters: 800)
+ * - Responsive layout with proper z-index hierarchy (uses CSS variables from theme.css)
  * - Keyboard accessible with proper focus management
  * - Screen reader friendly with ARIA labels
  *
@@ -97,7 +97,7 @@ export function FilterableContentLayout({
   const showStickyShadow = scrollY > SHADOW_THRESHOLD
 
   return (
-    <div className="flex flex-col gap-0">
+    <div className="flex flex-col gap-0 min-h-full flex-1">
       {/* Header - hide on scroll only on desktop, always visible on mobile */}
       <div
         className="md:transition-[transform,opacity] md:duration-base md:ease-out mb-0"
@@ -114,7 +114,7 @@ export function FilterableContentLayout({
         className={cn(
           'hidden md:block sticky',
           'top-[5rem]', // subnav height (64px, ajusta si es necesario)
-          'z-[950] bg-neutral-0 transition-all duration-base',
+          'z-[var(--z-sticky-filters)] bg-neutral-0 transition-all duration-base',
           showStickyShadow && 'shadow-sticky-light',
         )}
       >
@@ -143,7 +143,7 @@ export function FilterableContentLayout({
       {tabs && (
         <div
           className={cn(
-            'hidden md:block sticky z-[1000] bg-neutral-0',
+            'hidden md:block sticky z-[var(--z-tabs)] bg-neutral-0',
             'top-[9rem]',
             'shadow-[--shadow-sticky-light]',
             'mb-0',
@@ -340,7 +340,9 @@ export function FilterableContentLayout({
         </AnimatedSection>
       </div>
       {/* Padding top para compensar sticky en desktop */}
-      <div className={cn('flex flex-col gap-1 md:gap-1 pt-1', contentClassName)}>{children}</div>
+      <div className={cn('flex flex-col flex-1 gap-1 md:gap-1 pt-1', contentClassName)}>
+        {children}
+      </div>
     </div>
   )
 }

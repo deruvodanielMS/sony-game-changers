@@ -21,6 +21,7 @@ export function AmbitionDetailHeader({
   className,
 }: AmbitionDetailHeaderProps) {
   const t = useTranslations('AmbitionDetail')
+  const tTypeIcon = useTranslations('TypeIcon')
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
   const isDesktop = useMediaQuery(BREAKPOINTS.lg)
   const isTablet = !isMobile && !isDesktop
@@ -50,6 +51,7 @@ export function AmbitionDetailHeader({
           {/* Goal Title */}
           <Typography
             variant={isMobile ? 'h6' : 'h5'}
+            as="h1"
             className={cn('flex-1 min-w-0', isMobile && 'line-clamp-3')}
           >
             {title}
@@ -69,7 +71,15 @@ export function AmbitionDetailHeader({
             <div className="flex gap-0.5 items-center shrink-0">
               <TypeIcon type={ambitionType} variant="metadata" />
               <Typography variant="bodySmall" color="neutral500">
-                {t('metadata.type')}: <span className="font-bold">{ambitionType}</span>
+                {t('metadata.type')}:{' '}
+                <span className="font-bold">
+                  {tTypeIcon(
+                    ambitionType as
+                      | 'business'
+                      | 'manager_effectiveness'
+                      | 'personal_growth_and_development',
+                  )}
+                </span>
               </Typography>
             </div>
           )}

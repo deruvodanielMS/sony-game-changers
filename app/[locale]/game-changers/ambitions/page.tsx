@@ -9,6 +9,7 @@ import { GoalsHeader } from '@/components/game-changers/goals/GoalsHeader'
 import { NewAmbitionModal } from '@/components/game-changers/ambitions/NewAmbitionModal'
 import { Button } from '@/components/ui/atoms/Button'
 import { GoalCard } from '@/components/ui/organisms/GoalCard'
+import { EmptyState } from '@/components/ui/molecules/EmptyState'
 import { FilterableContentLayout } from '@/components/ui/templates/FilterableContentLayout'
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { Tabs } from '@/components/ui/molecules/Tabs'
@@ -129,7 +130,7 @@ export default function GameChangersGoalsPage() {
           <Button
             variant="primary"
             className="text-neutral-0"
-            leftIcon={<CirclePlus width={24} />}
+            leftIcon={<CirclePlus />}
             onClick={() => setIsNewAmbitionOpen(true)}
           >
             {t('newGoal')}
@@ -146,17 +147,40 @@ export default function GameChangersGoalsPage() {
           </AnimatedSection>
         }
       >
-        <div className="flex flex-col gap-1">
-          {filteredList.map((goalData, index) => {
-            const { ladderedGoals, ...goal } = goalData
-            const delay = Math.min(0.1 + index * 0.05, 0.4)
-            return (
-              <AnimatedSection key={goal.id} delay={delay}>
-                <GoalCard ladderGoals={ladderedGoals} goal={goal} />
-              </AnimatedSection>
-            )
-          })}
-        </div>
+        {filteredList.length === 0 ? (
+          <AnimatedSection delay={0.1} className="flex-1 flex flex-col">
+            {currentTab === 'active' ? (
+              <EmptyState
+                title={t('emptyState.active.title')}
+                description={t('emptyState.active.description')}
+                actionLabel={t('newGoal')}
+                actionIcon={<CirclePlus />}
+                onAction={() => setIsNewAmbitionOpen(true)}
+              />
+            ) : (
+              <EmptyState
+                title={t('emptyState.archived.title')}
+                description={t('emptyState.archived.description')}
+              />
+            )}
+          </AnimatedSection>
+        ) : (
+          <div className="flex flex-col gap-1">
+            {filteredList.map((goalData, index) => {
+              const { ladderedGoals, ...goal } = goalData
+              const delay = Math.min(0.1 + index * 0.05, 0.4)
+              return (
+                <AnimatedSection key={goal.id} delay={delay}>
+                  <GoalCard
+                    ladderGoals={ladderedGoals}
+                    goal={goal}
+                    onAddLadderedGoal={() => setIsNewAmbitionOpen(true)}
+                  />
+                </AnimatedSection>
+              )
+            })}
+          </div>
+        )}
       </FilterableContentLayout>
       <NewAmbitionModal open={isNewAmbitionOpen} onClose={() => setIsNewAmbitionOpen(false)} />
     </>

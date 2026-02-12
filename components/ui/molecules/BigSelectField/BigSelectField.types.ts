@@ -80,6 +80,11 @@ export interface BigSelectFieldProps extends Omit<
   hidePlaceholderIcon?: boolean
 
   /**
+   * If true, hides the description in the dropdown list but shows it when selected.
+   */
+  hideDescriptionInDropdown?: boolean
+
+  /**
    * Test ID for testing purposes.
    */
   'data-test-id'?: string

@@ -1,19 +1,21 @@
 'use client'
 
-import { use, useEffect } from 'react'
+import { use, useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { MoreHorizontal } from 'lucide-react'
+import { MoreHorizontal, Pencil, Archive, ArchiveRestore } from 'lucide-react'
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { Skeleton } from '@/components/ui/atoms/Skeleton'
 import { Card } from '@/components/ui/atoms/Card'
 import { Breadcrumb } from '@/components/ui/molecules/Breadcrumb'
 import { HigherAmbition } from '@/components/ui/molecules/HigherAmbition'
 import { Button } from '@/components/ui/atoms/Button'
+import { DropdownMenu } from '@/components/ui/atoms/DropdownMenu'
 import { AmbitionDetailHeader } from '@/components/game-changers/ambitions/AmbitionDetailHeader'
 import { AmbitionActions } from '@/components/game-changers/ambitions/AmbitionActions'
 import { AmbitionAchievements } from '@/components/game-changers/ambitions/AmbitionAchievements'
 import { AmbitionLaddering } from '@/components/game-changers/ambitions/AmbitionLaddering'
 import { AmbitionActivityFeed } from '@/components/game-changers/ambitions/AmbitionActivityFeed'
+import { NewAmbitionModal } from '@/components/game-changers/ambitions/NewAmbitionModal'
 import { useGoalsStore } from '@/stores/goals.store'
 import { ROUTES } from '@/common/routes'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -28,6 +30,7 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   const { fetchGoal, selected, selectGoal } = useGoalsStore()
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
   const { formatDate, formatDateTime } = useDateFormat()
+  const [isNewAmbitionOpen, setIsNewAmbitionOpen] = useState(false)
 
   useEffect(() => {
     fetchGoal(id)
@@ -201,6 +204,33 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   const showApprovalActions = status === GOAL_STATUSES.AWAITING_APPROVAL
   const showSendForApproval = status === GOAL_STATUSES.DRAFT
   const showAnyActions = showApprovalActions || showSendForApproval
+  const isArchived = status === 'archived'
+
+  // Dropdown menu items
+  const dropdownItems = [
+    {
+      label: t('actions.edit'),
+      icon: <Pencil />,
+      onClick: () => {
+        // TODO: Handle edit action
+      },
+    },
+    isArchived
+      ? {
+          label: t('actions.unarchive'),
+          icon: <ArchiveRestore />,
+          onClick: () => {
+            // TODO: Handle unarchive action
+          },
+        }
+      : {
+          label: t('actions.archive'),
+          icon: <Archive />,
+          onClick: () => {
+            // TODO: Handle archive action
+          },
+        },
+  ]
 
   const breadcrumbItems = [
     { label: t('breadcrumb.ambitions'), href: ROUTES.GAME_CHANGERS_AMBITIONS },
@@ -208,7 +238,7 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   ]
 
   return (
-    <div className="flex flex-col w-full pt-2">
+    <div className="flex flex-col w-full">
       {/* Top section: Breadcrumb, LadderGoal, Header with 24px spacing */}
       <div className="flex flex-col gap-1_5 w-full">
         <AnimatedSection delay={0}>
@@ -244,13 +274,18 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
                   </Button>
                 )}
 
-                {/* More Options Icon Button */}
-                <button
-                  className="flex items-center justify-center p-0.25 rounded-full hover:bg-neutral-100 transition-colors"
-                  aria-label={t('actions.moreOptions')}
-                >
-                  <MoreHorizontal className="size-1.5 text-neutral-1000" />
-                </button>
+                {/* More Options Dropdown */}
+                <DropdownMenu
+                  trigger={
+                    <button
+                      className="flex items-center justify-center p-0.25 rounded-full hover:bg-neutral-100 transition-colors cursor-pointer"
+                      aria-label={t('actions.moreOptions')}
+                    >
+                      <MoreHorizontal className="size-1.5 text-neutral-1000" />
+                    </button>
+                  }
+                  items={dropdownItems}
+                />
               </div>
             )}
           </div>
@@ -294,7 +329,11 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
 
         {/* Laddered Ambitions Section */}
         <AnimatedSection delay={0.25}>
-          <AmbitionLaddering ambitions={ladderedGoals} avatarOptions={mockAvatarOptions} />
+          <AmbitionLaddering
+            ambitions={ladderedGoals}
+            avatarOptions={mockAvatarOptions}
+            onAddAmbition={() => setIsNewAmbitionOpen(true)}
+          />
         </AnimatedSection>
 
         {/* Activity Feed Section */}
@@ -302,6 +341,8 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
           <AmbitionActivityFeed activities={mockActivityFeed} />
         </AnimatedSection>
       </div>
+
+      <NewAmbitionModal open={isNewAmbitionOpen} onClose={() => setIsNewAmbitionOpen(false)} />
     </div>
   )
 }

@@ -31,7 +31,7 @@ const rootStyles = cva(
 )
 
 const inputStyles =
-  'bg-transparent outline-none placeholder:text-neutral-600 text-neutral-1000 py-0_75 px-1 h-2_75'
+  'flex-1 w-full bg-transparent outline-none placeholder:text-neutral-600 text-neutral-1000 py-0_75 px-1 h-2_75'
 
 function TextFieldImpl(props: TextFieldProps, ref: React.ForwardedRef<HTMLInputElement>) {
   const {

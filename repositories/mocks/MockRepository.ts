@@ -151,12 +151,15 @@ export const mockActivityFeed = [
     id: '1',
     user: { name: 'Sarah Miller', avatar: '/profile-img/sarah-miller.png' },
     action: 'created' as const,
+    status: 'Draft',
     date: new Date(Date.now() - 86400000).toISOString(),
   },
   {
     id: '2',
     user: { name: 'Lars van der Zee', avatar: '/profile-img/lars-van-der-zee.png' },
     action: 'statusChange' as const,
+    from: 'Draft',
+    to: 'Awaiting Approval',
     date: new Date(Date.now() - 172800000).toISOString(),
   },
   {
@@ -169,6 +172,7 @@ export const mockActivityFeed = [
     id: '4',
     user: { name: 'Kylie Davies', avatar: '/profile-img/kylie-davies.png' },
     action: 'completed' as const,
+    target: 'Q4 Sales Target',
     date: new Date(Date.now() - 345600000).toISOString(),
   },
 ]

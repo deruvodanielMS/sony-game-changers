@@ -32,7 +32,7 @@ export function LadderedAmbition({
     >
       <div className="flex w-full sm:flex-1 gap-1 items-center min-w-0">
         <div className="flex items-center pr-0_5 shrink-0">
-          <div className="mr-[-0_5] shrink-0 size-3">
+          <div className="mr-[-0_5] shrink-0">
             <Arrow type={arrowType} className="size-3 overflow-hidden" />
           </div>
           <div className="mr-[-0_5] flex items-center justify-center shrink-0 size-2">
@@ -47,7 +47,7 @@ export function LadderedAmbition({
         >
           <Typography
             variant="body"
-            className="overflow-hidden text-ellipsis whitespace-nowrap text-neutral-1000 group-hover/link:bg-gradient-to-r group-hover/link:from-feedback-info-500 group-hover/link:to-extra-purple-500 group-hover/link:bg-clip-text group-hover/link:text-transparent"
+            className="overflow-hidden text-ellipsis whitespace-nowrap text-neutral-1000 group-hover/link:bg-gradient-to-r group-hover/link:from-feedback-info-500 group-hover/link:to-extra-purple-500 group-hover/link:bg-clip-text group-hover/link:!text-transparent"
           >
             {title}
           </Typography>

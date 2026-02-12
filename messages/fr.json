@@ -65,6 +65,16 @@
       "teamMembersLabel": "Membres de l'équipe",
       "clearAll": "Tout effacer",
       "showResults": "Afficher les résultats"
+    },
+    "emptyState": {
+      "active": {
+        "title": "Pas encore d'ambitions.",
+        "description": "Créez une ambition pour commencer à suivre vos progrès."
+      },
+      "archived": {
+        "title": "Aucune ambition archivée.",
+        "description": "Toutes les ambitions que vous archivez apparaîtront ici."
+      }
     }
   },
   "GoalCard": {
@@ -181,9 +191,16 @@
       "sendBack": "Renvoyer",
       "approve": "Approuver",
       "moreOptions": "Plus d'options",
+      "edit": "Modifier",
+      "archive": "Archiver",
+      "unarchive": "Désarchiver",
       "title": "Actions",
       "collapse": "Réduire les actions",
-      "expand": "Développer les actions"
+      "expand": "Développer les actions",
+      "emptyState": {
+        "title": "Aucune action définie.",
+        "description": "Définissez les étapes spécifiques que vous prendrez pour atteindre cette Ambition. Modifiez les détails pour les ajouter."
+      }
     },
     "metadata": {
       "type": "Type",
@@ -204,6 +221,10 @@
         "notStarted": "Non commencé",
         "onTrack": "Sur la bonne voie",
         "offTrack": "Hors piste"
+      },
+      "emptyState": {
+        "title": "Aucune réalisation pour le moment.",
+        "description": "Listez les résultats attendus ou les jalons pour cette Ambition. Modifiez les détails pour les ajouter."
       }
     },
     "ladderedAmbitions": {

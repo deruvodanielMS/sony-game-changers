@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from '@/utils/cn'
+import { Typography } from '@/components/ui/foundations/Typography'
 import { TypeIcon } from '@/components/ui/molecules/TypeIcon'
 import { GOAL_TYPES } from '@/domain/goal'
 import type { HigherAmbitionProps } from './HigherAmbition.types'
@@ -16,7 +17,11 @@ export function HigherAmbition({ text, goalType, onClick, className }: HigherAmb
   return (
     <Element
       onClick={onClick}
-      className={cn('flex items-center gap-1 h-2 text-left w-full', className)}
+      className={cn(
+        'flex items-center gap-1 h-2 text-left w-full',
+        onClick && 'cursor-pointer',
+        className,
+      )}
       {...(onClick && { type: 'button' })}
     >
       {/* Type Icon - 32px with info border */}
@@ -30,9 +35,13 @@ export function HigherAmbition({ text, goalType, onClick, className }: HigherAmb
       </div>
 
       {/* Text content */}
-      <span className="flex-1 min-w-0 overflow-hidden text-ellipsis text-body leading-body text-neutral-600 whitespace-nowrap">
+      <Typography
+        variant="bodySmall"
+        color="textSecondary"
+        className="flex-1 min-w-0 overflow-hidden text-ellipsis whitespace-nowrap"
+      >
         {text}
-      </span>
+      </Typography>
     </Element>
   )
 }

@@ -9,6 +9,7 @@ export const TYPOGRAPHY_COLORS = {
   neutral800: 'var(--color-neutral-800)',
   primary: 'var(--color-accent-primary)',
   secondary: 'var(--color-accent-primary-dark)',
+  textSecondary: 'var(--text-secondary)',
   success: 'var(--color-feedback-success-600)',
   warning: 'var(--color-feedback-warning-600)',
   danger: 'var(--color-feedback-danger-600)',

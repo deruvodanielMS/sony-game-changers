@@ -203,9 +203,18 @@
   /* Z-index
    * ⚠️ IMPORTANT: Keep synchronized with Z_INDEX constants in common/constants.ts
    * These values are used in Tailwind classes via z-[var(--z-*)]
+   * 
+   * Layering order (lowest to highest):
+   * 1. Sticky filters (450) - Filter bars that stick on scroll
+   * 2. Tabs (500) - Tab navigation that sticks on scroll
+   * 3. Modal (700) - Modal dialogs
+   * 4. Modal content (701) - Content inside modals
+   * 5. Overlay/Drawer/Header (800) - Full-screen overlays
    */
   --z-sticky-filters: 450;
   --z-tabs: 500;
+  --z-modal: 700; /* Matches Z_INDEX.MODAL */
+  --z-modal-content: 701;
   --z-drawer-overlay: 800; /* Matches Z_INDEX.OVERLAY */
   --z-mobile-header: 800; /* Matches Z_INDEX.OVERLAY */
 
