@@ -63,7 +63,7 @@ describe('SectionHeader', () => {
   it('description has correct typography classes', () => {
     render(<SectionHeader title="Test Title" description="Test description" />)
     const description = screen.getByText('Test description')
-    expect(description).toHaveClass('text-body', 'leading-body', 'font-normal')
+    expect(description).toHaveClass('text-body-small', 'leading-body-small', 'font-normal')
   })
 
   it('renders multiple actions', () => {

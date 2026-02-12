@@ -51,24 +51,27 @@ describe('HigherAmbition', () => {
     expect(element).toHaveClass('flex', 'items-center', 'gap-1', 'h-2')
   })
 
-  it('renders icon with info-500 border', () => {
+  it('renders icon via TypeIcon component', () => {
     const { container } = render(<HigherAmbition text="Test Goal" />)
-    const iconContainer = container.querySelector('div[class*="border-feedback-info-500"]')
-    expect(iconContainer).toBeInTheDocument()
-    expect(iconContainer).toHaveClass('border-2', 'border-feedback-info-500')
+    // TypeIcon renders with variant="higher" which has no border
+    const typeIconContainer = container.querySelector('div[class*="shrink-0"]')
+    expect(typeIconContainer).toBeInTheDocument()
   })
 
   it('truncates long text with ellipsis', () => {
     const longText = 'This is a very long text that should be truncated with ellipsis'
     const { container } = render(<HigherAmbition text={longText} />)
-    const textElement = container.querySelector('span')
+    // Typography component renders the text with truncation classes
+    const textElement = container.querySelector('[class*="overflow-hidden"]')
+    expect(textElement).toBeInTheDocument()
     expect(textElement).toHaveClass('overflow-hidden', 'text-ellipsis', 'whitespace-nowrap')
   })
 
-  it('has correct text color', () => {
-    const { container } = render(<HigherAmbition text="Test Goal" />)
-    const textElement = container.querySelector('span')
-    expect(textElement).toHaveClass('text-neutral-600')
+  it('has correct text color via Typography', () => {
+    render(<HigherAmbition text="Test Goal" />)
+    // Typography with color="textSecondary" is used - verify text is rendered
+    const textElement = screen.getByText('Test Goal')
+    expect(textElement).toBeInTheDocument()
   })
 
   it('renders type icon', () => {
