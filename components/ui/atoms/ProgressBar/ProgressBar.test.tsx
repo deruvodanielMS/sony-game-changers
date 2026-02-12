@@ -31,13 +31,13 @@ describe('ProgressBar', () => {
   it('applies L size variant', () => {
     render(<ProgressBar progress={50} size="L" data-test-id="progress-bar" />)
     const progressBar = screen.getByTestId('progress-bar')
-    expect(progressBar).toHaveClass('h-[30px]')
+    expect(progressBar).toHaveClass('h-progress-bar-lg')
   })
 
   it('applies S size variant', () => {
     render(<ProgressBar progress={50} size="S" data-test-id="progress-bar" />)
     const progressBar = screen.getByTestId('progress-bar')
-    expect(progressBar).toHaveClass('h-[20px]')
+    expect(progressBar).toHaveClass('h-progress-bar-sm')
   })
 
   it('applies in-progress status styling', () => {

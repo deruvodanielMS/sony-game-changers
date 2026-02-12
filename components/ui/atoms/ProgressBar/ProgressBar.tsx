@@ -2,6 +2,7 @@
 
 import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/utils/cn'
+import { useAnimatedProgress } from '@/hooks/useAnimatedProgress'
 import type { ProgressBarProps } from './ProgressBar.types'
 
 /**
@@ -13,8 +14,8 @@ import type { ProgressBarProps } from './ProgressBar.types'
 const progressBarVariants = cva('relative w-full rounded-full overflow-hidden bg-neutral-200', {
   variants: {
     size: {
-      L: 'h-[30px]',
-      S: 'h-[20px]',
+      L: 'h-progress-bar-lg',
+      S: 'h-progress-bar-sm',
     },
   },
   defaultVariants: {
@@ -22,20 +23,17 @@ const progressBarVariants = cva('relative w-full rounded-full overflow-hidden bg
   },
 })
 
-const progressFillVariants = cva(
-  'absolute left-0 top-0 h-full rounded-full transition-all duration-300 z-0',
-  {
-    variants: {
-      status: {
-        'in-progress': 'bg-extra-blue-200',
-        completed: 'bg-extra-green-200',
-      },
-    },
-    defaultVariants: {
-      status: 'in-progress',
+const progressFillVariants = cva('absolute left-0 top-0 h-full rounded-full z-0', {
+  variants: {
+    status: {
+      'in-progress': 'bg-extra-blue-200',
+      completed: 'bg-extra-green-200',
     },
   },
-)
+  defaultVariants: {
+    status: 'in-progress',
+  },
+})
 
 const progressTextVariants = cva('font-bold absolute right-1 top-1/2 -translate-y-1/2 z-10', {
   variants: {
@@ -75,6 +73,7 @@ export function ProgressBar({
   size = 'L',
   status = 'in-progress',
   showPercentage = true,
+  animate = true,
   className,
   'data-test-id': dataTestId,
 }: ProgressBarProps) {
@@ -83,6 +82,9 @@ export function ProgressBar({
   const clampedProgress = Number.isFinite(numericProgress)
     ? Math.min(100, Math.max(0, numericProgress))
     : 0
+
+  // Animate from 0 to target value on mount
+  const animatedProgress = useAnimatedProgress(clampedProgress, animate)
 
   return (
     <div
@@ -95,7 +97,10 @@ export function ProgressBar({
       aria-label={`Progress: ${clampedProgress}%`}
     >
       {/* Fill bar */}
-      <div className={progressFillVariants({ status })} style={{ width: `${clampedProgress}%` }} />
+      <div
+        className={cn(progressFillVariants({ status }), 'transition-[width] duration-700 ease-out')}
+        style={{ width: `${animatedProgress}%` }}
+      />
 
       {/* Percentage text */}
       {showPercentage && (

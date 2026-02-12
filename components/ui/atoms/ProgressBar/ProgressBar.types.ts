@@ -27,6 +27,12 @@ export interface ProgressBarProps {
   showPercentage?: boolean
 
   /**
+   * Whether to animate the progress bar from 0 to the target value on mount
+   * @default true
+   */
+  animate?: boolean
+
+  /**
    * Additional CSS classes
    */
   className?: string
