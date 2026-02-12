@@ -9,7 +9,7 @@ import { useEffect, useMemo, useEffectEvent } from 'react'
 import { ModalHeader, ModalBody } from '@/components/ui/molecules/Modal'
 import { Drawer } from '@/components/ui/atoms/Drawer'
 import { Typography } from '@/components/ui/foundations/Typography'
-import { Badge } from '@/components/ui/atoms/Badge'
+import { AmbitionStatus } from '@/components/ui/atoms/AmbitionStatus'
 import { cn } from '@/utils/cn'
 import { generateInitialsAvatarSrc } from '@/utils/generateInitialsAvatar'
 import type {
@@ -21,10 +21,10 @@ import type {
 import { useUIStore } from '@/stores/ui.store'
 import type { GoalStatus } from '@/domain/goal'
 
-const statusToBadgeVariant = (status?: GoalStatus) => {
+const statusToAmbitionStatusVariant = (status?: GoalStatus) => {
   if (status === 'draft') return 'draft'
   if (status === 'awaiting_approval') return 'awaiting-approval'
-  if (status === 'completed') return 'completed'
+  if (status === 'completed') return 'done'
   return 'default'
 }
 
@@ -122,9 +122,14 @@ function GoalPreviewCard({ goal, 'data-testid': dataTestId }: GoalPreviewCardPro
             {userName}
           </Typography>
         </div>
-        <Badge variant={statusToBadgeVariant(status as GoalStatus)} size="md" className="shrink-0">
+        <AmbitionStatus
+          variant={statusToAmbitionStatusVariant(status as GoalStatus)}
+          size="md"
+          className="shrink-0"
+          data-test-id="ambition-status"
+        >
           {formatStatusLabel(status)}
-        </Badge>
+        </AmbitionStatus>
       </div>
     </div>
   )

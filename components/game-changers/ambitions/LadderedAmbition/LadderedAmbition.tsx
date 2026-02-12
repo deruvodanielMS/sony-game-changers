@@ -4,7 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { Avatar } from '@/components/ui/atoms/Avatar'
 import { ProgressBar } from '@/components/ui/atoms/ProgressBar'
-import { Badge } from '@/components/ui/atoms/Badge'
+import { AmbitionStatus } from '@/components/ui/atoms/AmbitionStatus'
 import { Arrow } from '@/components/ui/atoms/Arrow'
 import { cn } from '@/utils/cn'
 import type { LadderedAmbitionProps } from './LadderedAmbition.types'
@@ -58,7 +58,7 @@ export function LadderedAmbition({
         {status === 'draft' ? (
           <div className="flex h-1_25 items-center justify-end">
             <div className="flex items-center justify-center px-0_5 py-0_25 h-2">
-              <Badge variant={statusVariant}>{statusLabel ?? ''}</Badge>
+              <AmbitionStatus variant={statusVariant}>{statusLabel ?? ''}</AmbitionStatus>
             </div>
           </div>
         ) : (

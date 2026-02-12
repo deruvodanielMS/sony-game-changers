@@ -82,7 +82,7 @@ describe('Checkbox', () => {
   it('applies lg size', () => {
     render(<Checkbox size="lg" data-test-id="checkbox" aria-label="Test checkbox" />)
     const checkbox = screen.getByTestId('checkbox')
-    expect(checkbox).toHaveClass('size-2')
+    expect(checkbox).toHaveClass('size-1_5')
   })
 
   it('merges custom className', () => {

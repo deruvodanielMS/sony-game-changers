@@ -201,7 +201,7 @@ describe('<LadderingModal />', () => {
     expect(screen.getByTestId('goal-preview-card')).toBeInTheDocument()
     expect(screen.getByText('Improve onboarding flow')).toBeInTheDocument()
     expect(screen.getByText('Ada Lovelace')).toBeInTheDocument()
-    expect(screen.getByTestId('badge')).toBeInTheDocument()
+    expect(screen.getByTestId('ambition-status')).toBeInTheDocument()
   })
 
   it('closes desktop modal when switching from desktop to mobile while open=true', () => {

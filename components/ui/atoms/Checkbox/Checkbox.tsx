@@ -14,38 +14,32 @@ const checkboxVariants = cva(
     'border-2',
     'disabled:cursor-not-allowed disabled:opacity-50',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2',
+    // Unchecked state (default)
+    'bg-transparent border-neutral-600',
+    // Checked state using Radix data attribute
+    'data-[state=checked]:bg-extra-purple-600 data-[state=checked]:border-extra-purple-600',
   ],
   {
     variants: {
       size: {
         sm: 'size-1',
         md: 'size-1_5',
-        lg: 'size-2',
-      },
-      checked: {
-        true: 'bg-feedback-success-600 border-feedback-success-600',
-        false: 'bg-transparent border-neutral-600',
+        lg: 'size-1_5',
       },
     },
     defaultVariants: {
       size: 'md',
-      checked: false,
     },
   },
 )
 
 const iconSizeMap = {
-  sm: 'w-3 h-3',
-  md: 'w-4 h-4',
-  lg: 'w-5 h-5',
+  sm: 'size-[12px]',
+  md: 'size-[16px]',
+  lg: 'size-[16px]',
 }
 
 export type CheckboxVariants = VariantProps<typeof checkboxVariants>
-
-const checkVariants = {
-  unchecked: { scale: 0, opacity: 0 },
-  checked: { scale: 1, opacity: 1 },
-}
 
 /**
  * Checkbox - Allow users to select one or more options
@@ -71,8 +65,6 @@ export function Checkbox({
   'aria-label': ariaLabel,
   'data-test-id': dataTestId,
 }: CheckboxProps) {
-  const isChecked = checked ?? defaultChecked ?? false
-
   return (
     <RadixCheckbox.Root
       checked={checked}
@@ -84,13 +76,13 @@ export function Checkbox({
       value={value}
       aria-label={ariaLabel}
       data-testid={dataTestId}
-      className={cn(checkboxVariants({ size, checked: isChecked }), className)}
+      className={cn(checkboxVariants({ size }), className)}
     >
-      <RadixCheckbox.Indicator asChild forceMount>
+      <RadixCheckbox.Indicator asChild>
         <m.div
-          initial="unchecked"
-          animate={isChecked ? 'checked' : 'unchecked'}
-          variants={checkVariants}
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0, opacity: 0 }}
           transition={{ duration: 0.2, ease: 'easeOut' }}
           className="flex items-center justify-center"
         >

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { ActivityItem } from './ActivityItem'
 import { Typography } from '@/components/ui/foundations/Typography'
-import { Badge } from '@/components/ui/atoms/Badge'
+import { AmbitionStatus } from '@/components/ui/atoms/AmbitionStatus'
 import { ArrowRight } from 'lucide-react'
 
 const meta: Meta<typeof ActivityItem> = {
@@ -64,9 +64,9 @@ export const StatusChange: Story = {
       <>
         <Typography variant="body">changed the status</Typography>
         <div className="flex gap-0.5 items-center flex-wrap">
-          <Badge variant="info">Draft</Badge>
+          <AmbitionStatus variant="draft">Draft</AmbitionStatus>
           <ArrowRight className="size-1 text-neutral-1000" />
-          <Badge variant="primary">Awaiting Approval</Badge>
+          <AmbitionStatus variant="awaiting-approval">Awaiting Approval</AmbitionStatus>
         </div>
       </>
     ),
@@ -138,9 +138,9 @@ export const Timeline: Story = {
         <>
           <Typography variant="body">changed the status</Typography>
           <div className="flex gap-0.5 items-center flex-wrap">
-            <Badge variant="info">Draft</Badge>
+            <AmbitionStatus variant="draft">Draft</AmbitionStatus>
             <ArrowRight className="size-1 text-neutral-1000" />
-            <Badge variant="primary">Awaiting Approval</Badge>
+            <AmbitionStatus variant="awaiting-approval">Awaiting Approval</AmbitionStatus>
           </div>
         </>
       </ActivityItem>
@@ -148,7 +148,7 @@ export const Timeline: Story = {
       <ActivityItem user={{ name: 'Emma Wilson' }} date="2 days ago">
         <>
           <Typography variant="body">created the Ambition as</Typography>
-          <Badge variant="info">Draft</Badge>
+          <AmbitionStatus variant="draft">Draft</AmbitionStatus>
         </>
       </ActivityItem>
     </div>

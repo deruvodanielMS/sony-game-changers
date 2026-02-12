@@ -12,7 +12,7 @@ import { EmptyState } from '@/components/ui/molecules/EmptyState'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { Button } from '@/components/ui/atoms/Button'
 import { ProgressBar } from '@/components/ui/atoms/ProgressBar'
-import { Badge } from '@/components/ui/atoms/Badge'
+import { AmbitionStatus } from '@/components/ui/atoms/AmbitionStatus'
 import { Switcher } from '@/components/ui/molecules/Switcher'
 import { cn } from '@/utils/cn'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -35,11 +35,13 @@ const listVariants = {
   },
 }
 
-const statusToBadgeVariant = (status?: string) => {
+const statusToAmbitionStatusVariant = (status?: string) => {
   const normalized = status?.toLowerCase().replace(/\s+/g, '_')
   if (normalized === 'draft') return 'draft'
   if (normalized === 'awaiting_approval') return 'awaiting-approval'
-  if (normalized === 'completed') return 'completed'
+  if (normalized === 'completed' || normalized === 'done') return 'done'
+  if (normalized === 'in_progress') return 'in-progress'
+  if (normalized === 'archived') return 'archived'
   return 'default'
 }
 
@@ -278,9 +280,12 @@ export function AmbitionLaddering({
 
                     {/* Status column */}
                     <div className="flex justify-start">
-                      <Badge variant={statusToBadgeVariant(ambition.status)} size="md">
+                      <AmbitionStatus
+                        variant={statusToAmbitionStatusVariant(ambition.status)}
+                        size="md"
+                      >
                         {formatStatusLabel(ambition.status)}
-                      </Badge>
+                      </AmbitionStatus>
                     </div>
                   </m.div>
                 </Link>

@@ -8,13 +8,13 @@ import type { SwitcherProps } from './Switcher.types'
 const sizeStyles = {
   small: {
     container: 'h-3 gap-0_25 p-0_25',
-    button: 'px-0_75 py-0_5 text-label-sm max-h-40px',
-    icon: 'w-1 h-1',
+    button: 'px-1 py-0_5 text-label-sm',
+    icon: 'w-1_25 h-1_25',
   },
   large: {
-    container: 'p-0_5 gap-0_25',
-    button: 'px-1 py-0_5 text-label-md max-h-40px whitespace-nowrap',
-    icon: 'w-1_25 h-1_25',
+    container: 'h-3 gap-0_25 p-0_5',
+    button: 'px-1 py-0_5 text-label-md whitespace-nowrap',
+    icon: 'w-1_5 h-1_5',
   },
 }
 

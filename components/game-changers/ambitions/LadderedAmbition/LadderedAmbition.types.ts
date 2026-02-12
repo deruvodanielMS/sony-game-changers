@@ -8,7 +8,7 @@ export interface LadderedAmbitionProps {
   progress: number
   status: GoalStatus | string
   statusLabel?: string
-  statusVariant?: 'draft' | 'awaiting-approval' | 'completed' | 'default'
+  statusVariant?: 'draft' | 'awaiting-approval' | 'in-progress' | 'done' | 'archived' | 'default'
   arrowType?: ArrowType
   href: string
   className?: string
