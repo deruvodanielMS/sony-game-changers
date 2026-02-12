@@ -139,6 +139,13 @@
   --modal-width-md: 547px;
   --modal-width-lg: 720px;
   --modal-width-xl: 1024px;
+
+  /* ��� Toast */
+  --toast-width: 500px;
+
+  /* ��� Progress Bar */
+  --progress-bar-height-lg: 30px;
+  --progress-bar-height-sm: 20px;
   --drawer-width-sm: 320px;
   --drawer-width-md: 420px;
   --drawer-width-lg: 560px;
