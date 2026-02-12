@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { SlidersHorizontal } from 'lucide-react'
 import { Button } from '@/components/ui/atoms/Button'
 import { Checkbox } from '@/components/ui/atoms/Checkbox'
+import { Drawer } from '@/components/ui/atoms/Drawer'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
 import { SearchField } from '@/components/ui/molecules/SearchField'
@@ -12,11 +13,8 @@ import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { useScrollDirection } from '@/hooks/useScrollDirection'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
-import { useUIStore } from '@/stores/ui.store'
 import { cn } from '@/utils/cn'
 import type { FilterableContentLayoutProps } from './FilterableContentLayout.types'
-import type { FilterMultiSelectProps } from '@/components/ui/molecules/FilterMultiSelect/FilterMultiSelect.types'
-import type { AvatarSelectProps } from '@/components/ui/molecules/AvatarSelect/AvatarSelect.types'
 
 // Constants
 const SCROLL_THRESHOLD = 100 // px - threshold to hide header on scroll
@@ -38,235 +36,6 @@ function FilterBadge({ count, className }: { count: number; className?: string }
     >
       {count > 9 ? '+9' : count}
     </span>
-  )
-}
-
-// Types for drawer content
-interface FilterDrawerContentProps {
-  filters: FilterMultiSelectProps[]
-  avatarSelector?: AvatarSelectProps
-  searchField?: {
-    value: string
-    onChange: (value: string) => void
-    placeholder?: string
-  }
-  translations: {
-    searchLabel?: string
-    filterByLabel?: string
-    teamMembersLabel?: string
-    clearAll: string
-    showResults: string
-  }
-  activeFiltersCount: number
-  onClearFilters?: () => void
-  onApply: () => void
-}
-
-/**
- * FilterDrawerContent - Separate component for drawer content with local state
- * This allows the UI to update reactively when selections change
- */
-function FilterDrawerContent({
-  filters,
-  avatarSelector,
-  searchField,
-  translations,
-  activeFiltersCount,
-  onClearFilters,
-  onApply,
-}: FilterDrawerContentProps) {
-  // Local state for temporary filter selections (applied on "Show Results")
-  const [localFilters, setLocalFilters] = useState<Record<string, string[]>>(() => {
-    const initial: Record<string, string[]> = {}
-    filters.forEach((filter) => {
-      initial[filter.label] = filter.selected ?? []
-    })
-    return initial
-  })
-
-  // Local state for avatar selection
-  const [localAvatarSelected, setLocalAvatarSelected] = useState<string[]>(
-    avatarSelector?.selected ?? [],
-  )
-
-  // Calculate local active filters count
-  const localActiveCount =
-    Object.values(localFilters).reduce((acc, selected) => acc + selected.length, 0) +
-    localAvatarSelected.length
-
-  // Handle checkbox toggle
-  const handleFilterToggle = (filterLabel: string, optionValue: string) => {
-    setLocalFilters((prev) => {
-      const current = prev[filterLabel] ?? []
-      const isSelected = current.includes(optionValue)
-      return {
-        ...prev,
-        [filterLabel]: isSelected
-          ? current.filter((v) => v !== optionValue)
-          : [...current, optionValue],
-      }
-    })
-  }
-
-  // Handle avatar selection
-  const handleAvatarSelect = (selected: string[]) => {
-    setLocalAvatarSelected(selected)
-  }
-
-  // Handle clear all
-  const handleClear = () => {
-    // Clear local state
-    setLocalFilters(() => {
-      const cleared: Record<string, string[]> = {}
-      filters.forEach((filter) => {
-        cleared[filter.label] = []
-      })
-      return cleared
-    })
-    setLocalAvatarSelected([])
-    // Also clear parent state
-    onClearFilters?.()
-  }
-
-  // Handle apply - commit local state to parent
-  const handleApply = () => {
-    // Apply filter selections to parent
-    filters.forEach((filter) => {
-      const localSelected = localFilters[filter.label] ?? []
-      filter.onSelect(localSelected)
-    })
-    // Apply avatar selection to parent
-    if (avatarSelector?.onAvatarSelect) {
-      avatarSelector.onAvatarSelect(localAvatarSelected)
-    }
-    onApply()
-  }
-
-  return (
-    <div className="flex flex-col h-full">
-      {/* Scrollable content */}
-      <div className="flex-1 overflow-y-auto px-1.5 pb-1.5">
-        {/* Search First - Most used action */}
-        {searchField && (
-          <div className="mb-1.5">
-            {translations.searchLabel && (
-              <Typography
-                variant="bodySmall"
-                fontWeight="semibold"
-                className="mb-0.5"
-                color="neutral800"
-              >
-                {translations.searchLabel}
-              </Typography>
-            )}
-            <SearchField
-              onChange={searchField.onChange}
-              defaultValue={searchField.value}
-              placeholder={searchField.placeholder}
-            />
-          </div>
-        )}
-
-        {/* Filters Section */}
-        {filters.length > 0 && (
-          <div className="mb-1.5">
-            {translations.filterByLabel && (
-              <Typography
-                variant="bodySmall"
-                fontWeight="semibold"
-                className="mb-0.75"
-                color="neutral800"
-              >
-                {translations.filterByLabel}
-              </Typography>
-            )}
-            <div className="flex flex-col gap-1.5">
-              {filters.map((filter) => (
-                <div key={filter.label} className="border-b border-neutral-200 pb-1.5">
-                  <Typography
-                    variant="body"
-                    fontWeight="semibold"
-                    className="mb-0.75"
-                    color="neutral800"
-                  >
-                    {filter.label}
-                  </Typography>
-                  <div className="flex flex-col gap-0.5">
-                    {filter.options.map((option) => {
-                      const isSelected = localFilters[filter.label]?.includes(option.value) ?? false
-                      return (
-                        <label
-                          key={option.value}
-                          className="flex items-center gap-0.75 cursor-pointer py-0.5"
-                        >
-                          <Checkbox
-                            checked={isSelected}
-                            onCheckedChange={() => handleFilterToggle(filter.label, option.value)}
-                            aria-label={option.label}
-                          />
-                          <Typography variant="body" color="neutral800">
-                            {option.label}
-                          </Typography>
-                        </label>
-                      )
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Avatar Selector */}
-        {avatarSelector && (
-          <div className="mb-1.5">
-            {translations.teamMembersLabel && (
-              <Typography
-                variant="bodySmall"
-                fontWeight="semibold"
-                className="mb-0.75"
-                color="neutral800"
-              >
-                {translations.teamMembersLabel}
-              </Typography>
-            )}
-            <AvatarSelect
-              {...avatarSelector}
-              selected={localAvatarSelected}
-              onAvatarSelect={handleAvatarSelect}
-            />
-          </div>
-        )}
-      </div>
-
-      {/* Sticky Footer with actions */}
-      <div className="sticky bottom-0 bg-neutral-0 border-t border-neutral-300 px-1.5 py-1 flex gap-0.75">
-        <Button
-          variant="secondary"
-          onClick={handleClear}
-          className="flex-1"
-          disabled={localActiveCount === 0}
-        >
-          {translations.clearAll}
-        </Button>
-        <Button
-          variant="primary"
-          onClick={handleApply}
-          className="flex-1 text-neutral-0 relative"
-          aria-label={
-            localActiveCount > 0
-              ? `${translations.showResults} (${localActiveCount} active filters)`
-              : translations.showResults
-          }
-        >
-          {translations.showResults}
-          <FilterBadge
-            count={localActiveCount}
-            className="ml-0_5 bg-neutral-0 text-feedback-error-500 outline-feedback-error-500"
-          />
-        </Button>
-      </div>
-    </div>
   )
 }
 
@@ -320,8 +89,14 @@ export function FilterableContentLayout({
   contentClassName,
   tabs,
 }: FilterableContentLayoutProps) {
-  const { openDrawer, closeDrawer } = useUIStore()
   const { scrollDirection, scrollY } = useScrollDirection()
+
+  // Local state for mobile filter drawer
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+
+  // Local state for temporary filter selections in drawer
+  const [localFilters, setLocalFilters] = useState<Record<string, string[]>>({})
+  const [localAvatarSelected, setLocalAvatarSelected] = useState<string[]>([])
 
   // Use media query hook for desktop detection
   const isDesktop = useMediaQuery(BREAKPOINTS.md)
@@ -331,6 +106,67 @@ export function FilterableContentLayout({
 
   // Show shadow when content is scrolling behind sticky elements
   const showStickyShadow = scrollY > SHADOW_THRESHOLD
+
+  // Initialize local state when drawer opens
+  const handleOpenDrawer = () => {
+    // Sync local state with current filter values
+    const initialFilters: Record<string, string[]> = {}
+    filters.forEach((filter) => {
+      initialFilters[filter.label] = filter.selected ?? []
+    })
+    setLocalFilters(initialFilters)
+    setLocalAvatarSelected(avatarSelector?.selected ?? [])
+    setIsDrawerOpen(true)
+  }
+
+  // Handle checkbox toggle in drawer
+  const handleFilterToggle = (filterLabel: string, optionValue: string) => {
+    setLocalFilters((prev) => {
+      const current = prev[filterLabel] ?? []
+      const isSelected = current.includes(optionValue)
+      return {
+        ...prev,
+        [filterLabel]: isSelected
+          ? current.filter((v) => v !== optionValue)
+          : [...current, optionValue],
+      }
+    })
+  }
+
+  // Handle avatar selection in drawer
+  const handleAvatarSelect = (selected: string[]) => {
+    setLocalAvatarSelected(selected)
+  }
+
+  // Calculate local active filters count for drawer
+  const localActiveCount =
+    Object.values(localFilters).reduce((acc, selected) => acc + selected.length, 0) +
+    localAvatarSelected.length
+
+  // Handle clear all in drawer
+  const handleClearFilters = () => {
+    const cleared: Record<string, string[]> = {}
+    filters.forEach((filter) => {
+      cleared[filter.label] = []
+    })
+    setLocalFilters(cleared)
+    setLocalAvatarSelected([])
+    onClearFilters?.()
+  }
+
+  // Handle apply - commit local state to parent and close drawer
+  const handleApplyFilters = () => {
+    // Apply filter selections to parent
+    filters.forEach((filter) => {
+      const localSelected = localFilters[filter.label] ?? []
+      filter.onSelect(localSelected)
+    })
+    // Apply avatar selection to parent
+    if (avatarSelector?.onAvatarSelect) {
+      avatarSelector.onAvatarSelect(localAvatarSelected)
+    }
+    setIsDrawerOpen(false)
+  }
 
   return (
     <div className="flex flex-col gap-0 min-h-full flex-1">
@@ -415,24 +251,7 @@ export function FilterableContentLayout({
               variant="secondary"
               className="relative"
               leftIcon={<SlidersHorizontal width={20} />}
-              onClick={() => {
-                openDrawer(
-                  <FilterDrawerContent
-                    filters={filters}
-                    avatarSelector={avatarSelector}
-                    searchField={searchField}
-                    translations={translations}
-                    activeFiltersCount={activeFiltersCount}
-                    onClearFilters={onClearFilters}
-                    onApply={closeDrawer}
-                  />,
-                  {
-                    title: drawerTitle,
-                    position: 'bottom',
-                    size: 'lg',
-                  },
-                )
-              }}
+              onClick={handleOpenDrawer}
               aria-label={
                 activeFiltersCount > 0
                   ? `${translations.filtersButton} (${activeFiltersCount} active)`
@@ -450,6 +269,143 @@ export function FilterableContentLayout({
       <div className={cn('flex flex-col flex-1 gap-1 md:gap-1 pt-1', contentClassName)}>
         {children}
       </div>
+
+      {/* Mobile Filter Drawer - rendered directly for reactive state */}
+      <Drawer
+        open={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        title={drawerTitle}
+        position="bottom"
+        size="lg"
+      >
+        <div className="flex flex-col h-full">
+          {/* Scrollable content */}
+          <div className="flex-1 overflow-y-auto">
+            {/* Search First - Most used action */}
+            {searchField && (
+              <div className="mb-1.5">
+                {translations.searchLabel && (
+                  <Typography
+                    variant="bodySmall"
+                    fontWeight="semibold"
+                    className="mb-0.5"
+                    color="neutral800"
+                  >
+                    {translations.searchLabel}
+                  </Typography>
+                )}
+                <SearchField
+                  onChange={searchField.onChange}
+                  defaultValue={searchField.value}
+                  placeholder={searchField.placeholder}
+                />
+              </div>
+            )}
+
+            {/* Filters Section */}
+            {filters.length > 0 && (
+              <div className="mb-1.5">
+                {translations.filterByLabel && (
+                  <Typography
+                    variant="bodySmall"
+                    fontWeight="semibold"
+                    className="mb-0.75"
+                    color="neutral800"
+                  >
+                    {translations.filterByLabel}
+                  </Typography>
+                )}
+                <div className="flex flex-col gap-1.5">
+                  {filters.map((filter) => (
+                    <div key={filter.label} className="border-b border-neutral-200 pb-1.5">
+                      <Typography
+                        variant="body"
+                        fontWeight="semibold"
+                        className="mb-0.75"
+                        color="neutral800"
+                      >
+                        {filter.label}
+                      </Typography>
+                      <div className="flex flex-col gap-0.5">
+                        {filter.options.map((option) => {
+                          const isSelected =
+                            localFilters[filter.label]?.includes(option.value) ?? false
+                          return (
+                            <label
+                              key={option.value}
+                              className="flex items-center gap-0.75 cursor-pointer py-0.5"
+                            >
+                              <Checkbox
+                                checked={isSelected}
+                                onCheckedChange={() =>
+                                  handleFilterToggle(filter.label, option.value)
+                                }
+                                aria-label={option.label}
+                              />
+                              <Typography variant="body" color="neutral800">
+                                {option.label}
+                              </Typography>
+                            </label>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Avatar Selector */}
+            {avatarSelector && (
+              <div className="mb-1.5">
+                {translations.teamMembersLabel && (
+                  <Typography
+                    variant="bodySmall"
+                    fontWeight="semibold"
+                    className="mb-0.75"
+                    color="neutral800"
+                  >
+                    {translations.teamMembersLabel}
+                  </Typography>
+                )}
+                <AvatarSelect
+                  {...avatarSelector}
+                  selected={localAvatarSelected}
+                  onAvatarSelect={handleAvatarSelect}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Sticky Footer with actions */}
+          <div className="sticky bottom-0 bg-neutral-0 border-t border-neutral-300 py-1 flex gap-0.75 -mx-1_5 px-1_5">
+            <Button
+              variant="secondary"
+              onClick={handleClearFilters}
+              className="flex-1"
+              disabled={localActiveCount === 0}
+            >
+              {translations.clearAll}
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleApplyFilters}
+              className="flex-1 text-neutral-0 relative"
+              aria-label={
+                localActiveCount > 0
+                  ? `${translations.showResults} (${localActiveCount} active filters)`
+                  : translations.showResults
+              }
+            >
+              {translations.showResults}
+              <FilterBadge
+                count={localActiveCount}
+                className="ml-0_5 bg-neutral-0 text-feedback-error-500 outline-feedback-error-500"
+              />
+            </Button>
+          </div>
+        </div>
+      </Drawer>
     </div>
   )
 }
