@@ -13,6 +13,9 @@ services:
       NEXTAUTH_SECRET: 'super-secret'
       NEXT_PUBLIC_AUTH_ENABLED: false
       REPOSITORY_SOURCE: 'prisma'
+      DEMO_IC_PASSWORD_ENC: 'DQZAH0wYFg=='
+      DEMO_MANAGER_PASSWORD_ENC: 'CQQDDkoOF1RdBhIe'
+      DEMO_PASSWORD_KEY: 'demo-key-gamechangers'
 
 volumes:
   db-data:

@@ -264,4 +264,18 @@
   "Toast": {
     "closeNotification": "Fermer la notification"
   }
+  ,"LoginForm": {
+    "title": "Bon retour",
+    "pageTitle": "Connectez-vous pour continuer",
+    "emailLabel": "Email",
+    "emailPlaceholder": "vous@entreprise.com",
+    "passwordLabel": "Mot de passe",
+    "passwordPlaceholder": "Entrez votre mot de passe",
+    "signIn": "Se connecter",
+    "signingIn": "Connexion…",
+    "invalidCredentials": "Email ou mot de passe invalide",
+    "demoHelp": "Démo : remplir rapidement les identifiants",
+    "useIC": "Compte IC",
+    "useManager": "Compte Manager"
+  }
 }

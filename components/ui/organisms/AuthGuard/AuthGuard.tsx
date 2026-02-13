@@ -1,7 +1,7 @@
 'use client'
 
 import { useSession, signIn } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { Spinner } from '@/components/ui/atoms/Spinner'
 import { useUserStore } from '@/stores/user.store'
@@ -13,17 +13,21 @@ type AuthGuardProps = {
   provider?: string
 }
 
-export function AuthGuard({ children, provider = 'okta' }: AuthGuardProps) {
+export function AuthGuard({ children, provider = 'credentials' }: AuthGuardProps) {
   const { status, data } = useSession()
   const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
+    // Wait for pathname, and skip redirect when already on a login page.
+    if (!pathname) return
+    const p = pathname.toLowerCase()
+    if (p === '/login' || p.endsWith('/login')) return
     if (status === 'unauthenticated') {
-      signIn(provider, {
-        callbackUrl: pathname,
-      })
+      const callbackUrl = `${window.location.origin}${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`
+      signIn(provider, { callbackUrl })
     }
-  }, [status, pathname, provider])
+  }, [status, pathname, provider, searchParams])
 
   const { getUser } = useUserStore()
 
@@ -33,7 +37,7 @@ export function AuthGuard({ children, provider = 'okta' }: AuthGuardProps) {
     }
   }, [status, data, getUser])
 
-  if (status !== 'authenticated') {
+  if (status === 'loading') {
     return (
       <div className="flex items-center justify-center w-screen h-screen">
         <Spinner size="large" />

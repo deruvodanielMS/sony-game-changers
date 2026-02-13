@@ -308,4 +308,18 @@
     "addLadderedAmbition": "Add laddered Ambition",
     "dismiss": "Dismiss"
   }
+  ,"LoginForm": {
+    "title": "Welcome back",
+    "pageTitle": "Sign in to continue",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@company.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "signIn": "Sign in",
+    "signingIn": "Signing in…",
+    "invalidCredentials": "Invalid email or password",
+    "demoHelp": "Demo: quick-fill credentials",
+    "useIC": "Use IC account",
+    "useManager": "Use Manager account"
+  }
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback, useEffect, useLayoutEffect } from 'react'
+import { useSession } from 'next-auth/react'
 import { LazyMotion, domMax } from 'framer-motion'
 import { cn } from '@/utils/cn'
 import { Drawer } from '@/components/ui/atoms/Drawer'
@@ -23,6 +24,8 @@ export interface AppLayoutProps {
  * Mobile (<768px): Drawer navigation
  */
 export function AppLayout({ children, className }: AppLayoutProps) {
+  const { status } = useSession()
+
   const [userCollapsedState, setUserCollapsedState] = useState<boolean | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true)
@@ -87,6 +90,12 @@ export function AppLayout({ children, className }: AppLayoutProps) {
   // Client-side: show correct layout based on width
   const showMobileLayout = isMounted && isMobile
   const showDesktopLayout = !isMounted || !isMobile
+
+  // If the user is unauthenticated, don't render the main layout —
+  // this allows pages like localized `/[locale]/login` to render without the app chrome.
+  if (status === 'unauthenticated') {
+    return <>{children}</>
+  }
 
   return (
     <LazyMotion features={domMax} strict>

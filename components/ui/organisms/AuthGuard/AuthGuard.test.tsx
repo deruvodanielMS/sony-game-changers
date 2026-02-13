@@ -1,95 +1,238 @@
+// AuthGuard.test.tsx
 import React from 'react'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
-import { vi } from 'vitest'
-
-vi.mock('next-auth/react', () => {
-  return {
-    useSession: vi.fn(),
-    signIn: vi.fn(),
-  }
-})
-
-vi.mock('next/navigation', () => ({
-  usePathname: vi.fn(),
-}))
-
-// Replace Spinner with a simple identifiable stub for assertions
-vi.mock('@/components/ui/atoms/Spinner', () => ({
-  Spinner: (props: any) => <div data-testid="spinner-mock" />,
-}))
 
 import { AuthGuard } from './AuthGuard'
-import { useSession, signIn } from 'next-auth/react'
-import { usePathname } from 'next/navigation'
+
+// --------------------
+// Mocks
+// --------------------
+const signInMock = vi.fn()
+const useSessionMock = vi.fn()
+
+vi.mock('next-auth/react', () => ({
+  signIn: (...args: any[]) => signInMock(...args),
+  useSession: () => useSessionMock(),
+}))
+
+let mockPathname: string | null = '/protected'
+let mockSearchParamsString = ''
+
+vi.mock('next/navigation', () => ({
+  usePathname: () => mockPathname,
+  useSearchParams: () => ({
+    toString: () => mockSearchParamsString,
+  }),
+}))
+
+// Spinner: lo reemplazamos por algo fácil de assert
+vi.mock('@/components/ui/atoms/Spinner', () => ({
+  Spinner: (props: any) => <div data-testid="spinner" data-size={props.size} />,
+}))
+
+const getUserMock = vi.fn()
+vi.mock('@/stores/user.store', () => ({
+  useUserStore: () => ({ getUser: getUserMock }),
+}))
+
+// Constante default
+vi.mock('@/common/constants', () => ({
+  DEFAULT_EMPLOYEE_EMAIL: 'default@company.com',
+}))
 
 describe('AuthGuard', () => {
+  const originalLocation = window.location
+
   beforeEach(() => {
-    vi.resetAllMocks()
+    signInMock.mockReset()
+    getUserMock.mockReset()
+    useSessionMock.mockReset()
+
+    mockPathname = '/protected'
+    mockSearchParamsString = ''
+
+    // set window.location.origin de forma controlada
+    // @ts-expect-error - override for tests
+    delete window.location
+    // @ts-expect-error - override for tests
+    window.location = { origin: 'https://example.com' }
   })
 
-  test('renders spinner when status is loading', () => {
-    ;(useSession as unknown as any).mockReturnValue({ status: 'loading' })
-    ;(usePathname as unknown as any).mockReturnValue('/some-path')
+  afterEach(() => {
+    // @ts-expect-error - restore
+    window.location = originalLocation
+  })
+
+  it('renders spinner while loading', () => {
+    useSessionMock.mockReturnValue({ status: 'loading', data: null })
 
     render(
       <AuthGuard>
-        <div>Protected Content</div>
+        <div>child</div>
       </AuthGuard>,
     )
 
-    expect(screen.queryByText('Protected Content')).toBeNull()
-    expect(screen.getByTestId('spinner-mock')).toBeInTheDocument()
-    expect(signIn as unknown as any).not.toHaveBeenCalled()
+    expect(screen.getByTestId('spinner')).toBeInTheDocument()
+    expect(screen.getByTestId('spinner')).toHaveAttribute('data-size', 'large')
+    expect(screen.queryByText('child')).not.toBeInTheDocument()
   })
 
-  test('calls signIn with default provider when unauthenticated', async () => {
-    ;(useSession as unknown as any).mockReturnValue({ status: 'unauthenticated' })
-    ;(usePathname as unknown as any).mockReturnValue('/current-path')
-
-    render(
-      <AuthGuard>
-        <div>Protected Content</div>
-      </AuthGuard>,
-    )
-
-    await waitFor(() => {
-      expect(signIn as unknown as any).toHaveBeenCalledWith('okta', {
-        callbackUrl: '/current-path',
-      })
+  it('renders children when not loading', () => {
+    useSessionMock.mockReturnValue({
+      status: 'authenticated',
+      data: { user: { email: 'a@b.com' } },
     })
 
-    // Spinner should still render while redirecting
-    expect(screen.getByTestId('spinner-mock')).toBeInTheDocument()
-  })
-
-  test('uses provider prop override when provided', async () => {
-    ;(useSession as unknown as any).mockReturnValue({ status: 'unauthenticated' })
-    ;(usePathname as unknown as any).mockReturnValue('/override-path')
-
     render(
-      <AuthGuard provider="github">
-        <div>Protected Content</div>
+      <AuthGuard>
+        <div>child</div>
       </AuthGuard>,
     )
 
-    await waitFor(() => {
-      expect(signIn as unknown as any).toHaveBeenCalledWith('github', {
-        callbackUrl: '/override-path',
-      })
-    })
+    expect(screen.getByText('child')).toBeInTheDocument()
   })
 
-  test('renders children when authenticated and does not call signIn', () => {
-    ;(useSession as unknown as any).mockReturnValue({ status: 'authenticated' })
-    ;(usePathname as unknown as any).mockReturnValue('/any')
+  it('calls signIn with callbackUrl when unauthenticated and not on login', async () => {
+    useSessionMock.mockReturnValue({ status: 'unauthenticated', data: null })
+    mockPathname = '/protected'
+    mockSearchParamsString = 'a=1&b=2'
 
     render(
       <AuthGuard>
-        <div>Protected Content</div>
+        <div>child</div>
       </AuthGuard>,
     )
 
-    expect(screen.getByText('Protected Content')).toBeInTheDocument()
-    expect(signIn as unknown as any).not.toHaveBeenCalled()
+    await waitFor(() => expect(signInMock).toHaveBeenCalledTimes(1))
+
+    expect(signInMock).toHaveBeenCalledWith('credentials', {
+      callbackUrl: 'https://example.com/protected?a=1&b=2',
+    })
+  })
+
+  it('calls signIn without querystring when search params are empty', async () => {
+    useSessionMock.mockReturnValue({ status: 'unauthenticated', data: null })
+    mockPathname = '/protected'
+    mockSearchParamsString = ''
+
+    render(
+      <AuthGuard>
+        <div>child</div>
+      </AuthGuard>,
+    )
+
+    await waitFor(() => expect(signInMock).toHaveBeenCalledTimes(1))
+
+    expect(signInMock).toHaveBeenCalledWith('credentials', {
+      callbackUrl: 'https://example.com/protected',
+    })
+  })
+
+  it('does NOT call signIn when pathname is null/empty', async () => {
+    useSessionMock.mockReturnValue({ status: 'unauthenticated', data: null })
+    mockPathname = null
+
+    render(
+      <AuthGuard>
+        <div>child</div>
+      </AuthGuard>,
+    )
+
+    // damos un micro-tick al effect
+    await new Promise((r) => setTimeout(r, 0))
+
+    expect(signInMock).not.toHaveBeenCalled()
+  })
+
+  it('does NOT call signIn when already on /login', async () => {
+    useSessionMock.mockReturnValue({ status: 'unauthenticated', data: null })
+    mockPathname = '/login'
+
+    render(
+      <AuthGuard>
+        <div>child</div>
+      </AuthGuard>,
+    )
+
+    await new Promise((r) => setTimeout(r, 0))
+    expect(signInMock).not.toHaveBeenCalled()
+  })
+
+  it('does NOT call signIn when pathname ends with /login (case-insensitive)', async () => {
+    useSessionMock.mockReturnValue({ status: 'unauthenticated', data: null })
+    mockPathname = '/auth/LOGIN'
+
+    render(
+      <AuthGuard>
+        <div>child</div>
+      </AuthGuard>,
+    )
+
+    await new Promise((r) => setTimeout(r, 0))
+    expect(signInMock).not.toHaveBeenCalled()
+  })
+
+  it('uses custom provider when provided', async () => {
+    useSessionMock.mockReturnValue({ status: 'unauthenticated', data: null })
+    mockPathname = '/protected'
+
+    render(
+      <AuthGuard provider="okta">
+        <div>child</div>
+      </AuthGuard>,
+    )
+
+    await waitFor(() => expect(signInMock).toHaveBeenCalledTimes(1))
+
+    expect(signInMock).toHaveBeenCalledWith('okta', {
+      callbackUrl: 'https://example.com/protected',
+    })
+  })
+
+  it('calls getUser with session email when authenticated', async () => {
+    useSessionMock.mockReturnValue({
+      status: 'authenticated',
+      data: { user: { email: 'user@company.com' } },
+    })
+
+    render(
+      <AuthGuard>
+        <div>child</div>
+      </AuthGuard>,
+    )
+
+    await waitFor(() => expect(getUserMock).toHaveBeenCalledTimes(1))
+    expect(getUserMock).toHaveBeenCalledWith('user@company.com')
+    expect(signInMock).not.toHaveBeenCalled()
+  })
+
+  it('falls back to DEFAULT_EMPLOYEE_EMAIL when authenticated but session email is missing', async () => {
+    useSessionMock.mockReturnValue({
+      status: 'authenticated',
+      data: { user: {} },
+    })
+
+    render(
+      <AuthGuard>
+        <div>child</div>
+      </AuthGuard>,
+    )
+
+    await waitFor(() => expect(getUserMock).toHaveBeenCalledTimes(1))
+    expect(getUserMock).toHaveBeenCalledWith('default@company.com')
+  })
+
+  it('does NOT call getUser when not authenticated', async () => {
+    useSessionMock.mockReturnValue({ status: 'unauthenticated', data: null })
+
+    render(
+      <AuthGuard>
+        <div>child</div>
+      </AuthGuard>,
+    )
+
+    await new Promise((r) => setTimeout(r, 0))
+    expect(getUserMock).not.toHaveBeenCalled()
   })
 })
