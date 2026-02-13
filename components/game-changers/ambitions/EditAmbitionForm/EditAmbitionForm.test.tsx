@@ -470,14 +470,17 @@ describe('EditAmbitionForm', () => {
 
   describe('Goal Reset on Change', () => {
     it('resets form when goal prop changes', async () => {
-      const initialGoal = createMockGoal({ title: 'Initial Title' })
-      const updatedGoal = createMockGoal({ title: 'Updated Title' })
+      const initialGoal = createMockGoal({ id: 'goal-1', title: 'Initial Title' })
+      const updatedGoal = createMockGoal({ id: 'goal-2', title: 'Updated Title' })
 
-      const { rerender } = render(<EditAmbitionForm goal={initialGoal} step={2} />)
+      // Use key prop to force component remount when goal changes (recommended React pattern)
+      const { rerender } = render(
+        <EditAmbitionForm key={initialGoal.id} goal={initialGoal} step={2} />,
+      )
 
       expect(screen.getByPlaceholderText('ambitionName.placeholder')).toHaveValue('Initial Title')
 
-      rerender(<EditAmbitionForm goal={updatedGoal} step={2} />)
+      rerender(<EditAmbitionForm key={updatedGoal.id} goal={updatedGoal} step={2} />)
 
       expect(screen.getByPlaceholderText('ambitionName.placeholder')).toHaveValue('Updated Title')
     })
