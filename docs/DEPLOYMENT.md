@@ -83,7 +83,18 @@ Vercel caches dependencies. The build script uses dynamic import after `prisma g
 
 ## Database Management
 
-### Reset database on Vercel
+### Automatic Stale Data Detection
+The build script automatically detects stale seed data by checking if `manager@employee.test` has the expected name (`James Miller`). If stale data is found, the script will:
+1. Clear all existing data (respecting foreign key constraints)
+2. Re-run the seed script
+
+### Force Re-seed
+To manually force a re-seed (e.g., after updating seed data):
+1. Add `FORCE_RESEED=true` to Vercel environment variables
+2. Trigger a new deployment
+3. After successful deployment, remove `FORCE_RESEED` variable
+
+### Reset database on Vercel (manual)
 1. Go to Prisma Console > Your database
 2. Delete all data or drop database
 3. Re-deploy to trigger seed

@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import type { Prisma } from '@prisma/client'
 import { GoalRepository } from '@/repositories/GoalRepository'
+import { getProfileImageUrl, getProfileImageUrlOrNull } from '@/utils/profileImage'
 import {
   ACHIEVEMENT_PROGRESS_STATUSES,
   CreateGoalDTO,
@@ -36,9 +37,7 @@ const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
       'Unassigned',
     goalType: goal.type,
     description: goal.body,
-    avatarUrl: goal.people_assignedTo?.profileImageUrl
-      ? `/profile-img/${goal.people_assignedTo.profileImageUrl}`
-      : null,
+    avatarUrl: getProfileImageUrlOrNull(goal.people_assignedTo?.profileImageUrl),
     ladderedGoals: (goal.relations || []).map((relation) => ({
       id: relation.id,
       title: relation.title,
@@ -50,9 +49,7 @@ const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
       userName:
         `${relation.people_assignedTo?.name || ''} ${relation.people_assignedTo?.lastname || ''}`.trim() ||
         'Unassigned',
-      avatarUrl: relation.people_assignedTo?.profileImageUrl
-        ? `/profile-img/${relation.people_assignedTo.profileImageUrl}`
-        : null,
+      avatarUrl: getProfileImageUrlOrNull(relation.people_assignedTo?.profileImageUrl),
     })),
   }
 }
@@ -347,7 +344,7 @@ export class PrismaGoalRepository implements GoalRepository {
     const avatarOptions = users.map((user) => ({
       uid: user.id,
       name: `${user.name} ${user.lastname}`.trim(),
-      url: user.profileImageUrl || '/profile-img/profile.png',
+      url: getProfileImageUrl(user.profileImageUrl),
       role: user.jobs?.name || 'Employee',
     }))
 
