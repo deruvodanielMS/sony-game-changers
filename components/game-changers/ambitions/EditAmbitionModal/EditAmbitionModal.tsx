@@ -26,7 +26,7 @@ export function EditAmbitionModal({
   const { openModal, closeAll, enqueueToast } = useUIStore()
   const { updateGoal } = useGoalsStore()
   const [currentStep, setCurrentStep] = useState(1)
-  const [isFormValid, setIsFormValid] = useState(false)
+  const [, setIsFormValid] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const validateRef = useRef<(() => boolean) | null>(null)
   const formDataRef = useRef<EditAmbitionFormData | null>(null)
