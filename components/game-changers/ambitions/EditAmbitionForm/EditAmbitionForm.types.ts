@@ -1,7 +1,8 @@
-import { GoalType } from '@/domain/goal'
+import type { GoalType } from '@/domain/goal'
+import type { GoalUI } from '@/domain/goal'
 import type { NewAmbitionShareMember } from '@/repositories/mocks/data/goals'
 
-export interface NewAmbitionFormData {
+export interface EditAmbitionFormData {
   // Step 1
   goalType: GoalType
   owner: string
@@ -10,18 +11,18 @@ export interface NewAmbitionFormData {
   // Step 2
   ladderedFrom?: string
   ambitionName: string
+  description?: string
   actions: string[]
   achievements: string[]
 }
 
-export interface NewAmbitionFormProps {
+export interface EditAmbitionFormProps {
+  goal: GoalUI
   className?: string
   'data-test-id'?: string
   step?: number
-  /** Pre-select parent ambition for laddering */
-  parentAmbitionId?: string
   onValidationChange?: (isValid: boolean) => void
-  onSubmit?: (formData: NewAmbitionFormData) => void
-  onFormDataChange?: (formData: NewAmbitionFormData) => void
+  onSubmit?: (formData: EditAmbitionFormData) => void
+  onFormDataChange?: (formData: EditAmbitionFormData) => void
   validateRef?: React.MutableRefObject<(() => boolean) | null>
 }

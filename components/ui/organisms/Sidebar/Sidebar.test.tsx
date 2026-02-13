@@ -42,7 +42,7 @@ vi.mock('@/stores/user.store', () => ({
     user: {
       name: 'John',
       lastname: 'Doe',
-      profileImageUrl: 'profile.png',
+      profileImageUrl: '/profile-img/profile.png',
     },
   }),
 }))

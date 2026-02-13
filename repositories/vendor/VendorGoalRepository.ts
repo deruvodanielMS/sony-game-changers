@@ -2,10 +2,12 @@ import {
   Goal,
   GoalAmbitionsResponse,
   CreateGoalDTO,
+  UpdateGoalDTO,
   ManagerAmbitionsData,
   GoalFiltersData,
   GOAL_STATUSES,
   GOAL_TYPES,
+  GoalStatus,
 } from '@/domain/goal'
 import { GoalRepository } from '../GoalRepository'
 
@@ -24,7 +26,12 @@ export class VendorGoalRepository implements GoalRepository {
     }
 
     const data = await res.json()
-    return data.map(this.toDomain)
+    // Sort by createdAt descending (newest first)
+    return data.map(this.toDomain).sort((a: Goal, b: Goal) => {
+      const dateA = new Date(a.createdAt).getTime()
+      const dateB = new Date(b.createdAt).getTime()
+      return dateB - dateA
+    })
   }
 
   async createGoal(goal: CreateGoalDTO): Promise<Goal> {
@@ -60,9 +67,9 @@ export class VendorGoalRepository implements GoalRepository {
     return this.toDomain(await res.json())
   }
 
-  async updateGoal(id: string, goal: CreateGoalDTO): Promise<Goal> {
+  async updateGoal(id: string, goal: UpdateGoalDTO): Promise<Goal> {
     const res = await fetch(`${this.baseUrl}/goals/${id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${process.env.VENDOR_API_TOKEN}`,
@@ -128,6 +135,23 @@ export class VendorGoalRepository implements GoalRepository {
         },
       ],
     }
+  }
+
+  async updateGoalStatus(id: string, status: GoalStatus): Promise<Goal> {
+    const res = await fetch(`${this.baseUrl}/goals/${id}/status`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.VENDOR_API_TOKEN}`,
+      },
+      body: JSON.stringify({ status }),
+    })
+
+    if (!res.ok) {
+      throw new Error('Failed to update goal status')
+    }
+
+    return this.toDomain(await res.json())
   }
 
   /**

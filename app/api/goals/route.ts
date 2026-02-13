@@ -92,11 +92,7 @@ export async function PUT(request: Request) {
 
     const { id: _discard, ...payload } = body as CreateGoalDTO & { id: string }
 
-    const updated = await goalService.updateGoal(
-      id,
-      payload as CreateGoalDTO,
-      session.user?.email || '',
-    )
+    const updated = await goalService.updateGoal(id, payload)
 
     return NextResponse.json(updated, { status: 201 })
   } catch (error) {
