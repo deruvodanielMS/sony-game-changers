@@ -9,23 +9,31 @@ const isProduction =
 const isPrismaSource =
   process.env.USERS_SOURCE === 'prisma' || process.env.GOALS_SOURCE === 'prisma'
 
-// Support multiple DATABASE_URL variable names (Vercel Prisma integration uses DB_ prefix)
+// Support multiple DATABASE_URL variable names
+// Vercel Prisma integration may use: POSTGRES_URL, DB_DATABASE_URL, or DATABASE_URL
 function getDatabaseUrl() {
-  return process.env.DB_DATABASE_URL || process.env.DATABASE_URL
+  return (
+    process.env.POSTGRES_URL ||
+    process.env.DB_DATABASE_URL ||
+    process.env.DATABASE_URL
+  )
 }
 
 function getPrismaAccelerateUrl() {
   return process.env.DB_PRISMA_DATABASE_URL || process.env.PRISMA_DATABASE_URL
 }
 
-// Map Vercel's DB_ prefixed variables to standard Prisma variable names
+// Map Vercel's env variables to standard Prisma variable names
 function setupDatabaseEnv() {
   const directUrl = getDatabaseUrl()
   const accelerateUrl = getPrismaAccelerateUrl()
 
   if (directUrl && !process.env.DATABASE_URL) {
     process.env.DATABASE_URL = directUrl
-    console.log('   Mapped DB_DATABASE_URL -> DATABASE_URL')
+    const source = process.env.POSTGRES_URL
+      ? 'POSTGRES_URL'
+      : 'DB_DATABASE_URL'
+    console.log(`   Mapped ${source} -> DATABASE_URL`)
   }
 
   if (accelerateUrl && !process.env.PRISMA_DATABASE_URL) {
