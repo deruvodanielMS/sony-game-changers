@@ -16,7 +16,6 @@ import {
   createGoal as dbCreateGoal,
   updateGoal as dbUpdateGoal,
   deleteGoal as dbDeleteGoal,
-  getUsers,
   getUserByEmail,
   getUserById,
 } from './mockDB'
