@@ -101,12 +101,12 @@ export function SendBackModal({
     }
   }, [open, isDesktop])
 
-  // Update modal content when comment changes (only when modal is open)
+  // Update modal content when comment or loading state changes (only when modal is open on desktop)
   useEffect(() => {
-    if (open && isDesktop) {
+    if (open && isDesktop === true) {
       toggleModal(true)
     }
-  }, [comment, isLoading])
+  }, [comment, isLoading, isDesktop])
 
   // Mobile drawer content
   const mobileContent = useMemo(

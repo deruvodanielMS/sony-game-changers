@@ -114,9 +114,11 @@ export class VendorGoalRepository implements GoalRepository {
           label: 'Status',
           'data-testid': 'filter-status',
           options: [
-            { label: 'Awaiting Approval', value: GOAL_STATUSES.AWAITING_APPROVAL },
-            { label: 'Completed', value: GOAL_STATUSES.COMPLETED },
             { label: 'Draft', value: GOAL_STATUSES.DRAFT },
+            { label: 'Awaiting Approval', value: GOAL_STATUSES.AWAITING_APPROVAL },
+            { label: 'In Progress', value: GOAL_STATUSES.APPROVED },
+            { label: 'Completed', value: GOAL_STATUSES.COMPLETED },
+            { label: 'Archived', value: GOAL_STATUSES.ARCHIVED },
           ],
           single: true,
         },
@@ -134,6 +136,7 @@ export class VendorGoalRepository implements GoalRepository {
           single: true,
         },
       ],
+      activePeriodId: null, // TODO: Fetch from vendor API
     }
   }
 
