@@ -332,11 +332,31 @@ export class PrismaGoalRepository implements GoalRepository {
   }
 
   async getGoalFilters(): Promise<GoalFiltersData> {
-    // TODO: Implement real logic to fetch filter options from database
-    // For now, return static filter configuration
+    // Fetch all active users from database for avatar selector
+    const users = await prisma.people.findMany({
+      where: { status: 'active' },
+      select: {
+        id: true,
+        name: true,
+        lastname: true,
+        profileImageUrl: true,
+        jobs: {
+          select: { name: true },
+        },
+      },
+      orderBy: { name: 'asc' },
+    })
+
+    const avatarOptions = users.map((user) => ({
+      uid: user.id,
+      name: `${user.name} ${user.lastname}`.trim(),
+      url: user.profileImageUrl || '/profile-img/profile.png',
+      role: user.jobs?.name || 'Employee',
+    }))
+
     return {
       avatarSelector: {
-        options: [],
+        options: avatarOptions,
         showItems: 4,
       },
       filters: [
