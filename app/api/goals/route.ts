@@ -50,7 +50,16 @@ export async function GET() {
     const goals = await goalService.listGoals(session?.user?.email || undefined)
     return NextResponse.json(goals)
   } catch (error) {
-    console.error('[GET /goals]', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error('[GET /goals]', errorMessage, error)
+
+    // Check for common database connection issues
+    if (errorMessage.includes('Database URL not configured')) {
+      return NextResponse.json(
+        { error: 'Database configuration error. Check PRISMA_DATABASE_URL environment variable.' },
+        { status: 500 },
+      )
+    }
 
     return NextResponse.json({ error: 'Failed to fetch goals' }, { status: 500 })
   }
