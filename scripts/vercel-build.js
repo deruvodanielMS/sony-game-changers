@@ -3,7 +3,6 @@
  * Runs migrations and seeds the database if empty (only in production)
  */
 import { execSync } from 'child_process'
-import { PrismaClient } from '@prisma/client'
 
 const isProduction =
   process.env.VERCEL_ENV === 'production' || process.env.NODE_ENV === 'production'
@@ -57,16 +56,21 @@ async function main() {
 
   // 2. Run migrations (only if using prisma source)
   if (isPrismaSource && directUrl) {
-    console.log('\n🔄 Running database migrations...')
+    console.log('\n🔄 Syncing database schema...')
     try {
-      execSync('npx prisma migrate deploy', { stdio: 'inherit' })
-      console.log('✅ Migrations applied successfully')
+      // Use db push for schema sync (works with existing databases)
+      // This is safer for Prisma Postgres as it handles schema changes gracefully
+      execSync('npx prisma db push --skip-generate', { stdio: 'inherit' })
+      console.log('✅ Database schema synced successfully')
     } catch (error) {
-      console.error('⚠️ Migration failed, continuing with build...', error.message)
+      console.error('⚠️ Schema sync failed, continuing with build...', error.message)
     }
 
     // 3. Seed if database is empty
     console.log('\n🌱 Checking if database needs seeding...')
+    
+    // Dynamic import after prisma generate
+    const { PrismaClient } = await import('@prisma/client')
     const prisma = new PrismaClient()
 
     try {
