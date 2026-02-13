@@ -42,10 +42,10 @@ async function seedBase(prisma) {
   const sarahMiller = await prisma.people.create({
     data: {
       email: 'smiller@test.com',
-      name: 'Sarah Miller',
-      lastname: 'User',
+      name: 'Sarah',
+      lastname: 'Miller',
       status: 'active',
-      profileImageUrl: 'sarah-miller.png',
+      profileImageUrl: '/profile-img/sarah-miller.png',
       orgId: org.id,
       jobId: job.id,
     },
@@ -54,10 +54,10 @@ async function seedBase(prisma) {
   const davidBrown = await prisma.people.create({
     data: {
       email: EMPLOYEE_EMAIL_BY_ROLE.IC,
-      name: 'David Brown',
-      lastname: 'User',
+      name: 'David',
+      lastname: 'Brown',
       status: 'active',
-      profileImageUrl: 'lars-van-der-zee.png',
+      profileImageUrl: '/profile-img/lars-van-der-zee.png',
       orgId: org.id,
       jobId: job.id,
     },
@@ -68,7 +68,7 @@ async function seedBase(prisma) {
       email: EMPLOYEE_EMAIL_BY_ROLE.MANAGER,
       name: 'Manager',
       lastname: 'User',
-      profileImageUrl: 'profile.png',
+      profileImageUrl: '/profile-img/profile.png',
       status: 'active',
       orgId: org.id,
       jobId: job.id,
