@@ -308,26 +308,15 @@ export function EditAmbitionForm({
     }))
   }, [goalFilters])
 
-  // Laddered from options (mock data for now)
+  const goals = useGoalsStore((state) => state.goals)
+
   const ladderedFromOptions = useMemo<BigSelectOption[]>(
-    () => [
-      {
-        value: 'division-ambition-1',
-        label: 'Accelerate platform innovation',
-        description: 'AAA Division Ambition',
-      },
-      {
-        value: 'division-ambition-2',
-        label: 'Improve customer satisfaction',
-        description: 'AAA Division Ambition',
-      },
-      {
-        value: 'team-ambition-1',
-        label: 'Increase team productivity',
-        description: 'AAA Team Ambition',
-      },
-    ],
-    [],
+    () =>
+      goals.map((goal) => ({
+        value: goal.uid,
+        label: goal.title,
+      })),
+    [goals],
   )
 
   // Step 1: Ambition Setup
