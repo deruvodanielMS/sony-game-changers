@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma'
 import type { Prisma } from '@prisma/client'
 import { GoalRepository } from '@/repositories/GoalRepository'
+import { getProfileImageUrl, getProfileImageUrlOrNull } from '@/utils/profileImage'
 import {
   ACHIEVEMENT_PROGRESS_STATUSES,
   CreateGoalDTO,
@@ -13,13 +14,6 @@ import {
   GoalFiltersData,
   GoalStatus,
 } from '@/domain/goal'
-
-const getProfileImageUrl = (profileImageUrl: string | null | undefined): string | null => {
-  if (!profileImageUrl) return null
-  // Avoid duplicating the path if it already includes /profile-img/
-  if (profileImageUrl.startsWith('/profile-img/')) return profileImageUrl
-  return `/profile-img/${profileImageUrl}`
-}
 
 const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
   const hasParent = goal.parent ? { parent: { id: goal.parent.id, title: goal.parent.title } } : {}
@@ -43,7 +37,7 @@ const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
       'Unassigned',
     goalType: goal.type,
     description: goal.body,
-    avatarUrl: getProfileImageUrl(goal.people_assignedTo?.profileImageUrl),
+    avatarUrl: getProfileImageUrlOrNull(goal.people_assignedTo?.profileImageUrl),
     ladderedGoals: (goal.relations || []).map((relation) => ({
       id: relation.id,
       title: relation.title,
@@ -55,7 +49,7 @@ const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
       userName:
         `${relation.people_assignedTo?.name || ''} ${relation.people_assignedTo?.lastname || ''}`.trim() ||
         'Unassigned',
-      avatarUrl: getProfileImageUrl(relation.people_assignedTo?.profileImageUrl),
+      avatarUrl: getProfileImageUrlOrNull(relation.people_assignedTo?.profileImageUrl),
     })),
   }
 }
@@ -350,7 +344,7 @@ export class PrismaGoalRepository implements GoalRepository {
     const avatarOptions = users.map((user) => ({
       uid: user.id,
       name: `${user.name} ${user.lastname}`.trim(),
-      url: user.profileImageUrl || '/profile-img/profile.png',
+      url: getProfileImageUrl(user.profileImageUrl),
       role: user.jobs?.name || 'Employee',
     }))
 

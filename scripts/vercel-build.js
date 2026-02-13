@@ -11,34 +11,28 @@ const isPrismaSource =
 
 // Support multiple DATABASE_URL variable names (Vercel Prisma integration uses DB_ prefix)
 function getDatabaseUrl() {
-  return (
-    process.env.DB_DATABASE_URL ||
-    process.env.DATABASE_URL
-  )
+  return process.env.DB_DATABASE_URL || process.env.DATABASE_URL
 }
 
 function getPrismaAccelerateUrl() {
-  return (
-    process.env.DB_PRISMA_DATABASE_URL ||
-    process.env.PRISMA_DATABASE_URL
-  )
+  return process.env.DB_PRISMA_DATABASE_URL || process.env.PRISMA_DATABASE_URL
 }
 
 // Map Vercel's DB_ prefixed variables to standard Prisma variable names
 function setupDatabaseEnv() {
   const directUrl = getDatabaseUrl()
   const accelerateUrl = getPrismaAccelerateUrl()
-  
+
   if (directUrl && !process.env.DATABASE_URL) {
     process.env.DATABASE_URL = directUrl
     console.log('   Mapped DB_DATABASE_URL -> DATABASE_URL')
   }
-  
+
   if (accelerateUrl && !process.env.PRISMA_DATABASE_URL) {
     process.env.PRISMA_DATABASE_URL = accelerateUrl
     console.log('   Mapped DB_PRISMA_DATABASE_URL -> PRISMA_DATABASE_URL')
   }
-  
+
   return { directUrl, accelerateUrl }
 }
 
@@ -66,23 +60,67 @@ async function main() {
       console.error('⚠️ Schema sync failed, continuing with build...', error.message)
     }
 
-    // 3. Seed if database is empty
+    // 3. Seed if database is empty or has stale data
     console.log('\n🌱 Checking if database needs seeding...')
-    
+
     // Dynamic import after prisma generate
     const { PrismaClient } = await import('@prisma/client')
     const prisma = new PrismaClient()
 
+    const forceReseed = process.env.FORCE_RESEED === 'true'
+
     try {
       const userCount = await prisma.people.count()
       console.log(`   Found ${userCount} users in database`)
+      console.log(`   FORCE_RESEED: ${forceReseed}`)
 
-      if (userCount === 0) {
+      let needsSeed = userCount === 0
+      let isStaleData = false
+
+      // Check for stale data by verifying known user has correct name
+      // Expected: email='manager@employee.test', name='James', lastname='Miller'
+      if (userCount > 0 && !needsSeed) {
+        const managerUser = await prisma.people.findFirst({
+          where: { email: 'manager@employee.test' },
+        })
+
+        if (managerUser) {
+          // Check if the user has the correct expected values from synced seed data
+          const expectedName = 'James'
+          const expectedLastname = 'Miller'
+
+          if (managerUser.name !== expectedName || managerUser.lastname !== expectedLastname) {
+            console.log(`   ⚠️ Stale data detected!`)
+            console.log(
+              `      Found: name='${managerUser.name}', lastname='${managerUser.lastname}'`,
+            )
+            console.log(`      Expected: name='${expectedName}', lastname='${expectedLastname}'`)
+            isStaleData = true
+          }
+        }
+      }
+
+      if (needsSeed) {
         console.log('   Database is empty, running seed...')
         execSync('npx prisma db seed', { stdio: 'inherit' })
         console.log('✅ Seed completed')
+      } else if (forceReseed || isStaleData) {
+        const reason = forceReseed ? 'FORCE_RESEED=true' : 'stale data detected'
+        console.log(`   Re-seeding database (${reason})...`)
+
+        // Clear existing data first (in correct order to handle foreign keys)
+        console.log('   Clearing existing data...')
+        await prisma.goalUpdates.deleteMany({})
+        await prisma.goal.deleteMany({})
+        await prisma.ambition.deleteMany({})
+        await prisma.people.deleteMany({})
+        console.log('   Existing data cleared')
+
+        // Run seed
+        execSync('npx prisma db seed', { stdio: 'inherit' })
+        console.log('✅ Re-seed completed')
       } else {
-        console.log('   Database already has data, skipping seed')
+        console.log('   Database has valid data, skipping seed')
       }
     } catch (error) {
       console.error('⚠️ Could not check/seed database:', error.message)
