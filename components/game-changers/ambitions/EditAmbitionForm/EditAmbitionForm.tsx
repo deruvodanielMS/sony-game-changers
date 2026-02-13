@@ -2,9 +2,8 @@
 
 import { useMemo, useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { useSession } from 'next-auth/react'
 import { m, AnimatePresence } from 'framer-motion'
-import { Info, Plus, Trash2, Users, XCircle } from 'lucide-react'
+import { Plus, Trash2, XCircle } from 'lucide-react'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
@@ -20,65 +19,35 @@ import { Card } from '@/components/ui/atoms/Card'
 import type { BigSelectOption } from '@/components/ui/molecules/BigSelectField'
 import { GOAL_TYPES, type GoalType } from '@/domain/goal'
 import { useGoalsStore } from '@/stores/goals.store'
-import {
-  newAmbitionShareWithOptions,
-  type NewAmbitionShareMember,
-} from '@/repositories/mocks/data/goals'
 import { cn } from '@/utils/cn'
-import type { NewAmbitionFormProps } from './NewAmbitionForm.types'
+import type { EditAmbitionFormProps, EditAmbitionFormData } from './EditAmbitionForm.types'
+import type { NewAmbitionShareMember } from '@/repositories/mocks/data/goals'
 
 type PrivacyValue = 'public' | 'private'
 
 type InputItem = { id: string; value: string }
 
-type ShareWithPillProps = {
-  member: NewAmbitionShareMember
-  onRemove: (value: string) => void
-}
-
-function ShareWithPill({ member, onRemove }: ShareWithPillProps) {
-  return (
-    <button
-      type="button"
-      onClick={() => onRemove(member.value)}
-      aria-label={member.name}
-      className={cn(
-        'inline-flex items-center gap-0_5 rounded-full',
-        'border border-neutral-800 px-0_75 py-0_25',
-        'text-body-small text-neutral-1000 transition-colors',
-        'hover:bg-neutral-100',
-      )}
-    >
-      <span>{member.name}</span>
-      <span aria-hidden className="text-neutral-600">
-        ×
-      </span>
-    </button>
-  )
-}
-
-export function NewAmbitionForm({
+export function EditAmbitionForm({
+  goal,
   className,
   step = 1,
-  parentAmbitionId,
   onValidationChange,
   onSubmit,
-  onFormDataChange,
   validateRef,
   'data-test-id': dataTestId,
-}: NewAmbitionFormProps) {
-  const t = useTranslations('CreateGoal')
-  const { data: session } = useSession()
+}: EditAmbitionFormProps) {
+  const t = useTranslations('EditGoal')
+  const tCreate = useTranslations('CreateGoal')
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
-  const { goalFilters, list: goalsList } = useGoalsStore()
+  const { goalFilters } = useGoalsStore()
 
-  // Step 1 state - Empty state by default
-  const [goalType, setGoalType] = useState<GoalType>(GOAL_TYPES.BUSINESS)
-  const [owner, setOwner] = useState('')
+  // Step 1 state - Initialize from goal
+  const [goalType, setGoalType] = useState<GoalType>(
+    (goal.goalType as GoalType) || GOAL_TYPES.BUSINESS,
+  )
+  const [owner, setOwner] = useState(goal.uid || '')
   const [privacy, setPrivacy] = useState<PrivacyValue>('public')
   const [sharedMembers, setSharedMembers] = useState<NewAmbitionShareMember[]>([])
-  const [shareWithSearch, setShareWithSearch] = useState('')
-  const [showShareWithDropdown, setShowShareWithDropdown] = useState(false)
 
   // Validation state
   const [ownerError, setOwnerError] = useState(false)
@@ -87,19 +56,75 @@ export function NewAmbitionForm({
   const [actionsError, setActionsError] = useState(false)
   const [achievementsError, setAchievementsError] = useState(false)
 
-  // Step 2 state - Use parentAmbitionId as initial value for ladderedFrom
-  const [ladderedFrom, setLadderedFrom] = useState(parentAmbitionId || '')
-  const [ambitionName, setAmbitionName] = useState('')
-  const [actions, setActions] = useState<InputItem[]>(() => [
-    { id: crypto.randomUUID(), value: '' },
-    { id: crypto.randomUUID(), value: '' },
-    { id: crypto.randomUUID(), value: '' },
-  ])
-  const [achievements, setAchievements] = useState<InputItem[]>(() => [
-    { id: crypto.randomUUID(), value: '' },
-    { id: crypto.randomUUID(), value: '' },
-    { id: crypto.randomUUID(), value: '' },
-  ])
+  // Step 2 state - Initialize from goal
+  const [ladderedFrom, setLadderedFrom] = useState(goal.parent?.id || '')
+  const [ambitionName, setAmbitionName] = useState(goal.title || '')
+  const [description, setDescription] = useState(goal.description || '')
+  const [actions, setActions] = useState<InputItem[]>(() => {
+    if (goal.goalActions && goal.goalActions.length > 0) {
+      return goal.goalActions.map((action) => ({
+        id: action.id || crypto.randomUUID(),
+        value: action.title,
+      }))
+    }
+    return [
+      { id: crypto.randomUUID(), value: '' },
+      { id: crypto.randomUUID(), value: '' },
+      { id: crypto.randomUUID(), value: '' },
+    ]
+  })
+  const [achievements, setAchievements] = useState<InputItem[]>(() => {
+    if (goal.goalAchievements && goal.goalAchievements.length > 0) {
+      return goal.goalAchievements.map((achievement) => ({
+        id: achievement.id || crypto.randomUUID(),
+        value: achievement.title,
+      }))
+    }
+    return [
+      { id: crypto.randomUUID(), value: '' },
+      { id: crypto.randomUUID(), value: '' },
+      { id: crypto.randomUUID(), value: '' },
+    ]
+  })
+
+  // Reset form when goal changes
+  useEffect(() => {
+    setGoalType((goal.goalType as GoalType) || GOAL_TYPES.BUSINESS)
+    setOwner(goal.uid || '')
+    setLadderedFrom(goal.parent?.id || '')
+    setAmbitionName(goal.title || '')
+    setDescription(goal.description || '')
+
+    if (goal.goalActions && goal.goalActions.length > 0) {
+      setActions(
+        goal.goalActions.map((action) => ({
+          id: action.id || crypto.randomUUID(),
+          value: action.title,
+        })),
+      )
+    } else {
+      setActions([
+        { id: crypto.randomUUID(), value: '' },
+        { id: crypto.randomUUID(), value: '' },
+        { id: crypto.randomUUID(), value: '' },
+      ])
+    }
+
+    if (goal.goalAchievements && goal.goalAchievements.length > 0) {
+      setAchievements(
+        goal.goalAchievements.map((achievement) => ({
+          id: achievement.id || crypto.randomUUID(),
+          value: achievement.title,
+        })),
+      )
+    } else {
+      setAchievements([
+        { id: crypto.randomUUID(), value: '' },
+        { id: crypto.randomUUID(), value: '' },
+        { id: crypto.randomUUID(), value: '' },
+      ])
+    }
+  }, [goal])
 
   // Validate Step 1 and notify parent
   useEffect(() => {
@@ -116,50 +141,24 @@ export function NewAmbitionForm({
     }
   }, [owner, goalType, ladderedFrom, ambitionName, actions, achievements, step, onValidationChange])
 
-  // Update ladderedFrom when parentAmbitionId changes (e.g., modal opened from different parent)
+  // Clear ladderedFrom when changing to non-business type
   useEffect(() => {
-    if (parentAmbitionId) {
-      setLadderedFrom(parentAmbitionId)
-    }
-  }, [parentAmbitionId])
-
-  // Clear ladderedFrom when changing to non-business type (but preserve if parentAmbitionId is set)
-  useEffect(() => {
-    if (goalType !== GOAL_TYPES.BUSINESS && !parentAmbitionId) {
+    if (goalType !== GOAL_TYPES.BUSINESS) {
       setLadderedFrom('')
     }
-  }, [goalType, parentAmbitionId])
-
-  // Pre-select owner based on logged in user (by name match)
-  useEffect(() => {
-    if (!owner && session?.user?.name && goalFilters?.avatarSelector?.options) {
-      const currentUser = goalFilters.avatarSelector.options.find(
-        (option) => option.name === session.user?.name,
-      )
-      if (currentUser) {
-        setOwner(currentUser.uid)
-      }
-    }
-  }, [session, goalFilters, owner])
-
-  // Clear share with search when privacy changes to public
-  useEffect(() => {
-    if (privacy === 'public') {
-      setShareWithSearch('')
-      setShowShareWithDropdown(false)
-    }
-  }, [privacy])
+  }, [goalType])
 
   // Update parent with current form data whenever it changes
   useEffect(() => {
     if (step === 2 && onSubmit) {
-      const formData = {
+      const formData: EditAmbitionFormData = {
         goalType,
         owner,
         privacy,
         sharedMembers,
         ladderedFrom: goalType === GOAL_TYPES.BUSINESS ? ladderedFrom : undefined,
         ambitionName,
+        description,
         actions: actions.filter((action) => action.value.trim() !== '').map((a) => a.value),
         achievements: achievements
           .filter((achievement) => achievement.value.trim() !== '')
@@ -175,6 +174,7 @@ export function NewAmbitionForm({
     sharedMembers,
     ladderedFrom,
     ambitionName,
+    description,
     actions,
     achievements,
     onSubmit,
@@ -257,84 +257,44 @@ export function NewAmbitionForm({
     }
   }
 
-  // Handle form submission
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleSubmit = () => {
-    const formData = {
-      goalType,
-      owner,
-      privacy,
-      sharedMembers,
-      ladderedFrom: goalType === GOAL_TYPES.BUSINESS ? ladderedFrom : undefined,
-      ambitionName,
-      actions: actions.filter((action) => action.value.trim() !== '').map((a) => a.value),
-      achievements: achievements
-        .filter((achievement) => achievement.value.trim() !== '')
-        .map((a) => a.value),
-    }
-    onSubmit?.(formData)
-  }
-
-  // Handle share with search
-  const handleShareWithChange = (value: string) => {
-    setShareWithSearch(value)
-    setShowShareWithDropdown(value.length > 0)
-  }
-
-  const handleAddShareMember = (member: NewAmbitionShareMember) => {
-    if (!sharedMembers.find((m) => m.value === member.value)) {
-      setSharedMembers((prev) => [...prev, member])
-    }
-    setShareWithSearch('')
-    setShowShareWithDropdown(false)
-  }
-
-  // Filter available share options
-  const availableShareOptions = useMemo(() => {
-    const selectedValues = sharedMembers.map((m) => m.value)
-    return newAmbitionShareWithOptions
-      .filter((option) => !selectedValues.includes(option.value))
-      .filter((option) => option.name.toLowerCase().includes(shareWithSearch.toLowerCase()))
-  }, [sharedMembers, shareWithSearch])
-
   const typeItems = useMemo(
     () => [
       {
         id: GOAL_TYPES.BUSINESS,
-        label: t('type.business'),
+        label: tCreate('type.business'),
         icon: <TypeIcon type={GOAL_TYPES.BUSINESS} variant="metadata" />,
-        ariaLabel: t('type.business'),
+        ariaLabel: tCreate('type.business'),
       },
       {
         id: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
-        label: t('type.growth'),
+        label: tCreate('type.growth'),
         icon: <TypeIcon type={GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT} variant="metadata" />,
-        ariaLabel: t('type.growth'),
+        ariaLabel: tCreate('type.growth'),
       },
       {
         id: GOAL_TYPES.MANAGER_EFFECTIVENESS,
-        label: t('type.manager'),
+        label: tCreate('type.manager'),
         icon: <TypeIcon type={GOAL_TYPES.MANAGER_EFFECTIVENESS} variant="metadata" />,
-        ariaLabel: t('type.manager'),
+        ariaLabel: tCreate('type.manager'),
       },
     ],
-    [t],
+    [tCreate],
   )
 
   const privacyItems = useMemo(
     () => [
       {
         id: 'public',
-        label: t('privacy.public'),
-        ariaLabel: t('privacy.public'),
+        label: tCreate('privacy.public'),
+        ariaLabel: tCreate('privacy.public'),
       },
       {
         id: 'private',
-        label: t('privacy.private'),
-        ariaLabel: t('privacy.private'),
+        label: tCreate('privacy.private'),
+        ariaLabel: tCreate('privacy.private'),
       },
     ],
-    [t],
+    [tCreate],
   )
 
   // Transform owner options to BigSelectOption format
@@ -348,19 +308,27 @@ export function NewAmbitionForm({
     }))
   }, [goalFilters])
 
-  // Laddered from options - use real goals from store
-  const ladderedFromOptions = useMemo<BigSelectOption[]>(() => {
-    if (!goalsList) return []
-
-    // Filter out archived goals and map to BigSelectOption format
-    return goalsList
-      .filter((goal) => goal.status !== 'archived')
-      .map((goal) => ({
-        value: goal.id,
-        label: goal.title,
-        description: goal.goalType ? `${goal.goalType.replace(/_/g, ' ')}` : undefined,
-      }))
-  }, [goalsList])
+  // Laddered from options (mock data for now)
+  const ladderedFromOptions = useMemo<BigSelectOption[]>(
+    () => [
+      {
+        value: 'division-ambition-1',
+        label: 'Accelerate platform innovation',
+        description: 'AAA Division Ambition',
+      },
+      {
+        value: 'division-ambition-2',
+        label: 'Improve customer satisfaction',
+        description: 'AAA Division Ambition',
+      },
+      {
+        value: 'team-ambition-1',
+        label: 'Increase team productivity',
+        description: 'AAA Team Ambition',
+      },
+    ],
+    [],
+  )
 
   // Step 1: Ambition Setup
   if (step === 1) {
@@ -376,14 +344,14 @@ export function NewAmbitionForm({
         </AnimatedSection>
 
         <AnimatedSection delay={0.2}>
-          <FormControl label={t('type.label')} mandatory>
+          <FormControl label={tCreate('type.label')} mandatory>
             {isMobile ? (
               <RadioGroup
                 items={typeItems}
                 value={goalType}
                 onChange={(value) => setGoalType(value as GoalType)}
                 size="large"
-                ariaLabel={t('type.label')}
+                ariaLabel={tCreate('type.label')}
               />
             ) : (
               <div className="self-start">
@@ -392,7 +360,7 @@ export function NewAmbitionForm({
                   value={goalType}
                   onChange={(value) => setGoalType(value as GoalType)}
                   size="large"
-                  ariaLabel={t('type.label')}
+                  ariaLabel={tCreate('type.label')}
                 />
               </div>
             )}
@@ -402,25 +370,25 @@ export function NewAmbitionForm({
         <AnimatedSection delay={0.3}>
           <BigSelectField
             options={ownerSelectOptions}
-            label={t('owner.label')}
+            label={tCreate('owner.label')}
             value={owner}
             onValueChange={handleOwnerChange}
-            placeholder={t('owner.placeholder')}
+            placeholder={tCreate('owner.placeholder')}
             required
             hideDescriptionInDropdown
-            error={ownerError ? t('owner.error') : undefined}
+            error={ownerError ? tCreate('owner.error') : undefined}
           />
         </AnimatedSection>
 
         <AnimatedSection delay={0.4}>
-          <FormControl label={t('privacy.label')} mandatory>
+          <FormControl label={tCreate('privacy.label')} mandatory>
             {isMobile ? (
               <RadioGroup
                 items={privacyItems}
                 value={privacy}
                 onChange={(value) => setPrivacy(value as PrivacyValue)}
                 size="small"
-                ariaLabel={t('privacy.label')}
+                ariaLabel={tCreate('privacy.label')}
               />
             ) : (
               <div className="self-start">
@@ -429,7 +397,7 @@ export function NewAmbitionForm({
                   value={privacy}
                   onChange={(value) => setPrivacy(value as PrivacyValue)}
                   size="small"
-                  ariaLabel={t('privacy.label')}
+                  ariaLabel={tCreate('privacy.label')}
                 />
               </div>
             )}
@@ -455,25 +423,27 @@ export function NewAmbitionForm({
         <AnimatedSection delay={0.2}>
           <BigSelectField
             options={ladderedFromOptions}
-            label={t('ladderedFrom.label')}
+            label={tCreate('ladderedFrom.label')}
             value={ladderedFrom}
             onValueChange={handleLadderedFromChange}
-            placeholder={t('ladderedFrom.placeholder')}
+            placeholder={tCreate('ladderedFrom.placeholder')}
             hidePlaceholderIcon
             required
             error={
-              ladderedFromError ? t('ladderedFrom.error') || 'This field is required' : undefined
+              ladderedFromError
+                ? tCreate('ladderedFrom.error') || 'This field is required'
+                : undefined
             }
           />
         </AnimatedSection>
       )}
 
       <AnimatedSection delay={goalType === GOAL_TYPES.BUSINESS ? 0.3 : 0.2}>
-        <FormControl label={t('ambitionName.label')} mandatory fullWidth>
+        <FormControl label={tCreate('ambitionName.label')} mandatory fullWidth>
           <TextField
             value={ambitionName}
             onChange={(e) => setAmbitionName(e.target.value)}
-            placeholder={t('ambitionName.placeholder')}
+            placeholder={tCreate('ambitionName.placeholder')}
             fullWidth
             aria-invalid={ambitionNameError}
           />
@@ -484,7 +454,7 @@ export function NewAmbitionForm({
                 className="text-body-small leading-body-small font-normal"
                 style={{ color: 'var(--feedback-error-500)' }}
               >
-                {t('ambitionName.error') || 'This field is required'}
+                {tCreate('ambitionName.error') || 'This field is required'}
               </span>
             </div>
           )}
@@ -496,14 +466,14 @@ export function NewAmbitionForm({
           <div className={cn('flex gap-1', isMobile ? 'flex-col' : 'flex-row items-start')}>
             <Card className="flex flex-col gap-0_5 md:gap-1_5 bg-neutral-100 border-none p-1 md:p-1_5 md:w-[270px] shrink-0">
               <Typography variant="h6">
-                {t('planActions.label')}
+                {tCreate('planActions.label')}
                 <span className="text-feedback-error-500 ml-0_25">*</span>
               </Typography>
               <Typography variant="body" color="textSecondary">
-                {t('planActions.description')}
+                {tCreate('planActions.description')}
               </Typography>
               <Typography variant="body" color="textSecondary">
-                {t('planActions.subDescription')}
+                {tCreate('planActions.subDescription')}
               </Typography>
             </Card>
 
@@ -523,7 +493,7 @@ export function NewAmbitionForm({
                       <TextField
                         value={action.value}
                         onChange={(e) => updateAction(action.id, e.target.value)}
-                        placeholder={t('planActions.placeholder')}
+                        placeholder={tCreate('planActions.placeholder')}
                         className="flex-1"
                         aria-invalid={index === 0 && actionsError}
                       />
@@ -532,7 +502,7 @@ export function NewAmbitionForm({
                           variant="link"
                           size="small"
                           onClick={() => removeAction(action.id)}
-                          aria-label={t('planActions.removeAction')}
+                          aria-label={tCreate('planActions.removeAction')}
                           className="shrink-0"
                         >
                           <Trash2 width={18} className="text-neutral-600" />
@@ -550,7 +520,7 @@ export function NewAmbitionForm({
                           className="text-body-small leading-body-small font-normal"
                           style={{ color: 'var(--feedback-error-500)' }}
                         >
-                          {t('planActions.error') || 'At least one action is required'}
+                          {tCreate('planActions.error') || 'At least one action is required'}
                         </span>
                       </div>
                     )}
@@ -565,7 +535,7 @@ export function NewAmbitionForm({
                 leftIcon={<Plus width={18} />}
                 className="self-start text-accent-primary"
               >
-                {t('planActions.addAction')}
+                {tCreate('planActions.addAction')}
               </Button>
             </div>
           </div>
@@ -577,14 +547,14 @@ export function NewAmbitionForm({
           <div className={cn('flex gap-1', isMobile ? 'flex-col' : 'flex-row items-start')}>
             <Card className="flex flex-col gap-0_5 md:gap-1_5 bg-neutral-100 border-none p-1 md:p-1_5 md:w-[270px] shrink-0">
               <Typography variant="h6">
-                {t('achievements.label')}
+                {tCreate('achievements.label')}
                 <span className="text-feedback-error-500 ml-0_25">*</span>
               </Typography>
               <Typography variant="body" color="textSecondary">
-                {t('achievements.description')}
+                {tCreate('achievements.description')}
               </Typography>
               <Typography variant="body" color="textSecondary">
-                {t('achievements.subDescription')}
+                {tCreate('achievements.subDescription')}
               </Typography>
             </Card>
 
@@ -604,7 +574,7 @@ export function NewAmbitionForm({
                       <TextField
                         value={achievement.value}
                         onChange={(e) => updateAchievement(achievement.id, e.target.value)}
-                        placeholder={t('achievements.placeholder')}
+                        placeholder={tCreate('achievements.placeholder')}
                         className="flex-1"
                         aria-invalid={index === 0 && achievementsError}
                       />
@@ -613,7 +583,7 @@ export function NewAmbitionForm({
                           variant="link"
                           size="small"
                           onClick={() => removeAchievement(achievement.id)}
-                          aria-label={t('achievements.removeAchievement')}
+                          aria-label={tCreate('achievements.removeAchievement')}
                           className="shrink-0"
                         >
                           <Trash2 width={18} className="text-neutral-600" />
@@ -631,7 +601,7 @@ export function NewAmbitionForm({
                           className="text-body-small leading-body-small font-normal"
                           style={{ color: 'var(--feedback-error-500)' }}
                         >
-                          {t('achievements.error') || 'At least one achievement is required'}
+                          {tCreate('achievements.error') || 'At least one achievement is required'}
                         </span>
                       </div>
                     )}
@@ -646,7 +616,7 @@ export function NewAmbitionForm({
                 leftIcon={<Plus width={18} />}
                 className="self-start text-accent-primary"
               >
-                {t('achievements.addAchievement')}
+                {tCreate('achievements.addAchievement')}
               </Button>
             </div>
           </div>
@@ -656,4 +626,4 @@ export function NewAmbitionForm({
   )
 }
 
-NewAmbitionForm.displayName = 'NewAmbitionForm'
+EditAmbitionForm.displayName = 'EditAmbitionForm'

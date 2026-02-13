@@ -19,7 +19,7 @@ import { useGoalsStore } from '@/stores/goals.store'
 import { AmbitionsLoading } from '@/components/ui/molecules/Loadings'
 import { GOAL_STATUSES } from '@/domain/goal'
 
-type TabValue = 'active' | 'archived'
+type TabValue = 'active' | 'drafts' | 'archived'
 
 export default function GameChangersGoalsPage() {
   const t = useTranslations('Goals')
@@ -85,17 +85,22 @@ export default function GameChangersGoalsPage() {
   // Tab items with i18n
   const tabItems: TabItem[] = [
     { value: 'active', label: t('activeTab') },
+    { value: 'drafts', label: t('draftsTab') },
     { value: 'archived', label: t('archivedTab') },
   ]
 
   // Filter goals based on current tab and active filters
   const filteredList =
     list?.filter((goalData) => {
-      // Tab filter: archived vs active
+      // Tab filter: archived vs drafts vs active
       if (currentTab === 'archived') {
-        if (goalData.status !== GOAL_STATUSES.COMPLETED) return false
+        if (goalData.status !== GOAL_STATUSES.ARCHIVED) return false
+      } else if (currentTab === 'drafts') {
+        if (goalData.status !== GOAL_STATUSES.DRAFT) return false
       } else {
-        if (goalData.status === GOAL_STATUSES.COMPLETED) return false
+        // Active tab: exclude archived and drafts
+        if (goalData.status === GOAL_STATUSES.ARCHIVED || goalData.status === GOAL_STATUSES.DRAFT)
+          return false
       }
 
       // Avatar filter: filter by assigned user uid
@@ -225,6 +230,14 @@ export default function GameChangersGoalsPage() {
                 actionIcon={<CirclePlus />}
                 onAction={() => setIsNewAmbitionOpen(true)}
               />
+            ) : currentTab === 'drafts' ? (
+              <EmptyState
+                title={t('emptyState.drafts.title')}
+                description={t('emptyState.drafts.description')}
+                actionLabel={t('newGoal')}
+                actionIcon={<CirclePlus />}
+                onAction={() => setIsNewAmbitionOpen(true)}
+              />
             ) : (
               <EmptyState
                 title={t('emptyState.archived.title')}
@@ -242,7 +255,10 @@ export default function GameChangersGoalsPage() {
                   <GoalCard
                     ladderGoals={ladderedGoals}
                     goal={goal}
-                    onAddLadderedGoal={() => setIsNewAmbitionOpen(true)}
+                    onAddLadderedGoal={() => {
+                      setSelectedParentAmbitionId(goal.id)
+                      setIsNewAmbitionOpen(true)
+                    }}
                   />
                 </AnimatedSection>
               )
@@ -250,7 +266,14 @@ export default function GameChangersGoalsPage() {
           </div>
         )}
       </FilterableContentLayout>
-      <NewAmbitionModal open={isNewAmbitionOpen} onClose={() => setIsNewAmbitionOpen(false)} />
+      <NewAmbitionModal
+        open={isNewAmbitionOpen}
+        onClose={() => {
+          setIsNewAmbitionOpen(false)
+          setSelectedParentAmbitionId(null)
+        }}
+        parentAmbitionId={selectedParentAmbitionId || undefined}
+      />
     </>
   )
 }

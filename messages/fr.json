@@ -48,12 +48,13 @@
     "newGoal": "Nouvelle Ambition",
     "filtersButton": "Filtres",
     "activeTab": "Actif",
+    "draftsTab": "Brouillons",
     "archivedTab": "Archivé",
     "status": {
       "completed": "Terminé",
       "draft": "Brouillon",
       "awaiting_approval": "En attente d'approbation",
-      "approved": "Approuvé",
+      "approved": "En cours",
       "archived": "Archivé"
     },
     "filters": {
@@ -72,6 +73,10 @@
       "active": {
         "title": "Pas encore d'ambitions.",
         "description": "Créez une ambition pour commencer à suivre vos progrès."
+      },
+      "drafts": {
+        "title": "Aucun brouillon d'ambition.",
+        "description": "Enregistrez une ambition comme brouillon pour continuer à la modifier plus tard."
       },
       "archived": {
         "title": "Aucune ambition archivée.",
@@ -168,8 +173,77 @@
       "back": "Retour"
     },
     "toast": {
-      "successMessage": "Ambition créée avec succès !"
+      "successMessage": "Ambition créée avec succès !",
+      "draftSaved": "Brouillon enregistré avec succès !",
+      "draftRequiresName": "Veuillez entrer un nom d'ambition pour enregistrer le brouillon",
+      "draftSaveError": "Échec de l'enregistrement du brouillon. Veuillez réessayer."
     }
+  },
+  "EditGoal": {
+    "title": "Modifier l'ambition",
+    "setupTitle": "Configuration de l'ambition",
+    "setupDescription": "Mettez à jour le type, le responsable et le niveau de confidentialité de cette ambition.",
+    "contentTitle": "Contenu de l'ambition & Framework (AAA)",
+    "contentDescription": "Mettez à jour le framework AAA (Ambition, actions et achievements) pour cet objectif.",
+    "actions": {
+      "cancel": "Annuler",
+      "next": "Suivant",
+      "save": "Enregistrer les modifications",
+      "back": "Retour"
+    },
+    "toast": {
+      "successMessage": "Ambition mise à jour avec succès !",
+      "errorMessage": "Échec de la mise à jour de l'ambition. Veuillez réessayer."
+    }
+  },
+  "AmbitionModals": {
+    "sendForApproval": {
+      "title": "Envoyer l'ambition pour approbation",
+      "description": "Vous pouvez ajouter un commentaire optionnel pour fournir plus de contexte sur votre ambition.",
+      "commentLabel": "Commentaire",
+      "commentPlaceholder": "Entrez un commentaire",
+      "submitButton": "Envoyer pour approbation",
+      "cancelButton": "Annuler",
+      "successMessage": "Ambition envoyée pour approbation avec succès.",
+      "errorMessage": "Échec de l'envoi de l'ambition pour approbation. Veuillez réessayer."
+    },
+    "archive": {
+      "title": "Archiver l'ambition ?",
+      "description": "Si vous archivez cette ambition, toutes les ambitions échelonnées associées seront également archivées. Vous pouvez les retrouver dans vos archives et les restaurer à l'état Brouillon à tout moment.",
+      "submitButton": "Oui, archiver",
+      "cancelButton": "Annuler",
+      "successMessage": "Ambition archivée avec succès.",
+      "errorMessage": "Échec de l'archivage de l'ambition. Veuillez réessayer."
+    },
+    "unarchive": {
+      "successMessage": "Ambition restaurée en brouillon avec succès.",
+      "errorMessage": "Échec de la restauration de l'ambition. Veuillez réessayer."
+    },
+    "sendBack": {
+      "title": "Renvoyer l'ambition",
+      "description": "Vous pouvez partager ce qui doit être ajusté. Vos commentaires aident l'employé à affiner son ambition.",
+      "commentLabel": "Commentaire",
+      "commentPlaceholder": "Entrez un commentaire",
+      "submitButton": "Renvoyer",
+      "cancelButton": "Annuler",
+      "successMessage": "Ambition renvoyée avec succès.",
+      "errorMessage": "Échec du renvoi de l'ambition. Veuillez réessayer."
+    },
+    "approve": {
+      "title": "Approuver l'ambition",
+      "description": "Vous pouvez laisser un commentaire à l'employé pour fournir plus de contexte sur cette approbation.",
+      "commentLabel": "Commentaire",
+      "commentPlaceholder": "Entrez un commentaire",
+      "submitButton": "Approuver",
+      "cancelButton": "Annuler",
+      "successMessage": "Ambition approuvée avec succès.",
+      "errorMessage": "Échec de l'approbation de l'ambition. Veuillez réessayer."
+    },
+    "characterCount": "{count}/150"
+  },
+  "ManagerAmbitions": {
+    "addLadderedAmbition": "Ajouter une ambition échelonnée",
+    "dismiss": "Ignorer"
   },
   "Common": {
     "confirm": "Confirmer",

@@ -4,12 +4,14 @@ import { GoalRepository } from '@/repositories/GoalRepository'
 import {
   ACHIEVEMENT_PROGRESS_STATUSES,
   CreateGoalDTO,
+  UpdateGoalDTO,
   GOAL_STATUSES,
   GOAL_TYPES,
   GoalAmbitionsResponse,
   GoalUI,
   ManagerAmbitionsData,
   GoalFiltersData,
+  GoalStatus,
 } from '@/domain/goal'
 
 const getProfileImageUrl = (profileImageUrl: string | null | undefined): string | null => {
@@ -70,6 +72,9 @@ export class PrismaGoalRepository implements GoalRepository {
             },
           }
         : undefined,
+      orderBy: {
+        createdAt: 'desc',
+      },
       include: {
         people_assignedTo: {
           select: {
@@ -228,35 +233,40 @@ export class PrismaGoalRepository implements GoalRepository {
     return goalMapper(createdGoal)
   }
 
-  async updateGoal(id: string, goal: CreateGoalDTO): Promise<GoalUI> {
+  async updateGoal(id: string, goal: UpdateGoalDTO): Promise<GoalUI> {
     const data: Prisma.goalsUpdateInput = {
-      title: goal.title,
-      body: goal.description ?? '',
-      type: goal.goalType as string,
-      status: goal.status as string,
-      progress: goal.progress ?? 0,
-      people_assignedTo: { connect: { id: goal.assignedTo } },
-      ...(!!goal.parentId
-        ? { parent: { connect: { id: goal.parentId } } }
-        : { parent: { disconnect: true } }),
-      ...(!!goal.periodId ? { performance_periods: { connect: { id: goal.periodId } } } : {}),
-      goal_achievements: {
-        deleteMany: {},
-        create: goal.goalAchievements.map((a) => ({
-          title: a.title,
-          body: a.body ?? '',
-          status: a.status ?? GOAL_STATUSES.DRAFT,
-          progress: a.progress ?? ACHIEVEMENT_PROGRESS_STATUSES.NOT_STARTED,
-        })),
-      },
-      goal_actions: {
-        deleteMany: {},
-        create: goal.goalActions.map((a) => ({
-          title: a.title,
-          body: a.body ?? '',
-          status: a.status ?? GOAL_STATUSES.DRAFT,
-        })),
-      },
+      ...(goal.title !== undefined && { title: goal.title }),
+      ...(goal.description !== undefined && { body: goal.description }),
+      ...(goal.goalType !== undefined && { type: goal.goalType as string }),
+      ...(goal.status !== undefined && { status: goal.status as string }),
+      ...(goal.progress !== undefined && { progress: goal.progress }),
+      ...(goal.parentId !== undefined
+        ? goal.parentId
+          ? { parent: { connect: { id: goal.parentId } } }
+          : { parent: { disconnect: true } }
+        : {}),
+      ...(goal.goalAchievements !== undefined && {
+        goal_achievements: {
+          deleteMany: {},
+          create: goal.goalAchievements.map((a) => ({
+            title: a.title,
+            body: a.body ?? '',
+            status: a.status ?? GOAL_STATUSES.DRAFT,
+            progress: a.progress ?? ACHIEVEMENT_PROGRESS_STATUSES.NOT_STARTED,
+          })),
+        },
+      }),
+      ...(goal.goalActions !== undefined && {
+        goal_actions: {
+          deleteMany: {},
+          create: goal.goalActions.map((a) => ({
+            title: a.title,
+            body: a.body ?? '',
+            status: a.status ?? GOAL_STATUSES.DRAFT,
+          })),
+        },
+      }),
+      updatedAt: new Date(),
     }
 
     const updatedGoal = (await prisma.goals.update({
@@ -355,5 +365,57 @@ export class PrismaGoalRepository implements GoalRepository {
         },
       ],
     }
+  }
+
+  async updateGoalStatus(id: string, status: GoalStatus): Promise<GoalUI> {
+    const updatedGoal = (await prisma.goals.update({
+      where: { id },
+      data: {
+        status: status as string,
+        updatedAt: new Date(),
+      },
+      include: {
+        people_assignedTo: {
+          select: {
+            id: true,
+            name: true,
+            lastname: true,
+            profileImageUrl: true,
+          },
+        },
+        parent: {
+          select: { id: true, title: true },
+        },
+        goal_achievements: {
+          select: {
+            id: true,
+            title: true,
+            status: true,
+            progress: true,
+          },
+        },
+        goal_actions: {
+          select: {
+            id: true,
+            title: true,
+            status: true,
+          },
+        },
+        relations: {
+          include: {
+            people_assignedTo: {
+              select: {
+                id: true,
+                name: true,
+                lastname: true,
+                profileImageUrl: true,
+              },
+            },
+          },
+        },
+      },
+    })) as unknown as GoalAmbitionsResponse
+
+    return goalMapper(updatedGoal)
   }
 }

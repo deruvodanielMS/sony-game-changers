@@ -10,6 +10,10 @@ import { ModalHeader, ModalBody } from '@/components/ui/molecules/Modal'
 import { Drawer } from '@/components/ui/atoms/Drawer'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { AmbitionStatus } from '@/components/ui/atoms/AmbitionStatus'
+import {
+  getStatusVariant,
+  getStatusLabel,
+} from '@/components/ui/atoms/AmbitionStatus/AmbitionStatus.types'
 import { cn } from '@/utils/cn'
 import { generateInitialsAvatarSrc } from '@/utils/generateInitialsAvatar'
 import type {
@@ -19,14 +23,6 @@ import type {
   ParentAmbition,
 } from './LadderingModal.types'
 import { useUIStore } from '@/stores/ui.store'
-import type { GoalStatus } from '@/domain/goal'
-
-const statusToAmbitionStatusVariant = (status?: GoalStatus) => {
-  if (status === 'draft') return 'draft'
-  if (status === 'awaiting_approval') return 'awaiting-approval'
-  if (status === 'completed') return 'done'
-  return 'default'
-}
 
 // Sub-component: Ambition Card (drop zone for linking ambitions)
 function AmbitionCard({
@@ -77,21 +73,7 @@ function AmbitionCard({
 
 // Sub-component: Goal Preview Card (shows the selected goal)
 function GoalPreviewCard({ goal, 'data-testid': dataTestId }: GoalPreviewCardProps) {
-  const t = useTranslations('Goals')
   const { title, userName, avatarUrl, status } = goal
-
-  const formatStatusLabel = (goalStatus?: GoalStatus | string) => {
-    if (!goalStatus) return 'Draft'
-    // Only translate if it's a valid status key
-    if (
-      goalStatus === 'draft' ||
-      goalStatus === 'awaiting_approval' ||
-      goalStatus === 'completed'
-    ) {
-      return t(`status.${goalStatus}`)
-    }
-    return goalStatus
-  }
 
   return (
     <div
@@ -123,12 +105,12 @@ function GoalPreviewCard({ goal, 'data-testid': dataTestId }: GoalPreviewCardPro
           </Typography>
         </div>
         <AmbitionStatus
-          variant={statusToAmbitionStatusVariant(status as GoalStatus)}
+          variant={getStatusVariant(status)}
           size="md"
           className="shrink-0"
           data-test-id="ambition-status"
         >
-          {formatStatusLabel(status)}
+          {getStatusLabel(status)}
         </AmbitionStatus>
       </div>
     </div>

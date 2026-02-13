@@ -121,7 +121,7 @@ export function SendForApprovalModal({
     } else if (!open || isMobile) {
       toggleModal(false)
     }
-  }, [open, isMobile])
+  }, [open, isMobile, comment])
 
   if (isMobile) {
     return (
