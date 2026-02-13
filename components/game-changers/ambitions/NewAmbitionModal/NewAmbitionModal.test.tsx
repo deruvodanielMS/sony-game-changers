@@ -17,6 +17,19 @@ vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
 }))
 
+vi.mock('next-auth/react', () => ({
+  useSession: () => ({
+    data: {
+      user: {
+        name: 'Test User',
+        email: 'test@example.com',
+        image: '/avatar.png',
+      },
+    },
+    status: 'authenticated',
+  }),
+}))
+
 const useMediaQueryMock = vi.fn()
 vi.mock('@/hooks/useMediaQuery', () => ({
   useMediaQuery: (...args: any[]) => useMediaQueryMock(...args),

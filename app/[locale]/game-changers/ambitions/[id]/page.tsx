@@ -16,6 +16,7 @@ import { AmbitionAchievements } from '@/components/game-changers/ambitions/Ambit
 import { AmbitionLaddering } from '@/components/game-changers/ambitions/AmbitionLaddering'
 import { AmbitionActivityFeed } from '@/components/game-changers/ambitions/AmbitionActivityFeed'
 import { NewAmbitionModal } from '@/components/game-changers/ambitions/NewAmbitionModal'
+import { EditAmbitionModal } from '@/components/game-changers/ambitions/EditAmbitionModal'
 import {
   SendForApprovalModal,
   ArchiveAmbitionModal,
@@ -35,11 +36,12 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   const t = useTranslations('AmbitionDetail')
   const tModals = useTranslations('AmbitionModals')
   const { id } = use(params)
-  const { fetchGoal, selected, selectGoal } = useGoalsStore()
+  const { fetchGoal, fetchGoalFilters, selected, selectGoal, updateGoalStatus } = useGoalsStore()
   const { enqueueToast } = useUIStore()
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
   const { formatDate, formatDateTime } = useDateFormat()
   const [isNewAmbitionOpen, setIsNewAmbitionOpen] = useState(false)
+  const [isEditAmbitionOpen, setIsEditAmbitionOpen] = useState(false)
 
   // Modal states
   const [isSendForApprovalOpen, setIsSendForApprovalOpen] = useState(false)
@@ -50,6 +52,7 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
 
   useEffect(() => {
     fetchGoal(id)
+    fetchGoalFilters() // Load filters for NewAmbitionModal
     return () => {
       selectGoal(null)
     }
@@ -60,15 +63,23 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   const handleSendForApproval = async (comment?: string) => {
     setIsActionLoading(true)
     try {
-      // TODO: Implement API call to send for approval
-      console.log('Send for approval with comment:', comment)
-      enqueueToast({
-        id: `send-approval-${Date.now()}`,
-        title: tModals('sendForApproval.successMessage'),
-        variant: 'success',
-        duration: 3000,
-      })
-      setIsSendForApprovalOpen(false)
+      const success = await updateGoalStatus(id, GOAL_STATUSES.AWAITING_APPROVAL, comment)
+      if (success) {
+        enqueueToast({
+          id: `send-approval-${Date.now()}`,
+          title: tModals('sendForApproval.successMessage'),
+          variant: 'success',
+          duration: 3000,
+        })
+        setIsSendForApprovalOpen(false)
+      } else {
+        enqueueToast({
+          id: `send-approval-error-${Date.now()}`,
+          title: tModals('sendForApproval.errorMessage'),
+          variant: 'error',
+          duration: 3000,
+        })
+      }
     } finally {
       setIsActionLoading(false)
     }
@@ -77,15 +88,47 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   const handleArchive = async () => {
     setIsActionLoading(true)
     try {
-      // TODO: Implement API call to archive
-      console.log('Archive ambition')
-      enqueueToast({
-        id: `archive-${Date.now()}`,
-        title: tModals('archive.successMessage'),
-        variant: 'success',
-        duration: 3000,
-      })
-      setIsArchiveOpen(false)
+      const success = await updateGoalStatus(id, GOAL_STATUSES.ARCHIVED)
+      if (success) {
+        enqueueToast({
+          id: `archive-${Date.now()}`,
+          title: tModals('archive.successMessage'),
+          variant: 'success',
+          duration: 3000,
+        })
+        setIsArchiveOpen(false)
+      } else {
+        enqueueToast({
+          id: `archive-error-${Date.now()}`,
+          title: tModals('archive.errorMessage'),
+          variant: 'error',
+          duration: 3000,
+        })
+      }
+    } finally {
+      setIsActionLoading(false)
+    }
+  }
+
+  const handleUnarchive = async () => {
+    setIsActionLoading(true)
+    try {
+      const success = await updateGoalStatus(id, GOAL_STATUSES.DRAFT)
+      if (success) {
+        enqueueToast({
+          id: `unarchive-${Date.now()}`,
+          title: tModals('unarchive.successMessage'),
+          variant: 'success',
+          duration: 3000,
+        })
+      } else {
+        enqueueToast({
+          id: `unarchive-error-${Date.now()}`,
+          title: tModals('unarchive.errorMessage'),
+          variant: 'error',
+          duration: 3000,
+        })
+      }
     } finally {
       setIsActionLoading(false)
     }
@@ -94,15 +137,23 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   const handleSendBack = async (comment?: string) => {
     setIsActionLoading(true)
     try {
-      // TODO: Implement API call to send back
-      console.log('Send back with comment:', comment)
-      enqueueToast({
-        id: `send-back-${Date.now()}`,
-        title: tModals('sendBack.successMessage'),
-        variant: 'success',
-        duration: 3000,
-      })
-      setIsSendBackOpen(false)
+      const success = await updateGoalStatus(id, GOAL_STATUSES.DRAFT, comment)
+      if (success) {
+        enqueueToast({
+          id: `send-back-${Date.now()}`,
+          title: tModals('sendBack.successMessage'),
+          variant: 'success',
+          duration: 3000,
+        })
+        setIsSendBackOpen(false)
+      } else {
+        enqueueToast({
+          id: `send-back-error-${Date.now()}`,
+          title: tModals('sendBack.errorMessage'),
+          variant: 'error',
+          duration: 3000,
+        })
+      }
     } finally {
       setIsActionLoading(false)
     }
@@ -111,15 +162,23 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   const handleApprove = async (comment?: string) => {
     setIsActionLoading(true)
     try {
-      // TODO: Implement API call to approve
-      console.log('Approve with comment:', comment)
-      enqueueToast({
-        id: `approve-${Date.now()}`,
-        title: tModals('approve.successMessage'),
-        variant: 'success',
-        duration: 3000,
-      })
-      setIsApproveOpen(false)
+      const success = await updateGoalStatus(id, GOAL_STATUSES.APPROVED, comment)
+      if (success) {
+        enqueueToast({
+          id: `approve-${Date.now()}`,
+          title: tModals('approve.successMessage'),
+          variant: 'success',
+          duration: 3000,
+        })
+        setIsApproveOpen(false)
+      } else {
+        enqueueToast({
+          id: `approve-error-${Date.now()}`,
+          title: tModals('approve.errorMessage'),
+          variant: 'error',
+          duration: 3000,
+        })
+      }
     } finally {
       setIsActionLoading(false)
     }
@@ -280,16 +339,18 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
     progress,
     createdAt,
     updatedAt,
+    parent,
   } = selected
-  const parentAmbition = ladderedGoals?.[0]
 
   // Calculate progress based on laddered goals completion
 
   // Determine which action buttons to show based on status
   const showApprovalActions = status === GOAL_STATUSES.AWAITING_APPROVAL
   const showSendForApproval = status === GOAL_STATUSES.DRAFT
-  const showAnyActions = showApprovalActions || showSendForApproval
-  const isArchived = status === 'archived'
+  const isArchived = status === GOAL_STATUSES.ARCHIVED
+  const isApproved = status === GOAL_STATUSES.APPROVED
+  // Show action buttons for draft, awaiting approval, and approved states (not archived)
+  const showAnyActions = showApprovalActions || showSendForApproval || isApproved
 
   // Dropdown menu items
   const dropdownItems = [
@@ -297,16 +358,14 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
       label: t('actions.edit'),
       icon: <Pencil />,
       onClick: () => {
-        // TODO: Handle edit action
+        setIsEditAmbitionOpen(true)
       },
     },
     isArchived
       ? {
           label: t('actions.unarchive'),
           icon: <ArchiveRestore />,
-          onClick: () => {
-            // TODO: Handle unarchive action
-          },
+          onClick: handleUnarchive,
         }
       : {
           label: t('actions.archive'),
@@ -386,12 +445,9 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
         </AnimatedSection>
 
         {/* Higher Ambition section - Shows parent goal */}
-        {parentAmbition && (
+        {parent && (
           <AnimatedSection delay={0.05}>
-            <HigherAmbition
-              text={parentAmbition.title}
-              goalType={parentAmbition.goalType ?? (parentAmbition as { type?: string }).type}
-            />
+            <HigherAmbition text={parent.title} goalType={goalType} />
           </AnimatedSection>
         )}
 
@@ -402,6 +458,7 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
             userName={userName}
             avatarUrl={avatarUrl || undefined}
             ambitionType={goalType}
+            status={status}
             progress={progress}
             createdDate={formatDate(createdAt)}
             updatedDate={formatDateTime(updatedAt)}
@@ -436,7 +493,17 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
         </AnimatedSection>
       </div>
 
-      <NewAmbitionModal open={isNewAmbitionOpen} onClose={() => setIsNewAmbitionOpen(false)} />
+      <NewAmbitionModal
+        open={isNewAmbitionOpen}
+        onClose={() => setIsNewAmbitionOpen(false)}
+        parentAmbitionId={id}
+      />
+
+      <EditAmbitionModal
+        open={isEditAmbitionOpen}
+        onClose={() => setIsEditAmbitionOpen(false)}
+        goal={selected}
+      />
 
       {/* Action Modals */}
       <SendForApprovalModal

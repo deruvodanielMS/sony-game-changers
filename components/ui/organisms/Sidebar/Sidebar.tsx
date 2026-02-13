@@ -131,7 +131,7 @@ export function Sidebar({
           <SidebarNavItem
             icon={
               <Image
-                src={`/profile-img/${user?.profileImageUrl || 'profile.png'}`}
+                src={user?.profileImageUrl || '/profile-img/profile.png'}
                 alt={`${user?.name} ${user?.lastname}`.trim() || t('profile')}
                 className="w-5 h-5 rounded-full object-cover"
                 width={24}

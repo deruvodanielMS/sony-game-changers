@@ -5,11 +5,24 @@ import { EMPLOYEE_EMAIL_BY_ROLE } from './common/constants'
 
 export const authEnabled = process.env.NEXT_PUBLIC_AUTH_ENABLED === 'true'
 
-const oktaProvider = OktaProvider({
-  clientId: process.env.OKTA_CLIENT_ID!,
-  clientSecret: process.env.OKTA_CLIENT_SECRET!,
-  issuer: process.env.OKTA_ISSUER!,
-})
+const getOktaProvider = () => {
+  if (!authEnabled) return null
+
+  const clientId = process.env.OKTA_CLIENT_ID
+  const clientSecret = process.env.OKTA_CLIENT_SECRET
+  const issuer = process.env.OKTA_ISSUER
+
+  if (!clientId || !clientSecret || !issuer) {
+    console.warn('Okta environment variables are not configured')
+    return null
+  }
+
+  return OktaProvider({
+    clientId,
+    clientSecret,
+    issuer,
+  })
+}
 
 const icProvider = CredentialsProvider({
   id: 'ic-credentials',
@@ -17,9 +30,9 @@ const icProvider = CredentialsProvider({
   credentials: {},
   async authorize() {
     return {
-      id: 'ic-user',
+      id: 'user-2',
       email: EMPLOYEE_EMAIL_BY_ROLE.IC,
-      name: 'Individual Contributor',
+      name: 'Sarah Miller',
     }
   },
 })
@@ -30,14 +43,15 @@ const managerProvider = CredentialsProvider({
   credentials: {},
   async authorize() {
     return {
-      id: 'manager-user',
+      id: 'user-1',
       email: EMPLOYEE_EMAIL_BY_ROLE.MANAGER,
-      name: 'Manager',
+      name: 'James Miller',
     }
   },
 })
 
-const providers = authEnabled ? [oktaProvider] : [icProvider, managerProvider]
+const oktaProvider = getOktaProvider()
+const providers = authEnabled && oktaProvider ? [oktaProvider] : [icProvider, managerProvider]
 
 export const authOptions: NextAuthOptions = {
   providers,

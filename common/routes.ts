@@ -23,8 +23,10 @@ const BASE_API = '/api'
 
 export const API_ROUTES = {
   GOALS: `${BASE_API}/goals`,
+  GOAL: (id: string) => `${BASE_API}/goals/${id}`,
   GOALS_MANAGER_AMBITIONS: `${BASE_API}/goals/manager-ambitions`,
   GOALS_FILTERS: `${BASE_API}/goals/filters`,
+  GOAL_STATUS: (id: string) => `${BASE_API}/goals/${id}/status`,
   USER: `${BASE_API}/user`,
 } as const
 
