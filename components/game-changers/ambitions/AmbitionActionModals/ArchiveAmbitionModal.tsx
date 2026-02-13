@@ -78,12 +78,12 @@ export function ArchiveAmbitionModal({
     }
   }, [open, isDesktop])
 
-  // Update modal content when isLoading changes (only when modal is open)
+  // Update modal content when isLoading changes (only when modal is open on desktop)
   useEffect(() => {
-    if (open && isDesktop) {
+    if (open && isDesktop === true) {
       toggleModal(true)
     }
-  }, [isLoading])
+  }, [isLoading, isDesktop])
 
   const mobileContent = useMemo(
     () => <p className="text-body text-neutral-1000">{t('description')}</p>,

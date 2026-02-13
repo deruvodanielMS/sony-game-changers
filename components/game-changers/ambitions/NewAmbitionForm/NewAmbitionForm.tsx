@@ -107,11 +107,11 @@ export function NewAmbitionForm({
       const isValid = owner !== ''
       onValidationChange?.(isValid)
     } else if (step === 2) {
-      const hasLadderedFrom = goalType === GOAL_TYPES.BUSINESS ? ladderedFrom !== '' : true
+      // ladderedFrom is optional - goals without parent become top-level
       const hasAmbitionName = ambitionName.trim() !== ''
       const hasActions = actions.some((action) => action.value.trim() !== '')
       const hasAchievements = achievements.some((achievement) => achievement.value.trim() !== '')
-      const isValid = hasLadderedFrom && hasAmbitionName && hasActions && hasAchievements
+      const isValid = hasAmbitionName && hasActions && hasAchievements
       onValidationChange?.(isValid)
     }
   }, [owner, goalType, ladderedFrom, ambitionName, actions, achievements, step, onValidationChange])
@@ -192,17 +192,17 @@ export function NewAmbitionForm({
         }
         return isValid
       } else if (step === 2) {
-        const hasLadderedFrom = goalType === GOAL_TYPES.BUSINESS ? ladderedFrom !== '' : true
+        // ladderedFrom is optional - goals without parent become top-level
         const hasAmbitionName = ambitionName.trim() !== ''
         const hasActions = actions.some((action) => action.value.trim() !== '')
         const hasAchievements = achievements.some((achievement) => achievement.value.trim() !== '')
 
-        setLadderedFromError(!hasLadderedFrom)
+        setLadderedFromError(false) // ladderedFrom is optional
         setAmbitionNameError(!hasAmbitionName)
         setActionsError(!hasActions)
         setAchievementsError(!hasAchievements)
 
-        return hasLadderedFrom && hasAmbitionName && hasActions && hasAchievements
+        return hasAmbitionName && hasActions && hasAchievements
       }
       return false
     }
@@ -460,7 +460,6 @@ export function NewAmbitionForm({
             onValueChange={handleLadderedFromChange}
             placeholder={t('ladderedFrom.placeholder')}
             hidePlaceholderIcon
-            required
             error={
               ladderedFromError ? t('ladderedFrom.error') || 'This field is required' : undefined
             }

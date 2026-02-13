@@ -97,7 +97,7 @@ export function NewAmbitionModal({
         status: GOAL_STATUSES.DRAFT,
         parentId: formData.ladderedFrom || undefined,
         assignedTo: assignedUserId,
-        periodId: 'current-period',
+        periodId: goalFilters?.activePeriodId || '',
         progress: 0,
         goalAchievements: formData.achievements?.length
           ? formData.achievements.map((achievement) => ({
@@ -184,7 +184,7 @@ export function NewAmbitionModal({
           status: GOAL_STATUSES.AWAITING_APPROVAL,
           parentId: formData.ladderedFrom || undefined,
           assignedTo: formData.owner,
-          periodId: 'current-period', // This should come from context or be selected
+          periodId: goalFilters?.activePeriodId || '',
           progress: 0,
           goalAchievements: formData.achievements.map((achievement) => ({
             title: achievement,

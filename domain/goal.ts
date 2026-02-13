@@ -166,6 +166,7 @@ export type GoalFiltersData = {
     showItems: number
   }
   filters: GoalFilter[]
+  activePeriodId: string | null
 }
 
 // DTO for updating goal status

@@ -341,6 +341,12 @@ export class PrismaGoalRepository implements GoalRepository {
       orderBy: { name: 'asc' },
     })
 
+    // Fetch active performance period
+    const activePeriod = await prisma.performance_periods.findFirst({
+      where: { active: true },
+      select: { id: true },
+    })
+
     const avatarOptions = users.map((user) => ({
       uid: user.id,
       name: `${user.name} ${user.lastname}`.trim(),
@@ -358,9 +364,11 @@ export class PrismaGoalRepository implements GoalRepository {
           label: 'Status',
           'data-testid': 'filter-status',
           options: [
-            { label: 'Awaiting Approval', value: GOAL_STATUSES.AWAITING_APPROVAL },
-            { label: 'Completed', value: GOAL_STATUSES.COMPLETED },
             { label: 'Draft', value: GOAL_STATUSES.DRAFT },
+            { label: 'Awaiting Approval', value: GOAL_STATUSES.AWAITING_APPROVAL },
+            { label: 'In Progress', value: GOAL_STATUSES.APPROVED },
+            { label: 'Completed', value: GOAL_STATUSES.COMPLETED },
+            { label: 'Archived', value: GOAL_STATUSES.ARCHIVED },
           ],
           single: true,
         },
@@ -378,6 +386,7 @@ export class PrismaGoalRepository implements GoalRepository {
           single: true,
         },
       ],
+      activePeriodId: activePeriod?.id || null,
     }
   }
 
