@@ -12,7 +12,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 - **State Management:** [Zustand](https://zustand-demo.pmnd.rs)
 - **Testing:** [Vitest](https://vitest.dev) + [React Testing Library](https://testing-library.com/react)
 - **Storybook:** [Storybook 8](https://storybook.js.org)
-- **Database (local):** [Prisma](https://www.prisma.io) + SQLite
+- **Database:** [Prisma](https://www.prisma.io) + PostgreSQL (Prisma Postgres on Vercel)
 
 ## Getting Started
 
@@ -57,10 +57,13 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 ## 🧩 Local Development – Prisma Onboarding
 
-This project uses **Prisma + SQLite** for local development in order to keep the setup simple and accessible for all team members.
+This project uses **Prisma + PostgreSQL** (Prisma Postgres on Vercel).
 
-The backend logic is mocked locally using Prisma and Next.js API routes.  
-The real backend will be provided by an external team.
+- **Local development**: Uses `mock` data sources by default (no database needed)
+- **Vercel/Production**: Uses `prisma` data sources with Prisma Postgres
+
+The backend logic can be mocked locally or connected to the real database.  
+Configuration is controlled via environment variables (`*_SOURCE=mock|prisma`).
 
 ### Generate Prisma Client
 
@@ -72,7 +75,7 @@ npx prisma generate
 
 ### Run database migrations
 
-Creates the local SQLite database and applies all migrations.
+Applies migrations to your Prisma Postgres database.
 
 ```bash
 npx prisma migrate dev
@@ -107,27 +110,25 @@ yarn dev:setup
 yarn db:reset
 ```
 
-⚠️ This will delete all local data and re-apply migrations.
-
----
-
-## 📦 Requirements
-
-- Node.js `>= 18`
-- Yarn
-- Git
-
-No external database is required for local development.
+⚠️ This will delete all data and re-apply migrations.
 
 ---
 
 ## 🔐 Environment Variables
 
-Create a local environment file:
+Copy the example file and configure for your environment:
 
 ```bash
-cp .env.example .env
+cp env.example .env.local
 ```
+
+### Local vs Production
+
+| Variable | Local | Vercel |
+|----------|-------|--------|
+| `*_SOURCE` | `mock` | `prisma` |
+| `NEXT_PUBLIC_AUTH_ENABLED` | `false` | `true` |
+| `DATABASE_URL` | Not needed | Prisma Postgres |
 
 ## Storybook
 

@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
+import { useSession } from 'next-auth/react'
 import { m, AnimatePresence } from 'framer-motion'
 import { Info, Plus, Trash2, Users, XCircle } from 'lucide-react'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -59,6 +60,7 @@ function ShareWithPill({ member, onRemove }: ShareWithPillProps) {
 export function NewAmbitionForm({
   className,
   step = 1,
+  parentAmbitionId,
   onValidationChange,
   onSubmit,
   onFormDataChange,
@@ -66,8 +68,9 @@ export function NewAmbitionForm({
   'data-test-id': dataTestId,
 }: NewAmbitionFormProps) {
   const t = useTranslations('CreateGoal')
+  const { data: session } = useSession()
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
-  const { goalFilters } = useGoalsStore()
+  const { goalFilters, list: goalsList } = useGoalsStore()
 
   // Step 1 state - Empty state by default
   const [goalType, setGoalType] = useState<GoalType>(GOAL_TYPES.BUSINESS)
@@ -84,8 +87,8 @@ export function NewAmbitionForm({
   const [actionsError, setActionsError] = useState(false)
   const [achievementsError, setAchievementsError] = useState(false)
 
-  // Step 2 state - Empty state by default
-  const [ladderedFrom, setLadderedFrom] = useState('')
+  // Step 2 state - Use parentAmbitionId as initial value for ladderedFrom
+  const [ladderedFrom, setLadderedFrom] = useState(parentAmbitionId || '')
   const [ambitionName, setAmbitionName] = useState('')
   const [actions, setActions] = useState<InputItem[]>(() => [
     { id: crypto.randomUUID(), value: '' },
@@ -104,21 +107,40 @@ export function NewAmbitionForm({
       const isValid = owner !== ''
       onValidationChange?.(isValid)
     } else if (step === 2) {
-      const hasLadderedFrom = goalType === GOAL_TYPES.BUSINESS ? ladderedFrom !== '' : true
+      // ladderedFrom is optional - goals without parent become top-level
       const hasAmbitionName = ambitionName.trim() !== ''
       const hasActions = actions.some((action) => action.value.trim() !== '')
       const hasAchievements = achievements.some((achievement) => achievement.value.trim() !== '')
-      const isValid = hasLadderedFrom && hasAmbitionName && hasActions && hasAchievements
+      const isValid = hasAmbitionName && hasActions && hasAchievements
       onValidationChange?.(isValid)
     }
   }, [owner, goalType, ladderedFrom, ambitionName, actions, achievements, step, onValidationChange])
 
-  // Clear ladderedFrom when changing to non-business type
+  // Update ladderedFrom when parentAmbitionId changes (e.g., modal opened from different parent)
   useEffect(() => {
-    if (goalType !== GOAL_TYPES.BUSINESS) {
+    if (parentAmbitionId) {
+      setLadderedFrom(parentAmbitionId)
+    }
+  }, [parentAmbitionId])
+
+  // Clear ladderedFrom when changing to non-business type (but preserve if parentAmbitionId is set)
+  useEffect(() => {
+    if (goalType !== GOAL_TYPES.BUSINESS && !parentAmbitionId) {
       setLadderedFrom('')
     }
-  }, [goalType])
+  }, [goalType, parentAmbitionId])
+
+  // Pre-select owner based on logged in user (by name match)
+  useEffect(() => {
+    if (!owner && session?.user?.name && goalFilters?.avatarSelector?.options) {
+      const currentUser = goalFilters.avatarSelector.options.find(
+        (option) => option.name === session.user?.name,
+      )
+      if (currentUser) {
+        setOwner(currentUser.uid)
+      }
+    }
+  }, [session, goalFilters, owner])
 
   // Clear share with search when privacy changes to public
   useEffect(() => {
@@ -170,17 +192,17 @@ export function NewAmbitionForm({
         }
         return isValid
       } else if (step === 2) {
-        const hasLadderedFrom = goalType === GOAL_TYPES.BUSINESS ? ladderedFrom !== '' : true
+        // ladderedFrom is optional - goals without parent become top-level
         const hasAmbitionName = ambitionName.trim() !== ''
         const hasActions = actions.some((action) => action.value.trim() !== '')
         const hasAchievements = achievements.some((achievement) => achievement.value.trim() !== '')
 
-        setLadderedFromError(!hasLadderedFrom)
+        setLadderedFromError(false) // ladderedFrom is optional
         setAmbitionNameError(!hasAmbitionName)
         setActionsError(!hasActions)
         setAchievementsError(!hasAchievements)
 
-        return hasLadderedFrom && hasAmbitionName && hasActions && hasAchievements
+        return hasAmbitionName && hasActions && hasAchievements
       }
       return false
     }
@@ -326,27 +348,19 @@ export function NewAmbitionForm({
     }))
   }, [goalFilters])
 
-  // Laddered from options (mock data for now)
-  const ladderedFromOptions = useMemo<BigSelectOption[]>(
-    () => [
-      {
-        value: 'division-ambition-1',
-        label: 'Accelerate platform innovation',
-        description: 'AAA Division Ambition',
-      },
-      {
-        value: 'division-ambition-2',
-        label: 'Improve customer satisfaction',
-        description: 'AAA Division Ambition',
-      },
-      {
-        value: 'team-ambition-1',
-        label: 'Increase team productivity',
-        description: 'AAA Team Ambition',
-      },
-    ],
-    [],
-  )
+  // Laddered from options - use real goals from store
+  const ladderedFromOptions = useMemo<BigSelectOption[]>(() => {
+    if (!goalsList) return []
+
+    // Filter out archived goals and map to BigSelectOption format
+    return goalsList
+      .filter((goal) => goal.status !== 'archived')
+      .map((goal) => ({
+        value: goal.id,
+        label: goal.title,
+        description: goal.goalType ? `${goal.goalType.replace(/_/g, ' ')}` : undefined,
+      }))
+  }, [goalsList])
 
   // Step 1: Ambition Setup
   if (step === 1) {
@@ -446,7 +460,6 @@ export function NewAmbitionForm({
             onValueChange={handleLadderedFromChange}
             placeholder={t('ladderedFrom.placeholder')}
             hidePlaceholderIcon
-            required
             error={
               ladderedFromError ? t('ladderedFrom.error') || 'This field is required' : undefined
             }

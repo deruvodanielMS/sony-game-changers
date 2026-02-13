@@ -3,8 +3,13 @@
 import { Link } from '@/i18n/navigation'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { Avatar } from '@/components/ui/atoms/Avatar'
-import { ProgressBar } from '@/components/ui/atoms/ProgressBar'
 import { AmbitionStatus } from '@/components/ui/atoms/AmbitionStatus'
+import {
+  getStatusVariant,
+  getStatusLabel,
+  shouldShowProgress,
+  getProgressVariant,
+} from '@/components/ui/atoms/AmbitionStatus/AmbitionStatus.types'
 import { Arrow } from '@/components/ui/atoms/Arrow'
 import { cn } from '@/utils/cn'
 import type { LadderedAmbitionProps } from './LadderedAmbition.types'
@@ -15,13 +20,17 @@ export function LadderedAmbition({
   avatarUrl,
   progress,
   status,
-  statusLabel,
-  statusVariant = 'default',
+  statusLabel: customLabel,
+  statusVariant: customVariant,
   arrowType = 'Laddered middle',
   href,
   className,
 }: LadderedAmbitionProps) {
-  const progressStatus: 'in-progress' | 'completed' = progress >= 100 ? 'completed' : 'in-progress'
+  // Use centralized helpers, with fallback to deprecated props for backwards compatibility
+  const showProgress = shouldShowProgress(status)
+  const variant = customVariant ?? getStatusVariant(status)
+  const label = customLabel ?? getStatusLabel(status)
+  const progressVariant = getProgressVariant(status, progress)
 
   return (
     <div
@@ -55,14 +64,12 @@ export function LadderedAmbition({
       </div>
 
       <div className="flex flex-col items-start sm:items-end shrink-0 w-full sm:w-[150px]">
-        {status === 'draft' ? (
-          <div className="flex h-1_25 items-center justify-end">
-            <div className="flex items-center justify-center px-0_5 py-0_25 h-2">
-              <AmbitionStatus variant={statusVariant}>{statusLabel ?? ''}</AmbitionStatus>
-            </div>
-          </div>
+        {showProgress ? (
+          <AmbitionStatus variant={progressVariant} showProgress progress={progress} size="sm" />
         ) : (
-          <ProgressBar progress={progress} size="S" status={progressStatus} showPercentage={true} />
+          <AmbitionStatus variant={variant} size="sm">
+            {label}
+          </AmbitionStatus>
         )}
       </div>
     </div>

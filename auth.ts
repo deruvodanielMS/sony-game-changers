@@ -1,7 +1,50 @@
-import NextAuth, { type NextAuthOptions } from 'next-auth'
+import NextAuth, { type NextAuthOptions, Session } from 'next-auth'
+import { getServerSession as nextAuthGetServerSession } from 'next-auth'
+import OktaProvider from 'next-auth/providers/okta'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { EMPLOYEE_EMAIL_BY_ROLE } from './common/constants'
+import { EMPLOYEE_EMAIL_BY_ROLE, DEFAULT_EMPLOYEE_EMAIL } from './common/constants'
 import { decrypt, encrypt } from './utils/simpleCrypto'
+
+export const authEnabled = process.env.NEXT_PUBLIC_AUTH_ENABLED === 'true'
+
+// Dev session for when auth is disabled (server-side)
+// Use a fixed far-future date to avoid hydration mismatch
+const devSession: Session = {
+  user: {
+    name: 'Dev User',
+    email: DEFAULT_EMPLOYEE_EMAIL,
+  },
+  expires: '2099-12-31T23:59:59.999Z',
+}
+
+/**
+ * Get server session - returns dev session when auth is disabled
+ */
+export async function getServerSession(): Promise<Session | null> {
+  if (!authEnabled) {
+    return devSession
+  }
+  return nextAuthGetServerSession(authOptions)
+}
+
+const getOktaProvider = () => {
+  if (!authEnabled) return null
+
+  const clientId = process.env.OKTA_CLIENT_ID
+  const clientSecret = process.env.OKTA_CLIENT_SECRET
+  const issuer = process.env.OKTA_ISSUER
+
+  if (!clientId || !clientSecret || !issuer) {
+    console.warn('Okta environment variables are not configured')
+    return null
+  }
+
+  return OktaProvider({
+    clientId,
+    clientSecret,
+    issuer,
+  })
+}
 
 // Demo password handling:
 // - `DEMO_PASSWORD_KEY` (server) is used to XOR-encrypt passwords
@@ -63,7 +106,8 @@ const credentialsProvider = CredentialsProvider({
   },
 })
 
-const providers = [credentialsProvider]
+const oktaProvider = getOktaProvider()
+const providers = authEnabled && oktaProvider ? [oktaProvider] : [credentialsProvider]
 
 export const authOptions: NextAuthOptions = {
   providers,

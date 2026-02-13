@@ -10,28 +10,19 @@ import { HigherAmbition } from '@/components/ui/molecules/HigherAmbition'
 import { Arrow } from '@/components/ui/atoms/Arrow'
 import { Button } from '../../atoms/Button'
 import { useTranslations } from 'next-intl'
-import { GoalStatus as GoalStatusType } from '@/domain/goal'
 import { ROUTES } from '@/common/routes'
 import { MainAmbition } from '@/components/game-changers/ambitions/MainAmbition'
 import { LadderedAmbition } from '@/components/game-changers/ambitions/LadderedAmbition'
 import { LadderingModal } from '@/components/ui/organisms/LadderingModal'
 import type { ParentAmbition } from '@/components/ui/organisms/LadderingModal'
+import {
+  getStatusVariant,
+  getStatusLabel,
+} from '@/components/ui/atoms/AmbitionStatus/AmbitionStatus.types'
 
 const cardHoverVariants = {
   rest: {},
   hover: {},
-}
-
-// Map ambition status to AmbitionStatus variant
-const statusToBadgeVariant = (
-  status: GoalStatusType,
-): 'draft' | 'awaiting-approval' | 'done' | 'default' => {
-  const statusMap: Record<GoalStatusType, 'draft' | 'awaiting-approval' | 'done'> = {
-    draft: 'draft',
-    awaiting_approval: 'awaiting-approval',
-    completed: 'done',
-  }
-  return statusMap[status] || 'default'
 }
 
 export function GoalCard({
@@ -49,7 +40,6 @@ export function GoalCard({
   const [open, setOpen] = useState(hasChildrenGoals > 0)
   const [isLadderingModalOpen, setIsLadderingModalOpen] = useState(false)
   const t = useTranslations('GoalCard')
-  const tGoals = useTranslations('Goals')
 
   const handleOpenLadderingModal = () => {
     setIsLadderingModalOpen(true)
@@ -97,6 +87,7 @@ export function GoalCard({
                   userName={userName}
                   avatarUrl={avatarUrl}
                   goalType={goalType}
+                  status={status}
                   progress={goal.progress}
                   href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
                   showLadderedIndicator={!!hasChildrenGoals}
@@ -113,6 +104,7 @@ export function GoalCard({
             userName={userName}
             avatarUrl={avatarUrl}
             goalType={goalType}
+            status={status}
             progress={goal.progress}
             href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
             showLadderedIndicator={!!hasChildrenGoals}
@@ -138,8 +130,8 @@ export function GoalCard({
                   avatarUrl={ladderGoal.avatarUrl}
                   progress={ladderGoal.progress}
                   status={ladderGoal.status}
-                  statusLabel={tGoals(`status.${ladderGoal.status}`)}
-                  statusVariant={statusToBadgeVariant(ladderGoal.status as GoalStatusType)}
+                  statusLabel={getStatusLabel(ladderGoal.status)}
+                  statusVariant={getStatusVariant(ladderGoal.status)}
                   arrowType={arrowType}
                   href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(ladderGoal.id)}
                 />

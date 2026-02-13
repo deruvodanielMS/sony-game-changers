@@ -4,7 +4,13 @@ import { Link } from '@/i18n/navigation'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { Avatar } from '@/components/ui/atoms/Avatar'
 import { TypeIcon } from '@/components/ui/molecules/TypeIcon'
-import { ProgressBar } from '@/components/ui/atoms/ProgressBar'
+import { AmbitionStatus } from '@/components/ui/atoms/AmbitionStatus'
+import {
+  getStatusVariant,
+  getStatusLabel,
+  shouldShowProgress,
+  getProgressVariant,
+} from '@/components/ui/atoms/AmbitionStatus/AmbitionStatus.types'
 import { cn } from '@/utils/cn'
 import type { MainAmbitionProps } from './MainAmbition.types'
 
@@ -13,12 +19,17 @@ export function MainAmbition({
   userName,
   avatarUrl,
   goalType,
+  status,
   progress,
   href,
   showLadderedIndicator,
   className,
 }: MainAmbitionProps) {
-  const progressStatus: 'in-progress' | 'completed' = progress >= 100 ? 'completed' : 'in-progress'
+  // Use centralized helpers to determine display mode
+  const showProgress = shouldShowProgress(status)
+  const statusVariant = getStatusVariant(status)
+  const statusLabel = getStatusLabel(status)
+  const progressVariant = getProgressVariant(status, progress)
 
   return (
     <div
@@ -50,7 +61,13 @@ export function MainAmbition({
       </div>
 
       <div className="flex flex-col items-start sm:items-end shrink-0 w-full sm:w-[150px]">
-        <ProgressBar progress={progress} size="L" status={progressStatus} showPercentage={true} />
+        {showProgress ? (
+          <AmbitionStatus variant={progressVariant} showProgress progress={progress} size="md" />
+        ) : (
+          <AmbitionStatus variant={statusVariant} size="md">
+            {statusLabel}
+          </AmbitionStatus>
+        )}
       </div>
     </div>
   )

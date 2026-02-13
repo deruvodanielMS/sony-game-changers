@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/auth'
+import { getServerSession } from '@/auth'
 import { createRepository } from '@/factories/createRepository'
 import { PrismaUserRepository } from '@/repositories/prisma/PrismaUserRepository'
 import { VendorUserRepository } from '@/repositories/vendor/VendorUserRepository'
@@ -23,7 +22,7 @@ const userRepository = createRepository<UserRepository>(
 const userService = new UserService(userRepository)
 
 export async function GET(req: Request) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -41,7 +40,16 @@ export async function GET(req: Request) {
     const user = await userService.getUser(email)
     return Response.json(user)
   } catch (error) {
-    console.error('[GET /user] >', email, error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error('[GET /user] >', email, errorMessage, error)
+
+    // Check for common database connection issues
+    if (errorMessage.includes('Database URL not configured')) {
+      return NextResponse.json(
+        { error: 'Database configuration error. Check PRISMA_DATABASE_URL environment variable.' },
+        { status: 500 },
+      )
+    }
 
     return NextResponse.json({ error: 'Failed to fetch user' }, { status: 500 })
   }

@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/auth'
+import { getServerSession } from '@/auth'
 import { GoalService } from '@/services/goalService'
 import { CreateGoalDTO } from '@/domain/goal'
 import { createRepository } from '@/factories/createRepository'
@@ -41,7 +40,7 @@ const userService = new UserService(userRepository)
 const goalService = new GoalService(goalRepository, userService)
 
 export async function GET() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -51,14 +50,23 @@ export async function GET() {
     const goals = await goalService.listGoals(session?.user?.email || undefined)
     return NextResponse.json(goals)
   } catch (error) {
-    console.error('[GET /goals]', error)
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    console.error('[GET /goals]', errorMessage, error)
+
+    // Check for common database connection issues
+    if (errorMessage.includes('Database URL not configured')) {
+      return NextResponse.json(
+        { error: 'Database configuration error. Check PRISMA_DATABASE_URL environment variable.' },
+        { status: 500 },
+      )
+    }
 
     return NextResponse.json({ error: 'Failed to fetch goals' }, { status: 500 })
   }
 }
 
 export async function POST(request: Request) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -76,7 +84,7 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -92,11 +100,7 @@ export async function PUT(request: Request) {
 
     const { id: _discard, ...payload } = body as CreateGoalDTO & { id: string }
 
-    const updated = await goalService.updateGoal(
-      id,
-      payload as CreateGoalDTO,
-      session.user?.email || '',
-    )
+    const updated = await goalService.updateGoal(id, payload)
 
     return NextResponse.json(updated, { status: 201 })
   } catch (error) {
@@ -106,7 +110,7 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
