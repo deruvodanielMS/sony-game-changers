@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/vercel-build.js",
-    "build:local": "prisma generate && next build",
+    "build": "prisma generate && next build",
+    "build:vercel": "node scripts/vercel-build.js",
     "start": "next start",
     "lint": "eslint . --ext .js,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
