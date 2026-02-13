@@ -94,10 +94,15 @@ export function Switcher({
       const container = containerRef.current
 
       if (activeButton && container) {
-        // Use offsetLeft and offsetWidth for more reliable positioning
-        setActiveRect({
-          left: activeButton.offsetLeft,
-          width: activeButton.offsetWidth,
+        const newLeft = activeButton.offsetLeft
+        const newWidth = activeButton.offsetWidth
+
+        // Only update if values actually changed to prevent infinite loops
+        setActiveRect((prev) => {
+          if (prev && prev.left === newLeft && prev.width === newWidth) {
+            return prev
+          }
+          return { left: newLeft, width: newWidth }
         })
       }
     }

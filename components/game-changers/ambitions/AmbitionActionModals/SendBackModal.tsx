@@ -21,7 +21,7 @@ export function SendBackModal({
 }: AmbitionActionModalProps) {
   const t = useTranslations('AmbitionModals.sendBack')
   const tCommon = useTranslations('AmbitionModals')
-  const isMobile = !useMediaQuery(BREAKPOINTS.md)
+  const isDesktop = useMediaQuery(BREAKPOINTS.md)
   const { openModal, closeAll } = useUIStore()
   const [comment, setComment] = useState('')
 
@@ -36,18 +36,102 @@ export function SendBackModal({
     setComment('')
   }, [comment, onConfirm])
 
-  const actions = useMemo(
+  // Desktop modal content - recreated when dependencies change
+  const desktopModalContent = useMemo(
     () => (
       <>
-        <Button variant="link" onClick={handleClose} disabled={isLoading}>
-          {t('cancelButton')}
-        </Button>
-        <Button variant="primary" onClick={handleConfirm} disabled={isLoading}>
-          {t('submitButton')}
-        </Button>
+        <ModalHeader showClose onClose={handleClose}>
+          {t('title')}
+        </ModalHeader>
+        <ModalBody className="flex flex-col gap-1">
+          <p className="text-body text-neutral-1000">{t('description')}</p>
+          <div className="flex flex-col gap-0_5">
+            <span className="text-body-small font-semibold text-neutral-1000">
+              {t('commentLabel')}
+            </span>
+            <TextArea
+              id="send-back-comment"
+              placeholder={t('commentPlaceholder')}
+              value={comment}
+              onChange={(e) => setComment(e.target.value.slice(0, MAX_COMMENT_LENGTH))}
+              resize="none"
+              rows={3}
+            />
+            <span className="text-body-small text-neutral-500">
+              {tCommon('characterCount', { count: comment.length })}
+            </span>
+          </div>
+        </ModalBody>
+        <ModalFooter className="justify-end">
+          <Button variant="link" onClick={handleClose} disabled={isLoading}>
+            {t('cancelButton')}
+          </Button>
+          <Button variant="primary" onClick={handleConfirm} disabled={isLoading}>
+            {t('submitButton')}
+          </Button>
+        </ModalFooter>
       </>
     ),
-    [t, handleClose, handleConfirm, isLoading],
+    [t, tCommon, comment, handleClose, handleConfirm, isLoading],
+  )
+
+  // useEffectEvent allows accessing the latest desktopModalContent without triggering re-runs
+  const toggleModal = useEffectEvent((show: boolean) => {
+    if (show) {
+      openModal(desktopModalContent, {
+        onClose: handleClose,
+        size: 'md',
+        overlayClose: true,
+        'aria-label': t('title'),
+      })
+    } else {
+      closeAll()
+    }
+  })
+
+  // Handle desktop modal open/close - only triggers on open/isDesktop changes
+  useEffect(() => {
+    // Wait for hydration to complete
+    if (isDesktop === undefined) return
+
+    if (open && isDesktop) {
+      toggleModal(true)
+    } else if (!open || !isDesktop) {
+      toggleModal(false)
+    }
+  }, [open, isDesktop])
+
+  // Update modal content when comment changes (only when modal is open)
+  useEffect(() => {
+    if (open && isDesktop) {
+      toggleModal(true)
+    }
+  }, [comment, isLoading])
+
+  // Mobile drawer content
+  const mobileContent = useMemo(
+    () => (
+      <>
+        <p className="text-body text-neutral-1000">{t('description')}</p>
+        <div className="flex flex-col gap-0_5">
+          <span className="text-body-small font-semibold text-neutral-1000">
+            {t('commentLabel')}
+          </span>
+          <TextArea
+            id="send-back-comment-mobile"
+            placeholder={t('commentPlaceholder')}
+            value={comment}
+            onChange={(e) => setComment(e.target.value.slice(0, MAX_COMMENT_LENGTH))}
+            resize="none"
+            rows={3}
+          />
+          <span className="text-body-small text-neutral-500">
+            {tCommon('characterCount', { count: comment.length })}
+          </span>
+        </div>
+      </>
+    ),
+    [t, tCommon, comment],
   )
 
   const mobileActions = useMemo(
@@ -64,66 +148,8 @@ export function SendBackModal({
     [t, handleClose, handleConfirm, isLoading],
   )
 
-  const content = useMemo(
-    () => (
-      <>
-        <p className="text-body text-neutral-1000">{t('description')}</p>
-        <div className="flex flex-col gap-0_5">
-          <span className="text-body-small font-semibold text-neutral-1000">
-            {t('commentLabel')}
-          </span>
-          <TextArea
-            id="send-back-comment"
-            placeholder={t('commentPlaceholder')}
-            value={comment}
-            onChange={(e) => setComment(e.target.value.slice(0, MAX_COMMENT_LENGTH))}
-            resize="none"
-            rows={3}
-          />
-          <span className="text-body-small text-neutral-500">
-            {tCommon('characterCount', { count: comment.length })}
-          </span>
-        </div>
-      </>
-    ),
-    [t, tCommon, comment],
-  )
-
-  const desktopModal = useMemo(
-    () => (
-      <>
-        <ModalHeader showClose onClose={handleClose}>
-          {t('title')}
-        </ModalHeader>
-        <ModalBody className="flex flex-col gap-1">{content}</ModalBody>
-        <ModalFooter className="justify-end">{actions}</ModalFooter>
-      </>
-    ),
-    [handleClose, t, content, actions],
-  )
-
-  const toggleModal = useEffectEvent((show: boolean) => {
-    if (show) {
-      openModal(desktopModal, {
-        onClose: handleClose,
-        size: 'md',
-        overlayClose: true,
-        'aria-label': t('title'),
-      })
-    } else {
-      closeAll()
-    }
-  })
-
-  useEffect(() => {
-    if (open && isMobile != null && !isMobile) {
-      toggleModal(true)
-    } else if (!open || isMobile) {
-      toggleModal(false)
-    }
-  }, [open, isMobile, comment])
-
-  if (isMobile) {
+  // Render mobile drawer
+  if (!isDesktop) {
     return (
       <Drawer
         open={open}
@@ -137,7 +163,7 @@ export function SendBackModal({
         aria-label={t('title')}
         actions={mobileActions}
       >
-        <div className="flex flex-col gap-1">{content}</div>
+        <div className="flex flex-col gap-1">{mobileContent}</div>
       </Drawer>
     )
   }

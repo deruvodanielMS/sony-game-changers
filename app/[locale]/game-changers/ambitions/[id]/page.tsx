@@ -349,25 +349,27 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
   const showSendForApproval = status === GOAL_STATUSES.DRAFT
   const isArchived = status === GOAL_STATUSES.ARCHIVED
   const isApproved = status === GOAL_STATUSES.APPROVED
-  // Show action buttons for draft, awaiting approval, and approved states (not archived)
-  const showAnyActions = showApprovalActions || showSendForApproval || isApproved
+  // Show action buttons for draft, awaiting approval, approved, and archived states
+  const showAnyActions = showApprovalActions || showSendForApproval || isApproved || isArchived
 
-  // Dropdown menu items
-  const dropdownItems = [
-    {
-      label: t('actions.edit'),
-      icon: <Pencil />,
-      onClick: () => {
-        setIsEditAmbitionOpen(true)
-      },
-    },
-    isArchived
-      ? {
+  // Dropdown menu items - when archived, only show Unarchive option
+  const dropdownItems = isArchived
+    ? [
+        {
           label: t('actions.unarchive'),
           icon: <ArchiveRestore />,
           onClick: handleUnarchive,
-        }
-      : {
+        },
+      ]
+    : [
+        {
+          label: t('actions.edit'),
+          icon: <Pencil />,
+          onClick: () => {
+            setIsEditAmbitionOpen(true)
+          },
+        },
+        {
           label: t('actions.archive'),
           icon: <Archive />,
           variant: 'danger' as const,
@@ -375,7 +377,7 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
             setIsArchiveOpen(true)
           },
         },
-  ]
+      ]
 
   const breadcrumbItems = [
     { label: t('breadcrumb.ambitions'), href: ROUTES.GAME_CHANGERS_AMBITIONS },
