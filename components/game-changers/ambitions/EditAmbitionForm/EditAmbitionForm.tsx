@@ -47,7 +47,7 @@ export function EditAmbitionForm({
   )
   const [owner, setOwner] = useState(goal.uid || '')
   const [privacy, setPrivacy] = useState<PrivacyValue>('public')
-  const [sharedMembers, setSharedMembers] = useState<NewAmbitionShareMember[]>([])
+  const [sharedMembers] = useState<NewAmbitionShareMember[]>([])
 
   // Validation state
   const [ownerError, setOwnerError] = useState(false)
