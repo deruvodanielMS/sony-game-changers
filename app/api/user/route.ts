@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/auth'
+import { getServerSession } from '@/auth'
 import { createRepository } from '@/factories/createRepository'
 import { PrismaUserRepository } from '@/repositories/prisma/PrismaUserRepository'
 import { VendorUserRepository } from '@/repositories/vendor/VendorUserRepository'
@@ -23,7 +22,7 @@ const userRepository = createRepository<UserRepository>(
 const userService = new UserService(userRepository)
 
 export async function GET(req: Request) {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })

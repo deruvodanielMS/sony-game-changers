@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/auth'
+import { getServerSession } from '@/auth'
 import { GoalService } from '@/services/goalService'
 import { createRepository } from '@/factories/createRepository'
 import { GoalRepository } from '@/repositories/GoalRepository'
@@ -25,7 +24,7 @@ const goalService = new GoalService(goalRepository)
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -47,7 +46,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession()
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
