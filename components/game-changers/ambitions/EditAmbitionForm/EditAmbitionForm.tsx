@@ -308,15 +308,15 @@ export function EditAmbitionForm({
     }))
   }, [goalFilters])
 
-  const goals = useGoalsStore((state) => state.goals)
+  const goalsList = useGoalsStore((state) => state.list)
 
   const ladderedFromOptions = useMemo<BigSelectOption[]>(
     () =>
-      goals.map((goal) => ({
-        value: goal.uid,
-        label: goal.title,
+      (goalsList || []).map((g) => ({
+        value: g.id,
+        label: g.title,
       })),
-    [goals],
+    [goalsList],
   )
 
   // Step 1: Ambition Setup

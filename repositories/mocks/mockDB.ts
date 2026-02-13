@@ -103,6 +103,11 @@ export function updateGoal(id: string, updates: Partial<GoalUI>): GoalUI | null 
                 ...lg,
                 title: updatedGoal.title,
                 status: updatedGoal.status,
+                goalType: updatedGoal.goalType,
+                description: updatedGoal.description,
+                uid: updatedGoal.uid,
+                userName: updatedGoal.userName,
+                avatarUrl: updatedGoal.avatarUrl,
                 progress: updatedGoal.progress,
                 updatedAt: updatedGoal.updatedAt,
               }
