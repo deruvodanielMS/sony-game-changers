@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from '@/auth'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/auth'
 import { GoalService } from '@/services/goalService'
 import { CreateGoalDTO } from '@/domain/goal'
 import { createRepository } from '@/factories/createRepository'
@@ -40,7 +41,7 @@ const userService = new UserService(userRepository)
 const goalService = new GoalService(goalRepository, userService)
 
 export async function GET() {
-  const session = await getServerSession()
+  const session = await getServerSession(authOptions)
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -66,7 +67,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const session = await getServerSession()
+  const session = await getServerSession(authOptions)
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -84,7 +85,7 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const session = await getServerSession()
+  const session = await getServerSession(authOptions)
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -110,7 +111,7 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const session = await getServerSession()
+  const session = await getServerSession(authOptions)
 
   if (!session) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
