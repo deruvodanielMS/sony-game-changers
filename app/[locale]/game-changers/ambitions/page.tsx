@@ -85,22 +85,18 @@ export default function GameChangersGoalsPage() {
   // Tab items with i18n
   const tabItems: TabItem[] = [
     { value: 'active', label: t('activeTab') },
-    { value: 'drafts', label: t('draftsTab') },
     { value: 'archived', label: t('archivedTab') },
   ]
 
   // Filter goals based on current tab and active filters
   // Only show root-level goals (without parentId) - laddered goals are shown inside their parent's GoalCard
   const filteredList = (list || []).filter((goalData) => {
-    // Tab filter: archived vs drafts vs active
+    // Tab filter: archived vs active
     if (currentTab === 'archived') {
       if (goalData.status !== GOAL_STATUSES.ARCHIVED) return false
-    } else if (currentTab === 'drafts') {
-      if (goalData.status !== GOAL_STATUSES.DRAFT) return false
     } else {
-      // Active tab: exclude archived and drafts
-      if (goalData.status === GOAL_STATUSES.ARCHIVED || goalData.status === GOAL_STATUSES.DRAFT)
-        return false
+      // Active tab: exclude archived only (drafts are shown in active)
+      if (goalData.status === GOAL_STATUSES.ARCHIVED) return false
     }
 
     // Avatar filter: filter by assigned user uid
@@ -226,14 +222,6 @@ export default function GameChangersGoalsPage() {
               <EmptyState
                 title={t('emptyState.active.title')}
                 description={t('emptyState.active.description')}
-                actionLabel={t('newGoal')}
-                actionIcon={<CirclePlus />}
-                onAction={() => setIsNewAmbitionOpen(true)}
-              />
-            ) : currentTab === 'drafts' ? (
-              <EmptyState
-                title={t('emptyState.drafts.title')}
-                description={t('emptyState.drafts.description')}
                 actionLabel={t('newGoal')}
                 actionIcon={<CirclePlus />}
                 onAction={() => setIsNewAmbitionOpen(true)}

@@ -244,7 +244,7 @@ describe('EditAmbitionForm', () => {
       expect(isValid).toBe(false)
     })
 
-    it('validates step 2 requires ladderedFrom for business goals', async () => {
+    it('does not require ladderedFrom for business goals', async () => {
       const goal = createMockGoal({
         title: 'Valid Title',
         goalType: GOAL_TYPES.BUSINESS,
@@ -259,7 +259,7 @@ describe('EditAmbitionForm', () => {
       render(<EditAmbitionForm goal={goal} step={2} validateRef={validateRef} />)
 
       const isValid = validateRef.current?.()
-      expect(isValid).toBe(false)
+      expect(isValid).toBe(true)
     })
 
     it('does not require ladderedFrom for non-business goals', async () => {

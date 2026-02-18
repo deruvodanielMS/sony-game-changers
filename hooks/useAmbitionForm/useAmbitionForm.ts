@@ -171,15 +171,14 @@ export function useAmbitionForm(options: UseAmbitionFormOptions = {}): UseAmbiti
       if (step === 1) {
         return owner !== ''
       } else if (step === 2) {
-        const hasLadderedFrom = goalType === GOAL_TYPES.BUSINESS ? ladderedFrom !== '' : true
         const hasAmbitionName = ambitionName.trim() !== ''
         const hasActions = actions.some((action) => action.value.trim() !== '')
         const hasAchievements = achievements.some((achievement) => achievement.value.trim() !== '')
-        return hasLadderedFrom && hasAmbitionName && hasActions && hasAchievements
+        return hasAmbitionName && hasActions && hasAchievements
       }
       return false
     },
-    [owner, goalType, ladderedFrom, ambitionName, actions, achievements],
+    [owner, ambitionName, actions, achievements],
   )
 
   // Validate and set errors
@@ -192,24 +191,22 @@ export function useAmbitionForm(options: UseAmbitionFormOptions = {}): UseAmbiti
         }
         return isValid
       } else if (step === 2) {
-        const hasLadderedFrom = goalType === GOAL_TYPES.BUSINESS ? ladderedFrom !== '' : true
         const hasAmbitionName = ambitionName.trim() !== ''
         const hasActions = actions.some((action) => action.value.trim() !== '')
         const hasAchievements = achievements.some((achievement) => achievement.value.trim() !== '')
 
         setErrors((prev) => ({
           ...prev,
-          ladderedFrom: !hasLadderedFrom,
           ambitionName: !hasAmbitionName,
           actions: !hasActions,
           achievements: !hasAchievements,
         }))
 
-        return hasLadderedFrom && hasAmbitionName && hasActions && hasAchievements
+        return hasAmbitionName && hasActions && hasAchievements
       }
       return false
     },
-    [owner, goalType, ladderedFrom, ambitionName, actions, achievements],
+    [owner, ambitionName, actions, achievements],
   )
 
   // Get form data for submission
@@ -219,7 +216,7 @@ export function useAmbitionForm(options: UseAmbitionFormOptions = {}): UseAmbiti
       owner,
       privacy,
       sharedMembers,
-      ladderedFrom: goalType === GOAL_TYPES.BUSINESS ? ladderedFrom : undefined,
+      ladderedFrom: ladderedFrom || undefined,
       ambitionName,
       description,
       actions: actions.filter((action) => action.value.trim() !== '').map((a) => a.value),
