@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { AppLayout } from '@/components/ui/templates/AppLayout'
-import { AuthGuard } from '@/components/ui/organisms/AuthGuard/AuthGuard'
+import { AuthGuard } from '@/app/providers'
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('Metadata')

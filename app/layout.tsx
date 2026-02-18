@@ -5,7 +5,7 @@ import { Inter } from 'next/font/google'
 
 import './globals.css'
 import { DEFAULT_LANGUAGE } from '@/common/constants'
-import { Providers } from './providers'
+import { SessionProvider } from './providers'
 
 const inter = Inter({
   variable: '--font-inter',
@@ -26,9 +26,9 @@ export default async function RootLayout({
   return (
     <html lang={DEFAULT_LANGUAGE} data-theme="light">
       <body className={inter.className} suppressHydrationWarning>
-        <Providers>
+        <SessionProvider>
           <NextIntlClientProvider>{children}</NextIntlClientProvider>
-        </Providers>
+        </SessionProvider>
       </body>
     </html>
   )

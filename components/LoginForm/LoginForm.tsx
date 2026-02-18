@@ -40,7 +40,7 @@ export function LoginForm() {
   }
 
   return (
-    <div className="max-w-sm mx-auto bg-white dark:bg-gray-800 shadow-md rounded-lg p-2">
+    <div className="max-w-sm mx-auto bg-white shadow-md rounded-lg p-2">
       <h4 className="text-h4 leading-h4 font-semibold mb-1">{t('title')}</h4>
       <form onSubmit={onSubmit} className="space-y-1_5">
         <div>
