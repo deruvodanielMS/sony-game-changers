@@ -19,31 +19,31 @@ export const goalFilters: GoalFiltersData = {
   avatarSelector: {
     options: [
       {
-        uid: 'cmkwz0wd50008n7km99rzndfe',
-        name: 'Manager User',
+        uid: 'user-1',
+        name: 'James Miller',
         url: '/profile-img/profile.png',
         role: 'Manager',
       },
       {
-        uid: 'cmkwz0wcz0006n7kmkgrisysw',
-        name: 'David Brown User',
-        url: '/profile-img/lars-van-der-zee.png',
-        role: 'Tech Lead',
-      },
-      {
-        uid: 'cmkwz0wcw0004n7kmc795a27a',
-        name: 'Sarah Miller User',
+        uid: 'user-2',
+        name: 'Sarah Miller',
         url: '/profile-img/sarah-miller.png',
         role: 'Senior Engineer',
       },
       {
-        uid: 'nn0098',
+        uid: 'user-3',
+        name: 'David Brown',
+        url: '/profile-img/lars-van-der-zee.png',
+        role: 'Tech Lead',
+      },
+      {
+        uid: 'user-4',
         name: 'Nia Washington',
         url: '/profile-img/nia-washington.png',
         role: 'Senior Software Engineer',
       },
       {
-        uid: 'nn0100',
+        uid: 'user-5',
         name: 'Kylie Davies',
         url: '/profile-img/kylie-davies.png',
         role: 'Product Manager',
@@ -56,9 +56,11 @@ export const goalFilters: GoalFiltersData = {
       label: 'Status',
       'data-testid': 'filter-status',
       options: [
-        { label: 'Awaiting Approval', value: GOAL_STATUSES.AWAITING_APPROVAL },
-        { label: 'Completed', value: GOAL_STATUSES.COMPLETED },
         { label: 'Draft', value: GOAL_STATUSES.DRAFT },
+        { label: 'Awaiting Approval', value: GOAL_STATUSES.AWAITING_APPROVAL },
+        { label: 'In Progress', value: GOAL_STATUSES.APPROVED },
+        { label: 'Completed', value: GOAL_STATUSES.COMPLETED },
+        { label: 'Archived', value: GOAL_STATUSES.ARCHIVED },
       ],
       single: true,
     },
@@ -76,6 +78,7 @@ export const goalFilters: GoalFiltersData = {
       single: true,
     },
   ],
+  activePeriodId: 'mock-period-2025-h1',
 }
 
 export default { managerAmbitions, goalFilters }

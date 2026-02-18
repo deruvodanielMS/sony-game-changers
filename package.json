@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
+    "build:vercel": "node scripts/vercel-build.js",
     "start": "next start",
     "lint": "eslint . --ext .js,.ts,.tsx",
     "lint:fix": "eslint . --ext .js,.ts,.tsx --fix",
@@ -22,6 +23,7 @@
     "chromatic": "npx chromatic --project-token=chpt_e76bbf9a400351f",
     "validate:i18n": "node scripts/validate-i18n.js",
     "validate:components": "node scripts/validate-component-structure.js",
+    "validate:deploy": "node scripts/validate-deploy.js",
     "validate": "npm run validate:i18n && npm run validate:components"
   },
   "dependencies": {

@@ -5,16 +5,21 @@ import '@testing-library/jest-dom'
 
 import { NewAmbitionModal } from './NewAmbitionModal'
 
-vi.mock('react', async () => {
-  const actual = await vi.importActual<typeof import('react')>('react')
-  return {
-    ...actual,
-    useEffectEvent: (fn: any) => fn,
-  }
-})
-
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
+}))
+
+vi.mock('next-auth/react', () => ({
+  useSession: () => ({
+    data: {
+      user: {
+        name: 'Test User',
+        email: 'test@example.com',
+        image: '/avatar.png',
+      },
+    },
+    status: 'authenticated',
+  }),
 }))
 
 const useMediaQueryMock = vi.fn()
@@ -26,16 +31,10 @@ vi.mock('@/common/breakpoints', () => ({
   BREAKPOINTS: { md: '(min-width: 768px)' },
 }))
 
-const openModalSpy = vi.fn()
-const closeModalSpy = vi.fn()
-const closeAllSpy = vi.fn()
 const enqueueToastSpy = vi.fn()
 
 vi.mock('@/stores/ui.store', () => ({
   useUIStore: () => ({
-    openModal: openModalSpy,
-    closeModal: closeModalSpy,
-    closeAll: closeAllSpy,
     enqueueToast: enqueueToastSpy,
   }),
 }))
@@ -45,17 +44,36 @@ const createGoalSpy = vi.fn()
 vi.mock('@/stores/goals.store', () => ({
   useGoalsStore: () => ({
     createGoal: createGoalSpy,
+    goalFilters: null,
   }),
 }))
 
-vi.mock('@/components/ui/molecules/Modal', () => ({
-  ModalHeader: ({ children }: any) => <div data-testid="modal-header">{children}</div>,
-  ModalBody: ({ children }: any) => <div data-testid="modal-body">{children}</div>,
-}))
-
-vi.mock('@/components/ui/atoms/Drawer', () => ({
-  Drawer: ({ children, open, title, ...rest }: any) => (
-    <div data-testid="drawer" data-open={String(open)} data-title={title} {...rest}>
+vi.mock('@/components/ui/molecules/ResponsiveModal', () => ({
+  ResponsiveModal: ({
+    children,
+    open,
+    title,
+    'data-test-id': dataTestId,
+    'aria-label': ariaLabel,
+    desktopSize,
+    mobileSize,
+    overlayClose,
+    customFooter,
+    mobileBodyClassName,
+    focusTrap,
+    onClose,
+    actions,
+    className,
+    ...rest
+  }: any) => (
+    <div
+      data-testid="responsive-modal"
+      data-open={String(open)}
+      data-title={title}
+      data-test-id={dataTestId}
+      aria-label={ariaLabel}
+      {...rest}
+    >
       {children}
     </div>
   ),
@@ -67,9 +85,6 @@ vi.mock('../NewAmbitionForm', () => ({
 
 describe('<NewAmbitionModal />', () => {
   beforeEach(() => {
-    openModalSpy.mockClear()
-    closeModalSpy.mockClear()
-    closeAllSpy.mockClear()
     enqueueToastSpy.mockClear()
     createGoalSpy.mockClear()
     useMediaQueryMock.mockReset()
@@ -79,43 +94,44 @@ describe('<NewAmbitionModal />', () => {
     cleanup()
   })
 
-  it('opens desktop modal via UI store when open=true on desktop', () => {
+  it('renders ResponsiveModal with correct props when open=true on desktop', () => {
     useMediaQueryMock.mockReturnValue(true)
 
     render(<NewAmbitionModal open onClose={vi.fn()} data-test-id="sut" />)
 
-    expect(openModalSpy).toHaveBeenCalledTimes(1)
-    const [desktopModalNode, options] = openModalSpy.mock.calls[0]
-    expect(desktopModalNode).toBeTruthy()
-    expect(options).toMatchObject({
-      size: 'full',
-      overlayClose: true,
-      'aria-label': 'title',
-    })
-    expect(screen.queryByTestId('drawer')).not.toBeInTheDocument()
+    const modal = screen.getByTestId('responsive-modal')
+    expect(modal).toBeInTheDocument()
+    expect(modal).toHaveAttribute('data-open', 'true')
+    expect(modal).toHaveAttribute('data-title', 'title')
+    expect(modal).toHaveAttribute('data-test-id', 'sut')
   })
 
-  it('renders Drawer on mobile and skips desktop modal', () => {
+  it('renders ResponsiveModal on mobile with correct props', () => {
     useMediaQueryMock.mockReturnValue(false)
 
     render(<NewAmbitionModal open onClose={vi.fn()} data-test-id="sut" />)
 
-    const drawer = screen.getByTestId('drawer')
-    expect(drawer).toBeInTheDocument()
-    expect(drawer).toHaveAttribute('data-open', 'true')
-    expect(drawer).toHaveAttribute('data-title', 'title')
-    expect(drawer).toHaveAttribute('data-test-id', 'sut')
-    expect(openModalSpy).not.toHaveBeenCalled()
+    const modal = screen.getByTestId('responsive-modal')
+    expect(modal).toBeInTheDocument()
+    expect(modal).toHaveAttribute('data-open', 'true')
+    expect(modal).toHaveAttribute('data-title', 'title')
+    expect(modal).toHaveAttribute('data-test-id', 'sut')
   })
 
-  it('closes desktop modal when open=false on desktop', () => {
+  it('renders NewAmbitionForm inside modal', () => {
     useMediaQueryMock.mockReturnValue(true)
 
-    const { rerender } = render(<NewAmbitionModal open onClose={vi.fn()} />)
-    expect(openModalSpy).toHaveBeenCalledTimes(1)
+    render(<NewAmbitionModal open onClose={vi.fn()} />)
 
-    rerender(<NewAmbitionModal open={false} onClose={vi.fn()} />)
+    expect(screen.getByTestId('new-ambition-form')).toBeInTheDocument()
+  })
 
-    expect(closeAllSpy).toHaveBeenCalledTimes(1)
+  it('passes open=false to ResponsiveModal when closed', () => {
+    useMediaQueryMock.mockReturnValue(true)
+
+    render(<NewAmbitionModal open={false} onClose={vi.fn()} />)
+
+    const modal = screen.getByTestId('responsive-modal')
+    expect(modal).toHaveAttribute('data-open', 'false')
   })
 })

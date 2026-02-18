@@ -1,70 +1,66 @@
 import { GoalRepository } from '@/repositories/GoalRepository'
 import { UserRepository } from '@/repositories/UserRepository'
-import { CreateGoalDTO, GoalUI, ManagerAmbitionsData, GoalFiltersData } from '@/domain/goal'
+import {
+  CreateGoalDTO,
+  UpdateGoalDTO,
+  GoalUI,
+  ManagerAmbitionsData,
+  GoalFiltersData,
+  GoalStatus,
+} from '@/domain/goal'
 import { User } from '@/domain/user'
-import { goals as initialGoals } from '@/repositories/mocks/data/goals'
-import { users as initialUsers } from '@/repositories/mocks/data/users'
 import { managerAmbitions, goalFilters } from '@/repositories/mocks/data/filters'
+import {
+  getGoals,
+  getGoalById,
+  createGoal as dbCreateGoal,
+  updateGoal as dbUpdateGoal,
+  deleteGoal as dbDeleteGoal,
+  getUserByEmail,
+  getUserById,
+} from './mockDB'
 
 function nowIso() {
   return new Date().toISOString()
 }
 
-// Singleton pattern: shared data across all instances
-let sharedGoals: GoalUI[] | null = null
-let sharedUsers: User[] | null = null
-
-function getSharedGoals(): GoalUI[] {
-  if (!sharedGoals) {
-    sharedGoals = JSON.parse(JSON.stringify(initialGoals))
-  }
-  return sharedGoals!
-}
-
-function getSharedUsers(): User[] {
-  if (!sharedUsers) {
-    sharedUsers = JSON.parse(JSON.stringify(initialUsers))
-  }
-  return sharedUsers!
+function generateId() {
+  return `mock-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
 }
 
 export class MockRepository implements GoalRepository, UserRepository {
-  private goals: GoalUI[] = getSharedGoals()
-  private users: User[] = getSharedUsers()
-
   // UserRepository
   async getUser(email: string): Promise<User | null> {
-    const found = this.users.find((u) => u.email === email)
-    return found || null
+    return getUserByEmail(email)
   }
 
   // GoalRepository
-  async findGoals(email?: string): Promise<GoalUI[]> {
-    return this.goals
+  async findGoals(_email?: string): Promise<GoalUI[]> {
+    return getGoals()
   }
 
   async findGoalById(id: string): Promise<GoalUI | null> {
-    const found = this.goals.find((g) => g.id === id)
-    return found || null
+    return getGoalById(id)
   }
 
   async createGoal(goal: CreateGoalDTO): Promise<GoalUI> {
-    const id = `mock-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`
-    const assigned = this.users.find((u) => u.id === goal.assignedTo)
+    const id = generateId()
+    const assignedUser = getUserById(goal.assignedTo)
 
-    const created: GoalUI = {
+    const newGoal: GoalUI = {
       id,
       title: goal.title,
       status: goal.status as string,
       goalType: goal.goalType as string,
       description: goal.description ?? '',
-      uid: assigned?.id ?? '',
-      userName: assigned ? `${assigned.name} ${assigned.lastname}` : 'Unassigned',
-      avatarUrl: assigned?.profileImageUrl ?? null,
+      uid: assignedUser?.id ?? goal.assignedTo,
+      userName: assignedUser ? `${assignedUser.name} ${assignedUser.lastname}` : 'Unassigned',
+      avatarUrl: assignedUser?.profileImageUrl ?? null,
       progress: goal.progress ?? 0,
       createdAt: nowIso(),
       updatedAt: nowIso(),
       ladderedGoals: [],
+      parent: goal.parentId ? { id: goal.parentId, title: '' } : undefined,
       goalAchievements:
         goal.goalAchievements?.map((achievement, index) => ({
           id: `ach-${id}-${index}`,
@@ -80,74 +76,76 @@ export class MockRepository implements GoalRepository, UserRepository {
         })) ?? [],
     }
 
-    this.goals.push(created)
-
-    // If this goal has a parent, add it to parent's ladderedGoals
+    // If there's a parent, get its title
     if (goal.parentId) {
-      const parentIdx = this.goals.findIndex((g) => g.id === goal.parentId)
-      if (parentIdx !== -1) {
-        const ladderedChild = {
-          id: created.id,
-          title: created.title,
-          status: created.status,
-          progress: created.progress,
-          createdAt: created.createdAt,
-          updatedAt: created.updatedAt,
-          uid: created.uid,
-          userName: created.userName,
-          avatarUrl: created.avatarUrl,
-        }
-
-        if (!this.goals[parentIdx].ladderedGoals) {
-          this.goals[parentIdx].ladderedGoals = []
-        }
-        this.goals[parentIdx].ladderedGoals.push(ladderedChild)
+      const parent = getGoalById(goal.parentId)
+      if (parent) {
+        newGoal.parent = { id: parent.id, title: parent.title }
       }
     }
 
-    return created
+    return dbCreateGoal(newGoal)
   }
 
-  async updateGoal(id: string, goal: CreateGoalDTO): Promise<GoalUI> {
-    const idx = this.goals.findIndex((g) => g.id === id)
-    if (idx === -1) {
-      throw new Error('Not found')
+  async updateGoal(id: string, updates: UpdateGoalDTO): Promise<GoalUI> {
+    const goalUpdates: Partial<GoalUI> = {}
+
+    if (updates.title !== undefined) goalUpdates.title = updates.title
+    if (updates.description !== undefined) goalUpdates.description = updates.description
+    if (updates.goalType !== undefined) goalUpdates.goalType = updates.goalType as string
+    if (updates.status !== undefined) goalUpdates.status = updates.status as string
+    if (updates.progress !== undefined) goalUpdates.progress = updates.progress
+
+    if (updates.goalAchievements !== undefined) {
+      goalUpdates.goalAchievements = updates.goalAchievements.map((a, index) => ({
+        id: `ach-${id}-${index}`,
+        title: a.title,
+        status: a.status ?? 'pending',
+        progress: null,
+      }))
     }
 
-    const assigned = this.users.find((u) => u.id === goal.assignedTo)
-
-    const updated: GoalUI = {
-      ...this.goals[idx],
-      title: goal.title,
-      status: goal.status as string,
-      goalType: goal.goalType as string,
-      description: goal.description ?? '',
-      uid: assigned?.id ?? this.goals[idx].uid,
-      userName: assigned ? `${assigned.name} ${assigned.lastname}` : this.goals[idx].userName,
-      avatarUrl: assigned?.profileImageUrl ?? this.goals[idx].avatarUrl,
-      progress: goal.progress ?? this.goals[idx].progress,
-      updatedAt: nowIso(),
+    if (updates.goalActions !== undefined) {
+      goalUpdates.goalActions = updates.goalActions.map((a, index) => ({
+        id: `act-${id}-${index}`,
+        title: a.title,
+        status: a.status ?? 'pending',
+      }))
     }
 
-    this.goals[idx] = updated
+    const updated = dbUpdateGoal(id, goalUpdates)
+
+    if (!updated) {
+      throw new Error('Goal not found')
+    }
 
     return updated
   }
 
   async deleteGoal(id: string): Promise<void> {
-    this.goals = this.goals.filter((g) => g.id !== id)
+    dbDeleteGoal(id)
   }
 
   async getManagerAmbitions(_email?: string): Promise<ManagerAmbitionsData | null> {
-    // In a real implementation, this would filter by user's manager
     return managerAmbitions
   }
 
   async getGoalFilters(): Promise<GoalFiltersData> {
     return goalFilters
   }
+
+  async updateGoalStatus(id: string, status: GoalStatus): Promise<GoalUI> {
+    const updated = dbUpdateGoal(id, { status: status as string })
+
+    if (!updated) {
+      throw new Error('Goal not found')
+    }
+
+    return updated
+  }
 }
 
+// Legacy exports for backwards compatibility
 export const mockAvatarOptions = [
   { uid: '1', name: 'Sarah Miller', url: '/profile-img/sarah-miller.png' },
   { uid: '2', name: 'Lars van der Zee', url: '/profile-img/lars-van-der-zee.png' },

@@ -5,6 +5,10 @@ import { m } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { AmbitionStatus } from '@/components/ui/atoms/AmbitionStatus'
+import {
+  getStatusVariant,
+  getStatusLabel,
+} from '@/components/ui/atoms/AmbitionStatus/AmbitionStatus.types'
 import { CommentInput } from '@/components/ui/molecules/CommentInput'
 import { ActivityItem } from '@/components/ui/molecules/ActivityItem'
 import { cn } from '@/utils/cn'
@@ -25,14 +29,14 @@ const listVariants = {
   },
 }
 
-function StatusBadge({
-  status,
-  variant = 'draft',
-}: {
-  status: string
-  variant?: 'draft' | 'awaiting-approval' | 'done'
-}) {
-  return <AmbitionStatus variant={variant}>{status}</AmbitionStatus>
+/**
+ * Displays status badge using centralized helpers
+ * Converts raw status string to proper variant and label
+ */
+function StatusBadge({ status }: { status: string }) {
+  return (
+    <AmbitionStatus variant={getStatusVariant(status)}>{getStatusLabel(status)}</AmbitionStatus>
+  )
 }
 
 function ActivityContent({ activity }: { activity: ActivityItemType }) {
@@ -55,9 +59,9 @@ function ActivityContent({ activity }: { activity: ActivityItemType }) {
         <>
           <Typography variant="body">{t('changedStatus')}</Typography>
           <div className="flex gap-0.5 items-center flex-wrap">
-            <StatusBadge status={activity.from || ''} variant="draft" />
+            <StatusBadge status={activity.from || ''} />
             <ArrowRight className="size-1 text-neutral-1000" />
-            <StatusBadge status={activity.to || ''} variant="awaiting-approval" />
+            <StatusBadge status={activity.to || ''} />
           </div>
         </>
       )
@@ -66,7 +70,7 @@ function ActivityContent({ activity }: { activity: ActivityItemType }) {
       return (
         <>
           <Typography variant="body">{t('created')}</Typography>
-          <StatusBadge status={activity.status || ''} variant="draft" />
+          <StatusBadge status={activity.status || ''} />
         </>
       )
 

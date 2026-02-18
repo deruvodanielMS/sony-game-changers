@@ -2,7 +2,13 @@
 
 import { useTranslations } from 'next-intl'
 import { Typography } from '@/components/ui/foundations/Typography'
-import { ProgressBar } from '@/components/ui/atoms/ProgressBar'
+import { AmbitionStatus } from '@/components/ui/atoms/AmbitionStatus'
+import {
+  getStatusVariant,
+  getStatusLabel,
+  shouldShowProgress,
+  getProgressVariant,
+} from '@/components/ui/atoms/AmbitionStatus/AmbitionStatus.types'
 import { Avatar } from '@/components/ui/atoms/Avatar'
 import { TypeIcon } from '@/components/ui/molecules/TypeIcon'
 import { cn } from '@/utils/cn'
@@ -15,6 +21,7 @@ export function AmbitionDetailHeader({
   userName,
   avatarUrl,
   ambitionType,
+  status,
   progress,
   createdDate,
   updatedDate,
@@ -24,6 +31,12 @@ export function AmbitionDetailHeader({
   const tTypeIcon = useTranslations('TypeIcon')
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
   const isDesktop = useMediaQuery(BREAKPOINTS.lg)
+
+  // Use centralized helpers to determine display mode
+  const showProgress = shouldShowProgress(status)
+  const statusVariant = getStatusVariant(status)
+  const statusLabel = getStatusLabel(status)
+  const progressVariant = getProgressVariant(status, progress)
 
   return (
     <div
@@ -102,14 +115,20 @@ export function AmbitionDetailHeader({
         </div>
       </div>
 
-      {/* Right section - Progress Bar (Large on desktop, Small on tablet/mobile) */}
+      {/* Right section - Status text or Progress Bar */}
       <div className={cn('flex items-center shrink-0', isMobile ? 'w-full' : 'w-[150px]')}>
-        <ProgressBar
-          progress={progress}
-          size={isDesktop ? 'L' : 'S'}
-          status={progress === 100 ? 'completed' : 'in-progress'}
-          showPercentage={true}
-        />
+        {showProgress ? (
+          <AmbitionStatus
+            variant={progressVariant}
+            showProgress
+            progress={progress}
+            size={isDesktop ? 'md' : 'sm'}
+          />
+        ) : (
+          <AmbitionStatus variant={statusVariant} size={isDesktop ? 'md' : 'sm'}>
+            {statusLabel}
+          </AmbitionStatus>
+        )}
       </div>
     </div>
   )

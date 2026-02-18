@@ -1,16 +1,13 @@
 'use client'
 
-import { useEffect, useMemo, useEffectEvent, useState, useRef, useCallback } from 'react'
+import { useMemo, useState, useRef, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSession } from 'next-auth/react'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { BREAKPOINTS } from '@/common/breakpoints'
 import { useUIStore } from '@/stores/ui.store'
 import { useGoalsStore } from '@/stores/goals.store'
 import { GOAL_STATUSES } from '@/domain/goal'
-import { ModalHeader, ModalBody } from '@/components/ui/molecules/Modal'
-import { Drawer } from '@/components/ui/atoms/Drawer'
+import { ResponsiveModal } from '@/components/ui/molecules/ResponsiveModal'
 import { Button } from '@/components/ui/atoms/Button'
 import { NewAmbitionForm } from '../NewAmbitionForm'
 import type { NewAmbitionFormProps } from '../NewAmbitionForm'
@@ -19,11 +16,12 @@ import type { NewAmbitionModalProps } from './NewAmbitionModal.types'
 export function NewAmbitionModal({
   open,
   onClose,
+  parentAmbitionId,
   'data-test-id': dataTestId,
 }: NewAmbitionModalProps) {
   const t = useTranslations('CreateGoal')
-  const isMobile = !useMediaQuery(BREAKPOINTS.md)
-  const { openModal, closeAll, enqueueToast } = useUIStore()
+  const { data: session } = useSession()
+  const { enqueueToast } = useUIStore()
   const { createGoal, goalFilters } = useGoalsStore()
   const [currentStep, setCurrentStep] = useState(1)
   const [isFormValid, setIsFormValid] = useState(false)
@@ -51,9 +49,103 @@ export function NewAmbitionModal({
     setIsSubmitting(false)
     formDataRef.current = null
 
-    closeAll()
     onClose?.()
-  }, [closeAll, onClose])
+  }, [onClose])
+
+  const handleSaveDraft = useCallback(async () => {
+    if (isSubmitting) return
+
+    // Minimal validation: only require ambition name
+    const formData = formDataRef.current
+    if (!formData?.ambitionName?.trim()) {
+      // Show error toast if no ambition name
+      enqueueToast({
+        id: 'draft-validation-error',
+        title: t('toast.draftRequiresName'),
+        variant: 'error',
+        duration: 3000,
+      })
+      return
+    }
+
+    setIsSubmitting(true)
+
+    try {
+      // Find user data for avatar and name
+      const avatarOptions = goalFilters?.avatarSelector?.options ?? []
+      const selectedUser = formData.owner
+        ? avatarOptions.find((option) => option.uid === formData.owner)
+        : null
+
+      // For drafts, if no owner is selected, try to use the current session user
+      const currentUserFromFilters = avatarOptions.find(
+        (option) => option.name === session?.user?.name,
+      )
+      const assignedUserId =
+        formData.owner || currentUserFromFilters?.uid || session?.user?.email || 'draft-user'
+
+      // Transform form data to CreateGoalDTO with DRAFT status
+      const goalData = {
+        title: formData.ambitionName,
+        description: '',
+        goalType: formData.goalType,
+        status: GOAL_STATUSES.DRAFT,
+        parentId: formData.ladderedFrom || undefined,
+        assignedTo: assignedUserId,
+        periodId: goalFilters?.activePeriodId || '',
+        progress: 0,
+        goalAchievements: formData.achievements?.length
+          ? formData.achievements.map((achievement) => ({
+              title: achievement,
+              status: 'pending',
+            }))
+          : [],
+        goalActions: formData.actions?.length
+          ? formData.actions.map((action) => ({
+              title: action,
+              status: 'pending',
+            }))
+          : [],
+      }
+
+      const userData = selectedUser
+        ? {
+            name: selectedUser.name,
+            avatarUrl: selectedUser.url,
+          }
+        : currentUserFromFilters
+          ? {
+              name: currentUserFromFilters.name,
+              avatarUrl: currentUserFromFilters.url,
+            }
+          : {
+              name: session?.user?.name || 'Current User',
+              avatarUrl: session?.user?.image || null,
+            }
+
+      const newGoal = await createGoal(goalData, userData)
+
+      if (newGoal) {
+        enqueueToast({
+          id: `draft-saved-${newGoal.id}`,
+          title: t('toast.draftSaved'),
+          variant: 'success',
+          duration: 3000,
+        })
+
+        handleClose()
+      }
+    } catch (error) {
+      enqueueToast({
+        id: 'draft-save-error',
+        title: t('toast.draftSaveError'),
+        variant: 'error',
+        duration: 3000,
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [isSubmitting, createGoal, goalFilters, session, enqueueToast, t, handleClose])
 
   const handleNext = useCallback(async () => {
     // Trigger validation
@@ -87,7 +179,7 @@ export function NewAmbitionModal({
           status: GOAL_STATUSES.AWAITING_APPROVAL,
           parentId: formData.ladderedFrom || undefined,
           assignedTo: formData.owner,
-          periodId: 'current-period', // This should come from context or be selected
+          periodId: goalFilters?.activePeriodId || '',
           progress: 0,
           goalAchievements: formData.achievements.map((achievement) => ({
             title: achievement,
@@ -104,7 +196,11 @@ export function NewAmbitionModal({
               name: selectedUser.name,
               avatarUrl: selectedUser.url,
             }
-          : undefined
+          : {
+              // Fallback to session user data
+              name: session?.user?.name || 'Current User',
+              avatarUrl: session?.user?.image || null,
+            }
 
         const newGoal = await createGoal(goalData, userData)
 
@@ -126,7 +222,7 @@ export function NewAmbitionModal({
         setIsSubmitting(false)
       }
     }
-  }, [currentStep, isSubmitting, createGoal, enqueueToast, t, handleClose])
+  }, [currentStep, isSubmitting, createGoal, goalFilters, session, enqueueToast, t, handleClose])
 
   const handleBack = useCallback(() => {
     if (currentStep === 2) {
@@ -137,7 +233,9 @@ export function NewAmbitionModal({
   const actions = useMemo(
     () => (
       <div className="flex w-full items-center justify-between gap-1">
-        <Button variant="secondary">{t('actions.saveDraft')}</Button>
+        <Button variant="secondary" onClick={handleSaveDraft} disabled={isSubmitting}>
+          {t('actions.saveDraft')}
+        </Button>
         <div className="flex items-center gap-0_75">
           {currentStep === 2 && (
             <Button
@@ -161,77 +259,49 @@ export function NewAmbitionModal({
         </div>
       </div>
     ),
-    [t, currentStep, isSubmitting, handleBack, handleNext],
+    [t, currentStep, isSubmitting, handleBack, handleNext, handleSaveDraft],
   )
 
-  const { desktopModal, content } = useMemo(() => {
-    const content = (
+  const customFooter = useMemo(
+    () => (
+      <div className="-mx-1_5 -mb-1_5 mt-auto flex w-[calc(100%+3rem)] items-center justify-between gap-1 rounded-b-large border-t border-neutral-200 px-1_5 py-1 bg-neutral-50">
+        {actions}
+      </div>
+    ),
+    [actions],
+  )
+
+  const content = useMemo(
+    () => (
       <NewAmbitionForm
         step={currentStep}
+        parentAmbitionId={parentAmbitionId}
         validateRef={validateRef}
         onValidationChange={handleValidationChange}
         onSubmit={handleFormDataChange}
       />
-    )
+    ),
+    [currentStep, parentAmbitionId, handleValidationChange, handleFormDataChange],
+  )
 
-    const desktopModal = (
-      <>
-        <ModalHeader showClose onClose={handleClose}>
-          {t('title')}
-        </ModalHeader>
-        <ModalBody className="flex flex-col">{content}</ModalBody>
-        <div className="-mx-1_5 -mb-1_5 mt-auto flex w-[calc(100%+3rem)] items-center justify-between gap-1 rounded-b-large border-t border-neutral-200 px-1_5 py-1 bg-neutral-50">
-          {actions}
-        </div>
-      </>
-    )
-
-    return { desktopModal, content }
-  }, [actions, handleClose, t, currentStep])
-
-  const toggleModal = useEffectEvent((show: boolean) => {
-    if (show) {
-      openModal(desktopModal, {
-        onClose: handleClose,
-        size: 'full',
-        overlayClose: true,
-        'aria-label': t('title'),
-      })
-    } else {
-      closeAll()
-    }
-  })
-
-  useEffect(() => {
-    if (open && isMobile != null && !isMobile) {
-      toggleModal(true)
-    } else if (!open || isMobile) {
-      toggleModal(false)
-    }
-  }, [open, isMobile, currentStep])
-
-  if (isMobile) {
-    return (
-      <Drawer
-        open={open}
-        onClose={handleClose}
-        position="bottom"
-        size="md"
-        overlayClose
-        showClose
-        hideCloseOnMobile
-        title={t('title')}
-        aria-label={t('title')}
-        actions={actions}
-        className="!h-screen"
-        data-test-id={dataTestId}
-      >
-        <div className="flex flex-col gap-1_5">{content}</div>
-      </Drawer>
-    )
-  }
-
-  return null
+  return (
+    <ResponsiveModal
+      open={open}
+      onClose={handleClose}
+      title={t('title')}
+      desktopSize="full"
+      mobileSize="md"
+      overlayClose
+      actions={actions}
+      customFooter={customFooter}
+      mobileBodyClassName="flex flex-col gap-1_5"
+      className="!h-screen"
+      aria-label={t('title')}
+      data-test-id={dataTestId}
+    >
+      {content}
+    </ResponsiveModal>
+  )
 }
 
 NewAmbitionModal.displayName = 'NewAmbitionModal'

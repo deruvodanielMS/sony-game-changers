@@ -1,7 +1,9 @@
 export const GOAL_STATUSES = {
-  COMPLETED: 'completed',
   DRAFT: 'draft',
   AWAITING_APPROVAL: 'awaiting_approval',
+  APPROVED: 'approved', // Shows as "In Progress" in UI
+  ARCHIVED: 'archived',
+  COMPLETED: 'completed', // Kept for backward compatibility
 } as const
 
 export const GOAL_TYPES = {
@@ -22,6 +24,25 @@ export type AchievementProgressStatus =
 export type GoalStatus = (typeof GOAL_STATUSES)[keyof typeof GOAL_STATUSES]
 
 export type GoalType = (typeof GOAL_TYPES)[keyof typeof GOAL_TYPES]
+
+// Valid status transitions map
+export const GOAL_STATUS_TRANSITIONS: Record<GoalStatus, GoalStatus[]> = {
+  [GOAL_STATUSES.DRAFT]: [GOAL_STATUSES.AWAITING_APPROVAL, GOAL_STATUSES.ARCHIVED],
+  [GOAL_STATUSES.AWAITING_APPROVAL]: [
+    GOAL_STATUSES.APPROVED,
+    GOAL_STATUSES.DRAFT,
+    GOAL_STATUSES.ARCHIVED,
+  ],
+  [GOAL_STATUSES.APPROVED]: [GOAL_STATUSES.ARCHIVED, GOAL_STATUSES.COMPLETED],
+  [GOAL_STATUSES.ARCHIVED]: [GOAL_STATUSES.DRAFT],
+  [GOAL_STATUSES.COMPLETED]: [GOAL_STATUSES.ARCHIVED],
+}
+
+// Actions that require manager role
+export const MANAGER_ONLY_ACTIONS: Array<{ from: GoalStatus; to: GoalStatus }> = [
+  { from: GOAL_STATUSES.AWAITING_APPROVAL, to: GOAL_STATUSES.APPROVED },
+  { from: GOAL_STATUSES.AWAITING_APPROVAL, to: GOAL_STATUSES.DRAFT }, // Send back
+]
 
 export type Goal = {
   id: string
@@ -145,4 +166,14 @@ export type GoalFiltersData = {
     showItems: number
   }
   filters: GoalFilter[]
+  activePeriodId: string | null
 }
+
+// DTO for updating goal status
+export type UpdateGoalStatusDTO = {
+  status: GoalStatus
+  comment?: string // Optional comment for activity feed
+}
+
+// DTO for updating goal (edit)
+export type UpdateGoalDTO = Partial<Omit<CreateGoalDTO, 'assignedTo' | 'createdBy' | 'periodId'>>

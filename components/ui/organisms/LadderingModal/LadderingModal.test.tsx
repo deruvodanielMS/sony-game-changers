@@ -10,15 +10,6 @@ import { LadderingModal } from './LadderingModal'
 // Mocks
 // --------------------
 
-// React: polyfill useEffectEvent for test envs that don't have it
-vi.mock('react', async () => {
-  const actual = await vi.importActual<typeof import('react')>('react')
-  return {
-    ...actual,
-    useEffectEvent: (fn: any) => fn,
-  }
-})
-
 // next-intl
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
@@ -38,15 +29,33 @@ vi.mock('lucide-react', () => ({
   Link: (props: any) => <svg data-testid="link-icon" {...props} />,
 }))
 
-// UI components (lightweight)
-vi.mock('@/components/ui/molecules/Modal', () => ({
-  ModalHeader: ({ children }: any) => <div data-testid="modal-header">{children}</div>,
-  ModalBody: ({ children }: any) => <div data-testid="modal-body">{children}</div>,
-}))
-
-vi.mock('@/components/ui/atoms/Drawer', () => ({
-  Drawer: ({ children, open, title, ...rest }: any) => (
-    <div data-testid="drawer" data-open={String(open)} data-title={title} {...rest}>
+// ResponsiveModal mock - filter out React-invalid props before spreading
+vi.mock('@/components/ui/molecules/ResponsiveModal', () => ({
+  ResponsiveModal: ({
+    children,
+    open,
+    title,
+    'data-test-id': dataTestId,
+    'aria-label': ariaLabel,
+    desktopSize,
+    mobileSize,
+    overlayClose,
+    customFooter,
+    mobileBodyClassName,
+    focusTrap,
+    onClose,
+    actions,
+    className,
+    ...rest
+  }: any) => (
+    <div
+      data-testid="responsive-modal"
+      data-open={String(open)}
+      data-title={title}
+      data-test-id={dataTestId}
+      aria-label={ariaLabel}
+      {...rest}
+    >
       {children}
     </div>
   ),
@@ -78,17 +87,6 @@ vi.mock('@/hooks/useMediaQuery', () => ({
 // BREAKPOINTS (only md is used)
 vi.mock('@/common/breakpoints', () => ({
   BREAKPOINTS: { md: '(min-width: 768px)' },
-}))
-
-// UI store hook
-const openModalSpy = vi.fn()
-const closeModalSpy = vi.fn()
-
-vi.mock('@/stores/ui.store', () => ({
-  useUIStore: () => ({
-    openModal: openModalSpy,
-    closeModal: closeModalSpy,
-  }),
 }))
 
 // --------------------
@@ -123,8 +121,6 @@ const parentAmbitions = [
 
 describe('<LadderingModal />', () => {
   beforeEach(() => {
-    openModalSpy.mockClear()
-    closeModalSpy.mockClear()
     useMediaQueryMock.mockReset()
   })
 
@@ -132,41 +128,32 @@ describe('<LadderingModal />', () => {
     cleanup()
   })
 
-  it('opens desktop modal via UI store when open=true and media query matches md (desktop)', () => {
-    // useMediaQuery(BREAKPOINTS.md) === true => isMobile = !true => false
+  it('renders ResponsiveModal with correct props when open=true on desktop', () => {
     useMediaQueryMock.mockReturnValue(true)
 
     render(<LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} data-testid="sut" />)
 
-    expect(openModalSpy).toHaveBeenCalledTimes(1)
-    const [desktopModalNode, options] = openModalSpy.mock.calls[0]
-    expect(desktopModalNode).toBeTruthy()
-    expect(options).toMatchObject({
-      size: 'lg',
-      overlayClose: true,
-    })
-    expect(typeof options.onClose).toBe('function')
-
-    // Desktop path returns null (content is rendered via openModal)
-    expect(screen.queryByTestId('drawer')).not.toBeInTheDocument()
+    const modal = screen.getByTestId('responsive-modal')
+    expect(modal).toBeInTheDocument()
+    expect(modal).toHaveAttribute('data-open', 'true')
+    expect(modal).toHaveAttribute('data-title', 'title')
+    expect(modal).toHaveAttribute('data-test-id', 'sut')
   })
 
-  it('closes desktop modal via UI store when open=false on desktop', () => {
-    useMediaQueryMock.mockReturnValue(true)
-
-    const { rerender } = render(
-      <LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} />,
-    )
-    expect(openModalSpy).toHaveBeenCalledTimes(1)
-
-    rerender(<LadderingModal open={false} onClose={vi.fn()} selectedGoal={selectedGoal} />)
-
-    expect(closeModalSpy).toHaveBeenCalledTimes(1)
-  })
-
-  it('renders Drawer on mobile (media query does NOT match md) and shows ambition cards + goal preview', () => {
-    // useMediaQuery(BREAKPOINTS.md) === false => isMobile = !false => true
+  it('renders ResponsiveModal on mobile with correct props', () => {
     useMediaQueryMock.mockReturnValue(false)
+
+    render(<LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} data-testid="sut" />)
+
+    const modal = screen.getByTestId('responsive-modal')
+    expect(modal).toBeInTheDocument()
+    expect(modal).toHaveAttribute('data-open', 'true')
+    expect(modal).toHaveAttribute('data-title', 'title')
+    expect(modal).toHaveAttribute('data-test-id', 'sut')
+  })
+
+  it('renders parent ambitions and goal preview content', () => {
+    useMediaQueryMock.mockReturnValue(true)
 
     render(
       <LadderingModal
@@ -177,17 +164,6 @@ describe('<LadderingModal />', () => {
         data-testid="sut"
       />,
     )
-
-    // Drawer should render in-tree for mobile
-    const drawer = screen.getByTestId('drawer')
-    expect(drawer).toBeInTheDocument()
-    expect(drawer).toHaveAttribute('data-open', 'true')
-
-    // Drawer receives data-test-id (note: prop name is data-test-id, not data-testid)
-    expect(drawer).toHaveAttribute('data-test-id', 'sut')
-
-    // No desktop modal usage on mobile
-    expect(openModalSpy).not.toHaveBeenCalled()
 
     // Ambition cards
     expect(screen.getByTestId('ambition-card-division')).toBeInTheDocument()
@@ -204,58 +180,24 @@ describe('<LadderingModal />', () => {
     expect(screen.getByTestId('ambition-status')).toBeInTheDocument()
   })
 
-  it('closes desktop modal when switching from desktop to mobile while open=true', () => {
-    // Start desktop
+  it('passes open=false to ResponsiveModal when closed', () => {
     useMediaQueryMock.mockReturnValue(true)
-    const { rerender } = render(
-      <LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} />,
-    )
-    expect(openModalSpy).toHaveBeenCalledTimes(1)
-    expect(closeModalSpy).toHaveBeenCalledTimes(0)
 
-    // Switch to mobile
-    useMediaQueryMock.mockReturnValue(false)
-    rerender(<LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} />)
+    render(<LadderingModal open={false} onClose={vi.fn()} selectedGoal={selectedGoal} />)
 
-    // When isMobile becomes true, effect should call toggleModal(false) => closeModal()
-    expect(closeModalSpy).toHaveBeenCalledTimes(1)
-
-    // And Drawer should now be rendered
-    expect(screen.getByTestId('drawer')).toBeInTheDocument()
+    const modal = screen.getByTestId('responsive-modal')
+    expect(modal).toHaveAttribute('data-open', 'false')
   })
 
-  it('does not open desktop modal if isMobile is true (even when open=true)', () => {
+  it('renders with translated title', () => {
     useMediaQueryMock.mockReturnValue(false)
 
     render(<LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} />)
 
-    expect(openModalSpy).not.toHaveBeenCalled()
-    expect(screen.getByTestId('drawer')).toBeInTheDocument()
-  })
-
-  it('when open=true but isMobile is "unknown"/null, it does not open modal (guards with isMobile != null)', () => {
-    // Some media query hooks can return null before hydration.
-    // Component uses: const isMobile = !useMediaQuery(...)
-    // If useMediaQuery returns null, isMobile becomes true (because !null === true)
-    // => mobile path. This test documents that behavior.
-    // If your hook *actually* returns undefined, !undefined === true as well.
-    useMediaQueryMock.mockReturnValue(null as never)
-
-    render(<LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} />)
-
-    expect(openModalSpy).not.toHaveBeenCalled()
-    expect(screen.getByTestId('drawer')).toBeInTheDocument()
-  })
-
-  it('passes translated title to Drawer title and aria-label', () => {
-    useMediaQueryMock.mockReturnValue(false)
-
-    render(<LadderingModal open onClose={vi.fn()} selectedGoal={selectedGoal} />)
-
-    const drawer = screen.getByTestId('drawer')
-    // Our Drawer mock puts title into data-title
-    expect(drawer).toHaveAttribute('data-title', 'title')
-    // aria-label should also be set
-    expect(drawer).toHaveAttribute('aria-label', 'title')
+    const modal = screen.getByTestId('responsive-modal')
+    // Our mock uses the key string as the value
+    expect(modal).toHaveAttribute('data-title', 'title')
+    // Note: LadderingModal doesn't explicitly pass aria-label, it relies on ResponsiveModal's default behavior
+    // which uses the title as aria-label when not provided
   })
 })

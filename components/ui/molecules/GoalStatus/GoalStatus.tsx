@@ -7,10 +7,12 @@ import type { GoalStatus } from '@/domain/goal'
 export function GoalStatus({ status, className }: { status: GoalStatus; className: string }) {
   const t = useTranslations('Goals')
 
-  const statusClasses = {
+  const statusClasses: Record<GoalStatus, string> = {
     completed: 'text-goal-completed',
     draft: 'text-goal-draft',
     awaiting_approval: 'text-goal-awaiting-approval',
+    approved: 'text-goal-completed', // "In Progress" uses same style as completed
+    archived: 'text-goal-draft', // Archived uses draft style (muted)
   }
 
   return (

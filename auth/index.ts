@@ -1,7 +1,10 @@
-import NextAuth, { type NextAuthOptions } from 'next-auth'
+import NextAuth, {
+  type NextAuthOptions,
+  getServerSession as nextAuthGetServerSession,
+} from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
-import { EMPLOYEE_EMAIL_BY_ROLE } from './common/constants'
-import { decrypt, encrypt } from './utils/simpleCrypto'
+import { EMPLOYEE_EMAIL_BY_ROLE } from '../common/constants'
+import { decrypt, encrypt } from '../utils/simpleCrypto'
 
 // Demo password handling:
 // - `DEMO_PASSWORD_KEY` (server) is used to XOR-encrypt passwords
@@ -88,3 +91,8 @@ export const authOptions: NextAuthOptions = {
 }
 
 export default NextAuth(authOptions)
+
+/**
+ * Wrapper for getServerSession that pre-configures authOptions
+ */
+export const getServerSession = () => nextAuthGetServerSession(authOptions)

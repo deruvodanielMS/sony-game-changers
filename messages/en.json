@@ -48,12 +48,13 @@
     "newGoal": "New Ambition",
     "filtersButton": "Filters",
     "activeTab": "Active",
+    "draftsTab": "Drafts",
     "archivedTab": "Archived",
     "status": {
       "completed": "Completed",
       "draft": "Draft",
       "awaiting_approval": "Awaiting Approval",
-      "approved": "Approved",
+      "approved": "In Progress",
       "archived": "Archived"
     },
     "filters": {
@@ -72,6 +73,10 @@
       "active": {
         "title": "No Ambitions yet.",
         "description": "Create an Ambition to begin tracking your progress."
+      },
+      "drafts": {
+        "title": "No draft Ambitions.",
+        "description": "Save an Ambition as draft to continue editing later."
       },
       "archived": {
         "title": "No archived Ambitions.",
@@ -170,7 +175,27 @@
       "back": "Back"
     },
     "toast": {
-      "successMessage": "Ambition created successfully!"
+      "successMessage": "Ambition created successfully!",
+      "draftSaved": "Draft saved successfully!",
+      "draftRequiresName": "Please enter an ambition name to save as draft",
+      "draftSaveError": "Failed to save draft. Please try again."
+    }
+  },
+  "EditGoal": {
+    "title": "Edit Ambition",
+    "setupTitle": "Ambition setup",
+    "setupDescription": "Update the type, assignee, and privacy level for this Ambition.",
+    "contentTitle": "Ambition content & Framework (AAA)",
+    "contentDescription": "Update the AAA framework (Ambition, actions, and achievements) for this goal.",
+    "actions": {
+      "cancel": "Cancel",
+      "next": "Next",
+      "save": "Save Changes",
+      "back": "Back"
+    },
+    "toast": {
+      "successMessage": "Ambition updated successfully!",
+      "errorMessage": "Failed to update ambition. Please try again."
     }
   },
   "Common": {
@@ -274,14 +299,20 @@
       "commentPlaceholder": "Enter a comment",
       "submitButton": "Send for approval",
       "cancelButton": "Cancel",
-      "successMessage": "Ambition sent for approval successfully."
+      "successMessage": "Ambition sent for approval successfully.",
+      "errorMessage": "Failed to send ambition for approval. Please try again."
     },
     "archive": {
       "title": "Archive Ambition?",
       "description": "If you archive this Ambition, all associated laddered Ambitions will also be archived. You can find them in your archive and restore them to Draft status at any time.",
       "submitButton": "Yes, Archive",
       "cancelButton": "Cancel",
-      "successMessage": "Ambition archived successfully."
+      "successMessage": "Ambition archived successfully.",
+      "errorMessage": "Failed to archive ambition. Please try again."
+    },
+    "unarchive": {
+      "successMessage": "Ambition restored to draft successfully.",
+      "errorMessage": "Failed to restore ambition. Please try again."
     },
     "sendBack": {
       "title": "Send back Ambition",
@@ -290,7 +321,8 @@
       "commentPlaceholder": "Enter a comment",
       "submitButton": "Send back",
       "cancelButton": "Cancel",
-      "successMessage": "Ambition sent back successfully."
+      "successMessage": "Ambition sent back successfully.",
+      "errorMessage": "Failed to send ambition back. Please try again."
     },
     "approve": {
       "title": "Approve Ambition",
@@ -299,7 +331,8 @@
       "commentPlaceholder": "Enter a comment",
       "submitButton": "Approve",
       "cancelButton": "Cancel",
-      "successMessage": "Ambition approved successfully."
+      "successMessage": "Ambition approved successfully.",
+      "errorMessage": "Failed to approve ambition. Please try again."
     },
     "characterCount": "{count}/150"
   },

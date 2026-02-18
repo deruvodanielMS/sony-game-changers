@@ -11,8 +11,13 @@ import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
 import { EmptyState } from '@/components/ui/molecules/EmptyState'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { Button } from '@/components/ui/atoms/Button'
-import { ProgressBar } from '@/components/ui/atoms/ProgressBar'
 import { AmbitionStatus } from '@/components/ui/atoms/AmbitionStatus'
+import {
+  getStatusVariant,
+  getStatusLabel,
+  shouldShowProgress,
+  getProgressVariant,
+} from '@/components/ui/atoms/AmbitionStatus/AmbitionStatus.types'
 import { Switcher } from '@/components/ui/molecules/Switcher'
 import { cn } from '@/utils/cn'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -35,28 +40,8 @@ const listVariants = {
   },
 }
 
-const statusToAmbitionStatusVariant = (status?: string) => {
-  const normalized = status?.toLowerCase().replace(/\s+/g, '_')
-  if (normalized === 'draft') return 'draft'
-  if (normalized === 'awaiting_approval') return 'awaiting-approval'
-  if (normalized === 'completed' || normalized === 'done') return 'done'
-  if (normalized === 'in_progress') return 'in-progress'
-  if (normalized === 'archived') return 'archived'
-  return 'default'
-}
-
-const formatStatusLabel = (status?: string) => {
-  if (!status) return 'Draft'
-  return status
-    .toLowerCase()
-    .replace(/_/g, ' ')
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ')
-}
-
 export function AmbitionLaddering({
-  ambitions,
+  ambitions = [],
   avatarOptions,
   onAddAmbition,
   className,
@@ -207,13 +192,24 @@ export function AmbitionLaddering({
                         </Typography>
                       </div>
 
-                      {/* Progress - ProgressBar for all breakpoints */}
-                      <ProgressBar
-                        progress={ambition.progress}
-                        size="S"
-                        status={ambition.progress === 100 ? 'completed' : 'in-progress'}
-                        className="w-25 shrink-0"
-                      />
+                      {/* Progress or Status - based on ambition status */}
+                      {shouldShowProgress(ambition.status) ? (
+                        <AmbitionStatus
+                          variant={getProgressVariant(ambition.status, ambition.progress)}
+                          showProgress
+                          progress={ambition.progress}
+                          size="sm"
+                          className="w-25 shrink-0"
+                        />
+                      ) : (
+                        <AmbitionStatus
+                          variant={getStatusVariant(ambition.status)}
+                          size="sm"
+                          className="shrink-0"
+                        >
+                          {getStatusLabel(ambition.status)}
+                        </AmbitionStatus>
+                      )}
                     </div>
                   </m.div>
                 </Link>
@@ -280,11 +276,8 @@ export function AmbitionLaddering({
 
                     {/* Status column */}
                     <div className="flex justify-start">
-                      <AmbitionStatus
-                        variant={statusToAmbitionStatusVariant(ambition.status)}
-                        size="md"
-                      >
-                        {formatStatusLabel(ambition.status)}
+                      <AmbitionStatus variant={getStatusVariant(ambition.status)} size="sm">
+                        {getStatusLabel(ambition.status)}
                       </AmbitionStatus>
                     </div>
                   </m.div>

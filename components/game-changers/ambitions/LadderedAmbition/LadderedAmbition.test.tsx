@@ -35,16 +35,14 @@ describe('LadderedAmbition', () => {
     expect(screen.getByAltText('Kylie Davies')).toBeInTheDocument()
   })
 
-  it('renders progress bar when status is not draft', () => {
+  it('renders progress bar when status is approved (in progress)', () => {
     render(
       <LadderedAmbition
         title="Laddered ambition"
         userName="Kylie Davies"
         avatarUrl="/profile-img/kylie-davies.png"
         progress={35}
-        status={GOAL_STATUSES.AWAITING_APPROVAL}
-        statusLabel="Awaiting approval"
-        statusVariant="awaiting-approval"
+        status={GOAL_STATUSES.APPROVED}
         arrowType="Laddered middle"
         href="/ambitions/2"
       />,
@@ -52,5 +50,22 @@ describe('LadderedAmbition', () => {
 
     expect(screen.queryByText('Draft')).toBeNull()
     expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '35')
+  })
+
+  it('renders status text when status is awaiting_approval', () => {
+    render(
+      <LadderedAmbition
+        title="Pending ambition"
+        userName="Kylie Davies"
+        avatarUrl="/profile-img/kylie-davies.png"
+        progress={0}
+        status={GOAL_STATUSES.AWAITING_APPROVAL}
+        arrowType="Laddered middle"
+        href="/ambitions/3"
+      />,
+    )
+
+    expect(screen.getByText('Awaiting Approval')).toBeInTheDocument()
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
   })
 })

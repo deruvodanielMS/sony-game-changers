@@ -1,6 +1,7 @@
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider  = "postgresql"
+  url       = env("PRISMA_DATABASE_URL") // Uses Prisma Accelerate for connection pooling
+  directUrl = env("DATABASE_URL") // Direct connection for migrations
 }
 
 generator client {
@@ -39,8 +40,11 @@ model people {
   status                        String?
   orgId                         String
   jobId                         String
+  managerId                     String?
   organization                  organization             @relation(fields: [orgId], references: [id])
   jobs                          jobs                     @relation(fields: [jobId], references: [id])
+  manager                       people?                  @relation("peopleToManager", fields: [managerId], references: [id])
+  directReports                 people[]                 @relation("peopleToManager")
   goals_assignedTo              goals[]                  @relation("peopleTogoals_assignedTo")
   goals_createdBy               goals[]                  @relation("peopleTogoals_createdBy")
   checkins_peopleId             checkins[]               @relation("peopleTocheckins_peopleId")
