@@ -169,8 +169,6 @@ export function Switcher({
           ? { color: variantConfig.activeStyle.color, backgroundColor: 'transparent' }
           : { ...variantConfig.inactiveStyle, backgroundColor: 'transparent' }
 
-        const iconClasses = cn('flex-shrink-0', sizeStyles[size].icon)
-
         return (
           <button
             key={item.id}
@@ -187,7 +185,7 @@ export function Switcher({
             className={buttonClasses}
             style={buttonStyle}
           >
-            {item.icon && <span className={iconClasses}>{item.icon}</span>}
+            {item.icon}
             {item.label && <span>{item.label}</span>}
           </button>
         )
