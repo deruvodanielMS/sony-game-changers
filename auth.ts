@@ -1,4 +1,5 @@
 import NextAuth, { type NextAuthOptions } from 'next-auth'
+import { getServerSession as nextAuthGetServerSession } from 'next-auth/next'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { EMPLOYEE_EMAIL_BY_ROLE } from './common/constants'
 import { decrypt, encrypt } from './utils/simpleCrypto'
@@ -86,5 +87,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
 }
+
+export const getServerSession = () => nextAuthGetServerSession(authOptions)
 
 export default NextAuth(authOptions)
