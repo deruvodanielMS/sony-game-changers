@@ -52,7 +52,9 @@
     "status": {
       "completed": "Terminé",
       "draft": "Brouillon",
-      "awaiting_approval": "En attente d'approbation"
+      "awaiting_approval": "En attente d'approbation",
+      "approved": "Approuvé",
+      "archived": "Archivé"
     },
     "filters": {
       "clearFieldsButton": "Effacer les filtres"

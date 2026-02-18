@@ -12,6 +12,12 @@ import type { SidebarProps } from './Sidebar.types'
 import { ROUTES } from '@/common/routes'
 import { useUserStore } from '@/stores/user.store'
 
+const getProfileImageUrl = (profileImageUrl: string | null | undefined): string => {
+  if (!profileImageUrl) return '/profile-img/profile.png'
+  if (profileImageUrl.startsWith('/profile-img/')) return profileImageUrl
+  return `/profile-img/${profileImageUrl}`
+}
+
 /**
  * Sidebar - Application sidebar with navigation items
  * Supports collapsed state, mobile drawer mode, and custom theming
@@ -131,7 +137,7 @@ export function Sidebar({
           <SidebarNavItem
             icon={
               <Image
-                src={`/profile-img/${user?.profileImageUrl || 'profile.png'}`}
+                src={getProfileImageUrl(user?.profileImageUrl)}
                 alt={`${user?.name} ${user?.lastname}`.trim() || t('profile')}
                 className="w-5 h-5 rounded-full object-cover"
                 width={24}

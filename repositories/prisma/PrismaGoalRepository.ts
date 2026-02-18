@@ -12,6 +12,13 @@ import {
   GoalFiltersData,
 } from '@/domain/goal'
 
+const getProfileImageUrl = (profileImageUrl: string | null | undefined): string | null => {
+  if (!profileImageUrl) return null
+  // Avoid duplicating the path if it already includes /profile-img/
+  if (profileImageUrl.startsWith('/profile-img/')) return profileImageUrl
+  return `/profile-img/${profileImageUrl}`
+}
+
 const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
   const hasParent = goal.parent ? { parent: { id: goal.parent.id, title: goal.parent.title } } : {}
   const hasAmbitions = goal.goal_ambitions ? { goalAmbitions: goal.goal_ambitions } : {}
@@ -34,9 +41,7 @@ const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
       'Unassigned',
     goalType: goal.type,
     description: goal.body,
-    avatarUrl: goal.people_assignedTo?.profileImageUrl
-      ? `/profile-img/${goal.people_assignedTo.profileImageUrl}`
-      : null,
+    avatarUrl: getProfileImageUrl(goal.people_assignedTo?.profileImageUrl),
     ladderedGoals: (goal.relations || []).map((relation) => ({
       id: relation.id,
       title: relation.title,
@@ -48,9 +53,7 @@ const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
       userName:
         `${relation.people_assignedTo?.name || ''} ${relation.people_assignedTo?.lastname || ''}`.trim() ||
         'Unassigned',
-      avatarUrl: relation.people_assignedTo?.profileImageUrl
-        ? `/profile-img/${relation.people_assignedTo.profileImageUrl}`
-        : null,
+      avatarUrl: getProfileImageUrl(relation.people_assignedTo?.profileImageUrl),
     })),
   }
 }
