@@ -89,18 +89,9 @@ export default function GameChangersGoalsPage() {
     { value: 'archived', label: t('archivedTab') },
   ]
 
-  // Flatten goals to include ladderedGoals for filtering (archived/draft children should appear in tabs)
-  const flattenedList =
-    list?.flatMap((goalData) => [
-      goalData,
-      ...(goalData.ladderedGoals || []).map((lg) => ({
-        ...lg,
-        ladderedGoals: [], // nested goals don't have further children in UI
-      })),
-    ]) || []
-
   // Filter goals based on current tab and active filters
-  const filteredList = flattenedList.filter((goalData) => {
+  // Only show root-level goals (without parentId) - laddered goals are shown inside their parent's GoalCard
+  const filteredList = (list || []).filter((goalData) => {
     // Tab filter: archived vs drafts vs active
     if (currentTab === 'archived') {
       if (goalData.status !== GOAL_STATUSES.ARCHIVED) return false
