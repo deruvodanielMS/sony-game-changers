@@ -1,9 +1,9 @@
 'use client'
 
-import { useMemo, useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslations } from 'next-intl'
-import { m, AnimatePresence } from 'framer-motion'
-import { Info, Plus, Trash2, Users, XCircle } from 'lucide-react'
+import { useSession } from 'next-auth/react'
+import { XCircle } from 'lucide-react'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
@@ -11,342 +11,65 @@ import { FormControl } from '@/components/ui/molecules/FormControl'
 import { Switcher } from '@/components/ui/molecules/Switcher'
 import { RadioGroup } from '@/components/ui/atoms/RadioGroup'
 import { BigSelectField } from '@/components/ui/molecules/BigSelectField'
-import { TypeIcon } from '@/components/ui/molecules/TypeIcon'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { TextField } from '@/components/ui/atoms/TextField'
-import { Button } from '@/components/ui/atoms/Button'
-import { Card } from '@/components/ui/atoms/Card'
-import type { BigSelectOption } from '@/components/ui/molecules/BigSelectField'
 import { GOAL_TYPES, type GoalType } from '@/domain/goal'
 import { useGoalsStore } from '@/stores/goals.store'
-import {
-  newAmbitionShareWithOptions,
-  type NewAmbitionShareMember,
-} from '@/repositories/mocks/data/goals'
+import { useAmbitionForm, useAmbitionFormOptions } from '@/hooks/useAmbitionForm'
+import { ActionsField, AchievementsField } from '@/components/game-changers/ambitions/shared'
 import { cn } from '@/utils/cn'
 import type { NewAmbitionFormProps } from './NewAmbitionForm.types'
-
-type PrivacyValue = 'public' | 'private'
-
-type InputItem = { id: string; value: string }
-
-type ShareWithPillProps = {
-  member: NewAmbitionShareMember
-  onRemove: (value: string) => void
-}
-
-function ShareWithPill({ member, onRemove }: ShareWithPillProps) {
-  return (
-    <button
-      type="button"
-      onClick={() => onRemove(member.value)}
-      aria-label={member.name}
-      className={cn(
-        'inline-flex items-center gap-0_5 rounded-full',
-        'border border-neutral-800 px-0_75 py-0_25',
-        'text-body-small text-neutral-1000 transition-colors',
-        'hover:bg-neutral-100',
-      )}
-    >
-      <span>{member.name}</span>
-      <span aria-hidden className="text-neutral-600">
-        ×
-      </span>
-    </button>
-  )
-}
 
 export function NewAmbitionForm({
   className,
   step = 1,
+  parentAmbitionId,
   onValidationChange,
   onSubmit,
-  onFormDataChange,
   validateRef,
   'data-test-id': dataTestId,
 }: NewAmbitionFormProps) {
   const t = useTranslations('CreateGoal')
+  const { data: session } = useSession()
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
   const { goalFilters } = useGoalsStore()
 
-  // Step 1 state - Empty state by default
-  const [goalType, setGoalType] = useState<GoalType>(GOAL_TYPES.BUSINESS)
-  const [owner, setOwner] = useState('')
-  const [privacy, setPrivacy] = useState<PrivacyValue>('public')
-  const [sharedMembers, setSharedMembers] = useState<NewAmbitionShareMember[]>([])
-  const [shareWithSearch, setShareWithSearch] = useState('')
-  const [showShareWithDropdown, setShowShareWithDropdown] = useState(false)
+  // Use shared hooks
+  const { state, handlers, getFormData, isStepValid } = useAmbitionForm({
+    parentAmbitionId,
+  })
+  const { typeItems, privacyItems, ownerSelectOptions, ladderedFromOptions } =
+    useAmbitionFormOptions()
 
-  // Validation state
-  const [ownerError, setOwnerError] = useState(false)
-  const [ladderedFromError, setLadderedFromError] = useState(false)
-  const [ambitionNameError, setAmbitionNameError] = useState(false)
-  const [actionsError, setActionsError] = useState(false)
-  const [achievementsError, setAchievementsError] = useState(false)
-
-  // Step 2 state - Empty state by default
-  const [ladderedFrom, setLadderedFrom] = useState('')
-  const [ambitionName, setAmbitionName] = useState('')
-  const [actions, setActions] = useState<InputItem[]>(() => [
-    { id: crypto.randomUUID(), value: '' },
-    { id: crypto.randomUUID(), value: '' },
-    { id: crypto.randomUUID(), value: '' },
-  ])
-  const [achievements, setAchievements] = useState<InputItem[]>(() => [
-    { id: crypto.randomUUID(), value: '' },
-    { id: crypto.randomUUID(), value: '' },
-    { id: crypto.randomUUID(), value: '' },
-  ])
-
-  // Validate Step 1 and notify parent
+  // Pre-select owner based on logged in user (by name match)
   useEffect(() => {
-    if (step === 1) {
-      const isValid = owner !== ''
-      onValidationChange?.(isValid)
-    } else if (step === 2) {
-      const hasLadderedFrom = goalType === GOAL_TYPES.BUSINESS ? ladderedFrom !== '' : true
-      const hasAmbitionName = ambitionName.trim() !== ''
-      const hasActions = actions.some((action) => action.value.trim() !== '')
-      const hasAchievements = achievements.some((achievement) => achievement.value.trim() !== '')
-      const isValid = hasLadderedFrom && hasAmbitionName && hasActions && hasAchievements
-      onValidationChange?.(isValid)
+    if (!state.owner && session?.user?.name && goalFilters?.avatarSelector?.options) {
+      const currentUser = goalFilters.avatarSelector.options.find(
+        (option) => option.name === session.user?.name,
+      )
+      if (currentUser) {
+        handlers.setOwner(currentUser.uid)
+      }
     }
-  }, [owner, goalType, ladderedFrom, ambitionName, actions, achievements, step, onValidationChange])
+  }, [session, goalFilters, state.owner, handlers])
 
-  // Clear ladderedFrom when changing to non-business type
+  // Notify parent of validation state changes
   useEffect(() => {
-    if (goalType !== GOAL_TYPES.BUSINESS) {
-      setLadderedFrom('')
-    }
-  }, [goalType])
+    onValidationChange?.(isStepValid(step))
+  }, [step, isStepValid, onValidationChange])
 
-  // Clear share with search when privacy changes to public
-  useEffect(() => {
-    if (privacy === 'public') {
-      setShareWithSearch('')
-      setShowShareWithDropdown(false)
-    }
-  }, [privacy])
-
-  // Update parent with current form data whenever it changes
+  // Update parent with form data on step 2
   useEffect(() => {
     if (step === 2 && onSubmit) {
-      const formData = {
-        goalType,
-        owner,
-        privacy,
-        sharedMembers,
-        ladderedFrom: goalType === GOAL_TYPES.BUSINESS ? ladderedFrom : undefined,
-        ambitionName,
-        actions: actions.filter((action) => action.value.trim() !== '').map((a) => a.value),
-        achievements: achievements
-          .filter((achievement) => achievement.value.trim() !== '')
-          .map((a) => a.value),
-      }
-      onSubmit(formData)
+      onSubmit(getFormData())
     }
-  }, [
-    step,
-    goalType,
-    owner,
-    privacy,
-    sharedMembers,
-    ladderedFrom,
-    ambitionName,
-    actions,
-    achievements,
-    onSubmit,
-  ])
+  }, [step, getFormData, onSubmit])
 
   // Expose validation function via ref
   useEffect(() => {
     if (!validateRef) return
-
-    validateRef.current = () => {
-      if (step === 1) {
-        const isValid = owner !== ''
-        if (!isValid) {
-          setOwnerError(true)
-        }
-        return isValid
-      } else if (step === 2) {
-        const hasLadderedFrom = goalType === GOAL_TYPES.BUSINESS ? ladderedFrom !== '' : true
-        const hasAmbitionName = ambitionName.trim() !== ''
-        const hasActions = actions.some((action) => action.value.trim() !== '')
-        const hasAchievements = achievements.some((achievement) => achievement.value.trim() !== '')
-
-        setLadderedFromError(!hasLadderedFrom)
-        setAmbitionNameError(!hasAmbitionName)
-        setActionsError(!hasActions)
-        setAchievementsError(!hasAchievements)
-
-        return hasLadderedFrom && hasAmbitionName && hasActions && hasAchievements
-      }
-      return false
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step, owner, goalType, ladderedFrom, ambitionName, actions, achievements])
-
-  // Handle owner change and clear error
-  const handleOwnerChange = (value: string) => {
-    setOwner(value)
-    if (value) {
-      setOwnerError(false)
-    }
-  }
-
-  // Handle laddered from change and clear error
-  const handleLadderedFromChange = (value: string) => {
-    setLadderedFrom(value)
-    if (value) {
-      setLadderedFromError(false)
-    }
-  }
-
-  // Handlers for dynamic actions
-  const addAction = () => {
-    setActions((prev) => [...prev, { id: crypto.randomUUID(), value: '' }])
-  }
-
-  const removeAction = (id: string) => {
-    setActions((prev) => prev.filter((item) => item.id !== id))
-  }
-
-  const updateAction = (id: string, value: string) => {
-    setActions((prev) => prev.map((item) => (item.id === id ? { ...item, value } : item)))
-    if (value.trim()) {
-      setActionsError(false)
-    }
-  }
-
-  // Handlers for dynamic achievements
-  const addAchievement = () => {
-    setAchievements((prev) => [...prev, { id: crypto.randomUUID(), value: '' }])
-  }
-
-  const removeAchievement = (id: string) => {
-    setAchievements((prev) => prev.filter((item) => item.id !== id))
-  }
-
-  const updateAchievement = (id: string, value: string) => {
-    setAchievements((prev) => prev.map((item) => (item.id === id ? { ...item, value } : item)))
-    if (value.trim()) {
-      setAchievementsError(false)
-    }
-  }
-
-  // Handle form submission
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleSubmit = () => {
-    const formData = {
-      goalType,
-      owner,
-      privacy,
-      sharedMembers,
-      ladderedFrom: goalType === GOAL_TYPES.BUSINESS ? ladderedFrom : undefined,
-      ambitionName,
-      actions: actions.filter((action) => action.value.trim() !== '').map((a) => a.value),
-      achievements: achievements
-        .filter((achievement) => achievement.value.trim() !== '')
-        .map((a) => a.value),
-    }
-    onSubmit?.(formData)
-  }
-
-  // Handle share with search
-  const handleShareWithChange = (value: string) => {
-    setShareWithSearch(value)
-    setShowShareWithDropdown(value.length > 0)
-  }
-
-  const handleAddShareMember = (member: NewAmbitionShareMember) => {
-    if (!sharedMembers.find((m) => m.value === member.value)) {
-      setSharedMembers((prev) => [...prev, member])
-    }
-    setShareWithSearch('')
-    setShowShareWithDropdown(false)
-  }
-
-  // Filter available share options
-  const availableShareOptions = useMemo(() => {
-    const selectedValues = sharedMembers.map((m) => m.value)
-    return newAmbitionShareWithOptions
-      .filter((option) => !selectedValues.includes(option.value))
-      .filter((option) => option.name.toLowerCase().includes(shareWithSearch.toLowerCase()))
-  }, [sharedMembers, shareWithSearch])
-
-  const typeItems = useMemo(
-    () => [
-      {
-        id: GOAL_TYPES.BUSINESS,
-        label: t('type.business'),
-        icon: <TypeIcon type={GOAL_TYPES.BUSINESS} variant="metadata" />,
-        ariaLabel: t('type.business'),
-      },
-      {
-        id: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
-        label: t('type.growth'),
-        icon: <TypeIcon type={GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT} variant="metadata" />,
-        ariaLabel: t('type.growth'),
-      },
-      {
-        id: GOAL_TYPES.MANAGER_EFFECTIVENESS,
-        label: t('type.manager'),
-        icon: <TypeIcon type={GOAL_TYPES.MANAGER_EFFECTIVENESS} variant="metadata" />,
-        ariaLabel: t('type.manager'),
-      },
-    ],
-    [t],
-  )
-
-  const privacyItems = useMemo(
-    () => [
-      {
-        id: 'public',
-        label: t('privacy.public'),
-        ariaLabel: t('privacy.public'),
-      },
-      {
-        id: 'private',
-        label: t('privacy.private'),
-        ariaLabel: t('privacy.private'),
-      },
-    ],
-    [t],
-  )
-
-  // Transform owner options to BigSelectOption format
-  const ownerSelectOptions = useMemo<BigSelectOption[]>(() => {
-    const avatarOptions = goalFilters?.avatarSelector?.options ?? []
-    return avatarOptions.map((option) => ({
-      value: option.uid,
-      label: option.name,
-      description: option.role,
-      avatar: option.url,
-    }))
-  }, [goalFilters])
-
-  // Laddered from options (mock data for now)
-  const ladderedFromOptions = useMemo<BigSelectOption[]>(
-    () => [
-      {
-        value: 'division-ambition-1',
-        label: 'Accelerate platform innovation',
-        description: 'AAA Division Ambition',
-      },
-      {
-        value: 'division-ambition-2',
-        label: 'Improve customer satisfaction',
-        description: 'AAA Division Ambition',
-      },
-      {
-        value: 'team-ambition-1',
-        label: 'Increase team productivity',
-        description: 'AAA Team Ambition',
-      },
-    ],
-    [],
-  )
+    validateRef.current = () => handlers.validate(step)
+  }, [validateRef, handlers, step])
 
   // Step 1: Ambition Setup
   if (step === 1) {
@@ -366,8 +89,8 @@ export function NewAmbitionForm({
             {isMobile ? (
               <RadioGroup
                 items={typeItems}
-                value={goalType}
-                onChange={(value) => setGoalType(value as GoalType)}
+                value={state.goalType}
+                onChange={(value) => handlers.setGoalType(value as GoalType)}
                 size="large"
                 ariaLabel={t('type.label')}
               />
@@ -375,8 +98,8 @@ export function NewAmbitionForm({
               <div className="self-start">
                 <Switcher
                   items={typeItems}
-                  value={goalType}
-                  onChange={(value) => setGoalType(value as GoalType)}
+                  value={state.goalType}
+                  onChange={(value) => handlers.setGoalType(value as GoalType)}
                   size="large"
                   ariaLabel={t('type.label')}
                 />
@@ -389,12 +112,12 @@ export function NewAmbitionForm({
           <BigSelectField
             options={ownerSelectOptions}
             label={t('owner.label')}
-            value={owner}
-            onValueChange={handleOwnerChange}
+            value={state.owner}
+            onValueChange={handlers.setOwner}
             placeholder={t('owner.placeholder')}
             required
             hideDescriptionInDropdown
-            error={ownerError ? t('owner.error') : undefined}
+            error={state.errors.owner ? t('owner.error') : undefined}
           />
         </AnimatedSection>
 
@@ -403,8 +126,8 @@ export function NewAmbitionForm({
             {isMobile ? (
               <RadioGroup
                 items={privacyItems}
-                value={privacy}
-                onChange={(value) => setPrivacy(value as PrivacyValue)}
+                value={state.privacy}
+                onChange={(value) => handlers.setPrivacy(value as 'public' | 'private')}
                 size="small"
                 ariaLabel={t('privacy.label')}
               />
@@ -412,8 +135,8 @@ export function NewAmbitionForm({
               <div className="self-start">
                 <Switcher
                   items={privacyItems}
-                  value={privacy}
-                  onChange={(value) => setPrivacy(value as PrivacyValue)}
+                  value={state.privacy}
+                  onChange={(value) => handlers.setPrivacy(value as 'public' | 'private')}
                   size="small"
                   ariaLabel={t('privacy.label')}
                 />
@@ -437,33 +160,35 @@ export function NewAmbitionForm({
         </div>
       </AnimatedSection>
 
-      {goalType === GOAL_TYPES.BUSINESS && (
+      {state.goalType === GOAL_TYPES.BUSINESS && (
         <AnimatedSection delay={0.2}>
           <BigSelectField
             options={ladderedFromOptions}
             label={t('ladderedFrom.label')}
-            value={ladderedFrom}
-            onValueChange={handleLadderedFromChange}
+            value={state.ladderedFrom}
+            onValueChange={handlers.setLadderedFrom}
             placeholder={t('ladderedFrom.placeholder')}
             hidePlaceholderIcon
             required
             error={
-              ladderedFromError ? t('ladderedFrom.error') || 'This field is required' : undefined
+              state.errors.ladderedFrom
+                ? t('ladderedFrom.error') || 'This field is required'
+                : undefined
             }
           />
         </AnimatedSection>
       )}
 
-      <AnimatedSection delay={goalType === GOAL_TYPES.BUSINESS ? 0.3 : 0.2}>
+      <AnimatedSection delay={state.goalType === GOAL_TYPES.BUSINESS ? 0.3 : 0.2}>
         <FormControl label={t('ambitionName.label')} mandatory fullWidth>
           <TextField
-            value={ambitionName}
-            onChange={(e) => setAmbitionName(e.target.value)}
+            value={state.ambitionName}
+            onChange={(e) => handlers.setAmbitionName(e.target.value)}
             placeholder={t('ambitionName.placeholder')}
             fullWidth
-            aria-invalid={ambitionNameError}
+            aria-invalid={state.errors.ambitionName}
           />
-          {ambitionNameError && (
+          {state.errors.ambitionName && (
             <div className="flex items-center gap-0_5 mt-0_5">
               <XCircle width={20} height={20} className="text-feedback-error-500 shrink-0" />
               <span
@@ -477,166 +202,24 @@ export function NewAmbitionForm({
         </FormControl>
       </AnimatedSection>
 
-      <AnimatedSection delay={goalType === GOAL_TYPES.BUSINESS ? 0.4 : 0.3}>
-        <div className="flex flex-col gap-1">
-          <div className={cn('flex gap-1', isMobile ? 'flex-col' : 'flex-row items-start')}>
-            <Card className="flex flex-col gap-0_5 md:gap-1_5 bg-neutral-100 border-none p-1 md:p-1_5 md:w-[270px] shrink-0">
-              <Typography variant="h6">
-                {t('planActions.label')}
-                <span className="text-feedback-error-500 ml-0_25">*</span>
-              </Typography>
-              <Typography variant="body" color="textSecondary">
-                {t('planActions.description')}
-              </Typography>
-              <Typography variant="body" color="textSecondary">
-                {t('planActions.subDescription')}
-              </Typography>
-            </Card>
-
-            <div className="flex flex-col gap-0_75 flex-1">
-              <AnimatePresence initial={false}>
-                {actions.map((action, index) => (
-                  <m.div
-                    key={action.id}
-                    layout
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
-                    transition={{ duration: 0.2, ease: 'easeOut' }}
-                    className="flex flex-col gap-0_5 origin-top"
-                  >
-                    <div className="flex items-center gap-0_75">
-                      <TextField
-                        value={action.value}
-                        onChange={(e) => updateAction(action.id, e.target.value)}
-                        placeholder={t('planActions.placeholder')}
-                        className="flex-1"
-                        aria-invalid={index === 0 && actionsError}
-                      />
-                      {index > 0 && (
-                        <Button
-                          variant="link"
-                          size="small"
-                          onClick={() => removeAction(action.id)}
-                          aria-label={t('planActions.removeAction')}
-                          className="shrink-0"
-                        >
-                          <Trash2 width={18} className="text-neutral-600" />
-                        </Button>
-                      )}
-                    </div>
-                    {index === 0 && actionsError && (
-                      <div className="flex items-center gap-0_5">
-                        <XCircle
-                          width={20}
-                          height={20}
-                          className="text-feedback-error-500 shrink-0"
-                        />
-                        <span
-                          className="text-body-small leading-body-small font-normal"
-                          style={{ color: 'var(--feedback-error-500)' }}
-                        >
-                          {t('planActions.error') || 'At least one action is required'}
-                        </span>
-                      </div>
-                    )}
-                  </m.div>
-                ))}
-              </AnimatePresence>
-
-              <Button
-                variant="link"
-                size="small"
-                onClick={addAction}
-                leftIcon={<Plus width={18} />}
-                className="self-start text-accent-primary"
-              >
-                {t('planActions.addAction')}
-              </Button>
-            </div>
-          </div>
-        </div>
+      <AnimatedSection delay={state.goalType === GOAL_TYPES.BUSINESS ? 0.4 : 0.3}>
+        <ActionsField
+          items={state.actions}
+          hasError={state.errors.actions}
+          onAdd={handlers.addAction}
+          onRemove={handlers.removeAction}
+          onUpdate={handlers.updateAction}
+        />
       </AnimatedSection>
 
-      <AnimatedSection delay={goalType === GOAL_TYPES.BUSINESS ? 0.5 : 0.4}>
-        <div className="flex flex-col gap-1">
-          <div className={cn('flex gap-1', isMobile ? 'flex-col' : 'flex-row items-start')}>
-            <Card className="flex flex-col gap-0_5 md:gap-1_5 bg-neutral-100 border-none p-1 md:p-1_5 md:w-[270px] shrink-0">
-              <Typography variant="h6">
-                {t('achievements.label')}
-                <span className="text-feedback-error-500 ml-0_25">*</span>
-              </Typography>
-              <Typography variant="body" color="textSecondary">
-                {t('achievements.description')}
-              </Typography>
-              <Typography variant="body" color="textSecondary">
-                {t('achievements.subDescription')}
-              </Typography>
-            </Card>
-
-            <div className="flex flex-col gap-0_75 flex-1">
-              <AnimatePresence initial={false}>
-                {achievements.map((achievement, index) => (
-                  <m.div
-                    key={achievement.id}
-                    layout
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.15 } }}
-                    transition={{ duration: 0.2, ease: 'easeOut' }}
-                    className="flex flex-col gap-0_5 origin-top"
-                  >
-                    <div className="flex items-center gap-0_75">
-                      <TextField
-                        value={achievement.value}
-                        onChange={(e) => updateAchievement(achievement.id, e.target.value)}
-                        placeholder={t('achievements.placeholder')}
-                        className="flex-1"
-                        aria-invalid={index === 0 && achievementsError}
-                      />
-                      {index > 0 && (
-                        <Button
-                          variant="link"
-                          size="small"
-                          onClick={() => removeAchievement(achievement.id)}
-                          aria-label={t('achievements.removeAchievement')}
-                          className="shrink-0"
-                        >
-                          <Trash2 width={18} className="text-neutral-600" />
-                        </Button>
-                      )}
-                    </div>
-                    {index === 0 && achievementsError && (
-                      <div className="flex items-center gap-0_5">
-                        <XCircle
-                          width={20}
-                          height={20}
-                          className="text-feedback-error-500 shrink-0"
-                        />
-                        <span
-                          className="text-body-small leading-body-small font-normal"
-                          style={{ color: 'var(--feedback-error-500)' }}
-                        >
-                          {t('achievements.error') || 'At least one achievement is required'}
-                        </span>
-                      </div>
-                    )}
-                  </m.div>
-                ))}
-              </AnimatePresence>
-
-              <Button
-                variant="link"
-                size="small"
-                onClick={addAchievement}
-                leftIcon={<Plus width={18} />}
-                className="self-start text-accent-primary"
-              >
-                {t('achievements.addAchievement')}
-              </Button>
-            </div>
-          </div>
-        </div>
+      <AnimatedSection delay={state.goalType === GOAL_TYPES.BUSINESS ? 0.5 : 0.4}>
+        <AchievementsField
+          items={state.achievements}
+          hasError={state.errors.achievements}
+          onAdd={handlers.addAchievement}
+          onRemove={handlers.removeAchievement}
+          onUpdate={handlers.updateAchievement}
+        />
       </AnimatedSection>
     </div>
   )

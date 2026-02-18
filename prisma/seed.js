@@ -1,14 +1,24 @@
 import { PrismaClient } from '@prisma/client'
 
-const EMPLOYEE_EMAIL_BY_ROLE = {
+/**
+ * Seed data that matches repositories/mocks/data/users.ts and filters.ts
+ * This ensures consistency between local development (mock) and production (prisma)
+ */
+
+const EMAILS = {
   MANAGER: 'manager@employee.test',
   IC: 'ic@employee.test',
+  DAVID: 'david.brown@employee.test',
+  NIA: 'nia.washington@employee.test',
+  KYLIE: 'kylie.davies@employee.test',
 }
 
 const GOAL_STATUSES = {
   COMPLETED: 'completed',
   DRAFT: 'draft',
   AWAITING_APPROVAL: 'awaiting_approval',
+  APPROVED: 'approved',
+  ARCHIVED: 'archived',
 }
 
 const GOAL_TYPES = {
@@ -20,7 +30,7 @@ const GOAL_TYPES = {
 const prisma = new PrismaClient()
 
 async function seedBase(prisma) {
-  // Organization
+  console.log('   Creating organization...')
   const org = await prisma.organization.create({
     data: {
       code: 'ORG-ROOT',
@@ -28,54 +38,106 @@ async function seedBase(prisma) {
     },
   })
 
-  // Job
-  const job = await prisma.jobs.create({
+  console.log('   Creating jobs...')
+  const jobManager = await prisma.jobs.create({
+    data: { name: 'Manager', code: 'MGR', level: 4, orgId: org.id },
+  })
+  const jobSeniorEngineer = await prisma.jobs.create({
+    data: { name: 'Senior Engineer', code: 'SE', level: 3, orgId: org.id },
+  })
+  const jobTechLead = await prisma.jobs.create({
+    data: { name: 'Tech Lead', code: 'TL', level: 3, orgId: org.id },
+  })
+  const jobSeniorSWE = await prisma.jobs.create({
+    data: { name: 'Senior Software Engineer', code: 'SSE', level: 3, orgId: org.id },
+  })
+  const jobPM = await prisma.jobs.create({
+    data: { name: 'Product Manager', code: 'PM', level: 3, orgId: org.id },
+  })
+
+  console.log('   Creating users (matching mockDB)...')
+
+  // user-1: James Miller (Manager) - manager@employee.test
+  // This is the team manager, no managerId (top of hierarchy)
+  const jamesMiller = await prisma.people.create({
     data: {
-      name: 'Software Engineer',
-      code: 'SE',
-      level: 3,
+      email: EMAILS.MANAGER,
+      name: 'James',
+      lastname: 'Miller',
+      status: 'active',
+      profileImageUrl: '/profile-img/profile.png',
+      employeeId: 'E001',
       orgId: org.id,
+      jobId: jobManager.id,
+      // No managerId - James is the top manager
     },
   })
 
-  // People
+  // user-2: Sarah Miller (Senior Engineer) - ic@employee.test
+  // Reports to James Miller
   const sarahMiller = await prisma.people.create({
     data: {
-      email: 'smiller@test.com',
-      name: 'Sarah Miller',
-      lastname: 'User',
+      email: EMAILS.IC,
+      name: 'Sarah',
+      lastname: 'Miller',
       status: 'active',
-      profileImageUrl: 'sarah-miller.png',
+      profileImageUrl: '/profile-img/sarah-miller.png',
+      employeeId: 'E002',
       orgId: org.id,
-      jobId: job.id,
+      jobId: jobSeniorEngineer.id,
+      managerId: jamesMiller.id, // Reports to James
     },
   })
 
+  // user-3: David Brown (Tech Lead) - david.brown@employee.test
+  // Reports to James Miller
   const davidBrown = await prisma.people.create({
     data: {
-      email: EMPLOYEE_EMAIL_BY_ROLE.IC,
-      name: 'David Brown',
-      lastname: 'User',
+      email: EMAILS.DAVID,
+      name: 'David',
+      lastname: 'Brown',
       status: 'active',
-      profileImageUrl: 'lars-van-der-zee.png',
+      profileImageUrl: '/profile-img/lars-van-der-zee.png',
+      employeeId: 'E003',
       orgId: org.id,
-      jobId: job.id,
+      jobId: jobTechLead.id,
+      managerId: jamesMiller.id, // Reports to James
     },
   })
 
-  const manager = await prisma.people.create({
+  // user-4: Nia Washington (Senior Software Engineer) - nia.washington@employee.test
+  // Reports to James Miller
+  const niaWashington = await prisma.people.create({
     data: {
-      email: EMPLOYEE_EMAIL_BY_ROLE.MANAGER,
-      name: 'Manager',
-      lastname: 'User',
-      profileImageUrl: 'profile.png',
+      email: EMAILS.NIA,
+      name: 'Nia',
+      lastname: 'Washington',
       status: 'active',
+      profileImageUrl: '/profile-img/nia-washington.png',
+      employeeId: 'E004',
       orgId: org.id,
-      jobId: job.id,
+      jobId: jobSeniorSWE.id,
+      managerId: jamesMiller.id, // Reports to James
     },
   })
 
-  // Performance period
+  // user-5: Kylie Davies (Product Manager) - kylie.davies@employee.test
+  // Reports to James Miller
+  const kylieDavies = await prisma.people.create({
+    data: {
+      email: EMAILS.KYLIE,
+      name: 'Kylie',
+      lastname: 'Davies',
+      status: 'active',
+      profileImageUrl: '/profile-img/kylie-davies.png',
+      employeeId: 'E005',
+      orgId: org.id,
+      jobId: jobPM.id,
+      managerId: jamesMiller.id, // Reports to James
+    },
+  })
+
+  console.log('   Creating performance period...')
   const period = await prisma.performance_periods.create({
     data: {
       name: 'H1 2025',
@@ -88,235 +150,360 @@ async function seedBase(prisma) {
 
   return {
     org,
-    job,
-    sarahMiller,
-    davidBrown,
-    manager,
+    users: {
+      jamesMiller, // Manager
+      sarahMiller, // IC (Senior Engineer)
+      davidBrown, // Tech Lead
+      niaWashington, // Senior SWE
+      kylieDavies, // PM
+    },
     period,
   }
 }
 
 async function seedDemo(prisma, ctx) {
-  // parent Goal For Manager, allowed to ladder
-  const managerGoal = await prisma.goals.create({
-    data: {
-      title: 'Improve team performance',
-      body: 'Increase efficiency and quality of delivery',
-      type: GOAL_TYPES.MANAGER_EFFECTIVENESS,
-      status: GOAL_STATUSES.AWAITING_APPROVAL,
-      progress: 50,
-      assignedTo: ctx.managerId,
-      createdBy: ctx.managerId,
-      periodId: ctx.periodId,
-    },
-  })
+  console.log('   Creating demo goals...')
 
-  const managerSelfGoal = await prisma.goals.create({
-    data: {
-      title: 'Improve team delivery predictability',
-      body: 'Ensure the team consistently meets commitments by improving planning and estimation',
-      type: GOAL_TYPES.MANAGER_EFFECTIVENESS,
-      status: GOAL_STATUSES.AWAITING_APPROVAL,
-      progress: 80,
-      assignedTo: ctx.managerId,
-      createdBy: ctx.managerId,
-      periodId: ctx.periodId,
-    },
-  })
+  // =====================================================
+  // PARENT GOALS (Top-level, no parentId)
+  // =====================================================
 
-  // Child Goals
-  const managerIcGoal = await prisma.goals.create({
+  // Parent Goal 1: Manager's strategic goal (Business)
+  const strategicGoal = await prisma.goals.create({
     data: {
-      title: 'Reduce bugs in production',
-      body: 'Reduce critical incidents by 30%',
+      title: 'Deliver all Q1 milestones on time with high quality',
+      body: 'Ensure the team delivers all committed features for Q1 while maintaining code quality standards',
       type: GOAL_TYPES.BUSINESS,
+      status: GOAL_STATUSES.APPROVED,
+      progress: 60,
+      assignedTo: ctx.users.jamesMiller.id,
+      createdBy: ctx.users.jamesMiller.id,
+      periodId: ctx.periodId,
+    },
+  })
+
+  // Parent Goal 2: Manager effectiveness goal
+  const managerEffectivenessGoal = await prisma.goals.create({
+    data: {
+      title: 'Improve team collaboration and communication',
+      body: 'Foster better teamwork through improved processes and regular feedback sessions',
+      type: GOAL_TYPES.MANAGER_EFFECTIVENESS,
+      status: GOAL_STATUSES.APPROVED,
+      progress: 40,
+      assignedTo: ctx.users.jamesMiller.id,
+      createdBy: ctx.users.jamesMiller.id,
+      periodId: ctx.periodId,
+    },
+  })
+
+  // =====================================================
+  // CHILD GOALS (With parentId - laddered to parent goals)
+  // =====================================================
+
+  // Child of strategicGoal - assigned to Sarah (IC)
+  const sarahBusinessGoal = await prisma.goals.create({
+    data: {
+      title: 'Implement new authentication system',
+      body: 'Build and deploy the new OAuth2-based authentication system',
+      type: GOAL_TYPES.BUSINESS,
+      status: GOAL_STATUSES.AWAITING_APPROVAL,
+      progress: 30,
+      parentId: strategicGoal.id, // <-- Laddered to strategic goal
+      assignedTo: ctx.users.sarahMiller.id,
+      createdBy: ctx.users.sarahMiller.id,
+      periodId: ctx.periodId,
+    },
+  })
+
+  // Child of strategicGoal - assigned to David
+  const davidBusinessGoal = await prisma.goals.create({
+    data: {
+      title: 'Reduce API response times by 40%',
+      body: 'Optimize database queries and implement caching to improve API performance',
+      type: GOAL_TYPES.BUSINESS,
+      status: GOAL_STATUSES.APPROVED,
+      progress: 75,
+      parentId: strategicGoal.id, // <-- Laddered to strategic goal
+      assignedTo: ctx.users.davidBrown.id,
+      createdBy: ctx.users.davidBrown.id,
+      periodId: ctx.periodId,
+    },
+  })
+
+  // Child of managerEffectivenessGoal - assigned to Nia
+  const niaCollabGoal = await prisma.goals.create({
+    data: {
+      title: 'Lead weekly knowledge sharing sessions',
+      body: 'Organize and lead technical presentations to share expertise across the team',
+      type: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
       status: GOAL_STATUSES.DRAFT,
       progress: 0,
-      assignedTo: ctx.ciId[1],
-      createdBy: ctx.managerId,
+      parentId: managerEffectivenessGoal.id, // <-- Laddered to manager effectiveness goal
+      assignedTo: ctx.users.niaWashington.id,
+      createdBy: ctx.users.niaWashington.id,
       periodId: ctx.periodId,
-      parentId: managerGoal.id,
     },
   })
 
-  const icGoal = await prisma.goals.create({
+  // =====================================================
+  // STANDALONE GOALS (No parent - top level)
+  // =====================================================
+
+  // Sarah's personal growth goal (no parent)
+  const sarahGrowthGoal = await prisma.goals.create({
     data: {
-      title: 'Improve test coverage',
-      body: 'Achieve 80% coverage on all services',
+      title: 'Obtain AWS Solutions Architect certification',
+      body: 'Complete training and pass the AWS certification exam',
       type: GOAL_TYPES.PERSONAL_GROWTH_AND_DEVELOPMENT,
-      status: GOAL_STATUSES.COMPLETED,
-      progress: 100,
-      parentId: managerGoal.id,
-      assignedTo: ctx.ciId[0],
-      createdBy: ctx.ciId[0],
+      status: GOAL_STATUSES.APPROVED,
+      progress: 50,
+      assignedTo: ctx.users.sarahMiller.id,
+      createdBy: ctx.users.sarahMiller.id,
       periodId: ctx.periodId,
     },
   })
 
-  // Actions
+  // Kylie's business goal (no parent)
+  const kylieGoal = await prisma.goals.create({
+    data: {
+      title: 'Launch new product feature by end of Q1',
+      body: 'Coordinate with engineering and design to ship the analytics dashboard',
+      type: GOAL_TYPES.BUSINESS,
+      status: GOAL_STATUSES.AWAITING_APPROVAL,
+      progress: 20,
+      assignedTo: ctx.users.kylieDavies.id,
+      createdBy: ctx.users.kylieDavies.id,
+      periodId: ctx.periodId,
+    },
+  })
+
+  // Archived goal example
+  const archivedGoal = await prisma.goals.create({
+    data: {
+      title: 'Legacy system migration (Archived)',
+      body: 'This goal was archived as priorities changed',
+      type: GOAL_TYPES.BUSINESS,
+      status: GOAL_STATUSES.ARCHIVED,
+      progress: 10,
+      assignedTo: ctx.users.davidBrown.id,
+      createdBy: ctx.users.davidBrown.id,
+      periodId: ctx.periodId,
+    },
+  })
+
+  console.log('   Creating goal actions...')
   await prisma.goal_actions.createMany({
     data: [
+      // Sarah's business goal actions
       {
-        title: 'Add a mandatory code review before merging any change',
+        title: 'Design OAuth2 flow and token management',
         body: '',
         status: 'active',
-        goalId: managerIcGoal.id,
+        goalId: sarahBusinessGoal.id,
       },
       {
-        title: 'Fix the top recurring bugs first by reviewing recent production issues',
+        title: 'Implement login/logout endpoints',
         body: '',
         status: 'active',
-        goalId: managerIcGoal.id,
+        goalId: sarahBusinessGoal.id,
       },
       {
-        title: 'Deploy smaller, more frequent changes instead of large releases',
+        title: 'Add session management and refresh tokens',
         body: '',
         status: 'active',
-        goalId: managerIcGoal.id,
+        goalId: sarahBusinessGoal.id,
+      },
+      // David's business goal actions
+      {
+        title: 'Profile and identify slow database queries',
+        body: '',
+        status: 'active',
+        goalId: davidBusinessGoal.id,
       },
       {
-        title: 'Write tests for every new feature before considering it done',
+        title: 'Implement Redis caching layer',
         body: '',
         status: 'active',
-        goalId: icGoal.id,
+        goalId: davidBusinessGoal.id,
       },
       {
-        title: 'Add tests when fixing bugs to prevent regressions',
+        title: 'Add query optimization indexes',
         body: '',
         status: 'active',
-        goalId: icGoal.id,
+        goalId: davidBusinessGoal.id,
+      },
+      // Nia's collaboration goal actions
+      {
+        title: 'Prepare presentation materials',
+        body: '',
+        status: 'active',
+        goalId: niaCollabGoal.id,
       },
       {
-        title: 'Track coverage in the CI pipeline and review it regularly',
+        title: 'Schedule recurring meeting slots',
         body: '',
         status: 'active',
-        goalId: icGoal.id,
+        goalId: niaCollabGoal.id,
       },
       {
-        title: 'Run regular sprint planning sessions with clear scope and priorities',
+        title: 'Collect feedback after each session',
         body: '',
         status: 'active',
-        goalId: managerSelfGoal.id,
+        goalId: niaCollabGoal.id,
+      },
+      // Sarah's growth goal actions
+      {
+        title: 'Complete AWS training course',
+        body: '',
+        status: 'active',
+        goalId: sarahGrowthGoal.id,
       },
       {
-        title: 'Break work into smaller, well-defined tasks to improve estimation accuracy',
+        title: 'Practice with sample exams',
         body: '',
         status: 'active',
-        goalId: managerSelfGoal.id,
+        goalId: sarahGrowthGoal.id,
       },
       {
-        title: 'Review past sprint results to adjust estimates and planning practices',
+        title: 'Schedule and take certification exam',
         body: '',
         status: 'active',
-        goalId: managerSelfGoal.id,
+        goalId: sarahGrowthGoal.id,
+      },
+      // Strategic goal actions
+      {
+        title: 'Define clear sprint goals aligned with Q1 milestones',
+        body: '',
+        status: 'active',
+        goalId: strategicGoal.id,
       },
       {
-        title: 'Enforce code reviews and quality checks before any production release',
+        title: 'Monitor progress weekly and address blockers',
         body: '',
         status: 'active',
-        goalId: managerGoal.id,
+        goalId: strategicGoal.id,
       },
       {
-        title: 'Prioritize bug fixes in planning sessions alongside new feature work',
+        title: 'Ensure code review standards are maintained',
         body: '',
         status: 'active',
-        goalId: managerGoal.id,
-      },
-      {
-        title: 'Review production incidents with the team to identify root causes and improvements',
-        body: '',
-        status: 'active',
-        goalId: managerGoal.id,
+        goalId: strategicGoal.id,
       },
     ],
   })
 
-  // Achievements
+  console.log('   Creating goal achievements...')
   await prisma.goal_achievements.createMany({
     data: [
+      // Sarah's business goal achievements
       {
-        title: 'Decreased production bugs by X% compared to the previous period',
+        title: 'Authentication system deployed to staging',
         body: '',
         status: 'active',
-        goalId: managerIcGoal.id,
-        progress: 'not-started',
-      },
-      {
-        title: 'Reduced critical incidents by addressing the most frequent root causes',
-        body: '',
-        status: 'active',
-        goalId: managerIcGoal.id,
-        progress: 'not-started',
-      },
-      {
-        title: 'Improved release stability through smaller and safer deployments',
-        body: '',
-        status: 'active',
-        goalId: managerIcGoal.id,
+        goalId: sarahBusinessGoal.id,
         progress: 'on-track',
       },
       {
-        title: 'Increased automated test coverage across key modules',
+        title: 'All security requirements met and verified',
         body: '',
         status: 'active',
-        goalId: icGoal.id,
+        goalId: sarahBusinessGoal.id,
+        progress: 'not-started',
+      },
+      {
+        title: 'Production rollout completed successfully',
+        body: '',
+        status: 'active',
+        goalId: sarahBusinessGoal.id,
+        progress: 'not-started',
+      },
+      // David's business goal achievements
+      {
+        title: 'API response time reduced by 20%',
+        body: '',
+        status: 'active',
+        goalId: davidBusinessGoal.id,
         progress: 'on-track',
       },
       {
-        title: 'Added regression tests for previously untested critical paths',
+        title: 'Cache hit rate above 80%',
         body: '',
         status: 'active',
-        goalId: icGoal.id,
+        goalId: davidBusinessGoal.id,
+        progress: 'on-track',
+      },
+      {
+        title: 'Zero performance regressions in monitoring',
+        body: '',
+        status: 'active',
+        goalId: davidBusinessGoal.id,
+        progress: 'not-started',
+      },
+      // Nia's collaboration goal achievements
+      {
+        title: 'Conducted at least 4 knowledge sharing sessions',
+        body: '',
+        status: 'active',
+        goalId: niaCollabGoal.id,
         progress: 'not-started',
       },
       {
-        title: 'Improved build reliability by catching issues earlier with tests',
+        title: 'Average feedback score above 4/5',
         body: '',
         status: 'active',
-        goalId: icGoal.id,
+        goalId: niaCollabGoal.id,
         progress: 'not-started',
       },
       {
-        title: 'Increased sprint commitment completion rate across the team',
+        title: 'Documentation created for shared topics',
         body: '',
         status: 'active',
-        goalId: managerSelfGoal.id,
+        goalId: niaCollabGoal.id,
+        progress: 'not-started',
+      },
+      // Sarah's growth goal achievements
+      {
+        title: 'Training course completed',
+        body: '',
+        status: 'active',
+        goalId: sarahGrowthGoal.id,
+        progress: 'on-track',
+      },
+      {
+        title: 'Practice exam score above 80%',
+        body: '',
+        status: 'active',
+        goalId: sarahGrowthGoal.id,
+        progress: 'not-started',
+      },
+      {
+        title: 'AWS certification obtained',
+        body: '',
+        status: 'active',
+        goalId: sarahGrowthGoal.id,
+        progress: 'not-started',
+      },
+      // Strategic goal achievements
+      {
+        title: 'All Q1 features delivered on schedule',
+        body: '',
+        status: 'active',
+        goalId: strategicGoal.id,
+        progress: 'on-track',
+      },
+      {
+        title: 'Code quality metrics maintained above threshold',
+        body: '',
+        status: 'active',
+        goalId: strategicGoal.id,
+        progress: 'on-track',
+      },
+      {
+        title: 'No critical bugs in production releases',
+        body: '',
+        status: 'active',
+        goalId: strategicGoal.id,
         progress: 'off-track',
-      },
-      {
-        title: 'Reduced carry-over work between sprints',
-        body: '',
-        status: 'active',
-        goalId: managerSelfGoal.id,
-        progress: 'off-track',
-      },
-      {
-        title: 'Improved accuracy of delivery estimates, leading to more reliable timelines',
-        body: '',
-        status: 'active',
-        goalId: managerSelfGoal.id,
-        progress: 'not-started',
-      },
-      {
-        title: 'Reduced the number of production bugs reported per release',
-        body: '',
-        status: 'active',
-        goalId: managerGoal.id,
-        progress: 'not-started',
-      },
-      {
-        title: 'Lowered severity of production incidents through better prevention',
-        body: '',
-        status: 'active',
-        goalId: managerGoal.id,
-        progress: 'not-started',
-      },
-      {
-        title: 'Improved overall product stability as reflected in fewer customer issuesnpx prisma',
-        body: '',
-        status: 'active',
-        goalId: managerGoal.id,
-        progress: 'on-track',
       },
     ],
   })
@@ -324,21 +511,28 @@ async function seedDemo(prisma, ctx) {
 
 async function main() {
   console.log('🌱 Seeding database...')
+  console.log('   (Data matches repositories/mocks/data/users.ts)')
 
   const base = await seedBase(prisma)
 
   await seedDemo(prisma, {
-    ciId: [base.sarahMiller.id, base.davidBrown.id],
-    managerId: base.manager.id,
+    users: base.users,
     periodId: base.period.id,
   })
 
-  console.log('✅ Seed completed')
+  console.log('')
+  console.log('✅ Seed completed!')
+  console.log('   Users created:')
+  console.log('   - manager@employee.test (James Miller - Manager)')
+  console.log('   - ic@employee.test (Sarah Miller - Senior Engineer)')
+  console.log('   - david.brown@employee.test (David Brown - Tech Lead)')
+  console.log('   - nia.washington@employee.test (Nia Washington - Senior SWE)')
+  console.log('   - kylie.davies@employee.test (Kylie Davies - Product Manager)')
 }
 
 main()
   .catch((e) => {
-    console.error(e)
+    console.error('❌ Seed failed:', e)
     process.exit(1)
   })
   .finally(async () => {

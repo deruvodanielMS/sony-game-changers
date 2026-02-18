@@ -19,7 +19,7 @@ import { useGoalsStore } from '@/stores/goals.store'
 import { AmbitionsLoading } from '@/components/ui/molecules/Loadings'
 import { GOAL_STATUSES } from '@/domain/goal'
 
-type TabValue = 'active' | 'archived'
+type TabValue = 'active' | 'drafts' | 'archived'
 
 export default function GameChangersGoalsPage() {
   const t = useTranslations('Goals')
@@ -89,41 +89,42 @@ export default function GameChangersGoalsPage() {
   ]
 
   // Filter goals based on current tab and active filters
-  const filteredList =
-    list?.filter((goalData) => {
-      // Tab filter: archived vs active
-      if (currentTab === 'archived') {
-        if (goalData.status !== GOAL_STATUSES.COMPLETED) return false
-      } else {
-        if (goalData.status === GOAL_STATUSES.COMPLETED) return false
-      }
+  // Only show root-level goals (without parentId) - laddered goals are shown inside their parent's GoalCard
+  const filteredList = (list || []).filter((goalData) => {
+    // Tab filter: archived vs active
+    if (currentTab === 'archived') {
+      if (goalData.status !== GOAL_STATUSES.ARCHIVED) return false
+    } else {
+      // Active tab: exclude archived only (drafts are shown in active)
+      if (goalData.status === GOAL_STATUSES.ARCHIVED) return false
+    }
 
-      // Avatar filter: filter by assigned user uid
-      if (selectedAvatars.length > 0) {
-        if (!selectedAvatars.includes(goalData.uid)) return false
-      }
+    // Avatar filter: filter by assigned user uid
+    if (selectedAvatars.length > 0) {
+      if (!selectedAvatars.includes(goalData.uid)) return false
+    }
 
-      // Status filter
-      if (selectedFilterStatus.length > 0) {
-        if (!selectedFilterStatus.includes(goalData.status)) return false
-      }
+    // Status filter
+    if (selectedFilterStatus.length > 0) {
+      if (!selectedFilterStatus.includes(goalData.status)) return false
+    }
 
-      // Type filter
-      if (selectedFilterType.length > 0) {
-        if (!goalData.goalType || !selectedFilterType.includes(goalData.goalType)) return false
-      }
+    // Type filter
+    if (selectedFilterType.length > 0) {
+      if (!goalData.goalType || !selectedFilterType.includes(goalData.goalType)) return false
+    }
 
-      // Search filter: search in title and description
-      if (selectedSearchValue.trim()) {
-        const searchLower = selectedSearchValue.toLowerCase().trim()
-        const titleMatch = goalData.title.toLowerCase().includes(searchLower)
-        const descriptionMatch = goalData.description?.toLowerCase().includes(searchLower) || false
-        const userNameMatch = goalData.userName.toLowerCase().includes(searchLower)
-        if (!titleMatch && !descriptionMatch && !userNameMatch) return false
-      }
+    // Search filter: search in title and description
+    if (selectedSearchValue.trim()) {
+      const searchLower = selectedSearchValue.toLowerCase().trim()
+      const titleMatch = goalData.title.toLowerCase().includes(searchLower)
+      const descriptionMatch = goalData.description?.toLowerCase().includes(searchLower) || false
+      const userNameMatch = goalData.userName.toLowerCase().includes(searchLower)
+      if (!titleMatch && !descriptionMatch && !userNameMatch) return false
+    }
 
-      return true
-    }) || []
+    return true
+  })
 
   // Count active filters for badge
   const activeFiltersCount =
@@ -242,7 +243,10 @@ export default function GameChangersGoalsPage() {
                   <GoalCard
                     ladderGoals={ladderedGoals}
                     goal={goal}
-                    onAddLadderedGoal={() => setIsNewAmbitionOpen(true)}
+                    onAddLadderedGoal={() => {
+                      setSelectedParentAmbitionId(goal.id)
+                      setIsNewAmbitionOpen(true)
+                    }}
                   />
                 </AnimatedSection>
               )
@@ -250,7 +254,14 @@ export default function GameChangersGoalsPage() {
           </div>
         )}
       </FilterableContentLayout>
-      <NewAmbitionModal open={isNewAmbitionOpen} onClose={() => setIsNewAmbitionOpen(false)} />
+      <NewAmbitionModal
+        open={isNewAmbitionOpen}
+        onClose={() => {
+          setIsNewAmbitionOpen(false)
+          setSelectedParentAmbitionId(null)
+        }}
+        parentAmbitionId={selectedParentAmbitionId || undefined}
+      />
     </>
   )
 }

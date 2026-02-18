@@ -5,8 +5,10 @@ import {
   GoalDraft,
   GoalUI,
   CreateGoalDTO,
+  UpdateGoalDTO,
   ManagerAmbitionsData,
   GoalFiltersData,
+  GoalStatus,
 } from '@/domain/goal'
 import { API_ROUTES } from '@/common/routes'
 
@@ -46,6 +48,12 @@ type GoalsState = {
     userData?: { name: string; avatarUrl: string | null },
   ) => Promise<GoalUI | null>
 
+  // Status updates
+  updateGoalStatus: (id: string, status: GoalStatus, comment?: string) => Promise<boolean>
+
+  // Goal updates (edit)
+  updateGoal: (id: string, data: UpdateGoalDTO) => Promise<boolean>
+
   fetchList: () => void
   fetchGoal: (id: string) => void
   fetchManagerAmbitions: () => void
@@ -63,7 +71,8 @@ export const useGoalsStore = create<GoalsState>((set) => {
       }
       return g
     })
-    if (!found) next.push(goal)
+    // Prepend new goals to keep newest first
+    if (!found) next.unshift(goal)
     return next
   }
 
@@ -152,9 +161,63 @@ export const useGoalsStore = create<GoalsState>((set) => {
 
         const newGoal = await res.json()
 
-        set((state) => ({
-          list: state.list ? [newGoal, ...state.list] : [newGoal],
-        }))
+        set((state) => {
+          let updatedList = state.list ? [newGoal, ...state.list] : [newGoal]
+
+          // If this goal has a parent, add it to parent's ladderedGoals
+          if (goalData.parentId) {
+            updatedList = updatedList.map((goal) => {
+              if (goal.id === goalData.parentId) {
+                const ladderedChild = {
+                  id: newGoal.id,
+                  title: newGoal.title,
+                  status: newGoal.status,
+                  goalType: newGoal.goalType,
+                  progress: newGoal.progress ?? 0,
+                  createdAt: newGoal.createdAt,
+                  updatedAt: newGoal.updatedAt,
+                  uid: newGoal.uid,
+                  userName: newGoal.userName,
+                  avatarUrl: newGoal.avatarUrl,
+                }
+
+                return {
+                  ...goal,
+                  ladderedGoals: [...(goal.ladderedGoals || []), ladderedChild],
+                }
+              }
+              return goal
+            })
+
+            // Also update selected if viewing the parent
+            const selected = state.selected
+            if (selected && selected.id === goalData.parentId) {
+              return {
+                list: updatedList,
+                selected: {
+                  ...selected,
+                  ladderedGoals: [
+                    ...(selected.ladderedGoals || []),
+                    {
+                      id: newGoal.id,
+                      title: newGoal.title,
+                      status: newGoal.status,
+                      goalType: newGoal.goalType,
+                      progress: newGoal.progress ?? 0,
+                      createdAt: newGoal.createdAt,
+                      updatedAt: newGoal.updatedAt,
+                      uid: newGoal.uid,
+                      userName: newGoal.userName,
+                      avatarUrl: newGoal.avatarUrl,
+                    },
+                  ],
+                },
+              }
+            }
+          }
+
+          return { list: updatedList }
+        })
 
         return newGoal
       } catch (error) {
@@ -193,20 +256,21 @@ export const useGoalsStore = create<GoalsState>((set) => {
 
           // If this goal has a parent, add it to parent's ladderedGoals
           if (goalData.parentId) {
+            const ladderedChild = {
+              id: newGoal.id,
+              title: newGoal.title,
+              status: newGoal.status,
+              goalType: newGoal.goalType,
+              progress: newGoal.progress,
+              createdAt: newGoal.createdAt,
+              updatedAt: newGoal.updatedAt,
+              uid: newGoal.uid,
+              userName: newGoal.userName,
+              avatarUrl: newGoal.avatarUrl,
+            }
+
             updatedList = updatedList.map((goal) => {
               if (goal.id === goalData.parentId) {
-                const ladderedChild = {
-                  id: newGoal.id,
-                  title: newGoal.title,
-                  status: newGoal.status,
-                  progress: newGoal.progress,
-                  createdAt: newGoal.createdAt,
-                  updatedAt: newGoal.updatedAt,
-                  uid: newGoal.uid,
-                  userName: newGoal.userName,
-                  avatarUrl: newGoal.avatarUrl,
-                }
-
                 return {
                   ...goal,
                   ladderedGoals: [...(goal.ladderedGoals || []), ladderedChild],
@@ -214,6 +278,18 @@ export const useGoalsStore = create<GoalsState>((set) => {
               }
               return goal
             })
+
+            // Also update selected if viewing the parent
+            const selected = state.selected
+            if (selected && selected.id === goalData.parentId) {
+              return {
+                list: updatedList,
+                selected: {
+                  ...selected,
+                  ladderedGoals: [...(selected.ladderedGoals || []), ladderedChild],
+                },
+              }
+            }
           }
 
           return { list: updatedList }
@@ -295,6 +371,70 @@ export const useGoalsStore = create<GoalsState>((set) => {
         console.error('[fetchGoalFilters] Error:', error)
         const errorMessage = error instanceof Error ? error.message : 'Failed to fetch goal filters'
         set({ goalFilters: null, goalFiltersError: errorMessage })
+      }
+    },
+
+    updateGoalStatus: async (id: string, status: GoalStatus, _comment?: string) => {
+      console.log('[updateGoalStatus] id:', id, 'status:', status)
+
+      try {
+        const res = await fetch(API_ROUTES.GOAL_STATUS(id), {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ status, comment: _comment }),
+        })
+
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}))
+          throw new Error(errorData.error || 'Failed to update goal status')
+        }
+
+        const updatedGoal = await res.json()
+
+        // Update local state
+        set((state) => ({
+          list: state.list?.map((g) => (g.id === id ? { ...g, ...updatedGoal } : g)) ?? null,
+          selected:
+            state.selected?.id === id ? { ...state.selected, ...updatedGoal } : state.selected,
+        }))
+
+        return true
+      } catch (error) {
+        console.error('[updateGoalStatus] Error:', error)
+        return false
+      }
+    },
+
+    updateGoal: async (id: string, data: UpdateGoalDTO) => {
+      try {
+        const res = await fetch(API_ROUTES.GOAL(id), {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        })
+
+        if (!res.ok) {
+          const errorData = await res.json().catch(() => ({}))
+          throw new Error(errorData.error || 'Failed to update goal')
+        }
+
+        const updatedGoal = await res.json()
+
+        // Update local state
+        set((state) => ({
+          list: state.list?.map((g) => (g.id === id ? { ...g, ...updatedGoal } : g)) ?? null,
+          selected:
+            state.selected?.id === id ? { ...state.selected, ...updatedGoal } : state.selected,
+        }))
+
+        return true
+      } catch (error) {
+        console.error('[updateGoal] Error:', error)
+        return false
       }
     },
   }

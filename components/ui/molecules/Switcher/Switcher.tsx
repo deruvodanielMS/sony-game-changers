@@ -94,10 +94,15 @@ export function Switcher({
       const container = containerRef.current
 
       if (activeButton && container) {
-        // Use offsetLeft and offsetWidth for more reliable positioning
-        setActiveRect({
-          left: activeButton.offsetLeft,
-          width: activeButton.offsetWidth,
+        const newLeft = activeButton.offsetLeft
+        const newWidth = activeButton.offsetWidth
+
+        // Only update if values actually changed to prevent infinite loops
+        setActiveRect((prev) => {
+          if (prev && prev.left === newLeft && prev.width === newWidth) {
+            return prev
+          }
+          return { left: newLeft, width: newWidth }
         })
       }
     }
@@ -164,8 +169,6 @@ export function Switcher({
           ? { color: variantConfig.activeStyle.color, backgroundColor: 'transparent' }
           : { ...variantConfig.inactiveStyle, backgroundColor: 'transparent' }
 
-        const iconClasses = cn('flex-shrink-0', sizeStyles[size].icon)
-
         return (
           <button
             key={item.id}
@@ -182,7 +185,7 @@ export function Switcher({
             className={buttonClasses}
             style={buttonStyle}
           >
-            {item.icon && <span className={iconClasses}>{item.icon}</span>}
+            {item.icon}
             {item.label && <span>{item.label}</span>}
           </button>
         )
