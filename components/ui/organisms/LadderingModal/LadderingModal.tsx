@@ -3,17 +3,13 @@
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { Link as LinkIcon } from 'lucide-react'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { BREAKPOINTS } from '@/common/breakpoints'
-import { useEffect, useMemo, useEffectEvent } from 'react'
-import { ModalHeader, ModalBody } from '@/components/ui/molecules/Modal'
-import { Drawer } from '@/components/ui/atoms/Drawer'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { AmbitionStatus } from '@/components/ui/atoms/AmbitionStatus'
 import {
   getStatusVariant,
   getStatusLabel,
 } from '@/components/ui/atoms/AmbitionStatus/AmbitionStatus.types'
+import { ResponsiveModal } from '@/components/ui/molecules/ResponsiveModal'
 import { cn } from '@/utils/cn'
 import { generateInitialsAvatarSrc } from '@/utils/generateInitialsAvatar'
 import type {
@@ -22,7 +18,6 @@ import type {
   GoalPreviewCardProps,
   ParentAmbition,
 } from './LadderingModal.types'
-import { useUIStore } from '@/stores/ui.store'
 
 // Sub-component: Ambition Card (drop zone for linking ambitions)
 function AmbitionCard({
@@ -127,19 +122,20 @@ export function LadderingModal({
 }: LadderingModalProps) {
   const t = useTranslations('LadderingModal')
 
-  // Use media query hook for mobile detection
-  const isMobile = !useMediaQuery(BREAKPOINTS.md)
-
-  const { openModal, closeModal } = useUIStore()
-
   const handleLink = (/*ambitionId: string*/) => {
     // TODO: Implement link logic with API call
     // Example: await linkGoalToAmbition(selectedGoal.id, ambitionId)
   }
 
-  const { desktopModal, content } = useMemo(() => {
-    // Content shared between Modal and Drawer
-    const content = (
+  return (
+    <ResponsiveModal
+      open={open}
+      onClose={onClose}
+      title={t('title')}
+      desktopSize="lg"
+      mobileSize="lg"
+      data-test-id={dataTestId}
+    >
       <div className="flex flex-col gap-1.5">
         {/* Ambition Cards Row - Stack on mobile, row on tablet+ */}
         {parentAmbitions && parentAmbitions.length > 0 && (
@@ -160,57 +156,8 @@ export function LadderingModal({
         {/* Goal Preview Card */}
         <GoalPreviewCard goal={selectedGoal} data-testid="goal-preview-card" />
       </div>
-    )
-    const desktopModal = (
-      <>
-        <ModalHeader showClose onClose={onClose}>
-          {t('title')}
-        </ModalHeader>
-
-        <ModalBody className="flex flex-col gap-1.5">{content}</ModalBody>
-      </>
-    )
-    return { desktopModal, content }
-  }, [onClose, t, selectedGoal, parentAmbitions])
-
-  const toggleModal = useEffectEvent((show: boolean) => {
-    if (show) {
-      openModal(desktopModal, { onClose, size: 'lg', overlayClose: true })
-    } else {
-      closeModal()
-    }
-  })
-
-  useEffect(() => {
-    if (open && isMobile != null && !isMobile) {
-      toggleModal(true)
-    } else if (!open || isMobile) {
-      toggleModal(false)
-    }
-  }, [open, isMobile])
-
-  // Mobile: use Drawer with bottom position (bottom sheet)
-  if (isMobile) {
-    return (
-      <Drawer
-        open={open}
-        onClose={onClose}
-        position="bottom"
-        size="md"
-        overlayClose
-        showClose
-        hideCloseOnMobile
-        title={t('title')}
-        aria-label={t('title')}
-        data-test-id={dataTestId}
-        className="!h-[80vh] md:!h-drawer-height-lg"
-      >
-        {content}
-      </Drawer>
-    )
-  }
-
-  return null
+    </ResponsiveModal>
+  )
 }
 
 LadderingModal.displayName = 'LadderingModal'

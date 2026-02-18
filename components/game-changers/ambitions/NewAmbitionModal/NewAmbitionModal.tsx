@@ -1,16 +1,13 @@
 'use client'
 
-import { useEffect, useMemo, useEffectEvent, useState, useRef, useCallback } from 'react'
+import { useMemo, useState, useRef, useCallback } from 'react'
 import { useTranslations } from 'next-intl'
 import { useSession } from 'next-auth/react'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { BREAKPOINTS } from '@/common/breakpoints'
 import { useUIStore } from '@/stores/ui.store'
 import { useGoalsStore } from '@/stores/goals.store'
 import { GOAL_STATUSES } from '@/domain/goal'
-import { ModalHeader, ModalBody } from '@/components/ui/molecules/Modal'
-import { Drawer } from '@/components/ui/atoms/Drawer'
+import { ResponsiveModal } from '@/components/ui/molecules/ResponsiveModal'
 import { Button } from '@/components/ui/atoms/Button'
 import { NewAmbitionForm } from '../NewAmbitionForm'
 import type { NewAmbitionFormProps } from '../NewAmbitionForm'
@@ -24,8 +21,7 @@ export function NewAmbitionModal({
 }: NewAmbitionModalProps) {
   const t = useTranslations('CreateGoal')
   const { data: session } = useSession()
-  const isMobile = !useMediaQuery(BREAKPOINTS.md)
-  const { openModal, closeAll, enqueueToast } = useUIStore()
+  const { enqueueToast } = useUIStore()
   const { createGoal, goalFilters } = useGoalsStore()
   const [currentStep, setCurrentStep] = useState(1)
   const [isFormValid, setIsFormValid] = useState(false)
@@ -53,9 +49,8 @@ export function NewAmbitionModal({
     setIsSubmitting(false)
     formDataRef.current = null
 
-    closeAll()
     onClose?.()
-  }, [closeAll, onClose])
+  }, [onClose])
 
   const handleSaveDraft = useCallback(async () => {
     if (isSubmitting) return
@@ -267,8 +262,17 @@ export function NewAmbitionModal({
     [t, currentStep, isSubmitting, handleBack, handleNext, handleSaveDraft],
   )
 
-  const { desktopModal, content } = useMemo(() => {
-    const content = (
+  const customFooter = useMemo(
+    () => (
+      <div className="-mx-1_5 -mb-1_5 mt-auto flex w-[calc(100%+3rem)] items-center justify-between gap-1 rounded-b-large border-t border-neutral-200 px-1_5 py-1 bg-neutral-50">
+        {actions}
+      </div>
+    ),
+    [actions],
+  )
+
+  const content = useMemo(
+    () => (
       <NewAmbitionForm
         step={currentStep}
         parentAmbitionId={parentAmbitionId}
@@ -276,74 +280,28 @@ export function NewAmbitionModal({
         onValidationChange={handleValidationChange}
         onSubmit={handleFormDataChange}
       />
-    )
+    ),
+    [currentStep, parentAmbitionId, handleValidationChange, handleFormDataChange],
+  )
 
-    const desktopModal = (
-      <>
-        <ModalHeader showClose onClose={handleClose}>
-          {t('title')}
-        </ModalHeader>
-        <ModalBody className="flex flex-col">{content}</ModalBody>
-        <div className="-mx-1_5 -mb-1_5 mt-auto flex w-[calc(100%+3rem)] items-center justify-between gap-1 rounded-b-large border-t border-neutral-200 px-1_5 py-1 bg-neutral-50">
-          {actions}
-        </div>
-      </>
-    )
-
-    return { desktopModal, content }
-  }, [
-    actions,
-    handleClose,
-    t,
-    currentStep,
-    parentAmbitionId,
-    handleValidationChange,
-    handleFormDataChange,
-  ])
-
-  const toggleModal = useEffectEvent((show: boolean) => {
-    if (show) {
-      openModal(desktopModal, {
-        onClose: handleClose,
-        size: 'full',
-        overlayClose: true,
-        'aria-label': t('title'),
-      })
-    } else {
-      closeAll()
-    }
-  })
-
-  useEffect(() => {
-    if (open && isMobile != null && !isMobile) {
-      toggleModal(true)
-    } else if (!open || isMobile) {
-      toggleModal(false)
-    }
-  }, [open, isMobile, currentStep])
-
-  if (isMobile) {
-    return (
-      <Drawer
-        open={open}
-        onClose={handleClose}
-        position="bottom"
-        size="md"
-        overlayClose
-        showClose
-        hideCloseOnMobile
-        title={t('title')}
-        aria-label={t('title')}
-        actions={actions}
-        className="!h-screen"
-        data-test-id={dataTestId}
-      >
-        <div className="flex flex-col gap-1_5">{content}</div>
-      </Drawer>
-    )
-  }
-
-  return null
+  return (
+    <ResponsiveModal
+      open={open}
+      onClose={handleClose}
+      title={t('title')}
+      desktopSize="full"
+      mobileSize="md"
+      overlayClose
+      actions={actions}
+      customFooter={customFooter}
+      mobileBodyClassName="flex flex-col gap-1_5"
+      className="!h-screen"
+      aria-label={t('title')}
+      data-test-id={dataTestId}
+    >
+      {content}
+    </ResponsiveModal>
+  )
 }
 
 NewAmbitionModal.displayName = 'NewAmbitionModal'
