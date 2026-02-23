@@ -353,5 +353,19 @@
     "demoHelp": "Démo : remplir rapidement les identifiants",
     "useIC": "Compte IC",
     "useManager": "Compte Manager"
+  },
+  "Team": {
+    "title": "L'Équipe",
+    "description": "Consultez et gérez les profils et l'activité de performance de l'équipe",
+    "teamMembers": "Membres de l'Équipe",
+    "searchPlaceholder": "Rechercher des membres...",
+    "viewGrid": "Affichage en grille",
+    "viewList": "Affichage en liste",
+    "viewSwitcherLabel": "Changer le mode d'affichage",
+    "totalMembers": "{count} Membres au Total",
+    "emptyState": {
+      "title": "Aucun membre de l'équipe trouvé",
+      "description": "Essayez d'ajuster votre recherche ou vos filtres"
+    }
   }
 }

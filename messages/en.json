@@ -356,5 +356,19 @@
     "demoHelp": "Demo: quick-fill credentials",
     "useIC": "Use IC account",
     "useManager": "Use Manager account"
+  },
+  "Team": {
+    "title": "The Team",
+    "description": "View and manage team profiles and performance activity",
+    "teamMembers": "Team Members",
+    "searchPlaceholder": "Search members...",
+    "viewGrid": "Grid view",
+    "viewList": "List view",
+    "viewSwitcherLabel": "Change view mode",
+    "totalMembers": "{count} Total Members",
+    "emptyState": {
+      "title": "No team members found",
+      "description": "Try adjusting your search or filters"
+    }
   }
 }
