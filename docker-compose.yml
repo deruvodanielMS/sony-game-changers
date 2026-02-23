@@ -1,14 +1,27 @@
-version: '3.9'
+version: '2.4'
 
 services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: gamechangers
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   app:
     build: .
     ports:
       - '3000:3000'
-    volumes:
-      - db-data:/data
     environment:
-      DATABASE_URL: 'file:/data/dev.db'
+      DATABASE_URL: 'postgresql://postgres:postgres@db:5432/gamechangers'
+      PRISMA_DATABASE_URL: 'postgresql://postgres:postgres@db:5432/gamechangers'
       NEXTAUTH_URL: 'http://localhost:3000'
       NEXTAUTH_SECRET: 'super-secret'
       NEXT_PUBLIC_AUTH_ENABLED: false
@@ -16,6 +29,9 @@ services:
       DEMO_IC_PASSWORD_ENC: 'DQZAH0wYFg=='
       DEMO_MANAGER_PASSWORD_ENC: 'CQQDDkoOF1RdBhIe'
       DEMO_PASSWORD_KEY: 'demo-key-gamechangers'
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
-  db-data:
+  postgres-data:
