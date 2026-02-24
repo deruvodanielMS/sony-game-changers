@@ -25,6 +25,7 @@ export function TeamMemberCard({
   role,
   className,
   'data-testid': dataTestId,
+  onClick,
 }: TeamMemberCardProps) {
   return (
     <div
@@ -34,6 +35,8 @@ export function TeamMemberCard({
         className,
       )}
       data-testid={dataTestId}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
     >
       <Avatar src={avatarUrl} alt={name} size="lg" />
 

@@ -30,4 +30,9 @@ export interface TeamMemberCardProps {
    * Test ID for testing purposes
    */
   'data-testid'?: string
+
+  /**
+   * Click handler — called when the card is clicked
+   */
+  onClick?: () => void
 }

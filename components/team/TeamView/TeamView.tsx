@@ -1,11 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import type { KeyboardEvent } from 'react'
 import { useTranslations } from 'next-intl'
 import { m, AnimatePresence } from 'framer-motion'
 import { Grid2x2, List } from 'lucide-react'
+import { ROUTES } from '@/common/routes'
 import { SearchField } from '@/components/ui/molecules/SearchField'
-import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
 import { EmptyState } from '@/components/ui/molecules/EmptyState'
 import { TeamMemberCard } from '@/components/team/TeamMemberCard'
 import { Typography } from '@/components/ui/foundations/Typography'
@@ -15,6 +16,7 @@ import { SectionHeader } from '@/components/ui/organisms/SectionHeader'
 import { cn } from '@/utils/cn'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
+import { useRouter } from '@/i18n/navigation'
 import type { TeamViewProps, ViewMode } from './TeamView.types'
 
 const cardVariants = {
@@ -44,6 +46,7 @@ const listVariants = {
  */
 export function TeamView({ members = [], className, 'data-testid': dataTestId }: TeamViewProps) {
   const t = useTranslations('Team')
+  const router = useRouter()
 
   // Media queries must be called unconditionally
   const matchesMd = useMediaQuery(BREAKPOINTS.md)
@@ -52,26 +55,27 @@ export function TeamView({ members = [], className, 'data-testid': dataTestId }:
   const isTablet = matchesMd && !matchesLg
 
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
-  const [selectedAvatars, setSelectedAvatars] = useState<string[]>([])
   const [searchQuery, setSearchQuery] = useState('')
 
-  // Transform members to avatar options format
-  const avatarOptions = members.map((member) => ({
-    uid: member.uid,
-    name: member.name,
-    url: member.url,
-  }))
+  const handleMemberClick = (uid: string) => {
+    router.push(`${ROUTES.GAME_CHANGERS_AMBITIONS}?assignee=${uid}`)
+  }
 
-  // Filter members based on search and avatar selection
+  const handleMemberRowKeyDown = (event: KeyboardEvent<HTMLDivElement>, uid: string) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      handleMemberClick(uid)
+    }
+  }
+
+  // Filter members based on search
   const filteredMembers = members.filter((member) => {
     const matchesSearch =
       searchQuery === '' ||
       member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (member.role?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false)
 
-    const matchesAvatar = selectedAvatars.length === 0 || selectedAvatars.includes(member.uid)
-
-    return matchesSearch && matchesAvatar
+    return matchesSearch
   })
 
   return (
@@ -98,16 +102,6 @@ export function TeamView({ members = [], className, 'data-testid': dataTestId }:
             value={searchQuery}
             onChange={setSearchQuery}
           />
-
-          {/* Avatar Filter */}
-          {avatarOptions.length > 0 && (
-            <AvatarSelect
-              options={avatarOptions}
-              selected={selectedAvatars}
-              onAvatarSelect={setSelectedAvatars}
-              showItems={isMobile ? 3 : isTablet ? 3 : 5}
-            />
-          )}
 
           {/* View Toggle Switcher */}
           {!isMobile && (
@@ -164,6 +158,7 @@ export function TeamView({ members = [], className, 'data-testid': dataTestId }:
                     avatarUrl={member.url}
                     role={member.role}
                     className="h-full"
+                    onClick={() => handleMemberClick(member.uid)}
                   />
                 </m.div>
               ))}
@@ -198,6 +193,10 @@ export function TeamView({ members = [], className, 'data-testid': dataTestId }:
                     'grid grid-cols-[200px_1fr] gap-1.5 px-1.5 py-1 items-center cursor-pointer hover:bg-neutral-100 transition-colors',
                     index !== filteredMembers.length - 1 && 'border-b border-neutral-300',
                   )}
+                  onClick={() => handleMemberClick(member.uid)}
+                  onKeyDown={(event) => handleMemberRowKeyDown(event, member.uid)}
+                  role="button"
+                  tabIndex={0}
                 >
                   {/* Name column with avatar */}
                   <div className="flex gap-1 items-center">
