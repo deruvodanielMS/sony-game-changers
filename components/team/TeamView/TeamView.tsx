@@ -182,10 +182,10 @@ export function TeamView({ members = [], className, 'data-testid': dataTestId }:
               {/* Table Header */}
               <div className="grid grid-cols-[200px_1fr] gap-1.5 px-1.5 py-1 bg-neutral-100 border-b border-neutral-300">
                 <Typography variant="bodySmall" fontWeight="bold" className="uppercase">
-                  NAME
+                  {t('columnName')}
                 </Typography>
                 <Typography variant="bodySmall" fontWeight="bold" className="uppercase">
-                  ROLE
+                  {t('columnRole')}
                 </Typography>
               </div>
 

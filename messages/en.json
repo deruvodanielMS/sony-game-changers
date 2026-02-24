@@ -342,8 +342,8 @@
   "ManagerAmbitions": {
     "addLadderedAmbition": "Add laddered Ambition",
     "dismiss": "Dismiss"
-  }
-  ,"LoginForm": {
+  },
+  "LoginForm": {
     "title": "Welcome back",
     "pageTitle": "Sign in to continue",
     "emailLabel": "Email",
@@ -358,17 +358,19 @@
     "useManager": "Use Manager account"
   },
   "Team": {
-    "title": "The Team",
+    "columnName": "Name",
+    "columnRole": "Role",
     "description": "View and manage team profiles and performance activity",
-    "teamMembers": "Team Members",
-    "searchPlaceholder": "Search members...",
-    "viewGrid": "Grid view",
-    "viewList": "List view",
-    "viewSwitcherLabel": "Change view mode",
-    "totalMembers": "{count} Total Members",
     "emptyState": {
       "title": "No team members found",
       "description": "Try adjusting your search or filters"
-    }
+    },
+    "searchPlaceholder": "Search members...",
+    "teamMembers": "Team Members",
+    "title": "The Team",
+    "totalMembers": "{count} Total Members",
+    "viewGrid": "Grid view",
+    "viewList": "List view",
+    "viewSwitcherLabel": "Change view mode"
   }
 }

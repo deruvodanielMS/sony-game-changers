@@ -339,8 +339,8 @@
   },
   "Toast": {
     "closeNotification": "Fermer la notification"
-  }
-  ,"LoginForm": {
+  },
+  "LoginForm": {
     "title": "Bon retour",
     "pageTitle": "Connectez-vous pour continuer",
     "emailLabel": "Email",
@@ -355,17 +355,19 @@
     "useManager": "Compte Manager"
   },
   "Team": {
-    "title": "L'Équipe",
+    "columnName": "Nom",
+    "columnRole": "Rôle",
     "description": "Consultez et gérez les profils et l'activité de performance de l'équipe",
-    "teamMembers": "Membres de l'Équipe",
-    "searchPlaceholder": "Rechercher des membres...",
-    "viewGrid": "Affichage en grille",
-    "viewList": "Affichage en liste",
-    "viewSwitcherLabel": "Changer le mode d'affichage",
-    "totalMembers": "{count} Membres au Total",
     "emptyState": {
       "title": "Aucun membre de l'équipe trouvé",
       "description": "Essayez d'ajuster votre recherche ou vos filtres"
-    }
+    },
+    "searchPlaceholder": "Rechercher des membres...",
+    "teamMembers": "Membres de l'Équipe",
+    "title": "L'Équipe",
+    "totalMembers": "{count} Membres au Total",
+    "viewGrid": "Affichage en grille",
+    "viewList": "Affichage en liste",
+    "viewSwitcherLabel": "Changer le mode d'affichage"
   }
 }
