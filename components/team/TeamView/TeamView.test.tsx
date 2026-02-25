@@ -119,12 +119,12 @@ describe('TeamView', () => {
     expect(screen.getAllByRole('textbox')).toHaveLength(1)
   })
 
-  it('navigates to ambitions with assignee when a member card is clicked', () => {
+  it('navigates to member ambitions view when a member card is clicked', () => {
     render(<TeamView members={members} />)
 
     fireEvent.click(screen.getByRole('button', { name: 'Alice Doe' }))
 
-    expect(mockPush).toHaveBeenCalledWith('/game-changers/ambitions?assignee=user-1')
+    expect(mockPush).toHaveBeenCalledWith('/team/user-1')
   })
 
   it('navigates to ambitions on Enter key from list row', () => {
@@ -135,7 +135,7 @@ describe('TeamView', () => {
     const rowButton = screen.getByRole('button', { name: /Bob Smith/i })
     fireEvent.keyDown(rowButton, { key: 'Enter' })
 
-    expect(mockPush).toHaveBeenCalledWith('/game-changers/ambitions?assignee=user-2')
+    expect(mockPush).toHaveBeenCalledWith('/team/user-2')
   })
 
   it('navigates to ambitions on Space key from list row', () => {
@@ -146,6 +146,6 @@ describe('TeamView', () => {
     const rowButton = screen.getByRole('button', { name: /Alice Doe/i })
     fireEvent.keyDown(rowButton, { key: ' ' })
 
-    expect(mockPush).toHaveBeenCalledWith('/game-changers/ambitions?assignee=user-1')
+    expect(mockPush).toHaveBeenCalledWith('/team/user-1')
   })
 })

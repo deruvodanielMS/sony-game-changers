@@ -368,6 +368,11 @@
     "totalMembers": "{count} Membres au Total",
     "viewGrid": "Affichage en grille",
     "viewList": "Affichage en liste",
-    "viewSwitcherLabel": "Changer le mode d'affichage"
+    "viewSwitcherLabel": "Changer le mode d'affichage",
+    "memberDetails": {
+      "joinedIn": "Entré en {date}",
+      "joinedUnknown": "Date d'entrée indisponible",
+      "locationUnknown": "Localisation indisponible"
+    }
   }
 }

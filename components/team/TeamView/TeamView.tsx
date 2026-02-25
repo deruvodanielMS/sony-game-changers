@@ -37,7 +37,7 @@ const listVariants = {
 /**
  * TeamView - Displays team members in grid or list view
  *
- * Includes filtering by search and avatar selection, with view mode toggle.
+ * Includes filtering by search, with view mode toggle.
  *
  * @example
  * ```tsx
@@ -58,7 +58,7 @@ export function TeamView({ members = [], className, 'data-testid': dataTestId }:
   const [searchQuery, setSearchQuery] = useState('')
 
   const handleMemberClick = (uid: string) => {
-    router.push(`${ROUTES.GAME_CHANGERS_AMBITIONS}?assignee=${uid}`)
+    router.push(ROUTES.TEAM_MEMBER_DETAIL(uid))
   }
 
   const handleMemberRowKeyDown = (event: KeyboardEvent<HTMLDivElement>, uid: string) => {

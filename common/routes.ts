@@ -8,6 +8,7 @@ export const BASE_ROUTES = {
 
 export const ROUTES = {
   ...BASE_ROUTES,
+  TEAM_MEMBER_DETAIL: (uid: string) => `${BASE_ROUTES.TEAM}/${uid}`,
   GAME_CHANGERS_AMBITIONS: `${BASE_ROUTES.GAME_CHANGERS}/ambitions`,
   GAME_CHANGERS_AMBITIONS_DETAIL: (id: string) => `${BASE_ROUTES.GAME_CHANGERS}/ambitions/${id}`,
   GAME_CHANGERS_CHECK_INS: `${BASE_ROUTES.GAME_CHANGERS}/check-ins`,

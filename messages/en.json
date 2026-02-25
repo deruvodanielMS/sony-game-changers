@@ -371,6 +371,11 @@
     "totalMembers": "{count} Total Members",
     "viewGrid": "Grid view",
     "viewList": "List view",
-    "viewSwitcherLabel": "Change view mode"
+    "viewSwitcherLabel": "Change view mode",
+    "memberDetails": {
+      "joinedIn": "Joined in {date}",
+      "joinedUnknown": "Join date unavailable",
+      "locationUnknown": "Location unavailable"
+    }
   }
 }
