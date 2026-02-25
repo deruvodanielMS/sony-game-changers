@@ -148,141 +148,178 @@ export default function TeamMemberAmbitionsPage({ params }: { params: Promise<{ 
   }
 
   return (
-    <div className="p-1 md:pt-2 md:px-3 md:pb-3 mt-4.5 md:mt-0">
-      <FilterableContentLayout
-        header={
-          <div className="flex flex-col gap-1">
-            <AnimatedSection delay={0}>
-              <Breadcrumb
-                items={[{ label: tTeam('title'), href: ROUTES.TEAM }, { label: member.name }]}
+    <div className="mt-4.5 md:mt-0">
+      {/* Sticky section navigation — mirrors LayoutTabSection behavior in game-changers */}
+      <div className="sticky top-16 md:top-0 z-(--z-tabs) bg-neutral-0 px-1 md:px-3">
+        <div className="hidden md:flex gap-1 pt-1.5">
+          <Switcher
+            ariaLabel="Team member section navigation"
+            size="large"
+            variant="generic"
+            value={selectedSection}
+            onChange={handleSubNavChange}
+            items={[
+              {
+                id: 'ambitions',
+                label: tPages('gameChangersGoals'),
+                icon: <RadarIcon className="w-1_25 h-1_25" />,
+              },
+              {
+                id: 'check-ins',
+                label: tPages('gameChangersCheckIns'),
+                icon: <CalendarIcon className="w-1_25 h-1_25" />,
+              },
+              {
+                id: 'feedback',
+                label: tPages('gameChangersFeedback'),
+                icon: <ChatIcon className="w-1_25 h-1_25" />,
+              },
+              {
+                id: 'performance-reviews',
+                label: tPages('gameChangersPerformanceReviews'),
+                icon: <UserActivityIcon className="w-1_25 h-1_25" />,
+              },
+            ]}
+          />
+        </div>
+        <div className="md:hidden overflow-x-auto py-1 scrollbar-hide">
+          <Switcher
+            ariaLabel="Team member section navigation"
+            size="large"
+            variant="generic"
+            value={selectedSection}
+            onChange={handleSubNavChange}
+            items={[
+              {
+                id: 'ambitions',
+                label: tPages('gameChangersGoals'),
+                icon: <RadarIcon className="w-1_25 h-1_25" />,
+              },
+              {
+                id: 'check-ins',
+                label: tPages('gameChangersCheckIns'),
+                icon: <CalendarIcon className="w-1_25 h-1_25" />,
+              },
+              {
+                id: 'feedback',
+                label: tPages('gameChangersFeedback'),
+                icon: <ChatIcon className="w-1_25 h-1_25" />,
+              },
+              {
+                id: 'performance-reviews',
+                label: tPages('gameChangersPerformanceReviews'),
+                icon: <UserActivityIcon className="w-1_25 h-1_25" />,
+              },
+            ]}
+          />
+        </div>
+      </div>
+
+      {/* Page content */}
+      <div className="p-1 pt-0 md:pt-1.5 md:px-3 md:pb-3">
+        <FilterableContentLayout
+          header={
+            <div className="flex flex-col gap-1">
+              <AnimatedSection delay={0}>
+                <Breadcrumb
+                  items={[{ label: tTeam('title'), href: ROUTES.TEAM }, { label: member.name }]}
+                />
+              </AnimatedSection>
+
+              <AnimatedSection delay={0.1}>
+                <TeamMemberHeaderCard
+                  name={member.name}
+                  role={member.role}
+                  avatarUrl={member.url}
+                  location={metadata?.location || tTeam('memberDetails.locationUnknown')}
+                  joinedLabel={
+                    metadata?.joinedDate
+                      ? tTeam('memberDetails.joinedIn', { date: metadata.joinedDate })
+                      : tTeam('memberDetails.joinedUnknown')
+                  }
+                />
+              </AnimatedSection>
+            </div>
+          }
+          filters={_filters}
+          searchField={{
+            value: selectedSearchValue,
+            onChange: setSelectedSearchValue,
+            placeholder: tGoals('filterDrawer.searchPlaceholder'),
+            label: tGoals('filterDrawer.searchLabel'),
+            clearable: true,
+          }}
+          onClearFilters={handleClearFilters}
+          drawerTitle={tGoals('filterDrawer.title')}
+          translations={{
+            filtersButton: tGoals('filtersButton'),
+            searchLabel: tGoals('filterDrawer.searchLabel'),
+            filterByLabel: tGoals('filterDrawer.filterByLabel'),
+            teamMembersLabel: tGoals('filterDrawer.teamMembersLabel'),
+            clearAll: tGoals('filterDrawer.clearAll'),
+            showResults: tGoals('filterDrawer.showResults'),
+          }}
+          contentClassName="gap-1 md:gap-1"
+          activeFiltersCount={activeFiltersCount}
+          primaryAction={
+            <Button
+              variant="primary"
+              className="text-neutral-0"
+              leftIcon={<CirclePlus />}
+              onClick={() => setIsNewAmbitionOpen(true)}
+            >
+              {tGoals('newGoal')}
+            </Button>
+          }
+          tabs={
+            <AnimatedSection delay={0.15} className="mt-1">
+              <Tabs
+                items={tabItems}
+                value={currentTab}
+                onChange={handleTabChange}
+                className="bg-neutral-0"
               />
             </AnimatedSection>
-
-            <AnimatedSection delay={0.05}>
-              <Switcher
-                ariaLabel="Team member section navigation"
-                size="large"
-                variant="generic"
-                value={selectedSection}
-                onChange={handleSubNavChange}
-                items={[
-                  {
-                    id: 'ambitions',
-                    label: tPages('gameChangersGoals'),
-                    icon: <RadarIcon className="w-1_25 h-1_25" />,
-                  },
-                  {
-                    id: 'check-ins',
-                    label: tPages('gameChangersCheckIns'),
-                    icon: <CalendarIcon className="w-1_25 h-1_25" />,
-                  },
-                  {
-                    id: 'feedback',
-                    label: tPages('gameChangersFeedback'),
-                    icon: <ChatIcon className="w-1_25 h-1_25" />,
-                  },
-                  {
-                    id: 'performance-reviews',
-                    label: tPages('gameChangersPerformanceReviews'),
-                    icon: <UserActivityIcon className="w-1_25 h-1_25" />,
-                  },
-                ]}
-              />
+          }
+        >
+          {filteredList.length === 0 ? (
+            <AnimatedSection delay={0.2} className="flex-1 flex flex-col">
+              {currentTab === 'active' ? (
+                <EmptyState
+                  title={tGoals('emptyState.active.title')}
+                  description={tGoals('emptyState.active.description')}
+                  actionLabel={tGoals('newGoal')}
+                  actionIcon={<CirclePlus />}
+                  onAction={() => setIsNewAmbitionOpen(true)}
+                />
+              ) : (
+                <EmptyState
+                  title={tGoals('emptyState.archived.title')}
+                  description={tGoals('emptyState.archived.description')}
+                />
+              )}
             </AnimatedSection>
+          ) : (
+            <div className="flex flex-col gap-1">
+              {filteredList.map((goalData, index) => {
+                const { ladderedGoals, ...goal } = goalData
+                const delay = Math.min(0.2 + index * 0.05, 0.45)
+                return (
+                  <AnimatedSection key={goal.id} delay={delay}>
+                    <GoalCard
+                      ladderGoals={ladderedGoals}
+                      goal={goal}
+                      onAddLadderedGoal={() => setIsNewAmbitionOpen(true)}
+                    />
+                  </AnimatedSection>
+                )
+              })}
+            </div>
+          )}
+        </FilterableContentLayout>
 
-            <AnimatedSection delay={0.1}>
-              <TeamMemberHeaderCard
-                name={member.name}
-                role={member.role}
-                avatarUrl={member.url}
-                location={metadata?.location || tTeam('memberDetails.locationUnknown')}
-                joinedLabel={
-                  metadata?.joinedDate
-                    ? tTeam('memberDetails.joinedIn', { date: metadata.joinedDate })
-                    : tTeam('memberDetails.joinedUnknown')
-                }
-              />
-            </AnimatedSection>
-          </div>
-        }
-        filters={_filters}
-        searchField={{
-          value: selectedSearchValue,
-          onChange: setSelectedSearchValue,
-          placeholder: tGoals('filterDrawer.searchPlaceholder'),
-          label: tGoals('filterDrawer.searchLabel'),
-          clearable: true,
-        }}
-        onClearFilters={handleClearFilters}
-        drawerTitle={tGoals('filterDrawer.title')}
-        translations={{
-          filtersButton: tGoals('filtersButton'),
-          searchLabel: tGoals('filterDrawer.searchLabel'),
-          filterByLabel: tGoals('filterDrawer.filterByLabel'),
-          teamMembersLabel: tGoals('filterDrawer.teamMembersLabel'),
-          clearAll: tGoals('filterDrawer.clearAll'),
-          showResults: tGoals('filterDrawer.showResults'),
-        }}
-        contentClassName="gap-1 md:gap-1"
-        activeFiltersCount={activeFiltersCount}
-        primaryAction={
-          <Button
-            variant="primary"
-            className="text-neutral-0"
-            leftIcon={<CirclePlus />}
-            onClick={() => setIsNewAmbitionOpen(true)}
-          >
-            {tGoals('newGoal')}
-          </Button>
-        }
-        tabs={
-          <AnimatedSection delay={0.15} className="mt-1">
-            <Tabs
-              items={tabItems}
-              value={currentTab}
-              onChange={handleTabChange}
-              className="bg-neutral-0"
-            />
-          </AnimatedSection>
-        }
-      >
-        {filteredList.length === 0 ? (
-          <AnimatedSection delay={0.2} className="flex-1 flex flex-col">
-            {currentTab === 'active' ? (
-              <EmptyState
-                title={tGoals('emptyState.active.title')}
-                description={tGoals('emptyState.active.description')}
-                actionLabel={tGoals('newGoal')}
-                actionIcon={<CirclePlus />}
-                onAction={() => setIsNewAmbitionOpen(true)}
-              />
-            ) : (
-              <EmptyState
-                title={tGoals('emptyState.archived.title')}
-                description={tGoals('emptyState.archived.description')}
-              />
-            )}
-          </AnimatedSection>
-        ) : (
-          <div className="flex flex-col gap-1">
-            {filteredList.map((goalData, index) => {
-              const { ladderedGoals, ...goal } = goalData
-              const delay = Math.min(0.2 + index * 0.05, 0.45)
-              return (
-                <AnimatedSection key={goal.id} delay={delay}>
-                  <GoalCard
-                    ladderGoals={ladderedGoals}
-                    goal={goal}
-                    onAddLadderedGoal={() => setIsNewAmbitionOpen(true)}
-                  />
-                </AnimatedSection>
-              )
-            })}
-          </div>
-        )}
-      </FilterableContentLayout>
-
-      <NewAmbitionModal open={isNewAmbitionOpen} onClose={() => setIsNewAmbitionOpen(false)} />
+        <NewAmbitionModal open={isNewAmbitionOpen} onClose={() => setIsNewAmbitionOpen(false)} />
+      </div>
     </div>
   )
 }

@@ -83,9 +83,10 @@ export function TeamView({ members = [], className, 'data-testid': dataTestId }:
       {/* Header Section */}
       <SectionHeader title={t('title')} description={t('description')} />
 
-      {/* Subtitle + Filters */}
+      {/* Subtitle + Filters — sticky below mobile header, flush to top on desktop */}
       <div
         className={cn(
+          'sticky top-16 md:top-0 z-(--z-sticky-filters) bg-neutral-0 py-1',
           'flex w-full gap-1.5',
           isMobile ? 'flex-col items-stretch' : 'flex-row items-center justify-between',
         )}
