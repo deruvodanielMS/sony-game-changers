@@ -183,7 +183,7 @@ export const useGoalsStore = create<GoalsState>((set) => {
 
                 return {
                   ...goal,
-                  ladderedGoals: [...(goal.ladderedGoals || []), ladderedChild],
+                  ladderedGoals: [ladderedChild, ...(goal.ladderedGoals || [])],
                 }
               }
               return goal
@@ -197,7 +197,6 @@ export const useGoalsStore = create<GoalsState>((set) => {
                 selected: {
                   ...selected,
                   ladderedGoals: [
-                    ...(selected.ladderedGoals || []),
                     {
                       id: newGoal.id,
                       title: newGoal.title,
@@ -210,6 +209,7 @@ export const useGoalsStore = create<GoalsState>((set) => {
                       userName: newGoal.userName,
                       avatarUrl: newGoal.avatarUrl,
                     },
+                    ...(selected.ladderedGoals || []),
                   ],
                 },
               }
@@ -273,7 +273,7 @@ export const useGoalsStore = create<GoalsState>((set) => {
               if (goal.id === goalData.parentId) {
                 return {
                   ...goal,
-                  ladderedGoals: [...(goal.ladderedGoals || []), ladderedChild],
+                  ladderedGoals: [ladderedChild, ...(goal.ladderedGoals || [])],
                 }
               }
               return goal
@@ -286,7 +286,7 @@ export const useGoalsStore = create<GoalsState>((set) => {
                 list: updatedList,
                 selected: {
                   ...selected,
-                  ladderedGoals: [...(selected.ladderedGoals || []), ladderedChild],
+                  ladderedGoals: [ladderedChild, ...(selected.ladderedGoals || [])],
                 },
               }
             }
@@ -307,8 +307,11 @@ export const useGoalsStore = create<GoalsState>((set) => {
           const errorData = await res.json().catch(() => ({}))
           throw new Error(errorData.error || 'Failed to fetch goals')
         }
-        const goals = await res.json()
-        set({ list: goals, listError: null })
+        const goals: GoalUI[] = await res.json()
+        const sorted = [...goals].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        )
+        set({ list: sorted, listError: null })
       } catch (error) {
         console.error('[fetchList] Error:', error)
         const errorMessage = error instanceof Error ? error.message : 'Failed to fetch goals'
@@ -322,7 +325,12 @@ export const useGoalsStore = create<GoalsState>((set) => {
         if (!res.ok) {
           throw new Error('Failed to fetch goal')
         }
-        const goal = await res.json()
+        const goal: GoalUI = await res.json()
+        if (goal.ladderedGoals) {
+          goal.ladderedGoals = [...goal.ladderedGoals].sort(
+            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          )
+        }
         set((state) => ({
           list: upsertGoal(state.list, goal),
           selected: state.selected?.id === goal.id ? { ...state.selected, ...goal } : goal,

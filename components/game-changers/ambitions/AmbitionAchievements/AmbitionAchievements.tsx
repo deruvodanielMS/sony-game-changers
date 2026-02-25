@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import { CollapsibleSection } from '@/components/ui/molecules/CollapsibleSection'
 import { AchievementItem } from '@/components/ui/molecules/AchievementItem'
@@ -23,6 +23,10 @@ export function AmbitionAchievements({
   const isMobile = !useMediaQuery(BREAKPOINTS.md)
   const [isOpen, setIsOpen] = useState(defaultOpen)
   const [achievements, setAchievements] = useState<Achievement[]>(initialAchievements)
+
+  useEffect(() => {
+    setAchievements(initialAchievements)
+  }, [initialAchievements])
 
   const handleAchievementToggle = (id: string | number) => {
     setAchievements((prev) => {
@@ -70,7 +74,7 @@ export function AmbitionAchievements({
               key={achievement.id}
               text={achievement.title}
               completed={isAchievementCompleted(achievement.status as GoalStatus)}
-              progress={achievement.progress || 'off-track'}
+              progress={achievement.progress || 'on-track'}
               onProgressChange={(progress) => handleProgressChange(achievement.id, progress)}
               size={isMobile ? 'sm' : 'md'}
             />

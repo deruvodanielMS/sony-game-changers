@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { m } from 'framer-motion'
+import { m, AnimatePresence } from 'framer-motion'
 import { Plus } from 'lucide-react'
 import { Card } from '@/components/ui/atoms/Card/Card'
 import { GoalCardProps } from './GoalCard.types'
@@ -112,33 +112,44 @@ export function GoalCard({
         )}
 
         {/* Laddered Goals Section */}
-        {open && hasChildrenGoals && (
-          <div className="flex flex-col items-start w-full">
-            {/* Laddered top arrow with dot - connects MainAmbition to first LadderedAmbition */}
-            <div className="flex items-start w-full pl-2_5">
-              <Arrow type="Higher top" className="shrink-0 w-3" />
-            </div>
-            {ladderGoals.map((ladderGoal, index) => {
-              const isLast = index === ladderGoals.length - 1
-              const arrowType = isLast ? 'Laddered bottom' : 'Laddered middle'
+        <AnimatePresence initial={false}>
+          {open && hasChildrenGoals && (
+            <m.div
+              key="laddered-goals"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="overflow-hidden w-full"
+            >
+              <div className="flex flex-col items-start w-full">
+                {/* Laddered top arrow with dot - connects MainAmbition to first LadderedAmbition */}
+                <div className="flex items-start w-full pl-2.5">
+                  <Arrow type="Higher top" className="shrink-0 w-3" />
+                </div>
+                {ladderGoals.map((ladderGoal, index) => {
+                  const isLast = index === ladderGoals.length - 1
+                  const arrowType = isLast ? 'Laddered bottom' : 'Laddered middle'
 
-              return (
-                <LadderedAmbition
-                  key={ladderGoal.id}
-                  title={ladderGoal.title}
-                  userName={ladderGoal.userName}
-                  avatarUrl={ladderGoal.avatarUrl}
-                  progress={ladderGoal.progress}
-                  status={ladderGoal.status}
-                  statusLabel={getStatusLabel(ladderGoal.status)}
-                  statusVariant={getStatusVariant(ladderGoal.status)}
-                  arrowType={arrowType}
-                  href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(ladderGoal.id)}
-                />
-              )
-            })}
-          </div>
-        )}
+                  return (
+                    <LadderedAmbition
+                      key={ladderGoal.id}
+                      title={ladderGoal.title}
+                      userName={ladderGoal.userName}
+                      avatarUrl={ladderGoal.avatarUrl}
+                      progress={ladderGoal.progress}
+                      status={ladderGoal.status}
+                      statusLabel={getStatusLabel(ladderGoal.status)}
+                      statusVariant={getStatusVariant(ladderGoal.status)}
+                      arrowType={arrowType}
+                      href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(ladderGoal.id)}
+                    />
+                  )
+                })}
+              </div>
+            </m.div>
+          )}
+        </AnimatePresence>
 
         {/* Bottom Section */}
         {(allowAddChildrenGoals || !!hasChildrenGoals) && (

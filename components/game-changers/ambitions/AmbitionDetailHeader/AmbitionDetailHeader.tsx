@@ -25,6 +25,8 @@ export function AmbitionDetailHeader({
   progress,
   createdDate,
   updatedDate,
+  privacy,
+  privacyCount,
   className,
 }: AmbitionDetailHeaderProps) {
   const t = useTranslations('AmbitionDetail')
@@ -50,7 +52,7 @@ export function AmbitionDetailHeader({
       <div
         className={cn(
           'flex flex-1 flex-col items-start min-h-px min-w-px',
-          isMobile ? 'gap-1' : 'gap-0.5',
+          isMobile ? 'gap-1' : 'gap-1.5',
         )}
       >
         {/* Title and Avatar row */}
@@ -76,7 +78,7 @@ export function AmbitionDetailHeader({
             'flex w-full',
             isMobile
               ? 'flex-col gap-0.5 items-start'
-              : 'flex-wrap gap-x-1 gap-y-0.5 items-center pl-4_5',
+              : 'flex-wrap gap-x-1.5 gap-y-0.5 items-center pl-4',
           )}
         >
           {/* Type Display with Icon */}
@@ -112,11 +114,28 @@ export function AmbitionDetailHeader({
               {t('metadata.lastUpdate')}: <span className="font-bold">{updatedDate}</span>
             </Typography>
           )}
+
+          {/* Privacy */}
+          {privacy && (
+            <div className="flex gap-0.5 items-center shrink-0">
+              <Typography variant="bodySmall" color="neutral500">
+                {t('metadata.privacy')}:{' '}
+                <span className="font-bold">
+                  {t(privacy === 'public' ? 'metadata.privacyPublic' : 'metadata.privacyPrivate')}
+                </span>
+              </Typography>
+              {privacyCount !== undefined && (
+                <span className="inline-flex items-center justify-center rounded-badge bg-neutral-200 text-neutral-600 text-body-tiny leading-body-tiny px-0.5 min-w-5 h-5">
+                  {privacyCount}
+                </span>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
       {/* Right section - Status text or Progress Bar */}
-      <div className={cn('flex items-center shrink-0', isMobile ? 'w-full' : 'w-[150px]')}>
+      <div className={cn('flex items-center justify-end shrink-0', isMobile ? 'w-full' : 'w-37.5')}>
         {showProgress ? (
           <AmbitionStatus
             variant={progressVariant}

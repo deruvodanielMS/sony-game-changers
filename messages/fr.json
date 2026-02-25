@@ -286,7 +286,10 @@
       "createdBy": "Créé par",
       "assignedTo": "Assigné à",
       "lastUpdate": "Dernière mise à jour",
-      "on": "le"
+      "on": "le",
+      "privacy": "Confidentialité",
+      "privacyPublic": "Public",
+      "privacyPrivate": "Privé"
     },
     "progress": {
       "completed": "Terminé",
