@@ -60,6 +60,7 @@ export type Goal = {
     id: string
     title: string
   }
+  privacy?: 'public' | 'private'
 }
 
 export type GoalUI = Goal & {
@@ -89,6 +90,7 @@ export type GoalAmbitionsResponse = {
     id: string
     title: string
   }
+  privacy?: 'public' | 'private'
   goal_ambitions?: Array<GoalAAA>
   goal_achievements?: Array<GoalAAA & { progress: AchievementProgressStatus | null }>
   goal_actions?: Array<GoalAAA>
