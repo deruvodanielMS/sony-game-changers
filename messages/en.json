@@ -138,7 +138,8 @@
     },
     "shareWith": {
       "label": "Share with",
-      "placeholder": "Add team members"
+      "placeholder": "Search team members...",
+      "addButton": "Add"
     },
     "ladderedFrom": {
       "label": "Laddered from:",
@@ -187,6 +188,14 @@
     "setupDescription": "Update the type, assignee, and privacy level for this Ambition.",
     "contentTitle": "Ambition content & Framework (AAA)",
     "contentDescription": "Update the AAA framework (Ambition, actions, and achievements) for this goal.",
+    "privacy": {
+      "helperPrivate": "Private Ambitions are only visible to the owner, their manager, and anyone you've granted permission to below."
+    },
+    "shareWith": {
+      "label": "Share with",
+      "placeholder": "Search team members...",
+      "addButton": "Add"
+    },
     "actions": {
       "cancel": "Cancel",
       "next": "Next",

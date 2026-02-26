@@ -16,6 +16,7 @@ import { GOAL_TYPES, type GoalType } from '@/domain/goal'
 import { useAmbitionForm, useAmbitionFormOptions } from '@/hooks/useAmbitionForm'
 import { ActionsField, AchievementsField } from '@/components/game-changers/ambitions/shared'
 import { cn } from '@/utils/cn'
+import { newAmbitionShareWithOptions } from '@/repositories/mocks/data/goals'
 import type { EditAmbitionFormProps } from './EditAmbitionForm.types'
 
 export function EditAmbitionForm({
@@ -129,6 +130,56 @@ export function EditAmbitionForm({
             )}
           </FormControl>
         </AnimatedSection>
+
+        {state.privacy === 'private' && (
+          <AnimatedSection delay={0.5}>
+            <div className="flex flex-col gap-1">
+              <Typography variant="bodySmall" color="textSecondary">
+                {t('privacy.helperPrivate')}
+              </Typography>
+              <FormControl label={t('shareWith.label')}>
+                <BigSelectField
+                  options={newAmbitionShareWithOptions.map((m) => ({
+                    value: m.value,
+                    label: m.name,
+                  }))}
+                  placeholder={t('shareWith.placeholder')}
+                  onValueChange={(value) => {
+                    const member = newAmbitionShareWithOptions.find((m) => m.value === value)
+                    if (member && !state.sharedMembers.some((m) => m.value === value)) {
+                      handlers.setSharedMembers([...state.sharedMembers, member])
+                    }
+                  }}
+                  hidePlaceholderIcon
+                />
+              </FormControl>
+              {state.sharedMembers.length > 0 && (
+                <div className="flex flex-wrap gap-0_5">
+                  {state.sharedMembers.map((member) => (
+                    <span
+                      key={member.value}
+                      className="inline-flex items-center gap-0_5 rounded-full bg-(--color-neutral-100) px-2 py-0_5 text-body-small text-neutral-900"
+                    >
+                      {member.name}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handlers.setSharedMembers(
+                            state.sharedMembers.filter((m) => m.value !== member.value),
+                          )
+                        }
+                        className="text-(--color-neutral-500) hover:text-neutral-900 transition-colors"
+                        aria-label={`Remove ${member.name}`}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </AnimatedSection>
+        )}
       </div>
     )
   }

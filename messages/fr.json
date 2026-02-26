@@ -138,7 +138,8 @@
     },
     "shareWith": {
       "label": "Partager avec",
-      "placeholder": "Ajouter des membres de l'équipe"
+      "placeholder": "Rechercher des membres de l'équipe...",
+      "addButton": "Ajouter"
     },
     "ladderedFrom": {
       "label": "Dérivé de :",
@@ -185,6 +186,14 @@
     "setupDescription": "Mettez à jour le type, le responsable et le niveau de confidentialité de cette ambition.",
     "contentTitle": "Contenu de l'ambition & Framework (AAA)",
     "contentDescription": "Mettez à jour le framework AAA (Ambition, actions et achievements) pour cet objectif.",
+    "privacy": {
+      "helperPrivate": "Les Ambitions privées ne sont visibles que par le propriétaire, son manager et toute personne autorisée ci-dessous."
+    },
+    "shareWith": {
+      "label": "Partager avec",
+      "placeholder": "Rechercher des membres de l'équipe...",
+      "addButton": "Ajouter"
+    },
     "actions": {
       "cancel": "Annuler",
       "next": "Suivant",
