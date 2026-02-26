@@ -36,7 +36,7 @@ export function GoalCard({
   onToggleExpand,
   'data-testid': dataTestId,
 }: GoalCardProps) {
-  const { id, title, avatarUrl, goalType, status, userName, parent } = goal
+  const { id, title, avatarUrl, goalType, status, userName, parent, privacy } = goal
   const hasChildrenGoals = ladderGoals.length
 
   // Goals with laddered ambitions should be expanded by default
@@ -71,7 +71,7 @@ export function GoalCard({
     >
       <Card
         data-testid={dataTestId}
-        className="flex flex-col gap-0_25 items-stretch relative hover:hover:border-neutral-400 transition-colors"
+        className="flex flex-col gap-1_5 items-stretch relative hover:hover:border-neutral-400 transition-colors"
       >
         {/* Higher Ambition Section with Arrow Connection */}
         {parent && (
@@ -103,6 +103,7 @@ export function GoalCard({
                   progress={goal.progress}
                   href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
                   showLadderedIndicator={!!hasChildrenGoals}
+                  privacy={privacy}
                 />
               </div>
             </div>
@@ -120,49 +121,50 @@ export function GoalCard({
             progress={goal.progress}
             href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
             showLadderedIndicator={!!hasChildrenGoals}
+            privacy={privacy}
           />
         )}
 
         {/* Laddered Goals Section */}
         {goalType === GOAL_TYPES.BUSINESS && (
-        <AnimatePresence initial={false}>
-          {open && hasChildrenGoals && (
-            <m.div
-              key="laddered-goals"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              className="overflow-hidden w-full"
-            >
-              <div className="flex flex-col items-start w-full">
-                {/* Laddered top arrow with dot - connects MainAmbition to first LadderedAmbition */}
-                <div className="flex items-start w-full pl-2.5">
-                  <Arrow type="Higher top" className="shrink-0 w-3" />
-                </div>
-                {ladderGoals.map((ladderGoal, index) => {
-                  const isLast = index === ladderGoals.length - 1
-                  const arrowType = isLast ? 'Laddered bottom' : 'Laddered middle'
+          <AnimatePresence initial={false}>
+            {open && hasChildrenGoals && (
+              <m.div
+                key="laddered-goals"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                className="overflow-hidden w-full"
+              >
+                <div className="flex flex-col items-start w-full">
+                  {/* Laddered top arrow with dot - connects MainAmbition to first LadderedAmbition */}
+                  <div className="flex items-start w-full pl-2.5">
+                    <Arrow type="Higher top" className="shrink-0 w-3" />
+                  </div>
+                  {ladderGoals.map((ladderGoal, index) => {
+                    const isLast = index === ladderGoals.length - 1
+                    const arrowType = isLast ? 'Laddered bottom' : 'Laddered middle'
 
-                  return (
-                    <LadderedAmbition
-                      key={ladderGoal.id}
-                      title={ladderGoal.title}
-                      userName={ladderGoal.userName}
-                      avatarUrl={ladderGoal.avatarUrl}
-                      progress={ladderGoal.progress}
-                      status={ladderGoal.status}
-                      statusLabel={getStatusLabel(ladderGoal.status)}
-                      statusVariant={getStatusVariant(ladderGoal.status)}
-                      arrowType={arrowType}
-                      href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(ladderGoal.id)}
-                    />
-                  )
-                })}
-              </div>
-            </m.div>
-          )}
-        </AnimatePresence>
+                    return (
+                      <LadderedAmbition
+                        key={ladderGoal.id}
+                        title={ladderGoal.title}
+                        userName={ladderGoal.userName}
+                        avatarUrl={ladderGoal.avatarUrl}
+                        progress={ladderGoal.progress}
+                        status={ladderGoal.status}
+                        statusLabel={getStatusLabel(ladderGoal.status)}
+                        statusVariant={getStatusVariant(ladderGoal.status)}
+                        arrowType={arrowType}
+                        href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(ladderGoal.id)}
+                      />
+                    )
+                  })}
+                </div>
+              </m.div>
+            )}
+          </AnimatePresence>
         )}
 
         {/* Bottom Section */}
@@ -209,12 +211,7 @@ export function GoalCard({
 
             {/* Right side: Toggle button */}
             {!!hasChildrenGoals && (
-              <Button
-                variant="link"
-                size="small"
-                onClick={toggleOpen}
-                className="shrink-0 !h-auto"
-              >
+              <Button variant="link" size="small" onClick={toggleOpen} className="shrink-0 !h-auto">
                 <span className="hidden sm:inline">
                   {open ? t('hideLadderedGoalsLabel') : t('viewLadderedGoalsLabel')}
                 </span>
