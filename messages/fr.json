@@ -42,7 +42,7 @@
   },
   "Goals": {
     "title": "Ambitions de votre équipe",
-    "description": "C'est l'endroit idéal pour une description de section étonnante.",
+    "description": "Suivez et gérez les Ambitions pour l'année fiscale FY{year}.",
     "completed": "Complété",
     "nonStarted": "Non commencé",
     "newGoal": "Nouvelle Ambition",
