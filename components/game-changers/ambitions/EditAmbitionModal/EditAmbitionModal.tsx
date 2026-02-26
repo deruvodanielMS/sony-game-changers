@@ -165,7 +165,7 @@ export function EditAmbitionModal({
 
   const customFooter = useMemo(
     () => (
-      <div className="-mx-1_5 -mb-1_5 mt-auto flex w-[calc(100%+3rem)] items-center justify-between gap-1 rounded-b-large border-t border-neutral-200 px-1_5 py-1 bg-neutral-50">
+      <div className="-mx-4 -mb-1.5 mt-auto flex w-[calc(100%+8rem)] items-center justify-between gap-1 rounded-b-large border-t border-neutral-200 px-4 pt-1 pb-1.5 bg-neutral-50">
         {actions}
       </div>
     ),
@@ -201,7 +201,7 @@ export function EditAmbitionModal({
       actions={actions}
       customFooter={customFooter}
       mobileBodyClassName="flex flex-col gap-1_5"
-      className="!h-screen"
+      className="pt-2.5! px-4! pb-1.5!"
       aria-label={t('title')}
       data-test-id={dataTestId}
     >
