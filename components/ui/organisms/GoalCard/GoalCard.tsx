@@ -19,6 +19,7 @@ import {
   getStatusVariant,
   getStatusLabel,
 } from '@/components/ui/atoms/AmbitionStatus/AmbitionStatus.types'
+import { GOAL_TYPES, GOAL_STATUSES } from '@/domain/goal'
 
 const cardHoverVariants = {
   rest: {},
@@ -31,13 +32,24 @@ export function GoalCard({
   allowAddChildrenGoals,
   onAddLadderedGoal,
   parentAmbitions,
+  isExpanded,
+  onToggleExpand,
   'data-testid': dataTestId,
 }: GoalCardProps) {
   const { id, title, avatarUrl, goalType, status, userName, parent } = goal
   const hasChildrenGoals = ladderGoals.length
 
   // Goals with laddered ambitions should be expanded by default
-  const [open, setOpen] = useState(hasChildrenGoals > 0)
+  const isControlled = isExpanded !== undefined
+  const [internalOpen, setInternalOpen] = useState(hasChildrenGoals > 0)
+  const open = isControlled ? isExpanded : internalOpen
+  const toggleOpen = () => {
+    if (onToggleExpand) {
+      onToggleExpand()
+    } else {
+      setInternalOpen(!internalOpen)
+    }
+  }
   const [isLadderingModalOpen, setIsLadderingModalOpen] = useState(false)
   const t = useTranslations('GoalCard')
 
@@ -112,6 +124,7 @@ export function GoalCard({
         )}
 
         {/* Laddered Goals Section */}
+        {goalType === GOAL_TYPES.BUSINESS && (
         <AnimatePresence initial={false}>
           {open && hasChildrenGoals && (
             <m.div
@@ -150,9 +163,10 @@ export function GoalCard({
             </m.div>
           )}
         </AnimatePresence>
+        )}
 
         {/* Bottom Section */}
-        {(allowAddChildrenGoals || !!hasChildrenGoals) && (
+        {goalType === GOAL_TYPES.BUSINESS && (allowAddChildrenGoals || !!hasChildrenGoals) && (
           <div className="flex items-center justify-between w-full gap-0_5">
             {/* Left side */}
             <div className="flex gap-0_5 sm:gap-1 items-center min-w-0">
@@ -163,6 +177,7 @@ export function GoalCard({
                   iconOnly
                   className="sm:hidden shrink-0 !h-auto"
                   onClick={onAddLadderedGoal}
+                  disabled={status === GOAL_STATUSES.DRAFT}
                   aria-label={t('addLadderedGoalLabel')}
                 >
                   <Plus width={20} />
@@ -174,6 +189,7 @@ export function GoalCard({
                   size="small"
                   leftIcon={<Plus width={20} />}
                   onClick={onAddLadderedGoal}
+                  disabled={status === GOAL_STATUSES.DRAFT}
                   className="hidden sm:flex shrink-0 !h-auto"
                 >
                   {t('addLadderedGoalLabel')}
@@ -196,7 +212,7 @@ export function GoalCard({
               <Button
                 variant="link"
                 size="small"
-                onClick={() => setOpen(!open)}
+                onClick={toggleOpen}
                 className="shrink-0 !h-auto"
               >
                 <span className="hidden sm:inline">

@@ -18,6 +18,7 @@ import type { TabItem } from '@/components/ui/molecules/Tabs'
 import { useGoalsStore } from '@/stores/goals.store'
 import { AmbitionsLoading } from '@/components/ui/molecules/Loadings'
 import { GOAL_STATUSES } from '@/domain/goal'
+import { getFiscalYear } from '@/common/fiscalYear'
 
 type TabValue = 'active' | 'drafts' | 'archived'
 const ASSIGNEE_QUERY_PARAM = 'assignee'
@@ -34,6 +35,7 @@ export default function GameChangersGoalsPage() {
   const [isNewAmbitionOpen, setIsNewAmbitionOpen] = useState(false)
   const [isManagerAmbitionsVisible, setIsManagerAmbitionsVisible] = useState(true)
   const [selectedParentAmbitionId, setSelectedParentAmbitionId] = useState<string | null>(null)
+  const [expandedGoalId, setExpandedGoalId] = useState<string | null>(null)
   const [hasInitializedAssigneeFilter, setHasInitializedAssigneeFilter] = useState(false)
   const {
     list,
@@ -50,7 +52,8 @@ export default function GameChangersGoalsPage() {
 
   // Fetch goals, manager ambitions and filters on mount
   useEffect(() => {
-    fetchList()
+    const fiscalYear = getFiscalYear()
+    fetchList(fiscalYear)
     fetchManagerAmbitions()
     fetchGoalFilters()
 
@@ -266,6 +269,10 @@ export default function GameChangersGoalsPage() {
                   <GoalCard
                     ladderGoals={ladderedGoals}
                     goal={goal}
+                    isExpanded={expandedGoalId === goal.id}
+                    onToggleExpand={() =>
+                      setExpandedGoalId(expandedGoalId === goal.id ? null : goal.id)
+                    }
                     onAddLadderedGoal={() => {
                       setSelectedParentAmbitionId(goal.id)
                       setIsNewAmbitionOpen(true)

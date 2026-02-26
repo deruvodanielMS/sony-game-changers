@@ -7,5 +7,7 @@ export type GoalCardProps = {
   allowAddChildrenGoals?: boolean
   onAddLadderedGoal?: () => void
   parentAmbitions?: ParentAmbition[]
+  isExpanded?: boolean
+  onToggleExpand?: () => void
   'data-testid'?: string
 }
