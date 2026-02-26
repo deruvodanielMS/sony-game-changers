@@ -20,6 +20,7 @@ import { ActionsField, AchievementsField } from '@/components/game-changers/ambi
 import { cn } from '@/utils/cn'
 import { newAmbitionShareWithOptions } from '@/repositories/mocks/data/goals'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
+import { Tag } from '@/components/ui/atoms/Tag'
 import type { NewAmbitionFormProps } from './NewAmbitionForm.types'
 
 export function NewAmbitionForm({
@@ -211,24 +212,18 @@ export function NewAmbitionForm({
               {state.sharedMembers.length > 0 && (
                 <div className="flex flex-wrap gap-0_5">
                   {state.sharedMembers.map((member) => (
-                    <span
+                    <Tag
                       key={member.value}
-                      className="inline-flex items-center gap-0_5 rounded-full border border-neutral-300 px-3 py-0_5 text-body-small text-neutral-900"
-                    >
-                      {member.name}
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handlers.setSharedMembers(
-                            state.sharedMembers.filter((m) => m.value !== member.value),
-                          )
-                        }
-                        className="text-neutral-500 hover:text-neutral-900 transition-colors leading-none"
-                        aria-label={`Remove ${member.name}`}
-                      >
-                        ×
-                      </button>
-                    </span>
+                      label={member.name}
+                      variant="outlined"
+                      size="sm"
+                      onRemove={() =>
+                        handlers.setSharedMembers(
+                          state.sharedMembers.filter((m) => m.value !== member.value),
+                        )
+                      }
+                      removeAriaLabel={`Remove ${member.name}`}
+                    />
                   ))}
                 </div>
               )}
