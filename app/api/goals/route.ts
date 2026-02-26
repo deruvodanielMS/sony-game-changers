@@ -40,7 +40,7 @@ const userService = new UserService(userRepository)
 
 const goalService = new GoalService(goalRepository, userService)
 
-export async function GET() {
+export async function GET(request: Request) {
   const session = await getServerSession(authOptions)
 
   if (!session) {
@@ -48,7 +48,12 @@ export async function GET() {
   }
 
   try {
-    const goals = await goalService.listGoals(session?.user?.email || undefined)
+    const url = new URL(request.url)
+    const fiscalYear = url.searchParams.get('fiscalYear')
+    const goals = await goalService.listGoals(
+      session?.user?.email || undefined,
+      fiscalYear ? Number(fiscalYear) : undefined,
+    )
     return NextResponse.json(goals)
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'

@@ -55,17 +55,27 @@ const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
 }
 
 export class PrismaGoalRepository implements GoalRepository {
-  async findGoals(email?: string): Promise<GoalUI[]> {
+  async findGoals(email?: string, fiscalYear?: number): Promise<GoalUI[]> {
     const list = (await prisma.goals.findMany({
-      where: email
-        ? {
-            people_assignedTo: {
-              is: {
-                email: email,
-              },
-            },
-          }
-        : undefined,
+      where:
+        email || fiscalYear
+          ? {
+              ...(email
+                ? {
+                    people_assignedTo: {
+                      is: {
+                        email: email,
+                      },
+                    },
+                  }
+                : {}),
+              ...(fiscalYear
+                ? {
+                    performance_periods: { fiscalYear },
+                  }
+                : {}),
+            }
+          : undefined,
       orderBy: {
         createdAt: 'desc',
       },

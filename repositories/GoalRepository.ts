@@ -8,7 +8,7 @@ import {
 } from '@/domain/goal'
 
 export interface GoalRepository {
-  findGoals(email?: string): Promise<Goal[]>
+  findGoals(email?: string, fiscalYear?: number): Promise<Goal[]>
   findGoalById(id: string): Promise<Goal | null>
   createGoal(goal: CreateGoalDTO): Promise<Goal>
   updateGoal(id: string, goal: UpdateGoalDTO): Promise<Goal>

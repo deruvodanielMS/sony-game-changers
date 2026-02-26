@@ -14,8 +14,12 @@ import { GoalRepository } from '../GoalRepository'
 export class VendorGoalRepository implements GoalRepository {
   private readonly baseUrl = process.env.VENDOR_API_URL!
 
-  async findGoals(email?: string): Promise<Goal[]> {
-    const res = await fetch(`${this.baseUrl}/goals${email ? `?email=${email}` : ''}`, {
+  async findGoals(email?: string, fiscalYear?: number): Promise<Goal[]> {
+    const params = new URLSearchParams()
+    if (email) params.set('email', email)
+    if (fiscalYear !== undefined) params.set('fiscalYear', String(fiscalYear))
+    const query = params.toString()
+    const res = await fetch(`${this.baseUrl}/goals${query ? `?${query}` : ''}`, {
       headers: {
         Authorization: `Bearer ${process.env.VENDOR_API_TOKEN}`,
       },
@@ -182,6 +186,7 @@ export class VendorGoalRepository implements GoalRepository {
       progress: 0,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      privacy: apiGoal.privacy ?? 'public',
     }
   }
 }

@@ -35,7 +35,7 @@ export class MockRepository implements GoalRepository, UserRepository {
   }
 
   // GoalRepository
-  async findGoals(_email?: string): Promise<GoalUI[]> {
+  async findGoals(_email?: string, _fiscalYear?: number): Promise<GoalUI[]> {
     return getGoals()
   }
 

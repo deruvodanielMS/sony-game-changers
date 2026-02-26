@@ -16,8 +16,8 @@ export class GoalService {
     private readonly userService?: UserService,
   ) {}
 
-  listGoals(email?: string) {
-    return this.goalRepo.findGoals(email)
+  listGoals(email?: string, fiscalYear?: number) {
+    return this.goalRepo.findGoals(email, fiscalYear)
   }
 
   getGoal(id: string) {

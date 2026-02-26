@@ -54,7 +54,7 @@ type GoalsState = {
   // Goal updates (edit)
   updateGoal: (id: string, data: UpdateGoalDTO) => Promise<boolean>
 
-  fetchList: () => void
+  fetchList: (fiscalYear?: number) => void
   fetchGoal: (id: string) => void
   fetchManagerAmbitions: () => void
   fetchGoalFilters: () => void
@@ -299,9 +299,12 @@ export const useGoalsStore = create<GoalsState>((set) => {
       }
     },
 
-    fetchList: async () => {
+    fetchList: async (fiscalYear?: number) => {
       try {
-        const res = await fetch(API_ROUTES.GOALS)
+        const url = fiscalYear
+          ? `${API_ROUTES.GOALS}?fiscalYear=${fiscalYear}`
+          : API_ROUTES.GOALS
+        const res = await fetch(url)
 
         if (!res.ok) {
           const errorData = await res.json().catch(() => ({}))
