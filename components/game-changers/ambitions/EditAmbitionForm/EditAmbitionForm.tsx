@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { XCircle } from 'lucide-react'
+import { Info, Users, XCircle } from 'lucide-react'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { BREAKPOINTS } from '@/common/breakpoints'
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
@@ -17,6 +17,7 @@ import { useAmbitionForm, useAmbitionFormOptions } from '@/hooks/useAmbitionForm
 import { ActionsField, AchievementsField } from '@/components/game-changers/ambitions/shared'
 import { cn } from '@/utils/cn'
 import { newAmbitionShareWithOptions } from '@/repositories/mocks/data/goals'
+import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import type { EditAmbitionFormProps } from './EditAmbitionForm.types'
 
 export function EditAmbitionForm({
@@ -38,6 +39,18 @@ export function EditAmbitionForm({
   })
   const { typeItems, privacyItems, ownerSelectOptions, ladderedFromOptions } =
     useAmbitionFormOptions()
+
+  // Share-with search state
+  const [shareSearch, setShareSearch] = useState('')
+  const [shareDropdownOpen, setShareDropdownOpen] = useState(false)
+  const shareWrapperRef = useRef<HTMLDivElement>(null)
+  useOnClickOutside(shareWrapperRef, () => setShareDropdownOpen(false))
+
+  const filteredShareOptions = newAmbitionShareWithOptions.filter(
+    (m) =>
+      !state.sharedMembers.some((s) => s.value === m.value) &&
+      m.name.toLowerCase().includes(shareSearch.toLowerCase()),
+  )
 
   // Notify parent of validation state changes
   useEffect(() => {
@@ -134,31 +147,58 @@ export function EditAmbitionForm({
         {state.privacy === 'private' && (
           <AnimatedSection delay={0.5}>
             <div className="flex flex-col gap-1">
-              <Typography variant="bodySmall" color="textSecondary">
-                {t('privacy.helperPrivate')}
-              </Typography>
-              <FormControl label={t('shareWith.label')}>
-                <BigSelectField
-                  options={newAmbitionShareWithOptions.map((m) => ({
-                    value: m.value,
-                    label: m.name,
-                  }))}
-                  placeholder={t('shareWith.placeholder')}
-                  onValueChange={(value) => {
-                    const member = newAmbitionShareWithOptions.find((m) => m.value === value)
-                    if (member && !state.sharedMembers.some((m) => m.value === value)) {
-                      handlers.setSharedMembers([...state.sharedMembers, member])
-                    }
-                  }}
-                  hidePlaceholderIcon
-                />
-              </FormControl>
+              {/* Info row */}
+              <div className="flex items-start gap-0_5">
+                <Info size={16} className="text-feedback-info-500 shrink-0 mt-0_25" />
+                <Typography variant="bodySmall" color="textSecondary">
+                  {t('privacy.helperPrivate')}
+                </Typography>
+              </div>
+
+              {/* Share with label + search */}
+              <div className="flex flex-col gap-0_5">
+                <Typography variant="bodySmall" className="font-semibold">
+                  {t('shareWith.label')}
+                </Typography>
+                <div className="relative" ref={shareWrapperRef}>
+                  <TextField
+                    value={shareSearch}
+                    onChange={(e) => setShareSearch(e.target.value)}
+                    onFocus={() => setShareDropdownOpen(true)}
+                    placeholder={t('shareWith.placeholder')}
+                    fullWidth
+                    leftIcon={<Users size={16} className="text-neutral-500" />}
+                  />
+                  {shareDropdownOpen && filteredShareOptions.length > 0 && (
+                    <div className="absolute top-full left-0 right-0 z-50 mt-0_25 rounded-small border border-neutral-300 bg-neutral-0 shadow-select max-h-[200px] overflow-auto">
+                      {filteredShareOptions.map((member) => (
+                        <button
+                          key={member.value}
+                          type="button"
+                          className="w-full flex items-center gap-1 px-1 py-0_75 text-body text-neutral-1000 hover:bg-neutral-100 transition-colors text-left"
+                          onMouseDown={(e) => {
+                            e.preventDefault()
+                            handlers.setSharedMembers([...state.sharedMembers, member])
+                            setShareSearch('')
+                            setShareDropdownOpen(false)
+                          }}
+                        >
+                          <Users size={16} className="text-neutral-500 shrink-0" />
+                          {member.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Selected member chips */}
               {state.sharedMembers.length > 0 && (
                 <div className="flex flex-wrap gap-0_5">
                   {state.sharedMembers.map((member) => (
                     <span
                       key={member.value}
-                      className="inline-flex items-center gap-0_5 rounded-full bg-(--color-neutral-100) px-2 py-0_5 text-body-small text-neutral-900"
+                      className="inline-flex items-center gap-0_5 rounded-full border border-neutral-300 px-3 py-0_5 text-body-small text-neutral-900"
                     >
                       {member.name}
                       <button
@@ -168,7 +208,7 @@ export function EditAmbitionForm({
                             state.sharedMembers.filter((m) => m.value !== member.value),
                           )
                         }
-                        className="text-(--color-neutral-500) hover:text-neutral-900 transition-colors"
+                        className="text-neutral-500 hover:text-neutral-900 transition-colors leading-none"
                         aria-label={`Remove ${member.name}`}
                       >
                         ×
