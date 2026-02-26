@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Target, Sprout, BriefcaseBusiness, Shrub } from 'lucide-react'
+import { Target, Sprout, BriefcaseBusiness, UsersRound } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import type { TypeIconProps, AmbitionType } from './TypeIcon.types'
 import { GOAL_TYPES } from '@/domain/goal'
@@ -16,8 +16,8 @@ const typeToIconKey: Record<AmbitionType, IconKey> = {
 
 const defaultIcons: Record<IconKey, typeof Sprout> = {
   business: BriefcaseBusiness,
-  manager_effectiveness: Sprout,
-  personal_growth_and_development: Shrub,
+  manager_effectiveness: UsersRound,
+  personal_growth_and_development: Sprout,
 }
 
 const variantStyles = {
