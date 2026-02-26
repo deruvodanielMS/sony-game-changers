@@ -11,11 +11,11 @@ export const tagVariants = cva(
     variants: {
       variant: {
         filled: 'bg-neutral-1000 text-neutral-0',
-        outlined: 'border border-neutral-300 bg-neutral-0 text-neutral-900',
+        outlined: 'border border-neutral-1000 bg-neutral-0 text-neutral-900',
       },
       size: {
-        sm: 'px-1_5 py-0_25 text-body-small leading-body-small',
-        md: 'px-2 py-0_5 text-body leading-body',
+        sm: 'px-0_5 py-0_25 text-body-small leading-body-small',
+        md: 'px-0_5 py-0_5 text-body leading-body',
       },
     },
     defaultVariants: {
