@@ -79,7 +79,7 @@ export function AvatarSelect({
             <button
               type="button"
               onClick={() => setOpen(!open)}
-              className="flex items-center justify-center w-2 h-2 shrink-0 grow-0 -ml-0_25 z-2 rounded-full bg-neutral-0 border-2 border-feedback-info-500 hover:bg-extra-purple-100 transition-colors"
+              className="flex items-center justify-center w-2 h-2 shrink-0 grow-0 -ml-0_25 z-2 rounded-full bg-neutral-0 border-2 border-feedback-info-500 hover:bg-extra-purple-100 transition-colors cursor-pointer"
             >
               <Plus width={18} height={18} className="text-feedback-info-500" />
             </button>

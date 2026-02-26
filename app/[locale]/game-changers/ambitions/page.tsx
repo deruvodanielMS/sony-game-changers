@@ -20,11 +20,13 @@ import { AmbitionsLoading } from '@/components/ui/molecules/Loadings'
 import { GOAL_STATUSES } from '@/domain/goal'
 
 type TabValue = 'active' | 'drafts' | 'archived'
+const ASSIGNEE_QUERY_PARAM = 'assignee'
 
 export default function GameChangersGoalsPage() {
   const t = useTranslations('Goals')
   const router = useRouter()
   const searchParams = useSearchParams()
+  const assigneeFromQuery = searchParams.get(ASSIGNEE_QUERY_PARAM)
   const [selectedAvatars, setSelectedAvatars] = useState<Array<string>>([])
   const [selectedFilterType, setSelectedFilterType] = useState<Array<string>>([])
   const [selectedFilterStatus, setSelectedFilterStatus] = useState<Array<string>>([])
@@ -32,6 +34,7 @@ export default function GameChangersGoalsPage() {
   const [isNewAmbitionOpen, setIsNewAmbitionOpen] = useState(false)
   const [isManagerAmbitionsVisible, setIsManagerAmbitionsVisible] = useState(true)
   const [selectedParentAmbitionId, setSelectedParentAmbitionId] = useState<string | null>(null)
+  const [hasInitializedAssigneeFilter, setHasInitializedAssigneeFilter] = useState(false)
   const {
     list,
     listError,
@@ -56,6 +59,26 @@ export default function GameChangersGoalsPage() {
 
   const filters = goalFilters?.filters ?? []
   const avatarSelector = goalFilters?.avatarSelector ?? { options: [], showItems: 4 }
+
+  useEffect(() => {
+    if (hasInitializedAssigneeFilter) {
+      return
+    }
+
+    if (!assigneeFromQuery) {
+      setHasInitializedAssigneeFilter(true)
+      return
+    }
+
+    const hasValidAssignee = avatarSelector.options.some(
+      (option) => option.uid === assigneeFromQuery,
+    )
+    if (hasValidAssignee) {
+      setSelectedAvatars([assigneeFromQuery])
+    }
+
+    setHasInitializedAssigneeFilter(true)
+  }, [assigneeFromQuery, avatarSelector.options, hasInitializedAssigneeFilter])
 
   const _filters = [
     { onSelect: setSelectedFilterStatus, selected: selectedFilterStatus, ...filters[0] },

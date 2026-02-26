@@ -239,7 +239,10 @@
       "createdBy": "Created by",
       "assignedTo": "Assigned to",
       "lastUpdate": "Last Update",
-      "on": "on"
+      "on": "on",
+      "privacy": "Privacy",
+      "privacyPublic": "Public",
+      "privacyPrivate": "Private"
     },
     "progress": {
       "completed": "Completed",
@@ -342,8 +345,8 @@
   "ManagerAmbitions": {
     "addLadderedAmbition": "Add laddered Ambition",
     "dismiss": "Dismiss"
-  }
-  ,"LoginForm": {
+  },
+  "LoginForm": {
     "title": "Welcome back",
     "pageTitle": "Sign in to continue",
     "emailLabel": "Email",
@@ -356,5 +359,26 @@
     "demoHelp": "Demo: quick-fill credentials",
     "useIC": "Use IC account",
     "useManager": "Use Manager account"
+  },
+  "Team": {
+    "columnName": "Name",
+    "columnRole": "Role",
+    "description": "View and manage team profiles and performance activity",
+    "emptyState": {
+      "title": "No team members found",
+      "description": "Try adjusting your search or filters"
+    },
+    "searchPlaceholder": "Search members...",
+    "teamMembers": "Team Members",
+    "title": "The Team",
+    "totalMembers": "{count} Total Members",
+    "viewGrid": "Grid view",
+    "viewList": "List view",
+    "viewSwitcherLabel": "Change view mode",
+    "memberDetails": {
+      "joinedIn": "Joined in {date}",
+      "joinedUnknown": "Join date unavailable",
+      "locationUnknown": "Location unavailable"
+    }
   }
 }

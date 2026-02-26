@@ -13,5 +13,7 @@ export interface AmbitionDetailHeaderProps {
   progress: number
   createdDate?: string
   updatedDate?: string
+  privacy?: 'public' | 'private'
+  privacyCount?: number
   className?: string
 }
