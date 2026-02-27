@@ -57,6 +57,7 @@ export class MockRepository implements GoalRepository, UserRepository {
       userName: assignedUser ? `${assignedUser.name} ${assignedUser.lastname}` : 'Unassigned',
       avatarUrl: assignedUser?.profileImageUrl ?? null,
       progress: goal.progress ?? 0,
+      privacy: goal.privacy ?? 'public',
       createdAt: nowIso(),
       updatedAt: nowIso(),
       ladderedGoals: [],

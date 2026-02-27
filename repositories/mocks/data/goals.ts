@@ -119,6 +119,7 @@ export const goals: GoalUI[] = [
     goalType: 'manager_effectiveness',
     description: 'Increase efficiency and quality of delivery',
     avatarUrl: '/profile-img/profile.png',
+    privacy: 'public',
     parent: {
       id: 'division-ambition-1',
       title: 'Accelerate platform innovation',
@@ -198,6 +199,7 @@ export const goals: GoalUI[] = [
     description:
       'Ensure the team consistently meets commitments by improving planning and estimation',
     avatarUrl: '/profile-img/profile.png',
+    privacy: 'public',
     parent: {
       id: 'division-ambition-2',
       title: 'Improve customer satisfaction',

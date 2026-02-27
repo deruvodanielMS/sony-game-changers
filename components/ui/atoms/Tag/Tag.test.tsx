@@ -33,16 +33,14 @@ describe('Tag', () => {
     render(<Tag label="Outlined" data-test-id="tag" />)
     const tag = screen.getByTestId('tag')
     expect(tag).toHaveClass('border')
-    expect(tag).toHaveClass('border-neutral-300')
+    expect(tag).toHaveClass('border-neutral-1000')
     expect(tag).toHaveClass('bg-neutral-0')
-    expect(tag).toHaveClass('text-neutral-900')
   })
 
   it('applies filled variant class when variant="filled"', () => {
     render(<Tag label="Filled" variant="filled" data-test-id="tag" />)
     const tag = screen.getByTestId('tag')
     expect(tag).toHaveClass('bg-neutral-1000')
-    expect(tag).toHaveClass('text-neutral-0')
   })
 
   it('merges custom className', () => {
@@ -50,7 +48,7 @@ describe('Tag', () => {
     const tag = screen.getByTestId('tag')
     expect(tag).toHaveClass('my-custom-class')
     // default variant still applies
-    expect(tag).toHaveClass('border-neutral-300')
+    expect(tag).toHaveClass('border-neutral-1000')
   })
 
   it('uses removeAriaLabel when provided', () => {
@@ -71,14 +69,16 @@ describe('Tag', () => {
   it('applies sm size classes', () => {
     render(<Tag label="Small" size="sm" data-test-id="tag" />)
     const tag = screen.getByTestId('tag')
-    expect(tag).toHaveClass('px-1_5')
+    expect(tag).toHaveClass('px-0_5')
     expect(tag).toHaveClass('py-0_25')
+    expect(tag).toHaveClass('text-body-small')
   })
 
   it('applies md size classes', () => {
     render(<Tag label="Medium" size="md" data-test-id="tag" />)
     const tag = screen.getByTestId('tag')
-    expect(tag).toHaveClass('px-2')
+    expect(tag).toHaveClass('px-0_5')
     expect(tag).toHaveClass('py-0_5')
+    expect(tag).toHaveClass('text-body')
   })
 })

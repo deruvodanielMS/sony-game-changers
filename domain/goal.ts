@@ -127,6 +127,7 @@ export type CreateGoalDTO = {
   createdBy?: string
   periodId: string
   progress: number
+  privacy?: 'public' | 'private'
   goalAchievements: CreateGoalAchievementDTO[]
   goalActions: CreateGoalActionDTO[]
 }

@@ -340,6 +340,7 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
     createdAt,
     updatedAt,
     parent,
+    privacy,
   } = selected
 
   // Calculate progress based on laddered goals completion
@@ -464,6 +465,7 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
             progress={progress}
             createdDate={formatDate(createdAt)}
             updatedDate={formatDateTime(updatedAt)}
+            privacy={privacy}
           />
         </AnimatedSection>
       </div>
