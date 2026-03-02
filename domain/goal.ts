@@ -61,6 +61,7 @@ export type Goal = {
     title: string
   }
   privacy?: 'public' | 'private'
+  sharedWith?: Array<{ id: string; name: string; avatarUrl?: string }>
 }
 
 export type GoalUI = Goal & {
@@ -128,6 +129,7 @@ export type CreateGoalDTO = {
   periodId: string
   progress: number
   privacy?: 'public' | 'private'
+  sharedWith?: Array<{ id: string; name: string; avatarUrl?: string }>
   goalAchievements: CreateGoalAchievementDTO[]
   goalActions: CreateGoalActionDTO[]
 }

@@ -71,6 +71,12 @@ export function EditAmbitionModal({
           description: formData.description,
           goalType: formData.goalType,
           parentId: formData.ladderedFrom || undefined,
+          privacy: formData.privacy,
+          sharedWith: formData.sharedMembers.map((m) => ({
+            id: m.value,
+            name: m.name,
+            avatarUrl: m.avatarUrl,
+          })),
           goalAchievements: formData.achievements.map((achievement) => ({
             title: achievement,
             status: 'pending',

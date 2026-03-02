@@ -12,6 +12,10 @@ vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => key,
 }))
 
+vi.mock('next-auth/react', () => ({
+  useSession: () => ({ data: null, status: 'unauthenticated' }),
+}))
+
 const useMediaQueryMock = vi.fn()
 vi.mock('@/hooks/useMediaQuery', () => ({
   useMediaQuery: (...args: unknown[]) => useMediaQueryMock(...args),

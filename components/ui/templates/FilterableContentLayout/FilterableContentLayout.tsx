@@ -9,6 +9,7 @@ import { Typography } from '@/components/ui/foundations/Typography'
 import { AvatarSelect } from '@/components/ui/molecules/AvatarSelect'
 import { SearchField } from '@/components/ui/molecules/SearchField'
 import { FilterBar } from '@/components/ui/organisms/GoalFilters/FilterBar'
+import { Badge } from '@/components/ui/atoms/Badge'
 import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
 import { useScrollDirection } from '@/hooks/useScrollDirection'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
@@ -24,18 +25,13 @@ const SHADOW_THRESHOLD = 10 // px - threshold to show sticky shadow
 function FilterBadge({ count, className }: { count: number; className?: string }) {
   if (count === 0) return null
   return (
-    <span
-      className={cn(
-        'inline-flex items-center justify-center min-w-[16px] h-[16px] px-[4px]',
-        'text-[12px] font-bold leading-[16px] text-neutral-0',
-        'rounded-full bg-feedback-error-500',
-        'outline outline-2 outline-neutral-0',
-        className,
-      )}
+    <Badge
+      type="counter"
+      count={count}
+      variant="error"
       aria-label={`${count} active filters`}
-    >
-      {count > 9 ? '+9' : count}
-    </span>
+      className={className}
+    />
   )
 }
 
@@ -247,20 +243,21 @@ export function FilterableContentLayout({
       >
         <AnimatedSection delay={0.05}>
           <div className="flex gap-1 justify-between items-center">
-            <Button
-              variant="secondary"
-              className="relative"
-              leftIcon={<SlidersHorizontal width={20} />}
-              onClick={handleOpenDrawer}
-              aria-label={
-                activeFiltersCount > 0
-                  ? `${translations.filtersButton} (${activeFiltersCount} active)`
-                  : translations.filtersButton
-              }
-            >
-              {translations.filtersButton}
+            <div className="relative">
+              <Button
+                variant="secondary"
+                leftIcon={<SlidersHorizontal width={20} />}
+                onClick={handleOpenDrawer}
+                aria-label={
+                  activeFiltersCount > 0
+                    ? `${translations.filtersButton} (${activeFiltersCount} active)`
+                    : translations.filtersButton
+                }
+              >
+                {translations.filtersButton}
+              </Button>
               <FilterBadge count={activeFiltersCount} className="absolute -top-0_25 -right-0_25" />
-            </Button>
+            </div>
             {primaryAction && <div className="shrink-0">{primaryAction}</div>}
           </div>
         </AnimatedSection>
@@ -387,22 +384,21 @@ export function FilterableContentLayout({
             >
               {translations.clearAll}
             </Button>
-            <Button
-              variant="primary"
-              onClick={handleApplyFilters}
-              className="flex-1 text-neutral-0 relative"
-              aria-label={
-                localActiveCount > 0
-                  ? `${translations.showResults} (${localActiveCount} active filters)`
-                  : translations.showResults
-              }
-            >
-              {translations.showResults}
-              <FilterBadge
-                count={localActiveCount}
-                className="ml-0_5 bg-neutral-0 text-feedback-error-500 outline-feedback-error-500"
-              />
-            </Button>
+            <div className="relative flex-1">
+              <Button
+                variant="primary"
+                onClick={handleApplyFilters}
+                className="w-full text-neutral-0"
+                aria-label={
+                  localActiveCount > 0
+                    ? `${translations.showResults} (${localActiveCount} active filters)`
+                    : translations.showResults
+                }
+              >
+                {translations.showResults}
+              </Button>
+              <FilterBadge count={localActiveCount} className="absolute -top-0_25 -right-0_25" />
+            </div>
           </div>
         </div>
       </Drawer>

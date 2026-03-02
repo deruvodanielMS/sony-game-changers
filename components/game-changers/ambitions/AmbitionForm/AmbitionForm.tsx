@@ -1,0 +1,324 @@
+'use client'
+
+import { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
+import { useSession } from 'next-auth/react'
+import { Info, XCircle } from 'lucide-react'
+import { useMediaQuery } from '@/hooks/useMediaQuery'
+import { BREAKPOINTS } from '@/common/breakpoints'
+import { AnimatedSection } from '@/components/ui/foundations/AnimatedSection'
+import { FormControl } from '@/components/ui/molecules/FormControl'
+import { Switcher } from '@/components/ui/molecules/Switcher'
+import { RadioGroup } from '@/components/ui/atoms/RadioGroup'
+import { BigSelectField } from '@/components/ui/molecules/BigSelectField'
+import { Typography } from '@/components/ui/foundations/Typography'
+import { TextField } from '@/components/ui/atoms/TextField'
+import { Avatar } from '@/components/ui/atoms/Avatar'
+import { GOAL_TYPES, type GoalType } from '@/domain/goal'
+import { useGoalsStore } from '@/stores/goals.store'
+import { useAmbitionForm, useAmbitionFormOptions } from '@/hooks/useAmbitionForm'
+import { ActionsField, AchievementsField } from '@/components/game-changers/ambitions/shared'
+import { cn } from '@/utils/cn'
+import { newAmbitionShareWithOptions } from '@/repositories/mocks/data/goals'
+import { useOnClickOutside } from '@/hooks/useOnclickOutside'
+import { Tag } from '@/components/ui/atoms/Tag'
+import type { AmbitionFormProps } from './AmbitionForm.types'
+
+export function AmbitionForm({
+  mode,
+  goal,
+  parentAmbitionId,
+  className,
+  step = 1,
+  onValidationChange,
+  onSubmit,
+  validateRef,
+  'data-test-id': dataTestId,
+}: AmbitionFormProps) {
+  const tCreate = useTranslations('CreateGoal')
+  const tEdit = useTranslations('EditGoal')
+  // Use EditGoal for step titles/descriptions in edit mode; CreateGoal for all form fields
+  const t = mode === 'edit' ? tEdit : tCreate
+
+  const { data: session } = useSession()
+  const isMobile = !useMediaQuery(BREAKPOINTS.md)
+  const { goalFilters } = useGoalsStore()
+
+  const { state, handlers, getFormData, isStepValid } = useAmbitionForm(
+    mode === 'edit' ? { initialGoal: goal } : { parentAmbitionId },
+  )
+  const { typeItems, privacyItems, ownerSelectOptions, ladderedFromOptions } =
+    useAmbitionFormOptions()
+
+  // Share-with search state
+  const [shareSearch, setShareSearch] = useState('')
+  const [shareDropdownOpen, setShareDropdownOpen] = useState(false)
+  const shareWrapperRef = useRef<HTMLDivElement>(null)
+  useOnClickOutside(shareWrapperRef, () => setShareDropdownOpen(false))
+
+  const filteredShareOptions = newAmbitionShareWithOptions.filter(
+    (m) =>
+      !state.sharedMembers.some((s) => s.value === m.value) &&
+      m.name.toLowerCase().includes(shareSearch.toLowerCase()),
+  )
+
+  // Pre-select owner based on logged-in user (create mode only)
+  useEffect(() => {
+    if (mode !== 'create') return
+    if (!state.owner && session?.user?.name && goalFilters?.avatarSelector?.options) {
+      const currentUser = goalFilters.avatarSelector.options.find(
+        (option) => option.name === session.user?.name,
+      )
+      if (currentUser) {
+        handlers.setOwner(currentUser.uid)
+      }
+    }
+  }, [mode, session, goalFilters, state.owner, handlers])
+
+  // Notify parent of validation state changes
+  useEffect(() => {
+    onValidationChange?.(isStepValid(step))
+  }, [step, isStepValid, onValidationChange])
+
+  // Update parent with form data on step 2
+  useEffect(() => {
+    if (step === 2 && onSubmit) {
+      onSubmit(getFormData())
+    }
+  }, [step, getFormData, onSubmit])
+
+  // Expose validation function via ref
+  useEffect(() => {
+    if (!validateRef) return
+    validateRef.current = () => handlers.validate(step)
+  }, [validateRef, handlers, step])
+
+  // ── Step 1: Ambition Setup ────────────────────────────────────────────────
+  if (step === 1) {
+    return (
+      <div className={cn('flex flex-col gap-2.5', className)} data-test-id={dataTestId}>
+        <AnimatedSection delay={0.1}>
+          <div className="flex flex-col gap-0.25">
+            <Typography variant="h5">{t('setupTitle')}</Typography>
+            <Typography variant="body" color="textSecondary">
+              {t('setupDescription')}
+            </Typography>
+          </div>
+        </AnimatedSection>
+
+        <AnimatedSection delay={0.2}>
+          <FormControl label={tCreate('type.label')} mandatory>
+            {isMobile ? (
+              <RadioGroup
+                items={typeItems}
+                value={state.goalType}
+                onChange={(value) => handlers.setGoalType(value as GoalType)}
+                size="large"
+                ariaLabel={tCreate('type.label')}
+              />
+            ) : (
+              <div className="self-start">
+                <Switcher
+                  items={typeItems}
+                  value={state.goalType}
+                  onChange={(value) => handlers.setGoalType(value as GoalType)}
+                  size="large"
+                  ariaLabel={tCreate('type.label')}
+                />
+              </div>
+            )}
+          </FormControl>
+        </AnimatedSection>
+
+        <AnimatedSection delay={0.3}>
+          <BigSelectField
+            options={ownerSelectOptions}
+            label={tCreate('owner.label')}
+            value={state.owner}
+            onValueChange={handlers.setOwner}
+            placeholder={tCreate('owner.placeholder')}
+            required
+            hideDescriptionInDropdown
+            error={state.errors.owner ? tCreate('owner.error') : undefined}
+          />
+        </AnimatedSection>
+
+        <AnimatedSection delay={0.4}>
+          <FormControl label={tCreate('privacy.label')} mandatory>
+            {isMobile ? (
+              <RadioGroup
+                items={privacyItems}
+                value={state.privacy}
+                onChange={(value) => handlers.setPrivacy(value as 'public' | 'private')}
+                size="small"
+                ariaLabel={tCreate('privacy.label')}
+              />
+            ) : (
+              <div className="self-start">
+                <Switcher
+                  items={privacyItems}
+                  value={state.privacy}
+                  onChange={(value) => handlers.setPrivacy(value as 'public' | 'private')}
+                  size="small"
+                  ariaLabel={tCreate('privacy.label')}
+                />
+              </div>
+            )}
+          </FormControl>
+        </AnimatedSection>
+
+        {state.privacy === 'private' && (
+          <AnimatedSection delay={0.5}>
+            <div className="flex flex-col gap-1">
+              {/* Info row */}
+              <div className="flex items-start gap-0.5">
+                <Info size={16} className="text-feedback-info-500 shrink-0 mt-0.25" />
+                <Typography variant="bodySmall" color="textSecondary">
+                  {t('privacy.helperPrivate')}
+                </Typography>
+              </div>
+
+              {/* Share with label + search */}
+              <div className="flex flex-col gap-0.5">
+                <Typography variant="bodySmall" className="font-semibold">
+                  {t('shareWith.label')}
+                </Typography>
+                <div className="relative" ref={shareWrapperRef}>
+                  <TextField
+                    value={shareSearch}
+                    onChange={(e) => {
+                      setShareSearch(e.target.value)
+                      setShareDropdownOpen(true)
+                    }}
+                    onFocus={() => setShareDropdownOpen(true)}
+                    onClick={() => setShareDropdownOpen(true)}
+                    placeholder={tCreate('shareWith.placeholder')}
+                    fullWidth
+                  />
+                  {shareDropdownOpen && filteredShareOptions.length > 0 && (
+                    <div className="absolute bottom-full left-0 right-0 z-50 mb-1 rounded-small border border-neutral-300 bg-neutral-0 shadow-select max-h-50 overflow-auto">
+                      {filteredShareOptions.map((member) => (
+                        <button
+                          key={member.value}
+                          type="button"
+                          className="w-full flex items-center gap-1 px-1 py-0.75 text-body text-neutral-1000 hover:bg-neutral-100 transition-colors text-left"
+                          onMouseDown={(e) => {
+                            e.preventDefault()
+                            handlers.setSharedMembers([...state.sharedMembers, member])
+                            setShareSearch('')
+                            setShareDropdownOpen(false)
+                          }}
+                        >
+                          <Avatar src={member.avatarUrl} alt={member.name} size="sm" />
+                          {member.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Selected member chips */}
+              {state.sharedMembers.length > 0 && (
+                <div className="flex flex-wrap gap-0.5">
+                  {state.sharedMembers.map((member) => (
+                    <Tag
+                      key={member.value}
+                      label={member.name}
+                      variant="outlined"
+                      size="sm"
+                      onRemove={() =>
+                        handlers.setSharedMembers(
+                          state.sharedMembers.filter((m) => m.value !== member.value),
+                        )
+                      }
+                      removeAriaLabel={`Remove ${member.name}`}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          </AnimatedSection>
+        )}
+      </div>
+    )
+  }
+
+  // ── Step 2: Ambition Content & Framework (AAA) ────────────────────────────
+  return (
+    <div className={cn('flex flex-col gap-2.5', className)} data-test-id={dataTestId}>
+      <AnimatedSection delay={0.1}>
+        <div className="flex flex-col gap-0.25">
+          <Typography variant="h5">{t('contentTitle')}</Typography>
+          <Typography variant="body" color="textSecondary">
+            {t('contentDescription')}
+          </Typography>
+        </div>
+      </AnimatedSection>
+
+      {state.goalType === GOAL_TYPES.BUSINESS && (
+        <AnimatedSection delay={0.2}>
+          <BigSelectField
+            options={ladderedFromOptions}
+            label={tCreate('ladderedFrom.label')}
+            value={state.ladderedFrom}
+            onValueChange={handlers.setLadderedFrom}
+            placeholder={tCreate('ladderedFrom.placeholder')}
+            hidePlaceholderIcon
+            required
+            error={
+              state.errors.ladderedFrom
+                ? tCreate('ladderedFrom.error') || 'This field is required'
+                : undefined
+            }
+          />
+        </AnimatedSection>
+      )}
+
+      <AnimatedSection delay={state.goalType === GOAL_TYPES.BUSINESS ? 0.3 : 0.2}>
+        <FormControl label={tCreate('ambitionName.label')} mandatory fullWidth>
+          <TextField
+            value={state.ambitionName}
+            onChange={(e) => handlers.setAmbitionName(e.target.value)}
+            placeholder={tCreate('ambitionName.placeholder')}
+            fullWidth
+            aria-invalid={state.errors.ambitionName}
+          />
+          {state.errors.ambitionName && (
+            <div className="flex items-center gap-0.5 mt-0.5">
+              <XCircle width={20} height={20} className="text-feedback-error-500 shrink-0" />
+              <span
+                className="text-body-small leading-body-small font-normal"
+                style={{ color: 'var(--feedback-error-500)' }}
+              >
+                {tCreate('ambitionName.error') || 'This field is required'}
+              </span>
+            </div>
+          )}
+        </FormControl>
+      </AnimatedSection>
+
+      <AnimatedSection delay={state.goalType === GOAL_TYPES.BUSINESS ? 0.4 : 0.3}>
+        <ActionsField
+          items={state.actions}
+          hasError={state.errors.actions}
+          onAdd={handlers.addAction}
+          onRemove={handlers.removeAction}
+          onUpdate={handlers.updateAction}
+        />
+      </AnimatedSection>
+
+      <AnimatedSection delay={state.goalType === GOAL_TYPES.BUSINESS ? 0.5 : 0.4}>
+        <AchievementsField
+          items={state.achievements}
+          hasError={state.errors.achievements}
+          onAdd={handlers.addAchievement}
+          onRemove={handlers.removeAchievement}
+          onUpdate={handlers.updateAchievement}
+        />
+      </AnimatedSection>
+    </div>
+  )
+}
+
+AmbitionForm.displayName = 'AmbitionForm'

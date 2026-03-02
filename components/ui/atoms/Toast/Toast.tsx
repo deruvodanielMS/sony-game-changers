@@ -1,26 +1,15 @@
 'use client'
 
-import { CheckCircle, XCircle, Info, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/utils/cn'
+import { Badge } from '@/components/ui/atoms/Badge'
 import { ToastViewProps } from './Toast.types'
 
 const variantConfig = {
-  success: {
-    icon: CheckCircle,
-    iconClass: 'text-feedback-success-500',
-    bgClass: 'bg-feedback-success-100',
-  },
-  error: {
-    icon: XCircle,
-    iconClass: 'text-feedback-error-500',
-    bgClass: 'bg-feedback-error-100',
-  },
-  info: {
-    icon: Info,
-    iconClass: 'text-feedback-info-500',
-    bgClass: 'bg-feedback-info-100',
-  },
+  success: { bgClass: 'bg-feedback-success-100' },
+  error: { bgClass: 'bg-feedback-error-100' },
+  info: { bgClass: 'bg-feedback-info-100' },
 }
 
 export function Toast({
@@ -34,7 +23,6 @@ export function Toast({
 }: ToastViewProps) {
   const t = useTranslations('Toast')
   const config = variantConfig[variant]
-  const Icon = config.icon
 
   // Determine what content to show
   const hasStructuredContent = title || description
@@ -57,7 +45,7 @@ export function Toast({
       role="status"
       aria-live="polite"
     >
-      <Icon className={cn('size-1_5 shrink-0', config.iconClass)} />
+      <Badge type="icon" variant={variant} size="md" className="shrink-0" />
       <div className="flex-1 min-w-0">
         {hasStructuredContent ? (
           <>

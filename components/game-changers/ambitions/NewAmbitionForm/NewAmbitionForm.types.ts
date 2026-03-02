@@ -1,18 +1,7 @@
-import { GoalType } from '@/domain/goal'
-import type { NewAmbitionShareMember } from '@/repositories/mocks/data/goals'
+import type { AmbitionFormData } from '@/components/game-changers/ambitions/AmbitionForm'
 
-export interface NewAmbitionFormData {
-  // Step 1
-  goalType: GoalType
-  owner: string
-  privacy: 'public' | 'private'
-  sharedMembers: NewAmbitionShareMember[]
-  // Step 2
-  ladderedFrom?: string
-  ambitionName: string
-  actions: string[]
-  achievements: string[]
-}
+/** @deprecated Use AmbitionFormData instead */
+export type NewAmbitionFormData = AmbitionFormData
 
 export interface NewAmbitionFormProps {
   className?: string

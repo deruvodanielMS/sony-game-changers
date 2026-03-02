@@ -42,7 +42,7 @@
   },
   "Goals": {
     "title": "Ambitions de votre équipe",
-    "description": "Suivez et gérez les Ambitions pour l'année fiscale FY{year}.",
+    "description": "Suivez et gérez les Ambitions pour l'année fiscale en cours.",
     "completed": "Complété",
     "nonStarted": "Non commencé",
     "newGoal": "Nouvelle Ambition",
@@ -298,7 +298,12 @@
       "on": "le",
       "privacy": "Confidentialité",
       "privacyPublic": "Public",
-      "privacyPrivate": "Privé"
+      "privacyPrivate": "Privé",
+      "sharedWithCount": "{count, plural, one {# personne} other {# personnes}}"
+    },
+    "sharedWithModal": {
+      "title": "Partagé avec",
+      "gotIt": "Compris"
     },
     "progress": {
       "completed": "Terminé",

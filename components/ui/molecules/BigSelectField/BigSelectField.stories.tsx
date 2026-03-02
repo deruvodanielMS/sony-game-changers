@@ -5,7 +5,7 @@ import { BigSelectField } from './BigSelectField'
 import type { BigSelectOption } from './BigSelectField.types'
 
 const meta: Meta<typeof BigSelectField> = {
-  title: 'UI/Molecules/BigSelectField',
+  title: 'Molecules/BigSelectField',
   component: BigSelectField,
   parameters: {
     layout: 'padded',

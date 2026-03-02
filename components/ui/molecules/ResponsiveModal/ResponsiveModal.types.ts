@@ -26,8 +26,10 @@ export interface ResponsiveModalProps {
   overlayClose?: boolean
   /** Enable focus trap (default: false) */
   focusTrap?: boolean
-  /** Additional class name for the content container */
+  /** Additional class name for the content container (desktop modal only) */
   className?: string
+  /** Additional class name applied to the mobile Drawer container (separate from desktop className) */
+  drawerClassName?: string
   /** Additional class name for the body content on mobile */
   mobileBodyClassName?: string
   /** Accessible label for the modal/drawer */

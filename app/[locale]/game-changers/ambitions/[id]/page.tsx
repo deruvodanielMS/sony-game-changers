@@ -341,6 +341,7 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
     updatedAt,
     parent,
     privacy,
+    sharedWith,
   } = selected
 
   // Calculate progress based on laddered goals completion
@@ -466,6 +467,8 @@ export default function AmbitionDetailPage({ params }: { params: Promise<{ id: s
             createdDate={formatDate(createdAt)}
             updatedDate={formatDateTime(updatedAt)}
             privacy={privacy}
+            privacyCount={sharedWith?.length}
+            sharedWith={sharedWith}
           />
         </AnimatedSection>
       </div>

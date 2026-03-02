@@ -29,14 +29,13 @@ const cardHoverVariants = {
 export function GoalCard({
   goal,
   ladderGoals,
-  allowAddChildrenGoals,
   onAddLadderedGoal,
   parentAmbitions,
   isExpanded,
   onToggleExpand,
   'data-testid': dataTestId,
 }: GoalCardProps) {
-  const { id, title, avatarUrl, goalType, status, userName, parent, privacy } = goal
+  const { id, title, avatarUrl, goalType, status, userName, parent } = goal
   const hasChildrenGoals = ladderGoals.length
 
   // Goals with laddered ambitions should be expanded by default
@@ -103,7 +102,6 @@ export function GoalCard({
                   progress={goal.progress}
                   href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
                   showLadderedIndicator={!!hasChildrenGoals}
-                  privacy={privacy}
                 />
               </div>
             </div>
@@ -121,7 +119,6 @@ export function GoalCard({
             progress={goal.progress}
             href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
             showLadderedIndicator={!!hasChildrenGoals}
-            privacy={privacy}
           />
         )}
 
@@ -168,35 +165,31 @@ export function GoalCard({
         )}
 
         {/* Bottom Section */}
-        {goalType === GOAL_TYPES.BUSINESS && (allowAddChildrenGoals || !!hasChildrenGoals) && (
+        {goalType === GOAL_TYPES.BUSINESS && (
           <div className="flex items-center justify-between w-full gap-0_5">
             {/* Left side */}
             <div className="flex gap-0_5 sm:gap-1 items-center min-w-0">
-              {(allowAddChildrenGoals || !!hasChildrenGoals) && (
-                <Button
-                  variant={'link'}
-                  size="small"
-                  iconOnly
-                  className="sm:hidden shrink-0 !h-auto"
-                  onClick={onAddLadderedGoal}
-                  disabled={status === GOAL_STATUSES.DRAFT}
-                  aria-label={t('addLadderedGoalLabel')}
-                >
-                  <Plus width={20} />
-                </Button>
-              )}
-              {(allowAddChildrenGoals || !!hasChildrenGoals) && (
-                <Button
-                  variant={'link'}
-                  size="small"
-                  leftIcon={<Plus width={20} />}
-                  onClick={onAddLadderedGoal}
-                  disabled={status === GOAL_STATUSES.DRAFT}
-                  className="hidden sm:flex shrink-0 !h-auto"
-                >
-                  {t('addLadderedGoalLabel')}
-                </Button>
-              )}
+              <Button
+                variant={'link'}
+                size="small"
+                iconOnly
+                className="sm:hidden shrink-0 !h-auto"
+                onClick={onAddLadderedGoal}
+                disabled={status !== GOAL_STATUSES.APPROVED}
+                aria-label={t('addLadderedGoalLabel')}
+              >
+                <Plus width={20} />
+              </Button>
+              <Button
+                variant={'link'}
+                size="small"
+                leftIcon={<Plus width={20} />}
+                onClick={onAddLadderedGoal}
+                disabled={status !== GOAL_STATUSES.APPROVED}
+                className="hidden sm:flex shrink-0 !h-auto"
+              >
+                {t('addLadderedGoalLabel')}
+              </Button>
               {!!hasChildrenGoals && (
                 <Typography variant="bodySmall" color="textSecondary" className="hidden sm:block">
                   {t('childrenGoalsLabel', { goals: hasChildrenGoals })}

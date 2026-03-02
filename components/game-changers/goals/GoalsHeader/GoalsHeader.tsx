@@ -4,7 +4,6 @@ import { useTranslations } from 'next-intl'
 import { SectionHeader } from '@/components/ui/organisms/SectionHeader'
 import { MetricCard } from '@/components/ui/molecules/MetricCard'
 import { ProgressRing } from '@/components/ui/atoms/ProgressRing'
-import { getFiscalYear } from '@/common/fiscalYear'
 import type { GoalsHeaderProps } from './GoalsHeader.types'
 
 /**
@@ -14,7 +13,6 @@ import type { GoalsHeaderProps } from './GoalsHeader.types'
  */
 export function GoalsHeader({ className, 'data-test-id': dataTestId }: GoalsHeaderProps) {
   const t = useTranslations('Goals')
-  const fiscalYear = getFiscalYear()
 
   // In a real app, these would come from props or API
   const completedCount = 18
@@ -54,7 +52,7 @@ export function GoalsHeader({ className, 'data-test-id': dataTestId }: GoalsHead
   return (
     <SectionHeader
       title={t('title')}
-      description={t('description', { year: fiscalYear })}
+      description={t('description')}
       actions={actions}
       className={className}
       data-test-id={dataTestId}

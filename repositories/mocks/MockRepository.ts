@@ -58,6 +58,7 @@ export class MockRepository implements GoalRepository, UserRepository {
       avatarUrl: assignedUser?.profileImageUrl ?? null,
       progress: goal.progress ?? 0,
       privacy: goal.privacy ?? 'public',
+      sharedWith: goal.sharedWith ?? [],
       createdAt: nowIso(),
       updatedAt: nowIso(),
       ladderedGoals: [],
@@ -96,6 +97,8 @@ export class MockRepository implements GoalRepository, UserRepository {
     if (updates.goalType !== undefined) goalUpdates.goalType = updates.goalType as string
     if (updates.status !== undefined) goalUpdates.status = updates.status as string
     if (updates.progress !== undefined) goalUpdates.progress = updates.progress
+    if (updates.privacy !== undefined) goalUpdates.privacy = updates.privacy
+    if (updates.sharedWith !== undefined) goalUpdates.sharedWith = updates.sharedWith
 
     if (updates.goalAchievements !== undefined) {
       goalUpdates.goalAchievements = updates.goalAchievements.map((a, index) => ({

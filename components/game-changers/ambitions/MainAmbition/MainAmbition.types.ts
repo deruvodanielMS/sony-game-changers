@@ -13,6 +13,5 @@ export interface MainAmbitionProps {
   progress: number
   href: string
   showLadderedIndicator?: boolean
-  privacy?: 'public' | 'private'
   className?: string
 }

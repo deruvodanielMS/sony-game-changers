@@ -10,6 +10,7 @@ export type NewAmbitionOwnerOption = {
 export type NewAmbitionShareMember = {
   value: string
   name: string
+  avatarUrl?: string
 }
 
 export const newAmbitionOwnerOptions: NewAmbitionOwnerOption[] = [
@@ -46,11 +47,11 @@ export const newAmbitionOwnerOptions: NewAmbitionOwnerOption[] = [
 ]
 
 export const newAmbitionShareWithOptions: NewAmbitionShareMember[] = [
-  { value: 'user-1', name: 'James Miller' },
-  { value: 'user-2', name: 'Sarah Miller' },
-  { value: 'user-3', name: 'David Brown' },
-  { value: 'user-4', name: 'Nia Washington' },
-  { value: 'user-5', name: 'Kylie Davies' },
+  { value: 'user-1', name: 'James Miller', avatarUrl: '/profile-img/profile.png' },
+  { value: 'user-2', name: 'Sarah Miller', avatarUrl: '/profile-img/sarah-miller.png' },
+  { value: 'user-3', name: 'David Brown', avatarUrl: '/profile-img/lars-van-der-zee.png' },
+  { value: 'user-4', name: 'Nia Washington', avatarUrl: '/profile-img/nia-washington.png' },
+  { value: 'user-5', name: 'Kylie Davies', avatarUrl: '/profile-img/kylie-davies.png' },
 ]
 
 export const goals: GoalUI[] = [
@@ -102,6 +103,10 @@ export const goals: GoalUI[] = [
     description: 'Optimize team processes to boost overall productivity',
     avatarUrl: '/profile-img/lars-van-der-zee.png',
     privacy: 'private',
+    sharedWith: [
+      { id: 'shared-1', name: 'Kylie Davies', avatarUrl: '/profile-img/profile.png' },
+      { id: 'shared-2', name: 'Lars van der Zee', avatarUrl: '/profile-img/lars-van-der-zee.png' },
+    ],
     ladderedGoals: [],
     goalAchievements: [],
     goalActions: [],

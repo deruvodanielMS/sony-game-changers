@@ -4,7 +4,7 @@ import { RadioGroup } from './RadioGroup'
 import { Home, Settings, User } from 'lucide-react'
 
 const meta: Meta<typeof RadioGroup> = {
-  title: 'UI/Atoms/RadioGroup',
+  title: 'Atoms/RadioGroup',
   component: RadioGroup,
   tags: ['autodocs'],
 }

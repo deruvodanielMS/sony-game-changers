@@ -42,7 +42,7 @@
   },
   "Goals": {
     "title": "Your Team Ambitions",
-    "description": "Track and manage Ambitions for the FY{year} fiscal year.",
+    "description": "Track and manage Ambitions for the current fiscal year.",
     "completed": "Completed",
     "nonStarted": "Non Started",
     "newGoal": "New Ambition",
@@ -251,7 +251,12 @@
       "on": "on",
       "privacy": "Privacy",
       "privacyPublic": "Public",
-      "privacyPrivate": "Private"
+      "privacyPrivate": "Private",
+      "sharedWithCount": "{count, plural, one {# person} other {# people}}"
+    },
+    "sharedWithModal": {
+      "title": "Shared with",
+      "gotIt": "Got it"
     },
     "progress": {
       "completed": "Completed",

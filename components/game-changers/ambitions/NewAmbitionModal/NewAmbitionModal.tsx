@@ -94,6 +94,12 @@ export function NewAmbitionModal({
         assignedTo: assignedUserId,
         periodId: goalFilters?.activePeriodId || '',
         progress: 0,
+        privacy: formData.privacy,
+        sharedWith: formData.sharedMembers.map((m) => ({
+          id: m.value,
+          name: m.name,
+          avatarUrl: m.avatarUrl,
+        })),
         goalAchievements: formData.achievements?.length
           ? formData.achievements.map((achievement) => ({
               title: achievement,
@@ -181,6 +187,12 @@ export function NewAmbitionModal({
           assignedTo: formData.owner,
           periodId: goalFilters?.activePeriodId || '',
           progress: 0,
+          privacy: formData.privacy,
+          sharedWith: formData.sharedMembers.map((m) => ({
+            id: m.value,
+            name: m.name,
+            avatarUrl: m.avatarUrl,
+          })),
           goalAchievements: formData.achievements.map((achievement) => ({
             title: achievement,
             status: 'pending',

@@ -63,8 +63,15 @@ export function useAmbitionForm(options: UseAmbitionFormOptions = {}): UseAmbiti
     () => (initialGoal?.goalType as GoalType) || GOAL_TYPES.BUSINESS,
   )
   const [owner, setOwnerState] = useState(() => initialGoal?.uid || '')
-  const [privacy, setPrivacy] = useState<PrivacyValue>('public')
-  const [sharedMembers, setSharedMembers] = useState<NewAmbitionShareMember[]>([])
+  const [privacy, setPrivacy] = useState<PrivacyValue>(() => initialGoal?.privacy ?? 'public')
+  const [sharedMembers, setSharedMembers] = useState<NewAmbitionShareMember[]>(
+    () =>
+      initialGoal?.sharedWith?.map((m) => ({
+        value: m.id,
+        name: m.name,
+        avatarUrl: m.avatarUrl,
+      })) ?? [],
+  )
 
   // Step 2 state - Initialize from goal or defaults
   const [ladderedFrom, setLadderedFromState] = useState(

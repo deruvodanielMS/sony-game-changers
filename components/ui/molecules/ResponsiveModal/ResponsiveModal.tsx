@@ -62,6 +62,7 @@ export function ResponsiveModal({
   overlayClose = true,
   focusTrap = false,
   className,
+  drawerClassName,
   mobileBodyClassName,
   'aria-label': ariaLabel,
   'data-test-id': dataTestId,
@@ -84,7 +85,7 @@ export function ResponsiveModal({
         aria-label={ariaLabel ?? title}
         data-test-id={dataTestId}
         actions={actions}
-        className={className}
+        className={drawerClassName}
       >
         {mobileBodyClassName ? <div className={mobileBodyClassName}>{children}</div> : children}
       </Drawer>

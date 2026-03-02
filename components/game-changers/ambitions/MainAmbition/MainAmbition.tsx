@@ -1,6 +1,5 @@
 'use client'
 
-import { Lock, Globe } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { Avatar } from '@/components/ui/atoms/Avatar'
@@ -23,8 +22,6 @@ export function MainAmbition({
   status,
   progress,
   href,
-  showLadderedIndicator,
-  privacy,
   className,
 }: MainAmbitionProps) {
   // Use centralized helpers to determine display mode
@@ -61,19 +58,6 @@ export function MainAmbition({
           </Typography>
         </Link>
       </div>
-
-      {privacy && (
-        <div
-          className="flex items-center shrink-0"
-          aria-label={privacy === 'private' ? 'Private' : 'Public'}
-        >
-          {privacy === 'private' ? (
-            <Lock size={16} className="text-neutral-500" />
-          ) : (
-            <Globe size={16} className="text-neutral-500" />
-          )}
-        </div>
-      )}
 
       <div className="flex flex-col items-start sm:items-end shrink-0 w-full sm:w-[150px]">
         {showProgress ? (
