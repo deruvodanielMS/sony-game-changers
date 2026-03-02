@@ -56,9 +56,11 @@ describe('Tag', () => {
     expect(screen.getByRole('button', { name: 'Delete Item' })).toBeInTheDocument()
   })
 
-  it('falls back to default aria-label when removeAriaLabel is omitted', () => {
-    render(<Tag label="Item" onRemove={() => {}} />)
-    expect(screen.getByRole('button', { name: 'Remove Item' })).toBeInTheDocument()
+  it('remove button aria-label is required for accessibility (type-enforced)', () => {
+    // removeAriaLabel is required by TagProps when onRemove is set (discriminated union)
+    // This ensures all remove buttons are localized at the call site
+    render(<Tag label="Item" onRemove={() => {}} removeAriaLabel="Retirer Item" />)
+    expect(screen.getByRole('button', { name: 'Retirer Item' })).toBeInTheDocument()
   })
 
   it('applies data-test-id as data-testid', () => {

@@ -38,6 +38,7 @@ const goalMapper = (goal: GoalAmbitionsResponse): GoalUI => {
     goalType: goal.type,
     description: goal.body,
     avatarUrl: getProfileImageUrlOrNull(goal.people_assignedTo?.profileImageUrl),
+    privacy: (goal.privacy as 'public' | 'private') ?? 'public',
     ladderedGoals: (goal.relations || []).map((relation) => ({
       id: relation.id,
       title: relation.title,
@@ -58,9 +59,9 @@ export class PrismaGoalRepository implements GoalRepository {
   async findGoals(email?: string, fiscalYear?: number): Promise<GoalUI[]> {
     const list = (await prisma.goals.findMany({
       where:
-        email || fiscalYear
+        email !== undefined || (fiscalYear !== undefined && Number.isFinite(fiscalYear))
           ? {
-              ...(email
+              ...(email !== undefined
                 ? {
                     people_assignedTo: {
                       is: {
@@ -69,7 +70,7 @@ export class PrismaGoalRepository implements GoalRepository {
                     },
                   }
                 : {}),
-              ...(fiscalYear
+              ...(fiscalYear !== undefined && Number.isFinite(fiscalYear)
                 ? {
                     performance_periods: { fiscalYear },
                   }
@@ -165,6 +166,7 @@ export class PrismaGoalRepository implements GoalRepository {
       people_assignedTo: { connect: { id: goal.assignedTo } },
       people_createdBy: { connect: { id: goal.createdBy } },
       performance_periods: { connect: { id: goal.periodId } },
+      privacy: goal.privacy ?? 'public',
       ...(!!goal.parentId ? { parent: { connect: { id: goal.parentId } } } : {}),
       ...(goal.goalAchievements.length > 0
         ? {
@@ -244,6 +246,7 @@ export class PrismaGoalRepository implements GoalRepository {
       ...(goal.goalType !== undefined && { type: goal.goalType as string }),
       ...(goal.status !== undefined && { status: goal.status as string }),
       ...(goal.progress !== undefined && { progress: goal.progress }),
+      ...(goal.privacy !== undefined && { privacy: goal.privacy }),
       ...(goal.parentId !== undefined
         ? goal.parentId
           ? { parent: { connect: { id: goal.parentId } } }

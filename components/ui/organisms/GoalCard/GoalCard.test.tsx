@@ -138,4 +138,44 @@ describe('GoalCard', () => {
     const icons = screen.getAllByRole('img')
     expect(icons.length).toBeGreaterThan(0)
   })
+
+  it('supports controlled expansion via isExpanded and onToggleExpand', async () => {
+    const onToggleExpand = vi.fn()
+
+    const { rerender } = render(
+      <GoalCard
+        goal={baseGoal}
+        ladderGoals={ladderGoals}
+        allowAddChildrenGoals={false}
+        isExpanded={true}
+        onToggleExpand={onToggleExpand}
+      />,
+    )
+
+    // Initially expanded (controlled)
+    expect(screen.getByText('Sub Goal A')).toBeInTheDocument()
+
+    // Clicking toggle fires the callback, does NOT change internal state
+    const hideButton = screen.getByRole('button', { name: /Hide laddered Ambitions/i })
+    fireEvent.click(hideButton)
+    expect(onToggleExpand).toHaveBeenCalledTimes(1)
+
+    // Since isExpanded is still true (controlled), content stays visible
+    expect(screen.getByText('Sub Goal A')).toBeInTheDocument()
+
+    // Parent collapses by passing isExpanded=false
+    rerender(
+      <GoalCard
+        goal={baseGoal}
+        ladderGoals={ladderGoals}
+        allowAddChildrenGoals={false}
+        isExpanded={false}
+        onToggleExpand={onToggleExpand}
+      />,
+    )
+
+    await waitFor(() => {
+      expect(screen.queryByText('Sub Goal A')).toBeNull()
+    })
+  })
 })

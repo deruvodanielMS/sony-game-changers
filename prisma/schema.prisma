@@ -70,6 +70,7 @@ model goals {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
   progress            Int
+  privacy             String?  @default("public")
   parent              goals?              @relation("goalsToparentId", fields: [parentId], references: [id])
   relations           goals[]             @relation("goalsToparentId")
   people_assignedTo   people              @relation("peopleTogoals_assignedTo", fields: [assignedTo], references: [id])

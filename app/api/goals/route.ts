@@ -49,11 +49,16 @@ export async function GET(request: Request) {
 
   try {
     const url = new URL(request.url)
-    const fiscalYear = url.searchParams.get('fiscalYear')
-    const goals = await goalService.listGoals(
-      session?.user?.email || undefined,
-      fiscalYear ? Number(fiscalYear) : undefined,
-    )
+    const fiscalYearParam = url.searchParams.get('fiscalYear')
+    let fiscalYearNumber: number | undefined
+    if (fiscalYearParam !== null) {
+      const parsed = Number(fiscalYearParam)
+      if (!Number.isFinite(parsed) || fiscalYearParam.trim() === '') {
+        return NextResponse.json({ error: 'Invalid fiscalYear query parameter' }, { status: 400 })
+      }
+      fiscalYearNumber = parsed
+    }
+    const goals = await goalService.listGoals(session?.user?.email || undefined, fiscalYearNumber)
     return NextResponse.json(goals)
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'

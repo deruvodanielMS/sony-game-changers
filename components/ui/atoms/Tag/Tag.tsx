@@ -35,16 +35,13 @@ export function Tag({
   'data-test-id': dataTestId,
 }: TagProps) {
   return (
-    <span
-      className={cn(tagVariants({ variant, size }), className)}
-      data-testid={dataTestId}
-    >
+    <span className={cn(tagVariants({ variant, size }), className)} data-testid={dataTestId}>
       {label}
       {onRemove && (
         <button
           type="button"
           onClick={onRemove}
-          aria-label={removeAriaLabel ?? `Remove ${label}`}
+          aria-label={removeAriaLabel ?? ''}
           className="inline-flex items-center justify-center shrink-0 text-current opacity-60 hover:opacity-100 transition-opacity leading-none"
         >
           <X size={12} strokeWidth={2.5} />

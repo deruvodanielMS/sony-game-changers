@@ -68,9 +68,7 @@ export function MainAmbition({
           <span
             role="img"
             aria-label={
-              privacy === 'private'
-                ? tPrivacy('privacy.private')
-                : tPrivacy('privacy.public')
+              privacy === 'private' ? tPrivacy('privacy.private') : tPrivacy('privacy.public')
             }
             className="flex items-center gap-0.5 text-body-small text-neutral-500"
           >
@@ -80,9 +78,7 @@ export function MainAmbition({
               <Globe size={12} aria-hidden />
             )}
             <span className="text-[11px] leading-none">
-              {privacy === 'private'
-                ? tPrivacy('privacy.private')
-                : tPrivacy('privacy.public')}
+              {privacy === 'private' ? tPrivacy('privacy.private') : tPrivacy('privacy.public')}
             </span>
           </span>
         )}

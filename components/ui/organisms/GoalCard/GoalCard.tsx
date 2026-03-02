@@ -43,10 +43,10 @@ export function GoalCard({
   const [internalOpen, setInternalOpen] = useState(hasChildrenGoals > 0)
   const open = isControlled ? isExpanded : internalOpen
   const toggleOpen = () => {
-    if (onToggleExpand) {
-      onToggleExpand()
+    if (isControlled) {
+      onToggleExpand?.()
     } else {
-      setInternalOpen(!internalOpen)
+      setInternalOpen((prev) => !prev)
     }
   }
   const [isLadderingModalOpen, setIsLadderingModalOpen] = useState(false)

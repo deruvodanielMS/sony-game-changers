@@ -301,9 +301,10 @@ export const useGoalsStore = create<GoalsState>((set) => {
 
     fetchList: async (fiscalYear?: number) => {
       try {
-        const url = fiscalYear
-          ? `${API_ROUTES.GOALS}?fiscalYear=${fiscalYear}`
-          : API_ROUTES.GOALS
+        const url =
+          fiscalYear !== undefined
+            ? `${API_ROUTES.GOALS}?fiscalYear=${fiscalYear}`
+            : API_ROUTES.GOALS
         const res = await fetch(url)
 
         if (!res.ok) {
