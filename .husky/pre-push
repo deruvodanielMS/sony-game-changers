@@ -3,3 +3,6 @@ npx tsc --noEmit || exit 1
 
 echo "Running unit tests..."
 npx vitest run || exit 1
+
+echo "Running build validation..."
+npm run build || exit 1
