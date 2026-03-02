@@ -35,7 +35,7 @@ export function GoalCard({
   onToggleExpand,
   'data-testid': dataTestId,
 }: GoalCardProps) {
-  const { id, title, avatarUrl, goalType, status, userName, parent } = goal
+  const { id, title, avatarUrl, goalType, status, userName, parent, privacy } = goal
   const hasChildrenGoals = ladderGoals.length
 
   // Goals with laddered ambitions should be expanded by default
@@ -101,6 +101,7 @@ export function GoalCard({
                   status={status}
                   progress={goal.progress}
                   href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
+                  privacy={privacy}
                   showLadderedIndicator={!!hasChildrenGoals}
                 />
               </div>
@@ -118,6 +119,7 @@ export function GoalCard({
             status={status}
             progress={goal.progress}
             href={ROUTES.GAME_CHANGERS_AMBITIONS_DETAIL(id)}
+            privacy={privacy}
             showLadderedIndicator={!!hasChildrenGoals}
           />
         )}

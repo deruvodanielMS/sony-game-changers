@@ -19,7 +19,7 @@ import { useGoalsStore } from '@/stores/goals.store'
 import { useAmbitionForm, useAmbitionFormOptions } from '@/hooks/useAmbitionForm'
 import { ActionsField, AchievementsField } from '@/components/game-changers/ambitions/shared'
 import { cn } from '@/utils/cn'
-import { newAmbitionShareWithOptions } from '@/repositories/mocks/data/goals'
+import type { NewAmbitionShareMember } from '@/repositories/mocks/data/goals'
 import { useOnClickOutside } from '@/hooks/useOnclickOutside'
 import { Tag } from '@/components/ui/atoms/Tag'
 import type { AmbitionFormProps } from './AmbitionForm.types'
@@ -56,7 +56,11 @@ export function AmbitionForm({
   const shareWrapperRef = useRef<HTMLDivElement>(null)
   useOnClickOutside(shareWrapperRef, () => setShareDropdownOpen(false))
 
-  const filteredShareOptions = newAmbitionShareWithOptions.filter(
+  const shareWithOptions: NewAmbitionShareMember[] = (
+    goalFilters?.avatarSelector?.options ?? []
+  ).map((o) => ({ value: o.uid, name: o.name, avatarUrl: o.url }))
+
+  const filteredShareOptions = shareWithOptions.filter(
     (m) =>
       !state.sharedMembers.some((s) => s.value === m.value) &&
       m.name.toLowerCase().includes(shareSearch.toLowerCase()),
@@ -232,7 +236,7 @@ export function AmbitionForm({
                           state.sharedMembers.filter((m) => m.value !== member.value),
                         )
                       }
-                      removeAriaLabel={`Remove ${member.name}`}
+                      removeAriaLabel={tCreate('shareWith.removeAriaLabel', { name: member.name })}
                     />
                   ))}
                 </div>

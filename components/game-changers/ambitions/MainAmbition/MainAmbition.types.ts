@@ -12,6 +12,7 @@ export interface MainAmbitionProps {
   status?: GoalStatus | string
   progress: number
   href: string
+  privacy?: 'public' | 'private'
   showLadderedIndicator?: boolean
   className?: string
 }

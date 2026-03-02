@@ -139,7 +139,8 @@
     "shareWith": {
       "label": "Partager avec",
       "placeholder": "Rechercher des membres de l'équipe...",
-      "addButton": "Ajouter"
+      "addButton": "Ajouter",
+      "removeAriaLabel": "Retirer {name}"
     },
     "ladderedFrom": {
       "label": "Dérivé de :",

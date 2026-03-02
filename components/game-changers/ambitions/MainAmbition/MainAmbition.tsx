@@ -1,6 +1,8 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
+import { useTranslations } from 'next-intl'
+import { Lock, Globe } from 'lucide-react'
 import { Typography } from '@/components/ui/foundations/Typography'
 import { Avatar } from '@/components/ui/atoms/Avatar'
 import { TypeIcon } from '@/components/ui/molecules/TypeIcon'
@@ -22,8 +24,10 @@ export function MainAmbition({
   status,
   progress,
   href,
+  privacy,
   className,
 }: MainAmbitionProps) {
+  const tPrivacy = useTranslations('CreateGoal')
   // Use centralized helpers to determine display mode
   const showProgress = shouldShowProgress(status)
   const statusVariant = getStatusVariant(status)
@@ -60,6 +64,28 @@ export function MainAmbition({
       </div>
 
       <div className="flex flex-col items-start sm:items-end shrink-0 w-full sm:w-[150px]">
+        {privacy && (
+          <span
+            role="img"
+            aria-label={
+              privacy === 'private'
+                ? tPrivacy('privacy.private')
+                : tPrivacy('privacy.public')
+            }
+            className="flex items-center gap-0.5 text-body-small text-neutral-500"
+          >
+            {privacy === 'private' ? (
+              <Lock size={12} aria-hidden />
+            ) : (
+              <Globe size={12} aria-hidden />
+            )}
+            <span className="text-[11px] leading-none">
+              {privacy === 'private'
+                ? tPrivacy('privacy.private')
+                : tPrivacy('privacy.public')}
+            </span>
+          </span>
+        )}
         {showProgress ? (
           <AmbitionStatus variant={progressVariant} showProgress progress={progress} size="md" />
         ) : (

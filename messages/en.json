@@ -139,7 +139,8 @@
     "shareWith": {
       "label": "Share with",
       "placeholder": "Search team members...",
-      "addButton": "Add"
+      "addButton": "Add",
+      "removeAriaLabel": "Remove {name}"
     },
     "ladderedFrom": {
       "label": "Laddered from:",
