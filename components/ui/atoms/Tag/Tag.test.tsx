@@ -15,7 +15,7 @@ describe('Tag', () => {
   })
 
   it('renders × button when onRemove is provided', () => {
-    render(<Tag label="With Remove" onRemove={() => {}} />)
+    render(<Tag label="With Remove" onRemove={() => {}} removeAriaLabel="Remove" />)
     expect(screen.getByRole('button')).toBeInTheDocument()
   })
 
@@ -23,7 +23,7 @@ describe('Tag', () => {
     const handleRemove = vi.fn()
     const user = userEvent.setup()
 
-    render(<Tag label="Removable" onRemove={handleRemove} />)
+    render(<Tag label="Removable" onRemove={handleRemove} removeAriaLabel="Remove" />)
     await user.click(screen.getByRole('button'))
 
     expect(handleRemove).toHaveBeenCalledTimes(1)

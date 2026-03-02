@@ -35,7 +35,7 @@ const meta: Meta<typeof Tag> = {
 }
 
 export default meta
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof Tag>
 
 /**
  * Default tag with outlined variant (white background, dark border)
@@ -63,6 +63,7 @@ export const WithRemove: Story = {
   args: {
     label: 'Removable Tag',
     onRemove: () => {},
+    removeAriaLabel: 'Remove tag',
   },
 }
 
@@ -77,8 +78,20 @@ export const AllVariants: Story = {
         <div className="flex flex-wrap items-center gap-2">
           <Tag label="Medium" variant="outlined" size="md" />
           <Tag label="Small" variant="outlined" size="sm" />
-          <Tag label="With Remove" variant="outlined" size="md" onRemove={() => {}} />
-          <Tag label="With Remove" variant="outlined" size="sm" onRemove={() => {}} />
+          <Tag
+            label="With Remove"
+            variant="outlined"
+            size="md"
+            onRemove={() => {}}
+            removeAriaLabel="Remove tag"
+          />
+          <Tag
+            label="With Remove"
+            variant="outlined"
+            size="sm"
+            onRemove={() => {}}
+            removeAriaLabel="Remove tag"
+          />
         </div>
       </div>
       <div className="flex flex-col gap-2">
@@ -86,8 +99,20 @@ export const AllVariants: Story = {
         <div className="flex flex-wrap items-center gap-2">
           <Tag label="Medium" variant="filled" size="md" />
           <Tag label="Small" variant="filled" size="sm" />
-          <Tag label="With Remove" variant="filled" size="md" onRemove={() => {}} />
-          <Tag label="With Remove" variant="filled" size="sm" onRemove={() => {}} />
+          <Tag
+            label="With Remove"
+            variant="filled"
+            size="md"
+            onRemove={() => {}}
+            removeAriaLabel="Remove tag"
+          />
+          <Tag
+            label="With Remove"
+            variant="filled"
+            size="sm"
+            onRemove={() => {}}
+            removeAriaLabel="Remove tag"
+          />
         </div>
       </div>
     </div>
@@ -103,5 +128,6 @@ export const Playground: Story = {
     variant: 'outlined',
     size: 'md',
     onRemove: () => {},
+    removeAriaLabel: 'Remove tag',
   },
 }
